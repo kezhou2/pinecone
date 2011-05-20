@@ -86,7 +86,6 @@ public class Device extends Entity {
 	/**
 	 * @return the user
 	 */
-	@XmlTransient
 	public User getUser() {
 		return user;
 	}
@@ -94,6 +93,7 @@ public class Device extends Entity {
 	/**
 	 * @param protocols the protocols to set
 	 */
+	@XmlTransient
 	public void setProtocols(Collection<Protocol> protocols) {
 		this.protocols = protocols;
 	}
@@ -108,6 +108,7 @@ public class Device extends Entity {
 	/**
 	 * @param variables the variables to set
 	 */
+	@XmlTransient
 	public void setVariables(Collection<Variable> variables) {
 		this.variables = variables;
 	}

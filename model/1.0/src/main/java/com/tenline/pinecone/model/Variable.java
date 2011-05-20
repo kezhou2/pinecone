@@ -86,7 +86,6 @@ public class Variable extends Entity {
 	/**
 	 * @return the device
 	 */
-	@XmlTransient
 	public Device getDevice() {
 		return device;
 	}
@@ -94,6 +93,7 @@ public class Variable extends Entity {
 	/**
 	 * @param records the records to set
 	 */
+	@XmlTransient
 	public void setRecords(Collection<Record> records) {
 		this.records = records;
 	}
@@ -108,6 +108,7 @@ public class Variable extends Entity {
 	/**
 	 * @param items the items to set
 	 */
+	@XmlTransient
 	public void setItems(Collection<Item> items) {
 		this.items = items;
 	}

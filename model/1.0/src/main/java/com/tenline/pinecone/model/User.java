@@ -12,6 +12,7 @@ import javax.jdo.annotations.Order;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Bill
@@ -53,6 +54,7 @@ public class User extends Entity {
 	/**
 	 * @param devices the devices to set
 	 */
+	@XmlTransient
 	public void setDevices(Collection<Device> devices) {
 		this.devices = devices;
 	}

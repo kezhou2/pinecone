@@ -7,7 +7,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Bill
@@ -71,7 +70,6 @@ public class Item extends Entity {
 	/**
 	 * @return the variable
 	 */
-	@XmlTransient
 	public Variable getVariable() {
 		return variable;
 	}

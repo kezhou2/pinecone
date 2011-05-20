@@ -5,11 +5,16 @@ package com.tenline.pinecone.service.restful;
 
 import java.util.Collection;
 
+import javax.jdo.PersistenceManagerFactory;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.model.User;
-import com.tenline.pinecone.persistence.UserDao;
 import com.tenline.pinecone.service.UserService;
 
 /**
@@ -17,17 +22,16 @@ import com.tenline.pinecone.service.UserService;
  *
  */
 @Service
-public class UserRestfulService implements UserService {
-	
-	private UserDao userDao;
+@Transactional
+public class UserRestfulService extends JdoDaoSupport implements UserService {
 
 	/**
 	 * 
 	 */
 	@Autowired
-	public UserRestfulService(UserDao userDao) {
+	public UserRestfulService(PersistenceManagerFactory persistenceManagerFactory) {
 		// TODO Auto-generated constructor stub
-		this.userDao = userDao;
+		setPersistenceManagerFactory(persistenceManagerFactory);
 	}
 
 	/* (non-Javadoc)
@@ -36,16 +40,19 @@ public class UserRestfulService implements UserService {
 	@Override
 	public User create(User user) {
 		// TODO Auto-generated method stub
-		return userDao.save(user);
+		return (User) getJdoTemplate().makePersistent(user);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.tenline.pinecone.service.UserService#show(java.lang.String)
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Collection<User> show(String filter) {
 		// TODO Auto-generated method stub
-		return userDao.find(filter);
+		String queryString = "select from " + User.class.getName();
+		if (!filter.equals("all")) queryString += " where " + filter;
+		return (Collection<User>) getJdoTemplate().find(queryString);
 	}
 
 	/* (non-Javadoc)
@@ -54,16 +61,19 @@ public class UserRestfulService implements UserService {
 	@Override
 	public User update(User user) {
 		// TODO Auto-generated method stub
-		return userDao.update(user);
+		User detachedUser = (User) getJdoTemplate().getObjectById(User.class, user.getId());
+		if (user.getSnsId() != null) detachedUser.setSnsId(user.getSnsId());
+		return (User) getJdoTemplate().makePersistent(detachedUser);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.tenline.pinecone.service.AbstractService#delete(java.lang.String)
 	 */
 	@Override
-	public void delete(String id) {
+	public Response delete(String id) {
 		// TODO Auto-generated method stub
-		userDao.delete(id);
+		getJdoTemplate().deletePersistent(getJdoTemplate().getObjectById(User.class, id));
+		return Response.status(Status.OK).build();
 	}
 
 }

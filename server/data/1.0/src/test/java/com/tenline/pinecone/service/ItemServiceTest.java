@@ -11,16 +11,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.tenline.pinecone.model.Item;
-import com.tenline.pinecone.persistence.ItemDao;
+import com.tenline.pinecone.model.Variable;
 import com.tenline.pinecone.service.restful.ItemRestfulService;
 
 /**
@@ -28,24 +26,26 @@ import com.tenline.pinecone.service.restful.ItemRestfulService;
  *
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-@RunWith(MockitoJUnitRunner.class) 
-public class ItemServiceTest {
+public class ItemServiceTest extends AbstractServiceTest {
+	
+	private Variable variable;
 	
 	private Item item;
 	
 	private List items;
 	
 	private ItemRestfulService itemService;
-	
-	@Mock
-	private ItemDao itemDao;
 
 	@Before
 	public void testSetup() {
-		itemService = new ItemRestfulService(itemDao);
+		itemService = new ItemRestfulService(persistenceManagerFactory);
+		itemService.setJdoTemplate(jdoTemplate);
 		item = new Item();
 		item.setId("asa");
 		item.setValue("1");
+		variable = new Variable();
+		variable.setId("asa");
+		item.setVariable(variable);
 		items = new ArrayList();
 		items.add(item);
 	}
@@ -53,48 +53,47 @@ public class ItemServiceTest {
 	@After
 	public void testShutdown() {	
 		itemService = null;
-		itemDao = null;
 		items.remove(item);
+		variable = null;
 		item = null;
 		items = null;
 	}
 
 	@Test
-	public void testCreate() {
-		ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);  
-		when(itemDao.save(item)).thenReturn(item);
+	public void testCreate() { 
+		when(jdoTemplate.getObjectById(Variable.class, variable.getId())).thenReturn(variable);
+		when(jdoTemplate.makePersistent(item)).thenReturn(item);
 		Item result = itemService.create(item);
-		verify(itemDao).save(argument.capture()); 
-		verify(itemDao).save(item);
-		assertEquals("1", argument.getValue().getValue());
+		verify(jdoTemplate).getObjectById(Variable.class, variable.getId());
+		verify(jdoTemplate).makePersistent(item);
 		assertEquals("1", result.getValue());
 	}
 	
 	@Test
 	public void testDelete() {
-		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);  
-		itemService.delete(item.getId());
-		verify(itemDao).delete(argument.capture());
-		assertEquals("asa", argument.getValue());
+		when(jdoTemplate.getObjectById(Item.class, item.getId())).thenReturn(item);
+		Response result = itemService.delete(item.getId());
+		verify(jdoTemplate).deletePersistent(item);
+		assertEquals(200, result.getStatus());
 	}
 	
 	@Test
 	public void testUpdate() {
-		ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);  
-		when(itemDao.update(item)).thenReturn(item);
+		when(jdoTemplate.getObjectById(Item.class, item.getId())).thenReturn(item);
+		when(jdoTemplate.makePersistent(item)).thenReturn(item);
 		Item result = itemService.update(item);
-		verify(itemDao).update(argument.capture());
-		verify(itemDao).update(item);
-		assertEquals("1", argument.getValue().getValue());
+		verify(jdoTemplate).getObjectById(Item.class, item.getId());
+		verify(jdoTemplate).makePersistent(item);
 		assertEquals("1", result.getValue());
 	}
 	
 	@Test
 	public void testShow() {
 		String filter = "value=='1'";
-		when(itemDao.find(filter)).thenReturn(items);
+		String queryString = "select from " + Item.class.getName() + " where " + filter;
+		when(jdoTemplate.find(queryString)).thenReturn(items);
 		Collection<Item> result = itemService.show(filter);
-		verify(itemDao).find(filter);
+		verify(jdoTemplate).find(queryString);
 		assertEquals(1, result.size());
 	}
 

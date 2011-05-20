@@ -5,11 +5,17 @@ package com.tenline.pinecone.service.restful;
 
 import java.util.Collection;
 
+import javax.jdo.PersistenceManagerFactory;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.model.Device;
-import com.tenline.pinecone.persistence.DeviceDao;
+import com.tenline.pinecone.model.User;
 import com.tenline.pinecone.service.DeviceService;
 
 /**
@@ -17,17 +23,16 @@ import com.tenline.pinecone.service.DeviceService;
  *
  */
 @Service
-public class DeviceRestfulService implements DeviceService {
-	
-	private DeviceDao deviceDao;
+@Transactional
+public class DeviceRestfulService extends JdoDaoSupport implements DeviceService {
 
 	/**
 	 * 
 	 */
 	@Autowired
-	public DeviceRestfulService(DeviceDao deviceDao) {
+	public DeviceRestfulService(PersistenceManagerFactory persistenceManagerFactory) {
 		// TODO Auto-generated constructor stub
-		this.deviceDao = deviceDao;
+		setPersistenceManagerFactory(persistenceManagerFactory);
 	}
 
 	/* (non-Javadoc)
@@ -36,25 +41,30 @@ public class DeviceRestfulService implements DeviceService {
 	@Override
 	public Device create(Device device) {
 		// TODO Auto-generated method stub
-		return deviceDao.save(device);
+		device.setUser((User) getJdoTemplate().getObjectById(User.class, device.getUser().getId()));
+		return (Device) getJdoTemplate().makePersistent(device);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.tenline.pinecone.service.DeviceService#show(java.lang.String)
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Collection<Device> show(String filter) {
 		// TODO Auto-generated method stub
-		return deviceDao.find(filter);
+		String queryString = "select from " + Device.class.getName();
+		if (!filter.equals("all")) queryString += " where " + filter;
+		return (Collection<Device>) getJdoTemplate().find(queryString);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.tenline.pinecone.service.AbstractService#delete(java.lang.String)
 	 */
 	@Override
-	public void delete(String id) {
+	public Response delete(String id) {
 		// TODO Auto-generated method stub
-		deviceDao.delete(id);
+		getJdoTemplate().deletePersistent(getJdoTemplate().getObjectById(Device.class, id));
+		return Response.status(Status.OK).build();
 	}
 
 	/* (non-Javadoc)
@@ -63,7 +73,10 @@ public class DeviceRestfulService implements DeviceService {
 	@Override
 	public Device update(Device device) {
 		// TODO Auto-generated method stub
-		return deviceDao.update(device);
+		Device detachedDevice = (Device) getJdoTemplate().getObjectById(Device.class, device.getId());
+		if (device.getName() != null) detachedDevice.setName(device.getName());
+		if (device.getType() != null) detachedDevice.setType(device.getType());
+		return (Device) getJdoTemplate().makePersistent(detachedDevice);
 	}
 
 }

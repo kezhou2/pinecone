@@ -11,41 +11,42 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
+import com.tenline.pinecone.model.Device;
 import com.tenline.pinecone.model.Variable;
-import com.tenline.pinecone.persistence.VariableDao;
 import com.tenline.pinecone.service.restful.VariableRestfulService;
 
 /**
  * @author Bill
  *
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
-@RunWith(MockitoJUnitRunner.class)
-public class VariableServiceTest {
 
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class VariableServiceTest extends AbstractServiceTest {
+
+	private Device device;
+	
 	private Variable variable;
 	
 	private List variables;
 	
 	private VariableRestfulService variableService;
 	
-	@Mock
-	private VariableDao variableDao;
-	
 	@Before
 	public void testSetup() {
-		variableService = new VariableRestfulService(variableDao);
+		variableService = new VariableRestfulService(persistenceManagerFactory);
+		variableService.setJdoTemplate(jdoTemplate);
 		variable = new Variable();
 		variable.setId("asa");
 		variable.setName("IF Output");
+		device = new Device();
+		device.setId("asa");
+		variable.setDevice(device);
 		variables = new ArrayList();
 		variables.add(variable);
 	}
@@ -53,48 +54,47 @@ public class VariableServiceTest {
 	@After
 	public void testShutdown() {
 		variableService = null;
-		variableDao = null;
 		variables.remove(variable);
+		device = null;
 		variable = null;
 		variables = null;
 	}
 	
 	@Test
 	public void testCreate() {
-		ArgumentCaptor<Variable> argument = ArgumentCaptor.forClass(Variable.class); 
-		when(variableDao.save(variable)).thenReturn(variable);
+		when(jdoTemplate.getObjectById(Device.class, device.getId())).thenReturn(device);
+		when(jdoTemplate.makePersistent(variable)).thenReturn(variable);
 		Variable result = variableService.create(variable);
-		verify(variableDao).save(argument.capture()); 
-		verify(variableDao).save(variable);
-		assertEquals("IF Output", argument.getValue().getName());
+		verify(jdoTemplate).getObjectById(Device.class, device.getId());
+		verify(jdoTemplate).makePersistent(variable);
 		assertEquals("IF Output", result.getName());
 	}
 	
 	@Test
 	public void testDelete() {
-		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class); 
-		variableService.delete(variable.getId());
-		verify(variableDao).delete(argument.capture());
-		assertEquals("asa", argument.getValue());
+		when(jdoTemplate.getObjectById(Variable.class, variable.getId())).thenReturn(variable);
+		Response result = variableService.delete(variable.getId());
+		verify(jdoTemplate).deletePersistent(variable);
+		assertEquals(200, result.getStatus());
 	}
 	
 	@Test
 	public void testUpdate() {
-		ArgumentCaptor<Variable> argument = ArgumentCaptor.forClass(Variable.class);  
-		when(variableDao.update(variable)).thenReturn(variable);
+		when(jdoTemplate.getObjectById(Variable.class, variable.getId())).thenReturn(variable);
+		when(jdoTemplate.makePersistent(variable)).thenReturn(variable);
 		Variable result = variableService.update(variable);
-		verify(variableDao).update(argument.capture());
-		verify(variableDao).update(variable);
-		assertEquals("IF Output", argument.getValue().getName());
+		verify(jdoTemplate).getObjectById(Variable.class, variable.getId());
+		verify(jdoTemplate).makePersistent(variable);
 		assertEquals("IF Output", result.getName());
 	}
 	
 	@Test
 	public void testShow() {
 		String filter = "name=='IF Output'";
-		when(variableDao.find(filter)).thenReturn(variables);
+		String queryString = "select from " + Variable.class.getName() + " where " + filter;
+		when(jdoTemplate.find(queryString)).thenReturn(variables);
 		Collection<Variable> result = variableService.show(filter);
-		verify(variableDao).find(filter);
+		verify(jdoTemplate).find(queryString);
 		assertEquals(1, result.size());
 	}
 

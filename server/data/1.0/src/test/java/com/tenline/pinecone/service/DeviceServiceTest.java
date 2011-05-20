@@ -11,16 +11,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.tenline.pinecone.model.Device;
-import com.tenline.pinecone.persistence.DeviceDao;
+import com.tenline.pinecone.model.User;
 import com.tenline.pinecone.service.restful.DeviceRestfulService;
 
 /**
@@ -28,8 +26,9 @@ import com.tenline.pinecone.service.restful.DeviceRestfulService;
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-@RunWith(MockitoJUnitRunner.class) 
-public class DeviceServiceTest {
+public class DeviceServiceTest extends AbstractServiceTest {
+
+	private User user;
 
 	private Device device;
 	
@@ -37,15 +36,16 @@ public class DeviceServiceTest {
 	
 	private DeviceRestfulService deviceService;
 	
-	@Mock
-	private DeviceDao deviceDao;
-	
 	@Before
 	public void testSetup() {
-		deviceService = new DeviceRestfulService(deviceDao);
+		deviceService = new DeviceRestfulService(persistenceManagerFactory);
+		deviceService.setJdoTemplate(jdoTemplate);
 		device = new Device();
 		device.setId("asa");
 		device.setName("ACU");
+		user = new User();
+		user.setId("asa");
+		device.setUser(user);
 		devices = new ArrayList();
 		devices.add(device);
 	}
@@ -53,48 +53,48 @@ public class DeviceServiceTest {
 	@After
 	public void testShutdown() {	
 		deviceService = null;
-		deviceDao = null;
 		devices.remove(device);
+		user = null;
 		device = null;
 		devices = null;
 	}
 
 	@Test
-	public void testCreate() {
-		ArgumentCaptor<Device> argument = ArgumentCaptor.forClass(Device.class);  
-		when(deviceDao.save(device)).thenReturn(device);
+	public void testCreate() { 
+		when(jdoTemplate.getObjectById(User.class, user.getId())).thenReturn(user);
+		when(jdoTemplate.makePersistent(device)).thenReturn(device);
 		Device result = deviceService.create(device);
-		verify(deviceDao).save(argument.capture()); 
-		verify(deviceDao).save(device);
-		assertEquals("ACU", argument.getValue().getName());
+		verify(jdoTemplate).getObjectById(User.class, user.getId()); 
+		verify(jdoTemplate).makePersistent(device);
 		assertEquals("ACU", result.getName());
 	}
 	
 	@Test
 	public void testDelete() {
-		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class); 
-		deviceService.delete(device.getId());
-		verify(deviceDao).delete(argument.capture());
-		assertEquals("asa", argument.getValue());
+		when(jdoTemplate.getObjectById(Device.class, device.getId())).thenReturn(device);
+		Response result = deviceService.delete(device.getId());
+		verify(jdoTemplate).getObjectById(Device.class, device.getId());
+		verify(jdoTemplate).deletePersistent(device);
+		assertEquals(200, result.getStatus());
 	}
 	
 	@Test
 	public void testUpdate() {
-		ArgumentCaptor<Device> argument = ArgumentCaptor.forClass(Device.class); 
-		when(deviceDao.update(device)).thenReturn(device);
+		when(jdoTemplate.getObjectById(Device.class, device.getId())).thenReturn(device);
+		when(jdoTemplate.makePersistent(device)).thenReturn(device);
 		Device result = deviceService.update(device);
-		verify(deviceDao).update(argument.capture());
-		verify(deviceDao).update(device);
-		assertEquals("ACU", argument.getValue().getName());
+		verify(jdoTemplate).getObjectById(Device.class, device.getId());
+		verify(jdoTemplate).makePersistent(device);
 		assertEquals("ACU", result.getName());
 	}
 	
 	@Test
 	public void testShow() {
 		String filter = "name=='ACU'";
-		when(deviceDao.find(filter)).thenReturn(devices);
+		String queryString = "select from " + Device.class.getName() + " where " + filter;
+		when(jdoTemplate.find(queryString)).thenReturn(devices);
 		Collection<Device> result = deviceService.show(filter);
-		verify(deviceDao).find(filter);
+		verify(jdoTemplate).find(queryString);
 		assertEquals(1, result.size());
 	}
 

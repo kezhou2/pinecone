@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- The Basics -->
-	<groupId>com.10line.pinecone</groupId>
-	<artifactId>fishshow</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>com.10line.pinecone.client</groupId>
+	<artifactId>renren-fishshow</artifactId>
+	<version>1.0</version>
 	<packaging>war</packaging>
 
 	<name>10line-pinecone-renren</name>

@@ -5,23 +5,137 @@
   <artifactId>streaming</artifactId>
   <packaging>war</packaging>
   <version>1.0</version>
+  <properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<gae.version>1.4.3</gae.version>
+  </properties>
+  <repositories>
+  	<repository>
+    	<id>maven.2</id>
+        <name>Maven 2 Repository</name>
+        <url>http://repo2.maven.org/maven2/</url>
+    </repository>
+	<repository>
+    	<id>pinecone</id>
+        <name>pinecone repo</name>
+        <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+  </repositories>
   <dependencies>
+  	<dependency>
+  		<groupId>nl.justobjects</groupId>
+  		<artifactId>pushlet</artifactId>
+  		<version>2.0.4</version>
+  	</dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.5</version>
-      <scope>test</scope>
+    	<groupId>junit</groupId>
+      	<artifactId>junit</artifactId>
+      	<version>4.5</version>
+      	<scope>test</scope>
     </dependency>
   </dependencies>
   <build>
     <plugins>
     	<plugin>
+        	<!-- Separates the unit tests from the integration tests. -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.8.1</version>
+            <configuration>
+            	<!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
+                <skip>true</skip>
+                <!-- Show 100% of the lines from the stack trace (doesn't work) -->
+                <trimStackTrace>false</trimStackTrace>
+            </configuration>
+            <executions>
+            	<execution>
+                	<id>unit-tests</id>
+                    <phase>test</phase>
+                    <goals>
+                    	<goal>test</goal>
+                    </goals>
+                    <configuration>
+                    	<!-- Never skip running the tests when the test phase is invoked -->
+                        <skip>false</skip>
+                        <includes>
+                        	<!-- Include unit tests within integration-test phase. -->
+                            <include>**/*Test.java</include>
+                        </includes>
+                        <excludes>
+                        	<!-- Exclude integration tests within (unit) test phase. -->
+                            <exclude>**/*IntegrationTest.java</exclude>
+                        </excludes>
+                    </configuration>
+                </execution>
+                <execution>
+                	<id>integration-tests</id>
+                    <phase>integration-test</phase>
+                    <goals>
+                    	<goal>test</goal>
+                    </goals>
+                    <configuration>
+                    	<!-- Never skip running the tests when the integration-test phase is invoked -->
+                        <skip>false</skip>
+                        <includes>
+                        	<!-- Include integration tests within integration-test phase. -->
+                            <include>**/*IntegrationTest.java</include>
+                        </includes>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+		<plugin>
+			<groupId>net.kindleit</groupId>
+			<artifactId>maven-gae-plugin</artifactId>
+			<version>0.8.4</version>
+			<executions>
+				<execution>
+					<id>start-gae-server</id>
+					<phase>pre-integration-test</phase>
+					<goals>
+						<goal>start</goal>
+					</goals>
+				</execution>
+				<execution>
+					<id>stop-gae-server</id>
+					<phase>post-integration-test</phase>
+					<goals>
+						<goal>stop</goal>
+					</goals>
+				</execution>
+			</executions>
+        	<dependencies>
+          		<dependency>
+            		<groupId>net.kindleit</groupId>
+            		<artifactId>gae-runtime</artifactId>
+            		<version>${gae.version}</version>
+            		<type>pom</type>
+          		</dependency>
+        	</dependencies>
+		</plugin>
+		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>2.0</version>
 			<configuration>
 				<source>1.6</source>
 				<target>1.6</target>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>2.1-beta-1</version>
+			<configuration>
+				<webResources>
+					<resource>
+						<directory>src/main/webapp</directory>
+						<filtering>true</filtering>
+						<includes>
+							<include>**/appengine-web.xml</include>
+						</includes>
+					</resource>
+				</webResources>
 			</configuration>
 		</plugin>
     </plugins>

@@ -170,12 +170,12 @@ public class PushletClient implements Protocol {
 	/**
 	 * Immediate listener: joins/subscribes and listens in one action.
 	 */
-	public void joinListen(PushletClientListener aListener, String aMode, String aSubject) throws PushletException {
+	public void joinListen(PushletClientListener aListener, String aMode, String format, String aSubject) throws PushletException {
 		stopListen();
 
 		String listenURL = pushletURL
 				+ "?" + P_EVENT + "=" + E_JOIN_LISTEN
-				+ "&" + P_FORMAT + "=" + FORMAT_XML
+				+ "&" + P_FORMAT + "=" + format
 				+ "&" + P_MODE + "=" + aMode
 				+ "&" + P_SUBJECT + "=" + aSubject;
 

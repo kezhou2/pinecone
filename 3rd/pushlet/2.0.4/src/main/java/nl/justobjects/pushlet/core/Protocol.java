@@ -14,7 +14,7 @@ public interface Protocol {
 	/**
 	 * Default URI .
 	 */
-	public static final String DEFAULT_SERVLET_URI = "/pushlet/pushlet.srv";
+	public static final String DEFAULT_SERVLET_URI = "/pushlet.srv";
 
 	//
 	// Common protocol header/parameter names

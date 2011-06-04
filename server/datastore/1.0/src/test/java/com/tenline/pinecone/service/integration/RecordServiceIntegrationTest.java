@@ -35,13 +35,13 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		assertEquals("251417324", user.getSnsId());
 		response.releaseConnection();
 		request = new ClientRequest(url + "/device/create");
-		request.body(MediaType.APPLICATION_JSON, "{\"device\":{\"name\":\"LNB\",\"type\":\"serial\",\"user\":{\"id\":\""+user.getId()+"\"}}}")
+		request.body(MediaType.APPLICATION_JSON, "{\"device\":{\"name\":\"LNB\",\"version\":\"1.1\",\"user\":{\"id\":\""+user.getId()+"\"}}}")
 			   .accept(MediaType.APPLICATION_JSON);
 		response = request.post();
 		assertEquals(200, response.getStatus());
 		Device device = response.getEntity(Device.class);
 		assertEquals("LNB", device.getName());
-		assertEquals("serial", device.getType());
+		assertEquals("1.1", device.getVersion());
 		response.releaseConnection();
 		request = new ClientRequest(url + "/variable/create");
 		request.body(MediaType.APPLICATION_JSON, "{\"variable\":{\"name\":\"A\",\"type\":\"read_only\",\"device\":{\"id\":\""+device.getId()+"\"}}}")

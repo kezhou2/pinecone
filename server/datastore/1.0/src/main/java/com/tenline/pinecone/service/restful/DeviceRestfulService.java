@@ -75,7 +75,9 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 		// TODO Auto-generated method stub
 		Device detachedDevice = (Device) getJdoTemplate().getObjectById(Device.class, device.getId());
 		if (device.getName() != null) detachedDevice.setName(device.getName());
-		if (device.getType() != null) detachedDevice.setType(device.getType());
+		if (device.getGroupId() != null) detachedDevice.setGroupId(device.getGroupId());
+		if (device.getArtifactId() != null) detachedDevice.setArtifactId(device.getArtifactId());
+		if (device.getVersion() != null) detachedDevice.setVersion(device.getVersion());
 		return (Device) getJdoTemplate().makePersistent(detachedDevice);
 	}
 

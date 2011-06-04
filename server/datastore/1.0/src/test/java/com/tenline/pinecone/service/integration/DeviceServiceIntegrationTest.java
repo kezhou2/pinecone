@@ -33,22 +33,34 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 		assertEquals("251417324", user.getSnsId());
 		response.releaseConnection();
 		request = new ClientRequest(url + "/device/create");
-		request.body(MediaType.APPLICATION_JSON, "{\"device\":{\"name\":\"LNB\",\"type\":\"serial\",\"user\":{\"id\":\""+user.getId()+"\"}}}")
+		request.body(MediaType.APPLICATION_JSON, "{\"device\":{\"name\":\"LNB\"," +
+																"\"groupId\":\"com.10line.pinecone\"," +
+																"\"artifactId\":\"efish\"," +
+																"\"version\":\"1.1\"," +
+																"\"user\":{\"id\":\""+user.getId()+"\"}}}")
 			   .accept(MediaType.APPLICATION_JSON);
 		response = request.post();
 		assertEquals(200, response.getStatus());
 		Device device = response.getEntity(Device.class);
 		assertEquals("LNB", device.getName());
-		assertEquals("serial", device.getType());
+		assertEquals("com.10line.pinecone", device.getGroupId());
+		assertEquals("efish", device.getArtifactId());
+		assertEquals("1.1", device.getVersion());
 		response.releaseConnection();
 		request = new ClientRequest(url + "/device/update");
-		request.body(MediaType.APPLICATION_JSON, "{\"device\":{\"id\":\""+device.getId()+"\",\"name\":\"ACU\",\"type\":\"tcp\"}}")
+		request.body(MediaType.APPLICATION_JSON, "{\"device\":{\"id\":\""+device.getId()+"\"," +
+															  "\"name\":\"ACU\"," +
+															  "\"groupId\":\"com.sun\"," +
+															  "\"artifactId\":\"e-fish\"," +
+															  "\"version\":\"2.1\"}}")
 			   .accept(MediaType.APPLICATION_JSON);
 		response = request.put();
 		assertEquals(200, response.getStatus());
 		device = response.getEntity(Device.class);
 		assertEquals("ACU", device.getName());
-		assertEquals("tcp", device.getType());
+		assertEquals("com.sun", device.getGroupId());
+		assertEquals("e-fish", device.getArtifactId());
+		assertEquals("2.1", device.getVersion());
 		response.releaseConnection();
 		request = new ClientRequest(url + "/device/show/{filter}");
 		request.pathParameter("filter", "id=='"+device.getId()+"'")

@@ -4,7 +4,6 @@
 package com.tenline.pinecone.service.integration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import javax.ws.rs.core.MediaType;
 
@@ -14,8 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.model.Event;
-
 /**
  * @author Bill
  *
@@ -23,42 +20,39 @@ import com.tenline.pinecone.model.Event;
 public class ChannelServiceIntegrationTest {
 	
 	private String url;
-	private Event event;
+	private String subject;
+	private String message;
 	private ClientRequest request;
 	private ClientResponse<?> response;
-
+	
 	@Before
 	public void testSetup() {
-		url = "http://localhost:8080/api";
+		url = "http://localhost:8080";
+		subject = "test";
+		message = "12";
 	}
 	
 	@After
 	public void testShutdown() {
 		url = null;
-		event = null;
+		subject = null;
+		message = null;
 		request = null;
 		response = null;
 	}
 	
 	@Test
-	public void testSubscribe() throws Exception {
-		request = new ClientRequest(url + "/channel/subscribe");
-		request.body(MediaType.APPLICATION_JSON, "{\"event\":{\"subject\":\"/test\"}}")
-			   .accept(MediaType.APPLICATION_JSON);
+	public void testSubscribeAndPublish() throws Exception {
+		request = new ClientRequest(url + "/api/channel/publish/{subject}");
+		request.pathParameter("subject", subject).body(MediaType.TEXT_PLAIN, message);
 		response = request.post();
 		assertEquals(200, response.getStatus());
-		event = response.getEntity(Event.class);
-		System.out.println(event.getToken());
-		assertNotNull(event.getToken());
 		response.releaseConnection();
-	}
-	
-	@Test
-	public void testPublish() throws Exception {
-		request = new ClientRequest(url + "/channel/publish");
-		request.body(MediaType.APPLICATION_JSON, "{\"event\":{\"subject\":\"/test\",\"message\":\"hello!\"}}");
-		response = request.post();
+		request = new ClientRequest(url + "/api/channel/subscribe/{subject}");
+		request.pathParameter("subject", subject);
+		response = request.get();
 		assertEquals(200, response.getStatus());
+		assertEquals(message, response.getEntity(String.class));
 		response.releaseConnection();
 	}
 

@@ -3,14 +3,14 @@
  */
 package com.tenline.pinecone.service;
 
-import javax.ws.rs.Consumes;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-
-import com.tenline.pinecone.model.Event;
 
 /**
  * @author Bill
@@ -21,23 +21,23 @@ public interface ChannelService {
 	
 	/**
 	 * 
-	 * @param event
-	 * @return
+	 * @param subject
+	 * @param response
 	 */
-	@POST
-	@Path("/subscribe")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Event subscribe(Event event);
+	@GET
+	@Path("/subscribe/{subject}")
+	public void subscribe(@PathParam("subject") String subject,
+						  @Context HttpServletResponse response);
 	
 	/**
 	 * 
-	 * @param event
+	 * @param subject
+	 * @param request
 	 * @return
 	 */
 	@POST
-	@Path("/publish")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response publish(Event event);
+	@Path("/publish/{subject}")
+	public Response publish(@PathParam("subject") String subject,
+							@Context HttpServletRequest request);
 	
 }

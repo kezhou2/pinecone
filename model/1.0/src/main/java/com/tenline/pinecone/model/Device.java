@@ -26,16 +26,17 @@ public class Device extends Entity {
 	private String name;
 	
 	@Persistent
-	private String type;
+	private String groupId;
+	
+	@Persistent
+	private String artifactId;
+	
+	@Persistent
+	private String version;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private User user;
 
-	@Persistent(mappedBy = "device", defaultFetchGroup = "true")
-    @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
-	private Collection<Protocol> protocols;
-	
 	@Persistent(mappedBy = "device", defaultFetchGroup = "true")
     @Element(dependent = "true")
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
@@ -61,19 +62,47 @@ public class Device extends Entity {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
-	 * @param type the type to set
+	 * @param groupId the groupId to set
 	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 	/**
-	 * @return the type
+	 * @return the groupId
 	 */
-	public String getType() {
-		return type;
+	public String getGroupId() {
+		return groupId;
+	}
+
+	/**
+	 * @param artifactId the artifactId to set
+	 */
+	public void setArtifactId(String artifactId) {
+		this.artifactId = artifactId;
+	}
+
+	/**
+	 * @return the artifactId
+	 */
+	public String getArtifactId() {
+		return artifactId;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
 	}
 
 	/**
@@ -88,21 +117,6 @@ public class Device extends Entity {
 	 */
 	public User getUser() {
 		return user;
-	}
-
-	/**
-	 * @param protocols the protocols to set
-	 */
-	@XmlTransient
-	public void setProtocols(Collection<Protocol> protocols) {
-		this.protocols = protocols;
-	}
-
-	/**
-	 * @return the protocols
-	 */
-	public Collection<Protocol> getProtocols() {
-		return protocols;
 	}
 
 	/**

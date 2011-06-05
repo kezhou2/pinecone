@@ -23,10 +23,10 @@
 	</repository>
   </repositories>
   <dependencies>
-  	<!-- Pinecone Model -->
+  	<!-- Pinecone SDK -->
   	<dependency>
   		<groupId>com.10line.pinecone</groupId>
-  		<artifactId>model</artifactId>
+  		<artifactId>sdk</artifactId>
   		<version>1.0</version>
   	</dependency>
   	<!-- Google App Engine meta-package -->

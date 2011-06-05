@@ -7,11 +7,12 @@ import static org.junit.Assert.assertEquals;
 
 import javax.ws.rs.core.MediaType;
 
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.tenline.pinecone.PineconeAPIListener;
+import com.tenline.pinecone.PineconeChannelAPI;
 
 /**
  * @author Bill
@@ -19,41 +20,59 @@ import org.junit.Test;
  */
 public class ChannelServiceIntegrationTest {
 	
-	private String url;
 	private String subject;
-	private String message;
-	private ClientRequest request;
-	private ClientResponse<?> response;
+	
+	private PineconeChannelAPI channelAPI;
 	
 	@Before
 	public void testSetup() {
-		url = "http://localhost:8080";
 		subject = "test";
-		message = "12";
 	}
 	
 	@After
 	public void testShutdown() {
-		url = null;
 		subject = null;
-		message = null;
-		request = null;
-		response = null;
+		channelAPI = null;
 	}
 	
 	@Test
-	public void testSubscribeAndPublish() throws Exception {
-		request = new ClientRequest(url + "/api/channel/publish/{subject}");
-		request.pathParameter("subject", subject).body(MediaType.TEXT_PLAIN, message);
-		response = request.post();
-		assertEquals(200, response.getStatus());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/api/channel/subscribe/{subject}");
-		request.pathParameter("subject", subject);
-		response = request.get();
-		assertEquals(200, response.getStatus());
-		assertEquals(message, response.getEntity(String.class));
-		response.releaseConnection();
+	public void testPublish() throws Exception {
+		channelAPI = new PineconeChannelAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals("Publish Successful!", message.toString());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		channelAPI.publish(subject, MediaType.TEXT_PLAIN, "Hello World".getBytes());
+	}
+	
+	@Test
+	public void testSubscribe() throws Exception {
+		channelAPI = new PineconeChannelAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals("Hello World", new String((byte[]) message));
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		channelAPI.subscribe(subject);
 	}
 
 }

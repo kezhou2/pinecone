@@ -7,12 +7,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
 
-import javax.ws.rs.core.MediaType;
-
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.util.GenericType;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import com.tenline.pinecone.PineconeAPIListener;
+import com.tenline.pinecone.PineconeDeviceAPI;
+import com.tenline.pinecone.PineconeUserAPI;
+import com.tenline.pinecone.PineconeVariableAPI;
 import com.tenline.pinecone.model.Device;
 import com.tenline.pinecone.model.User;
 import com.tenline.pinecone.model.Variable;
@@ -21,64 +23,173 @@ import com.tenline.pinecone.model.Variable;
  * @author Bill
  *
  */
-public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class VariableServiceIntegrationTest {
 
+	private User user;
+	
+	private Device device;
+	
+	private Variable variable;
+	
+	private PineconeUserAPI userAPI;
+	
+	private PineconeDeviceAPI deviceAPI;
+	
+	private PineconeVariableAPI variableAPI;
+	
+	@Before
+	public void testSetup() {
+		user = new User();
+		user.setSnsId("251417324");
+		device = new Device();
+		device.setName("LNB");
+		device.setGroupId("com.10line.pinecone");
+		device.setArtifactId("efish");
+		device.setVersion("1.1");
+		variable = new Variable();
+		variable.setName("A");
+		variable.setType("read_only");
+	}
+	
+	@After
+	public void testShutdown() {
+		user = null;
+		device = null;
+		variable = null;
+		userAPI = null;
+		deviceAPI = null;
+		variableAPI = null;
+	}
+	
 	@Test
 	public void testCRUD() throws Exception {
-		request = new ClientRequest(url + "/user/create");
-		request.body(MediaType.APPLICATION_JSON, "{\"user\":{\"snsId\":\"251417324\"}}")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.post();
-		assertEquals(200, response.getStatus());
-		User user = response.getEntity(User.class);
-		assertEquals("251417324", user.getSnsId());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/device/create");
-		request.body(MediaType.APPLICATION_JSON, "{\"device\":{\"name\":\"LNB\",\"version\":\"1.1\",\"user\":{\"id\":\""+user.getId()+"\"}}}")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.post();
-		assertEquals(200, response.getStatus());
-		Device device = response.getEntity(Device.class);
-		assertEquals("LNB", device.getName());
-		assertEquals("1.1", device.getVersion());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/variable/create");
-		request.body(MediaType.APPLICATION_JSON, "{\"variable\":{\"name\":\"A\",\"type\":\"read_only\",\"device\":{\"id\":\""+device.getId()+"\"}}}")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.post();
-		assertEquals(200, response.getStatus());
-		Variable variable = response.getEntity(Variable.class);
-		assertEquals("A", variable.getName());
-		assertEquals("read_only", variable.getType());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/variable/update");
-		request.body(MediaType.APPLICATION_JSON, "{\"variable\":{\"id\":\""+variable.getId()+"\",\"name\":\"B\",\"type\":\"write_only\"}}")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.put();
-		assertEquals(200, response.getStatus());
-		variable = response.getEntity(Variable.class);
-		assertEquals("B", variable.getName());
-		assertEquals("write_only", variable.getType());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/variable/show/{filter}");
-		request.pathParameter("filter", "id=='"+variable.getId()+"'")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.get();
-		assertEquals(200, response.getStatus());
-		assertEquals(1, response.getEntity(new GenericType<Collection<Variable>>(){}).size());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/variable/delete/{id}");
-		request.pathParameter("id", variable.getId());
-		response = request.delete();
-		assertEquals(200, response.getStatus());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/variable/show/{filter}");
-		request.pathParameter("filter", "id=='"+variable.getId()+"'")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.get();
-		assertEquals(200, response.getStatus());
-		assertEquals(0, response.getEntity(new GenericType<Collection<Variable>>(){}).size());
-		response.releaseConnection();
+		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				user = (User) message;
+				assertEquals("251417324", user.getSnsId());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		userAPI.create(user);
+		deviceAPI = new PineconeDeviceAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				device = (Device) message;
+				assertEquals("LNB", device.getName());
+				assertEquals("com.10line.pinecone", device.getGroupId());
+				assertEquals("efish", device.getArtifactId());
+				assertEquals("1.1", device.getVersion());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		device.setUser(user);
+		deviceAPI.create(device);
+		variableAPI = new PineconeVariableAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				variable = (Variable) message;
+				assertEquals("A", variable.getName());
+				assertEquals("read_only", variable.getType());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		variable.setDevice(device);
+		variableAPI.create(variable);
+		variableAPI = new PineconeVariableAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				variable = (Variable) message;
+				assertEquals("B", variable.getName());
+				assertEquals("write_only", variable.getType());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		variable.setName("B");
+		variable.setType("write_only");
+		variableAPI.update(variable);
+		variableAPI = new PineconeVariableAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			@SuppressWarnings("unchecked")
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals(1, ((Collection<Variable>) message).size());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		variableAPI.show("id=='"+variable.getId()+"'");
+		variableAPI = new PineconeVariableAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals("Variable Deleted!", message.toString());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		variableAPI.delete(variable.getId());	
+		variableAPI = new PineconeVariableAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			@SuppressWarnings("unchecked")
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals(0, ((Collection<Variable>) message).size());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		variableAPI.show("id=='"+variable.getId()+"'");
 	}
 
 }

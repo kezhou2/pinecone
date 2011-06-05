@@ -7,57 +7,123 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
 
-import javax.ws.rs.core.MediaType;
-
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.util.GenericType;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import com.tenline.pinecone.PineconeAPIListener;
+import com.tenline.pinecone.PineconeUserAPI;
 import com.tenline.pinecone.model.User;
 
 /**
  * @author Bill
  *
  */
-public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class UserServiceIntegrationTest {
+	
+	private User user;
+	
+	private PineconeUserAPI userAPI;
+	
+	@Before
+	public void testSetup() {
+		user = new User();
+		user.setSnsId("251417324");
+	}
+	
+	@After
+	public void testShutdown() {
+		user = null;
+		userAPI = null;
+	}
 
 	@Test
 	public void testCRUD() throws Exception {
-		request = new ClientRequest(url + "/user/create");
-		request.body(MediaType.APPLICATION_JSON, "{\"user\":{\"snsId\":\"251417324\"}}")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.post();
-		assertEquals(200, response.getStatus());
-		User user = response.getEntity(User.class);
-		assertEquals("251417324", user.getSnsId());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/user/update");
-		request.body(MediaType.APPLICATION_JSON, "{\"user\":{\"id\":\""+user.getId()+"\",\"snsId\":\"251417333\"}}")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.put();
-		assertEquals(200, response.getStatus());
-		user = response.getEntity(User.class);
-		assertEquals("251417333", user.getSnsId());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/user/show/{filter}");
-		request.pathParameter("filter", "snsId=='"+user.getSnsId()+"'")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.get();
-		assertEquals(200, response.getStatus());
-		assertEquals(1, response.getEntity(new GenericType<Collection<User>>(){}).size());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/user/delete/{id}");
-		request.pathParameter("id", user.getId());
-		response = request.delete();
-		assertEquals(200, response.getStatus());
-		response.releaseConnection();
-		request = new ClientRequest(url + "/user/show/{filter}");
-		request.pathParameter("filter", "id=='"+user.getId()+"'")
-			   .accept(MediaType.APPLICATION_JSON);
-		response = request.get();
-		assertEquals(200, response.getStatus());
-		assertEquals(0, response.getEntity(new GenericType<Collection<User>>(){}).size());
-		response.releaseConnection();
+		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				user = (User) message;
+				assertEquals("251417324", user.getSnsId());
+			}
+			
+		});
+		userAPI.create(user);
+		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				user = (User) message;
+				assertEquals("251417333", user.getSnsId());
+			}
+			
+		});
+		user.setSnsId("251417333");
+		userAPI.update(user);
+		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+
+			@Override
+			@SuppressWarnings("unchecked")
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals(1, ((Collection<User>) message).size());
+			}
+			
+		});
+		userAPI.show("snsId=='"+user.getSnsId()+"'");
+		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals("User Deleted!", message.toString());
+			}
+			
+		});
+		userAPI.delete(user.getId());
+		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+
+			@Override
+			@SuppressWarnings("unchecked")
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				assertEquals(0, ((Collection<User>) message).size());
+			}
+			
+		});
+		userAPI.show("id=='"+user.getId()+"'");
 	}
 
 }

@@ -26,10 +26,7 @@ public class Device extends Entity {
 	private String name;
 	
 	@Persistent
-	private String groupId;
-	
-	@Persistent
-	private String artifactId;
+	private String symbolicName;
 	
 	@Persistent
 	private String version;
@@ -64,31 +61,17 @@ public class Device extends Entity {
 	}
 
 	/**
-	 * @param groupId the groupId to set
+	 * @param symbolicName the symbolicName to set
 	 */
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
+	public void setSymbolicName(String symbolicName) {
+		this.symbolicName = symbolicName;
 	}
 
 	/**
-	 * @return the groupId
+	 * @return the symbolicName
 	 */
-	public String getGroupId() {
-		return groupId;
-	}
-
-	/**
-	 * @param artifactId the artifactId to set
-	 */
-	public void setArtifactId(String artifactId) {
-		this.artifactId = artifactId;
-	}
-
-	/**
-	 * @return the artifactId
-	 */
-	public String getArtifactId() {
-		return artifactId;
+	public String getSymbolicName() {
+		return symbolicName;
 	}
 
 	/**

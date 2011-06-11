@@ -16,15 +16,15 @@ import com.tenline.pinecone.platform.model.User;
  * @author Bill
  *
  */
-public class PineconeUserAPI extends PineconeAPI {
+public class UserAPI extends AbstractAPI {
 
 	/**
 	 * @param host
 	 * @param port
 	 * @param listener
 	 */
-	public PineconeUserAPI(String host, String port,
-			PineconeAPIListener listener) {
+	public UserAPI(String host, String port,
+			APIListener listener) {
 		super(host, port, listener);
 		// TODO Auto-generated constructor stub
 	}

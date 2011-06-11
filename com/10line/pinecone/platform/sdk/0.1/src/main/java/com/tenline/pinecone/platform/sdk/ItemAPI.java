@@ -16,15 +16,15 @@ import com.tenline.pinecone.platform.model.Item;
  * @author Bill
  *
  */
-public class PineconeItemAPI extends PineconeAPI {
+public class ItemAPI extends AbstractAPI {
 
 	/**
 	 * @param host
 	 * @param port
 	 * @param listener
 	 */
-	public PineconeItemAPI(String host, String port,
-			PineconeAPIListener listener) {
+	public ItemAPI(String host, String port,
+			APIListener listener) {
 		super(host, port, listener);
 		// TODO Auto-generated constructor stub
 	}

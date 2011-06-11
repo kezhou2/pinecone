@@ -16,15 +16,15 @@ import com.tenline.pinecone.platform.model.Variable;
  * @author Bill
  *
  */
-public class PineconeVariableAPI extends PineconeAPI {
+public class VariableAPI extends AbstractAPI {
 
 	/**
 	 * @param host
 	 * @param port
 	 * @param listener
 	 */
-	public PineconeVariableAPI(String host, String port,
-			PineconeAPIListener listener) {
+	public VariableAPI(String host, String port,
+			APIListener listener) {
 		super(host, port, listener);
 		// TODO Auto-generated constructor stub
 	}

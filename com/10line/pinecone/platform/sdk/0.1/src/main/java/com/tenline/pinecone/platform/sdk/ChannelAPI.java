@@ -9,15 +9,15 @@ import org.jboss.resteasy.client.ClientRequest;
  * @author Bill
  *
  */
-public class PineconeChannelAPI extends PineconeAPI {
+public class ChannelAPI extends AbstractAPI {
 
 	/**
 	 * @param host
 	 * @param port
 	 * @param listener
 	 */
-	public PineconeChannelAPI(String host, String port,
-			PineconeAPIListener listener) {
+	public ChannelAPI(String host, String port,
+			APIListener listener) {
 		super(host, port, listener);
 		// TODO Auto-generated constructor stub
 	}

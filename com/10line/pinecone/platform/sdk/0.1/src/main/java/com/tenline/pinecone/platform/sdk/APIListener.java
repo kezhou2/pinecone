@@ -7,7 +7,7 @@ package com.tenline.pinecone.platform.sdk;
  * @author Bill
  *
  */
-public interface PineconeAPIListener {
+public interface APIListener {
 	
 	/**
 	 * 

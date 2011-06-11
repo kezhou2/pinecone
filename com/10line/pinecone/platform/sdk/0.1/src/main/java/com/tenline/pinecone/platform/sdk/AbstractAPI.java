@@ -10,7 +10,7 @@ import org.jboss.resteasy.client.ClientResponse;
  * @author Bill
  *
  */
-public abstract class PineconeAPI {
+public abstract class AbstractAPI {
 	
 	protected String url;
 	
@@ -18,7 +18,7 @@ public abstract class PineconeAPI {
 	
 	protected ClientResponse<?> response;
 	
-	protected PineconeAPIListener listener;
+	protected APIListener listener;
 
 	/**
 	 * 
@@ -26,7 +26,7 @@ public abstract class PineconeAPI {
 	 * @param port
 	 * @param listener
 	 */
-	public PineconeAPI(String host, String port, PineconeAPIListener listener) {
+	public AbstractAPI(String host, String port, APIListener listener) {
 		// TODO Auto-generated constructor stub
 		url = "http://" + host + ":" + port;
 		this.listener = listener;

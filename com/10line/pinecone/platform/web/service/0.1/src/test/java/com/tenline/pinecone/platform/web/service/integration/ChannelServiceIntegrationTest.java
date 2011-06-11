@@ -11,8 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.PineconeAPIListener;
-import com.tenline.pinecone.platform.sdk.PineconeChannelAPI;
+import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.ChannelAPI;
 
 /**
  * @author Bill
@@ -22,7 +22,7 @@ public class ChannelServiceIntegrationTest {
 	
 	private String subject;
 	
-	private PineconeChannelAPI channelAPI;
+	private ChannelAPI channelAPI;
 	
 	@Before
 	public void testSetup() {
@@ -37,7 +37,7 @@ public class ChannelServiceIntegrationTest {
 	
 	@Test
 	public void testPublish() throws Exception {
-		channelAPI = new PineconeChannelAPI("localhost", "8080", new PineconeAPIListener() {
+		channelAPI = new ChannelAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -57,7 +57,7 @@ public class ChannelServiceIntegrationTest {
 	
 	@Test
 	public void testSubscribe() throws Exception {
-		channelAPI = new PineconeChannelAPI("localhost", "8080", new PineconeAPIListener() {
+		channelAPI = new ChannelAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {

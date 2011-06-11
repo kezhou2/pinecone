@@ -11,8 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.PineconeAPIListener;
-import com.tenline.pinecone.platform.sdk.PineconeUserAPI;
+import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.model.User;
 
 /**
@@ -23,7 +23,7 @@ public class UserServiceIntegrationTest {
 	
 	private User user;
 	
-	private PineconeUserAPI userAPI;
+	private UserAPI userAPI;
 	
 	@Before
 	public void testSetup() {
@@ -39,7 +39,7 @@ public class UserServiceIntegrationTest {
 
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -56,7 +56,7 @@ public class UserServiceIntegrationTest {
 			
 		});
 		userAPI.create(user);
-		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -74,7 +74,7 @@ public class UserServiceIntegrationTest {
 		});
 		user.setSnsId("251417333");
 		userAPI.update(user);
-		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -91,7 +91,7 @@ public class UserServiceIntegrationTest {
 			
 		});
 		userAPI.show("snsId=='"+user.getSnsId()+"'");
-		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -107,7 +107,7 @@ public class UserServiceIntegrationTest {
 			
 		});
 		userAPI.delete(user.getId());
-		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onError(String error) {

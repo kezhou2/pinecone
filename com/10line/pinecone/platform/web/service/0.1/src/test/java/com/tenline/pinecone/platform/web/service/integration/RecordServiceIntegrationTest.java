@@ -11,11 +11,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.PineconeAPIListener;
-import com.tenline.pinecone.platform.sdk.PineconeDeviceAPI;
-import com.tenline.pinecone.platform.sdk.PineconeRecordAPI;
-import com.tenline.pinecone.platform.sdk.PineconeUserAPI;
-import com.tenline.pinecone.platform.sdk.PineconeVariableAPI;
+import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.DeviceAPI;
+import com.tenline.pinecone.platform.sdk.RecordAPI;
+import com.tenline.pinecone.platform.sdk.UserAPI;
+import com.tenline.pinecone.platform.sdk.VariableAPI;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.model.User;
@@ -35,13 +35,13 @@ public class RecordServiceIntegrationTest {
 	
 	private Record record;
 	
-	private PineconeUserAPI userAPI;
+	private UserAPI userAPI;
 	
-	private PineconeDeviceAPI deviceAPI;
+	private DeviceAPI deviceAPI;
 	
-	private PineconeVariableAPI variableAPI;
+	private VariableAPI variableAPI;
 	
-	private PineconeRecordAPI recordAPI;
+	private RecordAPI recordAPI;
 	
 	@Before
 	public void testSetup() {
@@ -49,8 +49,7 @@ public class RecordServiceIntegrationTest {
 		user.setSnsId("251417324");
 		device = new Device();
 		device.setName("LNB");
-		device.setGroupId("com.10line.pinecone");
-		device.setArtifactId("efish");
+		device.setSymbolicName("com.10line.pinecone");
 		device.setVersion("1.1");
 		variable = new Variable();
 		variable.setName("A");
@@ -73,7 +72,7 @@ public class RecordServiceIntegrationTest {
 	
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -90,15 +89,14 @@ public class RecordServiceIntegrationTest {
 			
 		});
 		userAPI.create(user);
-		deviceAPI = new PineconeDeviceAPI("localhost", "8080", new PineconeAPIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				device = (Device) message;
 				assertEquals("LNB", device.getName());
-				assertEquals("com.10line.pinecone", device.getGroupId());
-				assertEquals("efish", device.getArtifactId());
+				assertEquals("com.10line.pinecone", device.getSymbolicName());
 				assertEquals("1.1", device.getVersion());
 			}
 
@@ -111,7 +109,7 @@ public class RecordServiceIntegrationTest {
 		});
 		device.setUser(user);
 		deviceAPI.create(device);
-		variableAPI = new PineconeVariableAPI("localhost", "8080", new PineconeAPIListener() {
+		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -130,7 +128,7 @@ public class RecordServiceIntegrationTest {
 		});
 		variable.setDevice(device);
 		variableAPI.create(variable);
-		recordAPI = new PineconeRecordAPI("localhost", "8080", new PineconeAPIListener() {
+		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -148,7 +146,7 @@ public class RecordServiceIntegrationTest {
 		});
 		record.setVariable(variable);
 		recordAPI.create(record);
-		recordAPI = new PineconeRecordAPI("localhost", "8080", new PineconeAPIListener() {
+		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -166,7 +164,7 @@ public class RecordServiceIntegrationTest {
 		});
 		record.setValue("1");
 		recordAPI.update(record);
-		recordAPI = new PineconeRecordAPI("localhost", "8080", new PineconeAPIListener() {
+		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")
@@ -183,7 +181,7 @@ public class RecordServiceIntegrationTest {
 			
 		});
 		recordAPI.show("id=='"+record.getId()+"'");
-		recordAPI = new PineconeRecordAPI("localhost", "8080", new PineconeAPIListener() {
+		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -199,7 +197,7 @@ public class RecordServiceIntegrationTest {
 			
 		});
 		recordAPI.delete(record.getId());
-		recordAPI = new PineconeRecordAPI("localhost", "8080", new PineconeAPIListener() {
+		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")

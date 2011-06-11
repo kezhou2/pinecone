@@ -11,11 +11,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.PineconeAPIListener;
-import com.tenline.pinecone.platform.sdk.PineconeDeviceAPI;
-import com.tenline.pinecone.platform.sdk.PineconeItemAPI;
-import com.tenline.pinecone.platform.sdk.PineconeUserAPI;
-import com.tenline.pinecone.platform.sdk.PineconeVariableAPI;
+import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.DeviceAPI;
+import com.tenline.pinecone.platform.sdk.ItemAPI;
+import com.tenline.pinecone.platform.sdk.UserAPI;
+import com.tenline.pinecone.platform.sdk.VariableAPI;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
@@ -35,13 +35,13 @@ public class ItemServiceIntegrationTest {
 	
 	private Item item;
 	
-	private PineconeUserAPI userAPI;
+	private UserAPI userAPI;
 	
-	private PineconeDeviceAPI deviceAPI;
+	private DeviceAPI deviceAPI;
 	
-	private PineconeVariableAPI variableAPI;
+	private VariableAPI variableAPI;
 	
-	private PineconeItemAPI itemAPI;
+	private ItemAPI itemAPI;
 	
 	@Before
 	public void testSetup() {
@@ -49,8 +49,7 @@ public class ItemServiceIntegrationTest {
 		user.setSnsId("251417324");
 		device = new Device();
 		device.setName("LNB");
-		device.setGroupId("com.10line.pinecone");
-		device.setArtifactId("efish");
+		device.setSymbolicName("com.10line.pinecone");
 		device.setVersion("1.1");
 		variable = new Variable();
 		variable.setName("A");
@@ -74,7 +73,7 @@ public class ItemServiceIntegrationTest {
 	
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new PineconeUserAPI("localhost", "8080", new PineconeAPIListener() {
+		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -91,15 +90,14 @@ public class ItemServiceIntegrationTest {
 			
 		});
 		userAPI.create(user);
-		deviceAPI = new PineconeDeviceAPI("localhost", "8080", new PineconeAPIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				device = (Device) message;
 				assertEquals("LNB", device.getName());
-				assertEquals("com.10line.pinecone", device.getGroupId());
-				assertEquals("efish", device.getArtifactId());
+				assertEquals("com.10line.pinecone", device.getSymbolicName());
 				assertEquals("1.1", device.getVersion());
 			}
 
@@ -112,7 +110,7 @@ public class ItemServiceIntegrationTest {
 		});
 		device.setUser(user);
 		deviceAPI.create(device);
-		variableAPI = new PineconeVariableAPI("localhost", "8080", new PineconeAPIListener() {
+		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -131,7 +129,7 @@ public class ItemServiceIntegrationTest {
 		});
 		variable.setDevice(device);
 		variableAPI.create(variable);
-		itemAPI = new PineconeItemAPI("localhost", "8080", new PineconeAPIListener() {
+		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -150,7 +148,7 @@ public class ItemServiceIntegrationTest {
 		});
 		item.setVariable(variable);
 		itemAPI.create(item);
-		itemAPI = new PineconeItemAPI("localhost", "8080", new PineconeAPIListener() {
+		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -170,7 +168,7 @@ public class ItemServiceIntegrationTest {
 		item.setText("B");
 		item.setValue("1");
 		itemAPI.update(item);
-		itemAPI = new PineconeItemAPI("localhost", "8080", new PineconeAPIListener() {
+		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")
@@ -187,7 +185,7 @@ public class ItemServiceIntegrationTest {
 			
 		});
 		itemAPI.show("id=='"+item.getId()+"'");
-		itemAPI = new PineconeItemAPI("localhost", "8080", new PineconeAPIListener() {
+		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -203,7 +201,7 @@ public class ItemServiceIntegrationTest {
 			
 		});
 		itemAPI.delete(item.getId());
-		itemAPI = new PineconeItemAPI("localhost", "8080", new PineconeAPIListener() {
+		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")

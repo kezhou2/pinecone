@@ -273,11 +273,11 @@
     <!-- 
 			Specify RESTEasy Version for your project
 	-->
-    <resteasy.version>2.2-beta-1</resteasy.version>
+    <resteasy.version>2.2.0.GA</resteasy.version>
     <!-- 
 			Specify Spring Version for your project
 	-->
-    <spring.version>2.5.6</spring.version>
+    <spring.version>3.0.5.RELEASE</spring.version>
   </properties>
   <profiles>
 	<!--

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+	<variable>
+		<name>water temperature</name>
+		<type>read_write_continuous</type>
+		<item>
+			<text>12°C</text>
+			<value>12</value>
+		</item>
+		<item>
+			<text>30°C</text>
+			<value>30</value>
+		</item>
+	</variable>
+</metadata>

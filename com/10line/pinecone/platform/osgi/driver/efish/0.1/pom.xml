@@ -7,8 +7,6 @@
   <packaging>bundle</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bundle.package>com.tenline.pinecone.platform.osgi.driver.efish</bundle.package>
-    <bundle.path>/com/10line/pinecone/platform/osgi/driver/efish/0.1/</bundle.path>
   </properties>
   <dependencies>
     <dependency>
@@ -38,11 +36,8 @@
             <packaging>${pom.packaging}</packaging>
 			<repositoryId>${project.distributionManagementArtifactRepository.id}</repositoryId>
             <url>${project.distributionManagementArtifactRepository.url}</url>
-            <bundleUrl>${project.distributionManagementArtifactRepository.url}${bundle.path}${pom.artifactId}-${pom.version}.jar</bundleUrl>
         	<instructions>
-        		<Bundle-Version>${pom.version}</Bundle-Version>
-        		<Bundle-Name>${pom.artifactId}-driver-${pom.version}</Bundle-Name>
-        		<Bundle-Activator>${bundle.package}.Activator</Bundle-Activator>
+        		<Bundle-Name>${pom.artifactId}</Bundle-Name>
         	</instructions>
         </configuration> 
       </plugin> 

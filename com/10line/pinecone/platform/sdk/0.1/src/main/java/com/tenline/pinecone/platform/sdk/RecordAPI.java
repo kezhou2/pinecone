@@ -84,5 +84,19 @@ public class RecordAPI extends AbstractAPI {
 		else listener.onError("Show Record Error Code: Http (" + response.getStatus() + ")");
 		response.releaseConnection();
 	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @throws Exception
+	 */
+	public void showByVariable(String filter) throws Exception {
+		request = new ClientRequest(url + "/api/record/show/{filter}/@Variable");
+		request.pathParameter("filter", filter).accept(MediaType.APPLICATION_JSON);
+		response = request.get();
+		if (response.getStatus() == 200) listener.onMessage(response.getEntity(new GenericType<Collection<Record>>(){}));
+		else listener.onError("Show Record By Variable Error Code: Http (" + response.getStatus() + ")");
+		response.releaseConnection();
+	}
 
 }

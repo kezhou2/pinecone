@@ -84,5 +84,19 @@ public class ItemAPI extends AbstractAPI {
 		else listener.onError("Show Item Error Code: Http (" + response.getStatus() + ")");
 		response.releaseConnection();
 	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @throws Exception
+	 */
+	public void showByVariable(String filter) throws Exception {
+		request = new ClientRequest(url + "/api/item/show/{filter}/@Variable");
+		request.pathParameter("filter", filter).accept(MediaType.APPLICATION_JSON);
+		response = request.get();
+		if (response.getStatus() == 200) listener.onMessage(response.getEntity(new GenericType<Collection<Item>>(){}));
+		else listener.onError("Show Item By Variable Error Code: Http (" + response.getStatus() + ")");
+		response.releaseConnection();
+	}
 
 }

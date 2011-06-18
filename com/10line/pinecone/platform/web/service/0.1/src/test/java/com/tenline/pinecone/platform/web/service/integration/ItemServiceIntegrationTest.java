@@ -217,7 +217,7 @@ public class ItemServiceIntegrationTest {
 			}
 			
 		});
-		itemAPI.show("id=='"+item.getId()+"'");
+		itemAPI.showByVariable("id=='"+variable.getId()+"'");
 	}
 
 }

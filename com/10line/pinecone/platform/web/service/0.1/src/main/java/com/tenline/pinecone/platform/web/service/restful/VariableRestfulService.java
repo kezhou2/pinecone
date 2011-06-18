@@ -48,7 +48,7 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 		// TODO Auto-generated method stub
 		String queryString = "select from " + Variable.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
-		return (Collection<Variable>) getJdoTemplate().find(queryString);
+		return getJdoTemplate().find(queryString);
 	}
 
 	@Override
@@ -65,6 +65,15 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 		if (variable.getName() != null) detachedVariable.setName(variable.getName());
 		if (variable.getType() != null) detachedVariable.setType(variable.getType());
 		return (Variable) getJdoTemplate().makePersistent(detachedVariable);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Collection<Variable> showByDevice(String filter) {
+		// TODO Auto-generated method stub
+		String queryString = "select from " + Variable.class.getName() + " where "
+		  + "device == d && d."+filter+" VARIABLES " + Device.class.getName() + " d";
+		return getJdoTemplate().find(queryString);
 	}
 
 }

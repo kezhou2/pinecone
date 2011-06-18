@@ -46,7 +46,7 @@ public class UserRestfulService extends JdoDaoSupport implements UserService {
 		// TODO Auto-generated method stub
 		String queryString = "select from " + User.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
-		return (Collection<User>) getJdoTemplate().find(queryString);
+		return getJdoTemplate().find(queryString);
 	}
 
 	@Override

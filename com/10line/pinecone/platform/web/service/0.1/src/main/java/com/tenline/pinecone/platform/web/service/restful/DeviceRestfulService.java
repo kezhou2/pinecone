@@ -48,7 +48,7 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 		// TODO Auto-generated method stub
 		String queryString = "select from " + Device.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
-		return (Collection<Device>) getJdoTemplate().find(queryString);
+		return getJdoTemplate().find(queryString);
 	}
 
 	@Override
@@ -66,6 +66,15 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 		if (device.getSymbolicName() != null) detachedDevice.setSymbolicName(device.getSymbolicName());
 		if (device.getVersion() != null) detachedDevice.setVersion(device.getVersion());
 		return (Device) getJdoTemplate().makePersistent(detachedDevice);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Collection<Device> showByUser(String filter) {
+		// TODO Auto-generated method stub
+		String queryString = "select from " + Device.class.getName() + " where "
+				  + "user == u && u."+filter+" VARIABLES " + User.class.getName() + " u";
+		return getJdoTemplate().find(queryString);
 	}
 
 }

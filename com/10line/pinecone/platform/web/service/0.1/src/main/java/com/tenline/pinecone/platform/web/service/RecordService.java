@@ -47,11 +47,22 @@ public interface RecordService extends AbstractService {
 	
 	/**
 	 * 
+	 * @param filter
 	 * @return
 	 */
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<Record> show(@PathParam("filter") String filter);
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/{filter}/@Variable")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<Record> showByVariable(@PathParam("filter") String filter);
 	
 }

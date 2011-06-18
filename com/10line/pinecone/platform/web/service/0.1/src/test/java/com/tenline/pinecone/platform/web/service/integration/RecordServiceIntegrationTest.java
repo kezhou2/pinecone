@@ -213,7 +213,7 @@ public class RecordServiceIntegrationTest {
 			}
 			
 		});
-		recordAPI.show("id=='"+record.getId()+"'");
+		recordAPI.showByVariable("id=='"+variable.getId()+"'");
 	}
 
 }

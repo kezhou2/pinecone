@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<metadata>
+<device>
 	<variable>
 		<name>water temperature</name>
 		<type>read_write_continuous</type>
@@ -12,4 +12,4 @@
 			<value>30</value>
 		</item>
 	</variable>
-</metadata>
+</device>

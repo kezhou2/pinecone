@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.driver.efish;
+package com.tenline.pinecone.platform.osgi.device.efish;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

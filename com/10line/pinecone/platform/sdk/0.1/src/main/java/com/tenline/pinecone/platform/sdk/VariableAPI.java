@@ -124,8 +124,8 @@ public class VariableAPI extends AbstractAPI {
 		JarFile jar = null;
 		try {
 			jar = ((JarURLConnection) new URL("jar:" + url + "!/").openConnection()).getJarFile();
-		    Document doc = new SAXReader().read(jar.getInputStream(jar.getEntry("META-INF/pinecone-metadata.xml")));
-		    List<Node> variableNodes = doc.selectNodes("/metadata/variable");
+		    Document doc = new SAXReader().read(jar.getInputStream(jar.getEntry("META-INF/device-metadata.xml")));
+		    List<Node> variableNodes = doc.selectNodes("/device/variable");
 		    Collection<Variable> variables = new ArrayList<Variable>();
 		    for (int i=0; i<variableNodes.size(); i++) {
 		    	Node variableNode = variableNodes.get(i);

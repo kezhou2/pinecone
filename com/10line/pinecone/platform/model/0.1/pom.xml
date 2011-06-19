@@ -104,7 +104,7 @@
         	<extensions>true</extensions>
         	<configuration>        	
         		<instructions>
-        			<Bundle-Name>${pom.artifactId}</Bundle-Name>
+        			<Bundle-Name>pinecone ${pom.artifactId}</Bundle-Name>
         		</instructions>
         	</configuration> 
       </plugin>

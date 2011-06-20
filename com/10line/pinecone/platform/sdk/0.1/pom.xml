@@ -39,17 +39,6 @@
         <artifactId>resteasy-jaxrs</artifactId>
         <version>${resteasy.version}</version>
 	</dependency>
-	<!-- XML Utility -->
-	<dependency>
-		<groupId>dom4j</groupId>
-		<artifactId>dom4j</artifactId>
-		<version>1.6.1</version>
-	</dependency>
-	<dependency>
-		<groupId>jaxen</groupId>
-		<artifactId>jaxen</artifactId>
-		<version>1.1-beta-9</version>
-	</dependency>
   </dependencies>
   <build>
   	<plugins>
@@ -69,7 +58,7 @@
         <extensions>true</extensions>
         <configuration>        	
         	<instructions>
-        		<Bundle-Name>pinecone ${pom.artifactId}</Bundle-Name>
+        		<Bundle-Name>Pinecone Java SDK</Bundle-Name>
         	</instructions>
         </configuration> 
       </plugin>

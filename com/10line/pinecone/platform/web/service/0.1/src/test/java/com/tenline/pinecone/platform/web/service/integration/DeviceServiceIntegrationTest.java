@@ -4,7 +4,6 @@
 package com.tenline.pinecone.platform.web.service.integration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 
@@ -161,23 +160,6 @@ public class DeviceServiceIntegrationTest {
 			
 		});
 		deviceAPI.showByUser("id=='"+user.getId()+"'");
-		deviceAPI = new DeviceAPI("pinecone.googlecode.com", "80", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertNotNull(((Collection<Device>) message).size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				System.out.println(error);
-			}
-			
-		});
-		deviceAPI.get();
 	}
 
 }

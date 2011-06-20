@@ -4,7 +4,6 @@
 package com.tenline.pinecone.platform.web.service.integration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 
@@ -189,42 +188,6 @@ public class VariableServiceIntegrationTest {
 			
 		});
 		variableAPI.showByDevice("id=='"+device.getId()+"'");
-		deviceAPI = new DeviceAPI("pinecone.googlecode.com", "80", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertNotNull(((Collection<Device>) message).size());
-				device = (Device) ((Collection<Device>) message).toArray()[0];
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				System.out.println(error);
-			}
-			
-		});
-		deviceAPI.get();
-		variableAPI = new VariableAPI("pinecone.googlecode.com", "80", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertNotNull(((Collection<Variable>) message).size());
-				assertNotNull(((Variable) ((Collection<Variable>) message).toArray()[0]).getItems().size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				System.out.println(error);
-			}
-			
-		});
-		variableAPI.get(device.getSymbolicName(), device.getVersion());
 	}
 
 }

@@ -76,7 +76,7 @@
 	</dependency>
     <dependency>
     	<groupId>org.jboss.resteasy</groupId>
-        <artifactId>resteasy-jaxb-provider</artifactId>
+        <artifactId>resteasy-jaxrs</artifactId>
         <version>${resteasy.version}</version>
     </dependency>
 	<!-- Test scope -->

@@ -3,6 +3,8 @@
  */
 package com.tenline.pinecone.platform.osgi.device.efish.integration;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 /**
@@ -15,7 +17,7 @@ public class EFishProtocolEncoderIntegrationTest extends
 	@Test
 	public void test() {
 		// Using pax-exam testing framework to do integration tests.
-		System.out.println(bundleContext.getBundle().getSymbolicName());
+		assertNotNull(bundleContext.getBundle().getSymbolicName());
 	}
 
 }

@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.osgi.device.efish.integration;
 
 import static org.ops4j.pax.exam.CoreOptions.felix;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.waitForFrameworkStartup;
 
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Inject;
@@ -25,7 +26,7 @@ public abstract class AbstractIntegrationTest {
 	
 	@Configuration
     public static Option[] configuration() throws Exception{
-		return options(felix());
+		return options(felix(), waitForFrameworkStartup());
     }
 
 }

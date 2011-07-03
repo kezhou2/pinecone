@@ -6,11 +6,11 @@ package com.tenline.pinecone.platform.web.service.restful;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
-import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.springframework.stereotype.Service;
 
+import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 import com.tenline.pinecone.platform.model.Message;
 import com.tenline.pinecone.platform.web.service.ChannelService;
 
@@ -30,6 +31,7 @@ import com.tenline.pinecone.platform.web.service.ChannelService;
 public class ChannelRestfulService implements ChannelService {
 	
 	private Cache cache;
+	private final static int EXPIRATION = 3; // seconds
 
 	/**
 	 * 
@@ -37,8 +39,9 @@ public class ChannelRestfulService implements ChannelService {
 	public ChannelRestfulService() {
 		// TODO Auto-generated constructor stub
 		try {
-			 CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
-			 cache = cacheFactory.createCache(Collections.emptyMap());
+			Map<Integer, Integer> props = new HashMap<Integer, Integer>();
+	        props.put(GCacheFactory.EXPIRATION_DELTA, EXPIRATION); 
+	        cache = CacheManager.getInstance().getCacheFactory().createCache(props);
 		} catch (CacheException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

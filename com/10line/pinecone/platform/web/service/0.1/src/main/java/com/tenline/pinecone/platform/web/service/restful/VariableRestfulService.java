@@ -68,12 +68,9 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Collection<Variable> showByDevice(String filter) {
 		// TODO Auto-generated method stub
-		String queryString = "select from " + Variable.class.getName() + " where "
-		  + "device == d && d."+filter+" VARIABLES " + Device.class.getName() + " d";
-		return getJdoTemplate().find(queryString);
+		return getJdoTemplate().getObjectById(Device.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getVariables();
 	}
 
 }

@@ -70,12 +70,9 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Collection<Record> showByVariable(String filter) {
 		// TODO Auto-generated method stub
-		String queryString = "select from " + Record.class.getName() + " where "
-		  + "variable == v && v."+filter+" VARIABLES " + Variable.class.getName() + " v";
-		return getJdoTemplate().find(queryString);
+		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getRecords();
 	}
 
 }

@@ -69,12 +69,9 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Collection<Device> showByUser(String filter) {
 		// TODO Auto-generated method stub
-		String queryString = "select from " + Device.class.getName() + " where "
-				  + "user == u && u."+filter+" VARIABLES " + User.class.getName() + " u";
-		return getJdoTemplate().find(queryString);
+		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getDevices();
 	}
 
 }

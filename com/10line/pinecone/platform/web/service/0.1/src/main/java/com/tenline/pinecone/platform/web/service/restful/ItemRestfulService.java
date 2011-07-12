@@ -68,12 +68,9 @@ public class ItemRestfulService extends JdoDaoSupport implements ItemService {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Collection<Item> showByVariable(String filter) {
 		// TODO Auto-generated method stub
-		String queryString = "select from " + Item.class.getName() + " where "
-		  + "variable == v && v."+filter+" VARIABLES " + Variable.class.getName() + " v";
-		return getJdoTemplate().find(queryString);
+		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getItems();
 	}
 
 }

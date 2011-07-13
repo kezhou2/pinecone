@@ -27,6 +27,12 @@
   		<artifactId>model</artifactId>
   		<version>0.1</version>
   	</dependency>
+  	<!-- Jettison Library -->
+  	<dependency>
+  		<groupId>org.codehaus.jettison</groupId>
+  		<artifactId>jettison</artifactId>
+  		<version>1.2</version>
+  	</dependency>
   </dependencies>
   <build>
   	<plugins>

@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -65,14 +67,18 @@ public class ItemAPI extends AbstractAPI {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setUseCaches(false);
 		connection.connect();
+		item.setText(URLEncoder.encode(item.getText(), "utf-8"));
+		item.setValue(URLEncoder.encode(item.getValue(), "utf-8"));
 		marshaller.marshal(item, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream())));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-					new MappedNamespaceConvention(new Configuration()))));
+			item = (Item) unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration())));
+        	item.setText(URLDecoder.decode(item.getText(), "utf-8"));
+        	item.setValue(URLDecoder.decode(item.getValue(), "utf-8"));
+			listener.onMessage(item);
 			connection.getInputStream().close();
 		}
 		else listener.onError("Create Item Error Code: Http (" + connection.getResponseCode() + ")");
@@ -105,14 +111,18 @@ public class ItemAPI extends AbstractAPI {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setUseCaches(false);
 		connection.connect();
+		item.setText(URLEncoder.encode(item.getText(), "utf-8"));
+		item.setValue(URLEncoder.encode(item.getValue(), "utf-8"));
 		marshaller.marshal(item, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream())));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-					new MappedNamespaceConvention(new Configuration()))));
+        	item = (Item) unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration())));
+        	item.setText(URLDecoder.decode(item.getText(), "utf-8"));
+        	item.setValue(URLDecoder.decode(item.getValue(), "utf-8"));
+        	listener.onMessage(item);
 			connection.getInputStream().close();
 		}
 		else listener.onError("Update Item Error Code: Http (" + connection.getResponseCode() + ")");
@@ -131,8 +141,11 @@ public class ItemAPI extends AbstractAPI {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
 			Collection<Item> message = new ArrayList<Item>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Item) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-							new MappedNamespaceConvention(new Configuration()))));
+				Item item = (Item) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration())));
+				item.setText(URLDecoder.decode(item.getText(), "utf-8"));
+				item.setValue(URLDecoder.decode(item.getValue(), "utf-8"));
+				message.add(item);
 			}
 			listener.onMessage(message);
 			connection.getInputStream().close();
@@ -153,8 +166,11 @@ public class ItemAPI extends AbstractAPI {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
 			Collection<Item> message = new ArrayList<Item>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Item) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-							new MappedNamespaceConvention(new Configuration()))));
+				Item item = (Item) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration())));
+				item.setText(URLDecoder.decode(item.getText(), "utf-8"));
+				item.setValue(URLDecoder.decode(item.getValue(), "utf-8"));
+				message.add(item);
 			}
 			listener.onMessage(message);
 			connection.getInputStream().close();

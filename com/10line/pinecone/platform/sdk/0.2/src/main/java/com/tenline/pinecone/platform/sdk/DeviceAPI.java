@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -65,14 +67,16 @@ public class DeviceAPI extends AbstractAPI {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setUseCaches(false);
 		connection.connect();
+		device.setName(URLEncoder.encode(device.getName(), "utf-8"));
 		marshaller.marshal(device, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream())));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-					new MappedNamespaceConvention(new Configuration()))));
+			device = (Device) unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration())));
+			device.setName(URLDecoder.decode(device.getName(), "utf-8"));
+        	listener.onMessage(device);
 			connection.getInputStream().close();
 		}
 		else listener.onError("Create Device Error Code: Http (" + connection.getResponseCode() + ")");
@@ -105,14 +109,16 @@ public class DeviceAPI extends AbstractAPI {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setUseCaches(false);
 		connection.connect();
+		device.setName(URLEncoder.encode(device.getName(), "utf-8"));
 		marshaller.marshal(device, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream())));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-					new MappedNamespaceConvention(new Configuration()))));
+			device = (Device) unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration())));
+			device.setName(URLDecoder.decode(device.getName(), "utf-8"));
+        	listener.onMessage(device);
 			connection.getInputStream().close();
 		}
 		else listener.onError("Update Device Error Code: Http (" + connection.getResponseCode() + ")");
@@ -131,8 +137,10 @@ public class DeviceAPI extends AbstractAPI {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
 			Collection<Device> message = new ArrayList<Device>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Device) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-							new MappedNamespaceConvention(new Configuration()))));
+				Device device = (Device) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration())));
+				device.setName(URLDecoder.decode(device.getName(), "utf-8"));
+				message.add(device);
 			}
 			listener.onMessage(message);
 			connection.getInputStream().close();
@@ -153,8 +161,10 @@ public class DeviceAPI extends AbstractAPI {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
 			Collection<Device> message = new ArrayList<Device>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Device) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-							new MappedNamespaceConvention(new Configuration()))));
+				Device device = (Device) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration())));
+				device.setName(URLDecoder.decode(device.getName(), "utf-8"));
+				message.add(device);
 			}
 			listener.onMessage(message);
 			connection.getInputStream().close();

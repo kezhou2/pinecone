@@ -3,7 +3,11 @@
  */
 package com.tenline.pinecone.platform.web.service.restful;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.jdo.PersistenceManagerFactory;
 import javax.ws.rs.core.Response;
@@ -45,17 +49,35 @@ public class ItemRestfulService extends JdoDaoSupport implements ItemService {
 	@Override
 	public Item create(Item item) {
 		// TODO Auto-generated method stub
-		item.setVariable((Variable) getJdoTemplate().getObjectById(Variable.class, item.getVariable().getId()));
-		return (Item) getJdoTemplate().makePersistent(item);
+		try {
+			item.setText(URLDecoder.decode(item.getText(), "utf-8"));
+			item.setValue(URLDecoder.decode(item.getValue(), "utf-8"));
+			item.setVariable((Variable) getJdoTemplate().getObjectById(Variable.class, item.getVariable().getId()));
+			item = (Item) getJdoTemplate().makePersistent(item);
+			item.setText(URLEncoder.encode(item.getText(), "utf-8"));
+			item.setValue(URLEncoder.encode(item.getValue(), "utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return item;
 	}
 
 	@Override
 	public Item update(Item item) {
 		// TODO Auto-generated method stub
-		Item detachedItem = (Item) getJdoTemplate().getObjectById(Item.class, item.getId());
-		if (item.getValue() != null) detachedItem.setValue(item.getValue());
-		if (item.getText() != null) detachedItem.setText(item.getText());
-		return (Item) getJdoTemplate().makePersistent(detachedItem);
+		try {
+			Item detachedItem = (Item) getJdoTemplate().getObjectById(Item.class, item.getId());
+			if (item.getValue() != null) detachedItem.setValue(URLDecoder.decode(item.getValue(), "utf-8"));
+			if (item.getText() != null) detachedItem.setText(URLDecoder.decode(item.getText(),"utf-8"));
+			item = (Item) getJdoTemplate().makePersistent(detachedItem);
+			item.setText(URLEncoder.encode(item.getText(), "utf-8"));
+			item.setValue(URLEncoder.encode(item.getValue(), "utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return item;
 	}
 
 	@Override
@@ -64,13 +86,36 @@ public class ItemRestfulService extends JdoDaoSupport implements ItemService {
 		// TODO Auto-generated method stub
 		String queryString = "select from " + Item.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
-		return getJdoTemplate().find(queryString);
+		Collection<Item> items = getJdoTemplate().find(queryString);
+		for (Iterator<Item> iterator = items.iterator(); iterator.hasNext();) {
+			Item item = iterator.next();
+			try {
+				item.setText(URLEncoder.encode(item.getText(), "utf-8"));
+				item.setValue(URLEncoder.encode(item.getValue(), "utf-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return items;
 	}
 
 	@Override
 	public Collection<Item> showByVariable(String filter) {
 		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getItems();
+		Variable variable = getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")));
+		Collection<Item> items = variable.getItems();
+		for (Iterator<Item> iterator = items.iterator(); iterator.hasNext();) {
+			Item item = iterator.next();
+			try {
+				item.setText(URLEncoder.encode(item.getText(), "utf-8"));
+				item.setValue(URLEncoder.encode(item.getValue(), "utf-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return items;
 	}
 
 }

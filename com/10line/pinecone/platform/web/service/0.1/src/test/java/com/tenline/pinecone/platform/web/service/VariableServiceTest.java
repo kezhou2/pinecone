@@ -43,7 +43,7 @@ public class VariableServiceTest extends AbstractServiceTest {
 		variableService.setJdoTemplate(jdoTemplate);
 		variable = new Variable();
 		variable.setId("asa");
-		variable.setName("IF Output");
+		variable.setName("IFOutput");
 		device = new Device();
 		device.setId("asa");
 		variable.setDevice(device);
@@ -67,7 +67,7 @@ public class VariableServiceTest extends AbstractServiceTest {
 		Variable result = variableService.create(variable);
 		verify(jdoTemplate).getObjectById(Device.class, device.getId());
 		verify(jdoTemplate).makePersistent(variable);
-		assertEquals("IF Output", result.getName());
+		assertEquals("IFOutput", result.getName());
 	}
 	
 	@Test
@@ -85,12 +85,12 @@ public class VariableServiceTest extends AbstractServiceTest {
 		Variable result = variableService.update(variable);
 		verify(jdoTemplate).getObjectById(Variable.class, variable.getId());
 		verify(jdoTemplate).makePersistent(variable);
-		assertEquals("IF Output", result.getName());
+		assertEquals("IFOutput", result.getName());
 	}
 	
 	@Test
 	public void testShow() {
-		String filter = "name=='IF Output'";
+		String filter = "name=='IFOutput'";
 		String queryString = "select from " + Variable.class.getName() + " where " + filter;
 		when(jdoTemplate.find(queryString)).thenReturn(variables);
 		Collection<Variable> result = variableService.show(filter);

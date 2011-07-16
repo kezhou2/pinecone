@@ -43,6 +43,7 @@ public class ItemServiceTest extends AbstractServiceTest {
 		item = new Item();
 		item.setId("asa");
 		item.setValue("1");
+		item.setText("1");
 		variable = new Variable();
 		variable.setId("asa");
 		item.setVariable(variable);

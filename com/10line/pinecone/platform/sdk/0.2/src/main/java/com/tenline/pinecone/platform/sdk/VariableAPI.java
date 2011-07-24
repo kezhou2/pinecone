@@ -8,8 +8,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -67,16 +65,13 @@ public class VariableAPI extends AbstractAPI {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setUseCaches(false);
 		connection.connect();
-		variable.setName(URLEncoder.encode(variable.getName(), "utf-8"));
 		marshaller.marshal(variable, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream())));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			variable = (Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration())));
-        	variable.setName(URLDecoder.decode(variable.getName(), "utf-8"));
-			listener.onMessage(variable);
+			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		}
 		else listener.onError("Create Variable Error Code: Http (" + connection.getResponseCode() + ")");
@@ -109,16 +104,13 @@ public class VariableAPI extends AbstractAPI {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setUseCaches(false);
 		connection.connect();
-		variable.setName(URLEncoder.encode(variable.getName(), "utf-8"));
 		marshaller.marshal(variable, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream())));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			variable = (Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration())));
-        	variable.setName(URLDecoder.decode(variable.getName(), "utf-8"));
-			listener.onMessage(variable);
+			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		}
 		else listener.onError("Update Variable Error Code: Http (" + connection.getResponseCode() + ")");
@@ -137,10 +129,8 @@ public class VariableAPI extends AbstractAPI {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
 			Collection<Variable> message = new ArrayList<Variable>();
 			for (int i=0; i<array.length(); i++) {
-				Variable variable = (Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-						new MappedNamespaceConvention(new Configuration())));
-				variable.setName(URLDecoder.decode(variable.getName(), "utf-8"));
-				message.add(variable);
+				message.add((Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration()))));
 			}
 			listener.onMessage(message);
 			connection.getInputStream().close();
@@ -161,10 +151,8 @@ public class VariableAPI extends AbstractAPI {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
 			Collection<Variable> message = new ArrayList<Variable>();
 			for (int i=0; i<array.length(); i++) {
-				Variable variable = (Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-						new MappedNamespaceConvention(new Configuration())));
-				variable.setName(URLDecoder.decode(variable.getName(), "utf-8"));
-				message.add(variable);
+				message.add((Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration()))));
 			}
 			listener.onMessage(message);
 			connection.getInputStream().close();

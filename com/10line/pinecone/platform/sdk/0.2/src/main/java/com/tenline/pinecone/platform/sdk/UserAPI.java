@@ -71,8 +71,7 @@ public class UserAPI extends AbstractAPI {
         connection.getOutputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-					new MappedNamespaceConvention(new Configuration()))));
+			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		}
 		else listener.onError("Create User Error Code: Http (" + connection.getResponseCode() + ")");
@@ -111,8 +110,7 @@ public class UserAPI extends AbstractAPI {
         connection.getOutputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
-			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-					new MappedNamespaceConvention(new Configuration()))));
+			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		}
 		else listener.onError("Update User Error Code: Http (" + connection.getResponseCode() + ")");

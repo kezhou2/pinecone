@@ -5,8 +5,6 @@ package com.tenline.pinecone.platform.sdk;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * @author Bill
@@ -35,8 +33,6 @@ public class ChannelAPI extends AbstractAPI {
 		byte[] bytes = new byte[connection.getInputStream().available()];
 		connection.getInputStream().read(bytes);
 		connection.getInputStream().close();
-		if (connection.getContentType().indexOf("text") >= 0)
-			bytes = URLDecoder.decode(new String(bytes), "utf-8").getBytes();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) listener.onMessage(bytes);
 		else listener.onError("Subscribe Channel Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
@@ -56,8 +52,6 @@ public class ChannelAPI extends AbstractAPI {
 		connection.setRequestProperty("Content-Type", contentType);
 		connection.setUseCaches(false);
 		connection.connect();
-		if (contentType.indexOf("text") >= 0)
-			contentBytes = URLEncoder.encode(new String(contentBytes), "utf-8").getBytes();
 		connection.getOutputStream().write(contentBytes);
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();

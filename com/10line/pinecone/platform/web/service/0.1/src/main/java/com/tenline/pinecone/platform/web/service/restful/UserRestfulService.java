@@ -37,7 +37,7 @@ public class UserRestfulService extends JdoDaoSupport implements UserService {
 	@Override
 	public User create(User user) {
 		// TODO Auto-generated method stub
-		return (User) getJdoTemplate().makePersistent(user);
+		return getJdoTemplate().makePersistent(user);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class UserRestfulService extends JdoDaoSupport implements UserService {
 		// TODO Auto-generated method stub
 		User detachedUser = (User) getJdoTemplate().getObjectById(User.class, user.getId());
 		if (user.getSnsId() != null) detachedUser.setSnsId(user.getSnsId());
-		return (User) getJdoTemplate().makePersistent(detachedUser);
+		return getJdoTemplate().makePersistent(detachedUser);
 	}
 
 	@Override

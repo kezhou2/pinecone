@@ -3,11 +3,7 @@
  */
 package com.tenline.pinecone.platform.web.service.restful;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.jdo.PersistenceManagerFactory;
 import javax.ws.rs.core.Response;
@@ -42,16 +38,8 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 	@Override
 	public Variable create(Variable variable) {
 		// TODO Auto-generated method stub
-		try {
-			variable.setName(URLDecoder.decode(variable.getName(), "utf-8"));
-			variable.setDevice((Device) getJdoTemplate().getObjectById(Device.class, variable.getDevice().getId()));
-			variable = (Variable) getJdoTemplate().makePersistent(variable);
-			variable.setName(URLEncoder.encode(variable.getName(), "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return variable;
+		variable.setDevice((Device) getJdoTemplate().getObjectById(Device.class, variable.getDevice().getId()));
+		return getJdoTemplate().makePersistent(variable);
 	}
 
 	@Override
@@ -60,17 +48,7 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 		// TODO Auto-generated method stub
 		String queryString = "select from " + Variable.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
-		Collection<Variable> variables = getJdoTemplate().find(queryString);
-		for (Iterator<Variable> iterator = variables.iterator(); iterator.hasNext();) {
-			Variable variable = iterator.next();
-			try {
-				variable.setName(URLEncoder.encode(variable.getName(), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return variables;
+		return getJdoTemplate().find(queryString);
 	}
 
 	@Override
@@ -83,34 +61,16 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 	@Override
 	public Variable update(Variable variable) {
 		// TODO Auto-generated method stub
-		try {
-			Variable detachedVariable = (Variable) getJdoTemplate().getObjectById(Variable.class, variable.getId());
-			if (variable.getName() != null) detachedVariable.setName(URLDecoder.decode(variable.getName(), "utf-8"));
-			if (variable.getType() != null) detachedVariable.setType(variable.getType());
-			variable = (Variable) getJdoTemplate().makePersistent(detachedVariable);
-			variable.setName(URLEncoder.encode(variable.getName(), "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return variable;
+		Variable detachedVariable = (Variable) getJdoTemplate().getObjectById(Variable.class, variable.getId());
+		if (variable.getName() != null) detachedVariable.setName(variable.getName());
+		if (variable.getType() != null) detachedVariable.setType(variable.getType());
+		return getJdoTemplate().makePersistent(detachedVariable);
 	}
 
 	@Override
 	public Collection<Variable> showByDevice(String filter) {
 		// TODO Auto-generated method stub
-		Device device = getJdoTemplate().getObjectById(Device.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")));
-		Collection<Variable> variables = device.getVariables();
-		for (Iterator<Variable> iterator = variables.iterator(); iterator.hasNext();) {
-			Variable variable = iterator.next();
-			try {
-				variable.setName(URLEncoder.encode(variable.getName(), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return variables;
+		return getJdoTemplate().getObjectById(Device.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getVariables();
 	}
 
 }

@@ -3,12 +3,8 @@
  */
 package com.tenline.pinecone.platform.web.service.restful;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import javax.jdo.PersistenceManagerFactory;
 import javax.ws.rs.core.Response;
@@ -50,33 +46,18 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 	@Override
 	public Record create(Record record) {
 		// TODO Auto-generated method stub
-		try {
-			record.setTimestamp(new Date());
-			record.setValue(URLDecoder.decode(record.getValue(), "utf-8"));
-			record.setVariable((Variable) getJdoTemplate().getObjectById(Variable.class, record.getVariable().getId()));
-			record = (Record) getJdoTemplate().makePersistent(record);
-			record.setValue(URLEncoder.encode(record.getValue(), "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return record;
+		record.setTimestamp(new Date());
+		record.setVariable((Variable) getJdoTemplate().getObjectById(Variable.class, record.getVariable().getId()));
+		return getJdoTemplate().makePersistent(record);
 	}
 
 	@Override
 	public Record update(Record record) {
 		// TODO Auto-generated method stub
-		try {
-			Record detachedRecord = (Record) getJdoTemplate().getObjectById(Record.class, record.getId());
-			detachedRecord.setTimestamp(new Date());
-			if (record.getValue() != null) detachedRecord.setValue(URLDecoder.decode(record.getValue(), "utf-8"));
-			record = (Record) getJdoTemplate().makePersistent(detachedRecord);
-			record.setValue(URLEncoder.encode(record.getValue(), "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return record;
+		Record detachedRecord = (Record) getJdoTemplate().getObjectById(Record.class, record.getId());
+		detachedRecord.setTimestamp(new Date());
+		if (record.getValue() != null) detachedRecord.setValue(record.getValue());
+		return getJdoTemplate().makePersistent(detachedRecord);
 	}
 
 	@Override
@@ -85,34 +66,13 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 		// TODO Auto-generated method stub
 		String queryString = "select from " + Record.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
-		Collection<Record> records = getJdoTemplate().find(queryString);
-		for (Iterator<Record> iterator = records.iterator(); iterator.hasNext();) {
-			Record record = iterator.next();
-			try {
-				record.setValue(URLEncoder.encode(record.getValue(), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return records;
+		return getJdoTemplate().find(queryString);
 	}
 
 	@Override
 	public Collection<Record> showByVariable(String filter) {
 		// TODO Auto-generated method stub
-		Variable variable = getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")));
-		Collection<Record> records = variable.getRecords();
-		for (Iterator<Record> iterator = records.iterator(); iterator.hasNext();) {
-			Record record = iterator.next();
-			try {
-				record.setValue(URLEncoder.encode(record.getValue(), "utf-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return records;
+		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getRecords();
 	}
 
 }

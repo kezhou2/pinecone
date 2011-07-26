@@ -70,7 +70,7 @@ public class VariableAPI extends AbstractAPI {
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-        	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
+        	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
 			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		}
@@ -109,7 +109,7 @@ public class VariableAPI extends AbstractAPI {
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-        	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
+        	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
 			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		}
@@ -126,7 +126,7 @@ public class VariableAPI extends AbstractAPI {
 		connection = (HttpURLConnection) new URL(url + "/api/variable/show/" + filter).openConnection();
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
+			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
 			Collection<Variable> message = new ArrayList<Variable>();
 			for (int i=0; i<array.length(); i++) {
 				message.add((Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
@@ -148,7 +148,7 @@ public class VariableAPI extends AbstractAPI {
 		connection = (HttpURLConnection) new URL(url + "/api/variable/show/" + filter + "/@Device").openConnection();
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine()));
+			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
 			Collection<Variable> message = new ArrayList<Variable>();
 			for (int i=0; i<array.length(); i++) {
 				message.add((Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 

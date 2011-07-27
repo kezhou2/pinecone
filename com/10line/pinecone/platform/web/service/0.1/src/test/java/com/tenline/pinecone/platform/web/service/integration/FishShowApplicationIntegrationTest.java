@@ -104,7 +104,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		variable = new Variable();
 		variable.setName("鱼缸水温");
-		variable.setType("read_write_continuous");
+		variable.setType("read_write_discrete");
 		variable.setDevice(device);
 		variableAPI.create(variable);
 		itemAPI = new ItemAPI(host, port, new APIListener() {
@@ -125,7 +125,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		item = new Item();
 		item.setText("12°C");
-		item.setValue("12");
+		item.setValue("23810");
 		item.setVariable(variable);
 		itemAPI.create(item);
 		itemAPI = new ItemAPI(host, port, new APIListener() {
@@ -134,7 +134,7 @@ public class FishShowApplicationIntegrationTest {
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				item = (Item) message;
-				assertEquals("30°C", item.getText());
+				assertEquals("13°C", item.getText());
 			}
 
 			@Override
@@ -145,8 +145,134 @@ public class FishShowApplicationIntegrationTest {
 			
 		});
 		item = new Item();
-		item.setText("30°C");
-		item.setValue("30");
+		item.setText("13°C");
+		item.setValue("21250");
+		item.setVariable(variable);
+		itemAPI.create(item);
+		variableAPI = new VariableAPI(host, port, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				variable = (Variable) message;
+				assertEquals("制氧频率", variable.getName());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		variable = new Variable();
+		variable.setName("制氧频率");
+		variable.setType("write_discrete");
+		variable.setDevice(device);
+		variableAPI.create(variable);
+		itemAPI = new ItemAPI(host, port, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				item = (Item) message;
+				assertEquals("1-5", item.getText());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		item = new Item();
+		item.setText("1-5");
+		item.setValue("281");
+		item.setVariable(variable);
+		itemAPI.create(item);
+		itemAPI = new ItemAPI(host, port, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				item = (Item) message;
+				assertEquals("1-6", item.getText());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		item = new Item();
+		item.setText("1-6");
+		item.setValue("286");
+		item.setVariable(variable);
+		itemAPI.create(item);
+		variableAPI = new VariableAPI(host, port, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				variable = (Variable) message;
+				assertEquals("鱼缸状态", variable.getName());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		variable = new Variable();
+		variable.setName("鱼缸状态");
+		variable.setType("read_discrete");
+		variable.setDevice(device);
+		variableAPI.create(variable);
+		itemAPI = new ItemAPI(host, port, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				item = (Item) message;
+				assertEquals("离线", item.getText());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		item = new Item();
+		item.setText("离线");
+		item.setValue("0");
+		item.setVariable(variable);
+		itemAPI.create(item);
+		itemAPI = new ItemAPI(host, port, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				item = (Item) message;
+				assertEquals("在线", item.getText());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
+			}
+			
+		});
+		item = new Item();
+		item.setText("在线");
+		item.setValue("1");
 		item.setVariable(variable);
 		itemAPI.create(item);
 	}

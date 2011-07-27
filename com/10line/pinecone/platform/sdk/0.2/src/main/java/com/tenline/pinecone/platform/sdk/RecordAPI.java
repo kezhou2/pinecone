@@ -62,11 +62,11 @@ public class RecordAPI extends AbstractAPI {
 		connection = (HttpURLConnection) new URL(url + "/api/record/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
-		connection.setRequestProperty("Content-Type", "application/json");
+		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.connect();
 		marshaller.marshal(record, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
-				new OutputStreamWriter(connection.getOutputStream())));
+				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -101,11 +101,11 @@ public class RecordAPI extends AbstractAPI {
 		connection = (HttpURLConnection) new URL(url + "/api/record/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
-		connection.setRequestProperty("Content-Type", "application/json");
+		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.connect();
 		marshaller.marshal(record, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
-				new OutputStreamWriter(connection.getOutputStream())));
+				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {

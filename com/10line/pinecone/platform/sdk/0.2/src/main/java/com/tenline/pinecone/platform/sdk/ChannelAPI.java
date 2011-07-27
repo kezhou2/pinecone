@@ -49,7 +49,7 @@ public class ChannelAPI extends AbstractAPI {
 		connection = (HttpURLConnection) new URL(url + "/api/channel/publish/" + subject).openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
-		connection.setRequestProperty("Content-Type", contentType);
+		connection.setRequestProperty("Content-Type", contentType + "; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.connect();
 		connection.getOutputStream().write(contentBytes);

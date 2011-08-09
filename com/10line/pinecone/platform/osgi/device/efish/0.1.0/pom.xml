@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.10line.pinecone.platform.osgi.device</groupId>
+  <artifactId>efish</artifactId>
+  <version>0.1.0</version>
+  <packaging>bundle</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <bundle.path>/com/10line/pinecone/platform/osgi/device/${pom.artifactId}/${pom.version}/</bundle.path>
+  </properties>
+  <repositories>
+  	<repository>
+    	<id>maven.2</id>
+        <name>Maven 2 Repository</name>
+        <url>http://repo2.maven.org/maven2/</url>
+    </repository>
+	<repository>
+    	<id>pinecone</id>
+        <name>pinecone repo</name>
+        <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+  </repositories>
+  <dependencies>
+    <!-- Pinecone Serial Monitor -->
+    <dependency>
+    	<groupId>com.10line.pinecone.platform.osgi.monitor</groupId>
+    	<artifactId>serial</artifactId>
+    	<version>0.1.0</version>
+    </dependency>
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.5</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Pax-Exam dependencies -->
+    <dependency>
+    	<groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-junit</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-container-default</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-junit-extender-impl</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>  
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.4</version>
+        <extensions>true</extensions>
+        <configuration>
+        	<remoteOBR>releases.xml</remoteOBR>
+        	<groupId>${pom.groupId}</groupId>
+            <artifactId>${pom.artifactId}</artifactId>
+            <version>${pom.version}</version>
+            <packaging>${pom.packaging}</packaging>
+			<repositoryId>${project.distributionManagementArtifactRepository.id}</repositoryId>
+            <url>${project.distributionManagementArtifactRepository.url}</url>
+            <bundleUrl>${project.distributionManagementArtifactRepository.url}${bundle.path}${pom.artifactId}-${pom.version}.jar</bundleUrl>
+        	<instructions>
+        		<Bundle-Name>${pom.artifactId}</Bundle-Name>
+        	</instructions>
+        </configuration> 
+      </plugin> 
+      <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>2.0</version>
+		<configuration>
+		  <source>1.6</source>
+		  <target>1.6</target>
+		</configuration>
+	  </plugin>
+    </plugins>
+    <extensions>
+	  <extension>
+	   <groupId>org.apache.maven.wagon</groupId>
+	   <artifactId>wagon-webdav</artifactId>
+	   <version>1.0-beta-2</version>
+	  </extension>
+	 </extensions>
+  </build>
+  <distributionManagement>
+  	<repository>
+    	<id>googlecode.pinecone.repo</id>
+        <name>Pinecone Repository</name>
+        <url>https://pinecone.googlecode.com/svn/repository</url>
+    </repository>
+  </distributionManagement>
+</project>

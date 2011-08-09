@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<port_config name="port_configuration">
+	<port>
+		<id>1</id>
+		<comment>usbstartank</comment>
+		<name>COM30</name>
+		<baudRate>300</baudRate>
+		<dataBits>8</dataBits>
+		<stopBits>1</stopBits>
+		<parity>none</parity>
+		<flowControl>none</flowControl>
+	</port>
+</port_config>

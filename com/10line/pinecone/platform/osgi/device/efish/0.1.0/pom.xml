@@ -77,6 +77,12 @@
         	<instructions>
         		<Bundle-Name>${pom.artifactId}</Bundle-Name>
         		<Fragment-Host>${host.bundle}</Fragment-Host>
+        		<Port>COM1</Port>
+        		<Baud-Rate>9600</Baud-Rate>
+        		<Stop-Bits>1</Stop-Bits>
+        		<Data-Bits>8</Data-Bits>
+        		<Parity>odd</Parity>
+        		<Flow-Control>rtscts_in</Flow-Control>
         	</instructions>
         </configuration> 
       </plugin> 

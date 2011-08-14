@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                         "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+ <servlet>
+  <servlet-name>RenrenApi</servlet-name>
+  <servlet-class>com.tenline.pinecone.fishshow.application.server.RenrenApiImpl</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>DeviceService</servlet-name>
+  <servlet-class>com.tenline.pinecone.fishshow.application.server.DeviceServiceImpl</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>RenrenApi</servlet-name>
+  <url-pattern>/fishshow/renrenapi</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>DeviceService</servlet-name>
+  <url-pattern>/fishshow/deviceService</url-pattern>
+ </servlet-mapping>
+ <!-- Default page to serve -->
+ <welcome-file-list>
+  <welcome-file>war/index.jsp</welcome-file>
+ </welcome-file-list>
+ <login-config>
+  <auth-method>BASIC</auth-method>
+ </login-config>
+</web-app>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" output="test-classes" path="test"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.5.0.1"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (1)"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_25"/>
+	<classpathentry kind="lib" path="D:/workspace/Eclipse/json_simple-1.1.jar" sourcepath="D:/IDE/repository/com/googlecode/json-simple/json-simple/1.1/json-simple-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="D:/workspace/Eclipse/jettison-1.2.jar"/>
+	<classpathentry kind="lib" path="D:/workspace/Eclipse/model-0.1.jar"/>
+	<classpathentry kind="lib" path="D:/workspace/Eclipse/sdk-0.2.jar"/>
+	<classpathentry kind="lib" path="D:/IDE/gxt-2.2.4/gxt-2.2.4/gxt-2.2.4-gwt22.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

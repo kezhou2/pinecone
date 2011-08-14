@@ -151,6 +151,7 @@ public class Activator implements BundleActivator {
 		params.put("id", endpointId);
 		endpoint.initialize(bundleContext, params);
 		endpoints.put(endpointId, endpoint);
+		// may be adjust variable type
 		Timer timer = new Timer();
 		timer.schedule(new PollingTask(device.getId(), endpointId), 0, 1000);
 		timers.put(device.getId(), timer);

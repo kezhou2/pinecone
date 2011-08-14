@@ -44,7 +44,8 @@ public class MinaSerialHandler extends AbstractMinaHandler {
 	public void messageReceived(IoSession session, Object message) throws Exception {
 		super.messageReceived(session, message);
 		// TODO Auto-generated method stub
-		
+		// String id = endpoint's id
+		// admin.postEvent(new Event("endpoint/read/" + id, dic));
 	}
 	
 	@Override

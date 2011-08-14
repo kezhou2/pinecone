@@ -40,7 +40,7 @@ public abstract class AbstractMinaEndpoint implements IEndpoint {
 	 */
 	protected Hashtable<String, String> getProperties(String id) {
 		Hashtable<String, String> properties = new Hashtable<String, String>();
-		properties.put(EventConstants.EVENT_TOPIC, "endpoint/" + id);
+		properties.put(EventConstants.EVENT_TOPIC, "endpoint/write/" + id);
 		return properties;
 	}
 

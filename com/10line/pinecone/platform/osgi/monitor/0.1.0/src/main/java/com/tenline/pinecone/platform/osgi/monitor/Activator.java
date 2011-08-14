@@ -3,6 +3,8 @@
  */
 package com.tenline.pinecone.platform.osgi.monitor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -11,7 +13,9 @@ import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLStreamException;
 
@@ -20,11 +24,15 @@ import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
 import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
+import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.User;
@@ -54,17 +62,29 @@ public class Activator implements BundleActivator {
 	
 	private EventAdmin admin;
 	
+	private JAXBContext context;
 	private Unmarshaller unmarshaller;
+	private Marshaller marshaller;
 	
 	private Hashtable<String, IEndpoint> endpoints;
 	private Hashtable<String, Timer> timers;
+	private Hashtable<String, MessageHandler> handlers;
 	
 	/**
 	 * 
 	 */
 	public Activator() {
 		// TODO Auto-generated constructor stub
+		try {
+			context = JAXBContext.newInstance(Device.class);
+			marshaller = context.createMarshaller();
+			unmarshaller = context.createUnmarshaller();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		timers = new Hashtable<String, Timer>();
+		handlers = new Hashtable<String, MessageHandler>();
 		endpoints = new Hashtable<String, IEndpoint>();
 		userAPI = new UserAPI(host, port, new APIListener() {
 
@@ -134,6 +154,7 @@ public class Activator implements BundleActivator {
 		Timer timer = new Timer();
 		timer.schedule(new PollingTask(device.getId(), endpointId), 0, 1000);
 		timers.put(device.getId(), timer);
+		handlers.put(device.getId(), new MessageHandler(device.getId(), endpointId));
 	}
 	
 	private class PollingTask extends TimerTask {
@@ -160,7 +181,7 @@ public class Activator implements BundleActivator {
 						JSONObject obj = new JSONObject(new String((byte[]) message, "utf-8"));
 						dic.put("message", unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
 								new MappedNamespaceConvention(new Configuration()))));
-						admin.postEvent(new Event("endpoint/" + PollingTask.this.id, dic));
+						admin.postEvent(new Event("endpoint/write/" + PollingTask.this.id, dic));
 					} catch (JAXBException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -194,6 +215,86 @@ public class Activator implements BundleActivator {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+	}
+	
+	private class MessageHandler implements EventHandler {
+		
+		private String subject;
+		private ChannelAPI channelAPI;
+		private ServiceRegistration registration;
+		
+		/**
+		 * 
+		 * @param subject
+		 * @param id
+		 */
+		public MessageHandler(String subject, String id) {
+			this.subject = subject + "-device";
+			setRegistration(bundleContext.registerService(EventHandler.class.getName(), this, getProperties(id)));
+			channelAPI = new ChannelAPI(host, port, new APIListener() {
+
+				@Override
+				public void onMessage(Object message) {
+					// TODO Auto-generated method stub
+					System.out.println(message);
+				}
+
+				@Override
+				public void onError(String error) {
+					// TODO Auto-generated method stub
+					System.out.println(error);
+				}
+				
+			});
+		}
+
+		@Override
+		public void handleEvent(Event arg0) {
+			// TODO Auto-generated method stub
+			try {
+				ByteArrayOutputStream output = new ByteArrayOutputStream();
+				byte[] bytes = new byte[1024];
+				marshaller.marshal(arg0.getProperty("message"), new MappedXMLStreamWriter(
+						new MappedNamespaceConvention(new Configuration()), 
+						new OutputStreamWriter(output, "utf-8")));
+				output.write(bytes); // refactor, may be bug
+				channelAPI.publish(subject, "application/json", bytes);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * Get Service Properties
+		 * @return
+		 */
+		private Hashtable<String, String> getProperties(String id) {
+			Hashtable<String, String> properties = new Hashtable<String, String>();
+			properties.put(EventConstants.EVENT_TOPIC, "endpoint/read/" + id);
+			return properties;
+		}
+
+		/**
+		 * @param registration the registration to set
+		 */
+		public void setRegistration(ServiceRegistration registration) {
+			this.registration = registration;
+		}
+
+		/**
+		 * @return the registration
+		 */
+		public ServiceRegistration getRegistration() {
+			return registration;
 		}
 		
 	}
@@ -242,6 +343,11 @@ public class Activator implements BundleActivator {
 			timers.get(key).purge();
 			timers.get(key).cancel();
 			timers.remove(key);
+		}
+		for (Enumeration<String> i = handlers.keys(); i.hasMoreElements();) {
+			String key = i.nextElement();
+			handlers.get(key).getRegistration().unregister();
+			handlers.remove(key);
 		}
 	}
 

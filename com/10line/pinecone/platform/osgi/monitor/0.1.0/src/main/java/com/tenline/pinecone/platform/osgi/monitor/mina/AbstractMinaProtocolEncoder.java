@@ -7,6 +7,8 @@ import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 
+import com.tenline.pinecone.platform.model.Device;
+
 /**
  * @author Bill
  *
@@ -22,9 +24,10 @@ public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter
 	
 	/**
 	 * Build Packet
+	 * @param device
 	 * @return
 	 */
-	protected abstract byte[] buildPacket();
+	protected abstract byte[] buildPacket(Device device);
 
 	/**
 	 * Build Packet Type

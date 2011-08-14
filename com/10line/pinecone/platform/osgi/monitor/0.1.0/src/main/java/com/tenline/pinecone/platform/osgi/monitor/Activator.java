@@ -3,6 +3,7 @@
  */
 package com.tenline.pinecone.platform.osgi.monitor;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -10,6 +11,15 @@ import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLStreamException;
+
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.codehaus.jettison.mapped.Configuration;
+import org.codehaus.jettison.mapped.MappedNamespaceConvention;
+import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -43,6 +53,8 @@ public class Activator implements BundleActivator {
 	private BundleContext bundleContext;
 	
 	private EventAdmin admin;
+	
+	private Unmarshaller unmarshaller;
 	
 	private Hashtable<String, IEndpoint> endpoints;
 	private Hashtable<String, Timer> timers;
@@ -143,9 +155,25 @@ public class Activator implements BundleActivator {
 				@Override
 				public void onMessage(Object message) {
 					// TODO Auto-generated method stub
-					Dictionary<String, Object> dic = new Hashtable<String, Object>();
-					dic.put("message", new String((byte[]) message));
-					admin.postEvent(new Event("endpoint/" + PollingTask.this.id, dic));
+					try {
+						Dictionary<String, Object> dic = new Hashtable<String, Object>();
+						JSONObject obj = new JSONObject(new String((byte[]) message, "utf-8"));
+						dic.put("message", unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
+								new MappedNamespaceConvention(new Configuration()))));
+						admin.postEvent(new Event("endpoint/" + PollingTask.this.id, dic));
+					} catch (JAXBException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (XMLStreamException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				@Override

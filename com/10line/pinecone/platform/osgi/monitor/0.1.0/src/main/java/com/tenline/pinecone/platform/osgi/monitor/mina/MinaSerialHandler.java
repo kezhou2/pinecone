@@ -3,9 +3,14 @@
  */
 package com.tenline.pinecone.platform.osgi.monitor.mina;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.apache.mina.core.session.IoSession;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
+
+import com.tenline.pinecone.platform.model.Device;
 
 /**
  * @author Bill
@@ -19,12 +24,19 @@ public class MinaSerialHandler extends AbstractMinaHandler {
 	private IoSession session; 
 	
 	/**
+	 * Endpoint's Id
+	 */
+	private String endpointId;
+	
+	/**
 	 * 
 	 * @param bundleContext
+	 * @param endpointId
 	 */
-	public MinaSerialHandler(BundleContext bundleContext) {
+	public MinaSerialHandler(BundleContext bundleContext, String endpointId) {
 		super(bundleContext);
 		// TODO Auto-generated constructor stub
+		this.endpointId = endpointId;
 	}
 
 	@Override
@@ -44,8 +56,9 @@ public class MinaSerialHandler extends AbstractMinaHandler {
 	public void messageReceived(IoSession session, Object message) throws Exception {
 		super.messageReceived(session, message);
 		// TODO Auto-generated method stub
-		// String id = endpoint's id
-		// admin.postEvent(new Event("endpoint/read/" + id, dic));
+		Dictionary<String, Object> dic = new Hashtable<String, Object>();
+		dic.put("message", (Device) message);
+		admin.postEvent(new Event("endpoint/read/" + endpointId, dic));	 
 	}
 	
 	@Override

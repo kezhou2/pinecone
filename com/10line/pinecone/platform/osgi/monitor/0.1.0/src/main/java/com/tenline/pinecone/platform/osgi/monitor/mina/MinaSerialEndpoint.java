@@ -69,7 +69,7 @@ public class MinaSerialEndpoint extends AbstractMinaEndpoint {
 		connector.getFilterChain().addLast("executor", new ExecutorFilter(executor));
 		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MinaProtocolCodecFactory
 				(bundleContext, params.get("packageName"))));
-		handler = new MinaSerialHandler(bundleContext);
+		handler = new MinaSerialHandler(bundleContext, params.get("id"));
 		registration = bundleContext.registerService(EventHandler.class.getName(), handler, getProperties(params.get("id")));
 		connector.setHandler(handler);
 		ConnectFuture future = connector.connect(new SerialAddress(params.get("port"), 

@@ -6,10 +6,12 @@ package com.tenline.pinecone.platform.osgi.monitor;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,11 +38,13 @@ import org.osgi.service.event.EventHandler;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.osgi.monitor.mina.MinaSerialEndpoint;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
+import com.tenline.pinecone.platform.sdk.VariableAPI;
 
 /**
  * @author Bill
@@ -58,6 +62,8 @@ public class Activator implements BundleActivator {
 	
 	private DeviceAPI deviceAPI;
 	
+	private VariableAPI variableAPI;
+	
 	private BundleContext bundleContext;
 	
 	private EventAdmin admin;
@@ -67,8 +73,8 @@ public class Activator implements BundleActivator {
 	private Marshaller marshaller;
 	
 	private Hashtable<String, IEndpoint> endpoints;
-	private Hashtable<String, Timer> timers;
-	private Hashtable<String, MessageHandler> handlers;
+	private Hashtable<String, Scheduler> schedulers;
+	private Hashtable<String, Handler> handlers;
 	
 	/**
 	 * 
@@ -83,27 +89,29 @@ public class Activator implements BundleActivator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		timers = new Hashtable<String, Timer>();
-		handlers = new Hashtable<String, MessageHandler>();
+		handlers = new Hashtable<String, Handler>();
 		endpoints = new Hashtable<String, IEndpoint>();
+		schedulers = new Hashtable<String, Scheduler>();
 		userAPI = new UserAPI(host, port, new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
-				User user = (User) ((Collection<?>) message).toArray()[0];
-				try {
-					deviceAPI.showByUser("id=='"+user.getId()+"'");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				Object[] users = ((Collection<?>) message).toArray();
+				for (int i=0; i<users.length; i++) {
+					try {
+						deviceAPI.showByUser("id=='"+((User) users[i]).getId()+"'");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				
+				System.out.println(error);
 			}
 			
 		});
@@ -112,14 +120,46 @@ public class Activator implements BundleActivator {
 			@Override
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
-				Device device = (Device) ((Collection<?>) message).toArray()[0];
-				Activator.this.initializeEndpoint(device);
+				Object[] devices = ((Collection<?>) message).toArray();
+				for (int i=0; i<devices.length; i++) {
+					Activator.this.initializeEndpoint((Device) devices[i]);
+				}
 			}
 
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				
+				System.out.println(error);
+			}
+			
+		});
+		variableAPI = new VariableAPI(host, port, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				Object[] variables = ((Collection<?>) message).toArray();
+				for (int i=0; i<variables.length; i++) {
+					Variable variable = (Variable) variables[i];
+					if (variable.getType().indexOf("read") >= 0) {
+						Device device = new Device();
+						device.setVariables(new ArrayList<Variable>());
+						Variable newVariable = new Variable();
+						newVariable.setName(variable.getName()); 
+						// variables.size() == 1, variables.get(0).getName() != null, items == null
+						device.getVariables().add(newVariable);
+						schedulers.get(variable.getDevice().getId()).addToReadQueue(device);
+					}
+					if (i == variables.length - 1) {
+						schedulers.get(variable.getDevice().getId()).start();
+					}
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				System.out.println(error);
 			}
 			
 		});
@@ -151,38 +191,119 @@ public class Activator implements BundleActivator {
 		params.put("id", endpointId);
 		endpoint.initialize(bundleContext, params);
 		endpoints.put(endpointId, endpoint);
-		// may be adjust variable type
-		Timer timer = new Timer();
-		timer.schedule(new PollingTask(device.getId(), endpointId), 0, 1000);
-		timers.put(device.getId(), timer);
-		handlers.put(device.getId(), new MessageHandler(device.getId(), endpointId));
+		schedulers.put(device.getId(), new Scheduler(device.getId(), endpointId));
+		handlers.put(device.getId(), new Handler(device.getId(), endpointId));
+		try {
+			variableAPI.showByDevice("id=='"+device.getId()+"'");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	private class PollingTask extends TimerTask {
+	private class Scheduler {
 		
-		private String id;
-		private String subject;
+		/**
+		 * Write Queue
+		 */
+		private LinkedList<Device> writeQueue;
+		
+		/**
+		 * Read Queue
+		 */
+		private LinkedList<Device> readQueue;
+		
+		/**
+		 * Read Queue Index
+		 */
+		private int readIndex;
+		
+		/**
+		 * Scheduler Timer
+		 */
+		private Timer timer;
+		
+		/**
+		 * Scheduler Timer Task
+		 */
+		private TimerTask timerTask;
+		
+		/**
+		 * Scheduler Timer Task Interval
+		 */
+		private static final int INTERVAL = 100;
+		
+		/**
+		 * Scheduler Timer Task Interval After Task Starting
+		 */
+		private static final int AFTER_START_INTERVAL = 5000;
+		
+		/**
+		 * Scheduler Last Queue Item
+		 */
+		private Device lastQueueItem;
+		
+		/**
+		 * Scheduler Last Queue Item Type
+		 */
+		private int lastQueueItemType;
+		private static final int NULL = 0;
+		private static final int CONTROL = 1;
+		private static final int QUERY = 2;
+		
+		/**
+		 * Scheduler Write Queue Try Counter 
+		 */
+		private int writeQueueTryCounter;
+		
+		/**
+		 * Scheduler Write Queue Max Try Times
+		 */
+		private static final int MAX_TRY_TIMES = 3;
+		
+		/**
+		 * Endpoint's Id
+		 */
+		private String endpointId;
+		
+		/**
+		 * Device's Id
+		 */
+		private String deviceId;
+		
+		/**
+		 * Channel API
+		 */
 		private ChannelAPI channelAPI;
 		
 		/**
 		 * 
-		 * @param subject
-		 * @param id
+		 * @param deviceId
+		 * @param endpointId
 		 */
-		public PollingTask(String subject, String id) {
-			this.subject = subject + "-application";
-			this.id = id;
+		public Scheduler(String deviceId, String endpointId) {
+			writeQueue = new LinkedList<Device>();
+			readQueue = new LinkedList<Device>();
+			this.endpointId = endpointId;
+			this.deviceId = deviceId;
 			channelAPI = new ChannelAPI(host, port, new APIListener() {
+				
+				private String oldName;
 
 				@Override
 				public void onMessage(Object message) {
 					// TODO Auto-generated method stub
 					try {
-						Dictionary<String, Object> dic = new Hashtable<String, Object>();
 						JSONObject obj = new JSONObject(new String((byte[]) message, "utf-8"));
-						dic.put("message", unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-								new MappedNamespaceConvention(new Configuration()))));
-						admin.postEvent(new Event("endpoint/write/" + PollingTask.this.id, dic));
+						Device device = (Device) unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
+								new MappedNamespaceConvention(new Configuration()))); 
+						// variables.size() == 1, variables.get(0).getName() != null
+						// items.size() == 1, items.get(0).getValue() != null
+						String name = ((Variable) device.getVariables().toArray()[0]).getName();
+						if (!oldName.equals(name)) {
+							Scheduler.this.addToWriteQueue(device);
+							oldName = name;
+						}
 					} catch (JAXBException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -206,34 +327,132 @@ public class Activator implements BundleActivator {
 				
 			});
 		}
+		
+		/**
+		 * Start Scheduler
+		 */
+		public void start() {
+			timer = new Timer();
+			timerTask = new TimerTask(){
 
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			try {
-				channelAPI.subscribe(subject);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					if (lastQueueItemType == CONTROL) {				
+						if (writeQueueTryCounter < MAX_TRY_TIMES) {
+							writeQueue.addFirst(lastQueueItem);	
+							writeQueueTryCounter++;
+						} else {
+							writeQueueTryCounter = 0;
+						}
+					}
+					execute();
+					try {
+						channelAPI.subscribe(deviceId + "-application");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			};
+			timer.schedule(timerTask, AFTER_START_INTERVAL, INTERVAL);
+		}
+		
+		/**
+		 * Execute Scheduler
+		 */
+		public void execute() {
+			if (!writeQueue.isEmpty()) {
+				lastQueueItem = writeQueue.removeFirst();
+				lastQueueItemType = CONTROL;
+				dispatch(lastQueueItem);
+			} else {
+				lastQueueItem = null;
+				lastQueueItemType = NULL;
+				if (!readQueue.isEmpty()) {
+					readIndex %= readQueue.size();
+					lastQueueItem = readQueue.get(readIndex);
+					lastQueueItemType = QUERY;
+					dispatch(lastQueueItem);
+					readIndex++;	
+				} else {
+					lastQueueItem = null;
+					lastQueueItemType = NULL;
+				}
 			}
+		}
+		
+		/**
+		 * Dispatch to endpoint
+		 * @param device
+		 */
+		private void dispatch(Device device) {
+			Dictionary<String, Object> dic = new Hashtable<String, Object>();
+			dic.put("message", device);
+			admin.postEvent(new Event("endpoint/write/" + endpointId, dic));
+		}
+		
+		/**
+		 * Stop Scheduler
+		 */
+		public void stop() {
+			timerTask.cancel();
+			timer.purge();
+			writeQueue.clear();
+			readQueue.clear();
+		}
+		
+		/**
+		 * 
+		 * @param device
+		 */
+		public void addToWriteQueue(Device device) {
+			writeQueue.addLast(device);
+		}
+		
+		/**
+		 * 
+		 * @param device
+		 */
+		@SuppressWarnings("unused")
+		public void removeFromWriteQueue(Device device) {
+			writeQueue.remove(device);
+		}
+		
+		/**
+		 * 
+		 * @param device
+		 */
+		public void addToReadQueue(Device device) {
+			readQueue.addLast(device);
+		}
+		
+		/**
+		 * 
+		 * @param device
+		 */
+		@SuppressWarnings("unused")
+		public void removeFromReadQueue(Device device) {
+			readQueue.remove(device);
 		}
 		
 	}
 	
-	private class MessageHandler implements EventHandler {
+	private class Handler implements EventHandler {
 		
-		private String subject;
+		private String deviceId;
 		private ChannelAPI channelAPI;
 		private ServiceRegistration registration;
 		
 		/**
 		 * 
-		 * @param subject
-		 * @param id
+		 * @param deviceId
+		 * @param endpointId
 		 */
-		public MessageHandler(String subject, String id) {
-			this.subject = subject + "-device";
-			setRegistration(bundleContext.registerService(EventHandler.class.getName(), this, getProperties(id)));
+		public Handler(String deviceId, String endpointId) {
+			this.deviceId = deviceId;
+			setRegistration(bundleContext.registerService(EventHandler.class.getName(), this, getProperties(endpointId)));
 			channelAPI = new ChannelAPI(host, port, new APIListener() {
 
 				@Override
@@ -252,16 +471,19 @@ public class Activator implements BundleActivator {
 		}
 
 		@Override
-		public void handleEvent(Event arg0) {
+		public void handleEvent(Event event) {
 			// TODO Auto-generated method stub
 			try {
+				Device device = (Device) event.getProperty("message");
+				Variable variable = (Variable) device.getVariables().toArray()[0];
+				if (variable.getItems() == null) { // write response
+					Scheduler scheduler = schedulers.get(deviceId);
+					scheduler.lastQueueItemType = Scheduler.NULL;
+				}
 				ByteArrayOutputStream output = new ByteArrayOutputStream();
-				byte[] bytes = new byte[1024];
-				marshaller.marshal(arg0.getProperty("message"), new MappedXMLStreamWriter(
-						new MappedNamespaceConvention(new Configuration()), 
-						new OutputStreamWriter(output, "utf-8")));
-				output.write(bytes); // refactor, may be bug
-				channelAPI.publish(subject, "application/json", bytes);
+				marshaller.marshal(device, new MappedXMLStreamWriter(
+						new MappedNamespaceConvention(new Configuration()), new OutputStreamWriter(output, "utf-8")));
+				channelAPI.publish(deviceId + "-device", "application/json", output.toByteArray());
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -339,11 +561,10 @@ public class Activator implements BundleActivator {
 			endpoints.get(key).close();
 			endpoints.remove(key);
 		}
-		for (Enumeration<String> i = timers.keys(); i.hasMoreElements();) {
+		for (Enumeration<String> i = schedulers.keys(); i.hasMoreElements();) {
 			String key = i.nextElement();
-			timers.get(key).purge();
-			timers.get(key).cancel();
-			timers.remove(key);
+			schedulers.get(key).stop();
+			schedulers.remove(key);
 		}
 		for (Enumeration<String> i = handlers.keys(); i.hasMoreElements();) {
 			String key = i.nextElement();

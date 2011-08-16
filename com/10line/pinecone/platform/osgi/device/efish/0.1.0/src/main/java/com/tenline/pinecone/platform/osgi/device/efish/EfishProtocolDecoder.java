@@ -6,7 +6,6 @@ package com.tenline.pinecone.platform.osgi.device.efish;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.osgi.framework.BundleContext;
 
 import com.tenline.pinecone.platform.osgi.monitor.mina.AbstractMinaProtocolDecoder;
 
@@ -18,10 +17,8 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 
 	/**
 	 * 
-	 * @param bundleContext
 	 */
-	public EfishProtocolDecoder(BundleContext bundleContext) {
-		super(bundleContext);
+	public EfishProtocolDecoder() {
 		// TODO Auto-generated constructor stub
 	}
 

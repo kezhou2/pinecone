@@ -4,6 +4,7 @@
 package com.tenline.pinecone.platform.osgi.monitor.mina;
 
 import java.util.Hashtable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.mina.core.future.CloseFuture;
@@ -18,14 +19,20 @@ import org.apache.mina.transport.serial.SerialAddress.DataBits;
 import org.apache.mina.transport.serial.SerialAddress.FlowControl;
 import org.apache.mina.transport.serial.SerialAddress.Parity;
 import org.apache.mina.transport.serial.SerialAddress.StopBits;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.event.EventHandler;
+
+import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.osgi.monitor.IEndpoint;
 
 /**
  * @author Bill
  *
  */
-public class MinaSerialEndpoint extends AbstractMinaEndpoint {
+public class MinaSerialEndpoint implements IEndpoint {
+
+	/**
+	 * Concurrent Executor Service
+	 */
+	private ExecutorService executor;
 
 	/**
 	 * MINA IoConnector
@@ -38,9 +45,9 @@ public class MinaSerialEndpoint extends AbstractMinaEndpoint {
 	private IoSession session;
 	
 	/**
-	 * MINA Serial Handler
+	 * MINA Handler
 	 */
-	private MinaSerialHandler handler;
+	private MinaHandler handler;
 	
 	/**
 	 * 
@@ -56,21 +63,21 @@ public class MinaSerialEndpoint extends AbstractMinaEndpoint {
 		CloseFuture future = session.close(true);
 		future.awaitUninterruptibly(); // wait until the connection is closed
 		if(future.isClosed()) {
-			registration.unregister();
 			connector.dispose();
 			executor.shutdown();
+			handler.close();
 		}
 	}
 
 	@Override
-	public void initialize(BundleContext bundleContext, Hashtable<String, String> params) {
+	public void initialize(Hashtable<String, String> params, Hashtable<Device, IoSession> mapping) {
 		// TODO Auto-generated method stub
 		executor = Executors.newCachedThreadPool();
 		connector.getFilterChain().addLast("executor", new ExecutorFilter(executor));
-		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MinaProtocolCodecFactory
-				(bundleContext, params.get("packageName"))));
-		handler = new MinaSerialHandler(bundleContext, params.get("id"));
-		registration = bundleContext.registerService(EventHandler.class.getName(), handler, getProperties(params.get("id")));
+		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter
+				(new MinaProtocolCodecFactory(params.get("packageName"))));
+		handler = new MinaHandler();
+		handler.initialize(mapping);
 		connector.setHandler(handler);
 		ConnectFuture future = connector.connect(new SerialAddress(params.get("port"), 
 				Integer.valueOf(params.get("baudRate")), 

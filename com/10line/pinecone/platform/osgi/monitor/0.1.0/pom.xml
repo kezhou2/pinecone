@@ -35,14 +35,6 @@
     	<type>bundle</type>
     	<scope>compile</scope>
     </dependency>
-    <!-- OSGI Service -->
-    <dependency>
-        <groupId>org.eclipse.osgi</groupId>
-        <artifactId>org.eclipse.osgi.services</artifactId>
-        <version>3.2.100.v20100503</version>
-        <type>jar</type>
-        <scope>compile</scope>
-    </dependency>
   	<!-- Pinecone SDK -->
     <dependency>
     	<groupId>com.10line.pinecone.platform</groupId>

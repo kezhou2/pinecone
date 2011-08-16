@@ -3,14 +3,10 @@
  */
 package com.tenline.pinecone.platform.osgi.monitor.mina;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
-import org.osgi.framework.BundleContext;
 
 /**
  * @author Bill
@@ -30,15 +26,12 @@ public class MinaProtocolCodecFactory implements ProtocolCodecFactory {
 
 	/**
 	 * 
-	 * @param bundleContext
 	 * @param packageName
 	 */
-	public MinaProtocolCodecFactory(BundleContext bundleContext, String packageName) {
+	public MinaProtocolCodecFactory(String packageName) {
 		// TODO Auto-generated constructor stub
 		try {
-			Class<?> decoderClass = Class.forName(packageName + "ProtocolDecoder");
-			Constructor<?> decoderConstructor = decoderClass.getDeclaredConstructor(BundleContext.class);
-			decoder = (ProtocolDecoder) decoderConstructor.newInstance(bundleContext);
+			decoder = (ProtocolDecoder) Class.forName(packageName + "ProtocolDecoder").newInstance();
 			encoder = (ProtocolEncoder) Class.forName(packageName + "ProtocolEncoder").newInstance();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -52,16 +45,10 @@ public class MinaProtocolCodecFactory implements ProtocolCodecFactory {
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 	}
 
 	@Override

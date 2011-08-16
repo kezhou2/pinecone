@@ -5,7 +5,9 @@ package com.tenline.pinecone.platform.osgi.monitor;
 
 import java.util.Hashtable;
 
-import org.osgi.framework.BundleContext;
+import org.apache.mina.core.session.IoSession;
+
+import com.tenline.pinecone.platform.model.Device;
 
 /**
  * @author Bill
@@ -20,9 +22,9 @@ public interface IEndpoint {
 	
 	/**
 	 * Initialize Endpoint
-	 * @param bundleContext
 	 * @param params
+	 * @param mapping
 	 */
-	void initialize(BundleContext bundleContext, Hashtable<String, String> params);
+	void initialize(Hashtable<String, String> params, Hashtable<Device, IoSession> mapping);
 
 }

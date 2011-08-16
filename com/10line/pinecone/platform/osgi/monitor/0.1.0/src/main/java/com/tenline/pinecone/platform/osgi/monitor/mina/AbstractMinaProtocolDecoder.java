@@ -5,7 +5,6 @@ package com.tenline.pinecone.platform.osgi.monitor.mina;
 
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.osgi.framework.BundleContext;
 
 /**
  * @author Bill
@@ -15,9 +14,8 @@ public abstract class AbstractMinaProtocolDecoder extends CumulativeProtocolDeco
 	
 	/**
 	 * 
-	 * @param bundleContext
 	 */
-	public AbstractMinaProtocolDecoder(BundleContext bundleContext) {
+	public AbstractMinaProtocolDecoder() {
 		// TODO Auto-generated constructor stub
 	}
 	

@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  */
 @XmlRootElement
+@SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class Variable extends Entity {
 

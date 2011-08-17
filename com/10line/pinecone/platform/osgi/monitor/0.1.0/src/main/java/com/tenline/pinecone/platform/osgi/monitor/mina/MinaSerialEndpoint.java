@@ -3,7 +3,6 @@
  */
 package com.tenline.pinecone.platform.osgi.monitor.mina;
 
-import java.util.Hashtable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,8 +18,10 @@ import org.apache.mina.transport.serial.SerialAddress.DataBits;
 import org.apache.mina.transport.serial.SerialAddress.FlowControl;
 import org.apache.mina.transport.serial.SerialAddress.Parity;
 import org.apache.mina.transport.serial.SerialAddress.StopBits;
+import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.osgi.monitor.Activator;
 import com.tenline.pinecone.platform.osgi.monitor.IEndpoint;
 
 /**
@@ -50,6 +51,11 @@ public class MinaSerialEndpoint implements IEndpoint {
 	private MinaHandler handler;
 	
 	/**
+	 * MINA Protocol Codec Factory
+	 */
+	private MinaProtocolCodecFactory factory;
+	
+	/**
 	 * 
 	 */
 	public MinaSerialEndpoint() {
@@ -65,28 +71,38 @@ public class MinaSerialEndpoint implements IEndpoint {
 		if(future.isClosed()) {
 			connector.dispose();
 			executor.shutdown();
+			factory.close();
 			handler.close();
 		}
 	}
 
 	@Override
-	public void initialize(Hashtable<String, String> params, Hashtable<Device, IoSession> mapping) {
+	public void initialize(Device device) {
 		// TODO Auto-generated method stub
-		executor = Executors.newCachedThreadPool();
-		connector.getFilterChain().addLast("executor", new ExecutorFilter(executor));
-		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter
-				(new MinaProtocolCodecFactory(params.get("packageName"))));
-		handler = new MinaHandler();
-		handler.initialize(mapping);
-		connector.setHandler(handler);
-		ConnectFuture future = connector.connect(new SerialAddress(params.get("port"), 
-				Integer.valueOf(params.get("baudRate")), 
-				getDataBits(Integer.valueOf(params.get("dataBits"))), 
-				getStopBits(Integer.valueOf(params.get("stopBits"))), 
-				getParity(params.get("parity")), 
-				getFlowControl(params.get("flowControl"))));
-		future.awaitUninterruptibly(); // wait until the connection is finished
-		if(future.isConnected()) session = future.getSession();
+		try {
+			executor = Executors.newCachedThreadPool();
+			connector.getFilterChain().addLast("executor", new ExecutorFilter(executor));
+			factory = new MinaProtocolCodecFactory();
+			factory.initialize(device);
+			connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(factory));
+			handler = new MinaHandler();
+			handler.initialize(factory.getBuilder());
+			handler.getMapping().put(device, null);
+			connector.setHandler(handler);
+			// Port Generation Strategy
+			Bundle bundle = Activator.getBundle(device.getSymbolicName());
+			ConnectFuture future = connector.connect(new SerialAddress(bundle.getHeaders().get("Port").toString(), 
+					Integer.valueOf(bundle.getHeaders().get("Baud-Rate").toString()), 
+					getDataBits(Integer.valueOf(bundle.getHeaders().get("Data-Bits").toString())), 
+					getStopBits(Integer.valueOf(bundle.getHeaders().get("Stop-Bits").toString())), 
+					getParity(bundle.getHeaders().get("Parity").toString()), 
+					getFlowControl(bundle.getHeaders().get("Flow-Control").toString())));
+			future.awaitUninterruptibly(); // wait until the connection is finished
+			if(future.isConnected()) session = future.getSession();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 
 	/**

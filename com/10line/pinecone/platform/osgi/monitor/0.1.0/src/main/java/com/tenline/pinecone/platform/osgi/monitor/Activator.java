@@ -5,9 +5,7 @@ package com.tenline.pinecone.platform.osgi.monitor;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 
-import org.apache.mina.core.session.IoSession;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -31,7 +29,7 @@ public class Activator implements BundleActivator {
 	
 	private DeviceAPI deviceAPI;
 	
-	private BundleContext bundleContext;
+	private static BundleContext bundleContext;
 	
 	private ArrayList<IEndpoint> endpoints;
 	
@@ -87,7 +85,6 @@ public class Activator implements BundleActivator {
 			}
 			
 		});
-		
 	}
 	
 	/**
@@ -96,25 +93,14 @@ public class Activator implements BundleActivator {
 	 * @throws Exception 
 	 */
 	private void initializeEndpoint(Device device) throws Exception {
-		Hashtable<String, String> params = new Hashtable<String, String>();
-		String symbolicName = device.getSymbolicName();
-		String tempName = symbolicName.substring(symbolicName.lastIndexOf(".") + 1);
-		String name = String.valueOf(tempName.charAt(0)).toUpperCase() + tempName.substring(1);
-		params.put("packageName", symbolicName.replace("10line", "tenline") + "." + name);
-		Bundle bundle = getBundle(symbolicName);
-		params.put("port", bundle.getHeaders().get("port").toString());
-		if (params.get("port").indexOf("COM") >= 0) {
-			params.put("baudRate", bundle.getHeaders().get("Baud-Rate").toString());
-			params.put("dataBits", bundle.getHeaders().get("Data-Bits").toString());
-			params.put("stopBits", bundle.getHeaders().get("Stop-Bits").toString());
-			params.put("parity", bundle.getHeaders().get("Parity").toString());
-			params.put("flowControl", bundle.getHeaders().get("Flow-Control").toString());
-			IEndpoint endpoint = new MinaSerialEndpoint();
-			Hashtable<Device, IoSession> mapping = new Hashtable<Device, IoSession>();
-			mapping.put(device, null);
-			endpoint.initialize(params, mapping);
+		Bundle bundle = getBundle(device.getSymbolicName());
+		if (bundle.getHeaders().get("Baud-Rate") != null) {
+			MinaSerialEndpoint endpoint = new MinaSerialEndpoint();
+			endpoint.initialize(device);
 			endpoints.add(endpoint);
-		} // TCP
+		} 
+		// TCP Server
+		// TCP Client
 	}
 	
 	/**
@@ -122,7 +108,7 @@ public class Activator implements BundleActivator {
 	 * @param symbolicName
 	 * @return
 	 */
-	private Bundle getBundle(String symbolicName) {
+	public static Bundle getBundle(String symbolicName) {
 		for (int i=0; i<bundleContext.getBundles().length; i++) {
 			Bundle bundle = bundleContext.getBundles()[i];
 			if (bundle.getSymbolicName().equals(symbolicName)) {
@@ -136,14 +122,14 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		// TODO Auto-generated method stub
-		this.bundleContext = bundleContext;
+		Activator.bundleContext = bundleContext;
 		userAPI.show("snsId=='" + snsId + "'");
 	}
 
 	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 		// TODO Auto-generated method stub
-		this.bundleContext = null;
+		Activator.bundleContext = null;
 		while (endpoints.size() > 0) {
 			endpoints.get(0).close();
 			endpoints.remove(0);

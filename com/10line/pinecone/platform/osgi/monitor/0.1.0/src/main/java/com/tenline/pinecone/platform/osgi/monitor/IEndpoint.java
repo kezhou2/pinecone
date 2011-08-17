@@ -3,10 +3,6 @@
  */
 package com.tenline.pinecone.platform.osgi.monitor;
 
-import java.util.Hashtable;
-
-import org.apache.mina.core.session.IoSession;
-
 import com.tenline.pinecone.platform.model.Device;
 
 /**
@@ -22,9 +18,8 @@ public interface IEndpoint {
 	
 	/**
 	 * Initialize Endpoint
-	 * @param params
-	 * @param mapping
+	 * @param device
 	 */
-	void initialize(Hashtable<String, String> params, Hashtable<Device, IoSession> mapping);
+	void initialize(Device device);
 
 }

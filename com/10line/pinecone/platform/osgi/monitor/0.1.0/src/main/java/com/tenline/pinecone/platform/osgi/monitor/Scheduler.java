@@ -57,10 +57,12 @@ public class Scheduler {
 	
 	/**
 	 * 
+	 * @param builder
 	 */
-	public Scheduler() {
+	public Scheduler(AbstractProtocolBuilder builder) {
 		writeQueue = new LinkedList<Device>();
 		readQueue = new LinkedList<Device>();
+		builder.initializeReadQueue(readQueue);
 	}
 	
 	/**

@@ -83,6 +83,11 @@
         		<Data-Bits>8</Data-Bits>
         		<Parity>odd</Parity>
         		<Flow-Control>rtscts_in</Flow-Control>
+        		<Water-Temperature>%Water-Temperature</Water-Temperature>
+        		<Oxygen-Generation>%Oxygen-Generation</Oxygen-Generation>
+        		<Work>%Work</Work>
+        		<Stop>%Stop</Stop>
+        		<Minute>%Minute</Minute>
         	</instructions>
         </configuration> 
       </plugin> 

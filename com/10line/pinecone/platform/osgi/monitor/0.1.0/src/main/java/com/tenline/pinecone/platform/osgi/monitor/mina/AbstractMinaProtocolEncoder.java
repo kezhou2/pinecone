@@ -6,8 +6,11 @@ package com.tenline.pinecone.platform.osgi.monitor.mina;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
+import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Variable;
+import com.tenline.pinecone.platform.osgi.monitor.Activator;
 
 /**
  * @author Bill
@@ -16,10 +19,17 @@ import com.tenline.pinecone.platform.model.Device;
 public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter {
 
 	/**
-	 * 
+	 * Protocol Bundle
 	 */
-	public AbstractMinaProtocolEncoder() {
+	protected Bundle bundle;
+	
+	/**
+	 * 
+	 * @param device
+	 */
+	public AbstractMinaProtocolEncoder(Device device) {
 		// TODO Auto-generated constructor stub
+		bundle = Activator.getBundle(device.getSymbolicName());
 	}
 	
 	/**
@@ -31,15 +41,17 @@ public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter
 
 	/**
 	 * Build Packet Type
+	 * @param variable
 	 * @return
 	 */
-	protected abstract byte[] buildPacketType();
+	protected abstract byte[] buildPacketType(Variable variable);
 
 	/**
 	 * Build Packet Data
+	 * @param variable
 	 * @return
 	 */
-	protected abstract byte[] buildPacketData(); 
+	protected abstract byte[] buildPacketData(Variable variable); 
 
 	/**
 	 * Build Packet Check

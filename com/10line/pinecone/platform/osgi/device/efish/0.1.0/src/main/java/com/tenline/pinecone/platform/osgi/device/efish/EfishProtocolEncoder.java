@@ -14,7 +14,7 @@ import com.tenline.pinecone.platform.osgi.monitor.mina.AbstractMinaProtocolEncod
 
 /**
  * @author Bill
- *
+ * 
  */
 public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 
@@ -44,15 +44,19 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	protected byte[] buildPacketType(Variable variable) {
 		// TODO Auto-generated method stub
 		byte[] bytes = null;
-		if (variable.getName().equals(bundle.getHeaders().get("Water-Temperature"))) {
+		if (variable.getName().equals(
+				bundle.getHeaders().get("Water-Temperature"))) {
 			if (variable.getItems() == null) {
-				bytes = new byte[]{ 0x02 };
+				bytes = new byte[] { 0x02 };
 			} else {
-				bytes = BufferHelper.appendBuffer(new byte[]{ 0x04, 0x01 }, bytes);
-				bytes = BufferHelper.appendBuffer(buildPacketData(variable), bytes);
+				bytes = BufferHelper.appendBuffer(new byte[] { 0x04, 0x01 },
+						bytes);
+				bytes = BufferHelper.appendBuffer(buildPacketData(variable),
+						bytes);
 			}
-		} else if (variable.getName().equals(bundle.getHeaders().get("Oxygen-Generation"))) {
-			bytes = BufferHelper.appendBuffer(new byte[]{ 0x03, 0x01 }, bytes);
+		} else if (variable.getName().equals(
+				bundle.getHeaders().get("Oxygen-Generation"))) {
+			bytes = BufferHelper.appendBuffer(new byte[] { 0x03, 0x01 }, bytes);
 			bytes = BufferHelper.appendBuffer(buildPacketData(variable), bytes);
 		}
 		return bytes;
@@ -63,33 +67,36 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 		// TODO Auto-generated method stub
 		byte[] bytes = null;
 		String temp = ((Item) variable.getItems().toArray()[0]).getValue();
-		if (variable.getName().equals(bundle.getHeaders().get("Water-Temperature"))) {
+		if (variable.getName().equals(
+				bundle.getHeaders().get("Water-Temperature"))) {
 			if (temp.equals("20")) {
-				bytes = new byte[]{ 0x02, 0x02 };
+				bytes = new byte[] { (byte) 0x08, (byte) 0x02 };
 			} else if (temp.equals("21")) {
-				bytes = new byte[]{ 0x01, (byte) 0xF3 };
+				bytes = new byte[] { (byte) 0xfa, (byte) 0x01 };
 			} else if (temp.equals("22")) {
-				bytes = new byte[]{ 0x01, (byte) 0xE6 };
+				bytes = new byte[] { (byte) 0xec, (byte) 0x01 };
 			} else if (temp.equals("23")) {
-				bytes = new byte[]{ 0x01, (byte) 0xD9 };
+				bytes = new byte[] { (byte) 0xdf, (byte) 0x01 };
 			} else if (temp.equals("24")) {
-				bytes = new byte[]{ 0x01, (byte) 0xCA };
+				bytes = new byte[] { (byte) 0xd1, (byte) 0x01 };
 			} else if (temp.equals("25")) {
-				bytes = new byte[]{ 0x01, (byte) 0xBC };
+				bytes = new byte[] { (byte) 0xc2, (byte) 0x01 };
 			} else if (temp.equals("26")) {
-				bytes = new byte[]{ 0x01, (byte) 0xB1 };
+				bytes = new byte[] { (byte) 0xb6, (byte) 0x01 };
 			} else if (temp.equals("27")) {
-				bytes = new byte[]{ 0x01, (byte) 0xA7 };
+				bytes = new byte[] { (byte) 0xab, (byte) 0x01 };
 			} else if (temp.equals("28")) {
-				bytes = new byte[]{ 0x01, (byte) 0x9D };
+				bytes = new byte[] { (byte) 0xa1, (byte) 0x01 };
 			} else if (temp.equals("29")) {
-				bytes = new byte[]{ 0x01, (byte) 0x93 };
+				bytes = new byte[] { (byte) 0x97, (byte) 0x01 };
 			} else if (temp.equals("30")) {
-				bytes = new byte[]{ 0x01, (byte) 0x89 };
+				bytes = new byte[] { (byte) 0xbd, (byte) 0x01 };
 			}
-		} else if (variable.getName().equals(bundle.getHeaders().get("Oxygen-Generation"))) {
+		} else if (variable.getName().equals(
+				bundle.getHeaders().get("Oxygen-Generation"))) {
 			String[] temps = temp.split("-");
-			bytes = new byte[]{Byte.valueOf(temps[0]), (byte) (Byte.valueOf(temps[1]) * 5)};
+			bytes = new byte[] { Byte.valueOf(temps[0]),
+					(byte) (Byte.valueOf(temps[1]) * 5) };
 		}
 		return bytes;
 	}

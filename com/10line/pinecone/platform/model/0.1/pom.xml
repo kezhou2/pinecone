@@ -108,6 +108,24 @@
         		</instructions>
         	</configuration> 
       </plugin>
+      <plugin>  
+      	  <groupId>org.apache.maven.plugins</groupId>
+      	  <artifactId>maven-assembly-plugin</artifactId>  
+          <version>2.2-beta-5</version>    
+          <executions>  
+          	<execution> 
+            	<phase>package</phase> 
+                <goals>  
+                	<goal>single</goal>
+                </goals>  
+                <configuration>               
+                	<descriptors>  
+                    	<descriptor>src/main/resources/assembly-gwt.xml</descriptor>  
+                    </descriptors>  
+                </configuration>  
+            </execution> 
+          </executions>  
+      </plugin>
   	</plugins>
   	<extensions>
 	  <extension>

@@ -3,6 +3,11 @@
  */
 package com.tenline.pinecone.platform.osgi.monitor.mina;
 
+import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,6 +61,11 @@ public class MinaSerialEndpoint implements IEndpoint {
 	private MinaProtocolCodecFactory factory;
 	
 	/**
+	 * Serial Ports
+	 */
+	private static ArrayList<String> serialPorts = new ArrayList<String>();
+	
+	/**
 	 * 
 	 */
 	public MinaSerialEndpoint() {
@@ -66,6 +76,7 @@ public class MinaSerialEndpoint implements IEndpoint {
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
+		removePort();
 		CloseFuture future = session.close(true);
 		future.awaitUninterruptibly(); // wait until the connection is closed
 		if(future.isClosed()) {
@@ -89,9 +100,8 @@ public class MinaSerialEndpoint implements IEndpoint {
 			handler.initialize(factory.getBuilder());
 			handler.getMapping().put(device, null);
 			connector.setHandler(handler);
-			// Port Generation Strategy
 			Bundle bundle = Activator.getBundle(device.getSymbolicName());
-			ConnectFuture future = connector.connect(new SerialAddress(bundle.getHeaders().get("Port").toString(), 
+			ConnectFuture future = connector.connect(new SerialAddress(getPort(bundle), 
 					Integer.valueOf(bundle.getHeaders().get("Baud-Rate").toString()), 
 					getDataBits(Integer.valueOf(bundle.getHeaders().get("Data-Bits").toString())), 
 					getStopBits(Integer.valueOf(bundle.getHeaders().get("Stop-Bits").toString())), 
@@ -103,6 +113,53 @@ public class MinaSerialEndpoint implements IEndpoint {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+	}
+	
+	/**
+	 * Get Port
+	 * @param bundle
+	 * @return
+	 */
+	private String getPort(Bundle bundle) {
+		String port = bundle.getHeaders().get("Port").toString();
+		if (port != null) {
+			try {
+				if (CommPortIdentifier.getPortIdentifier(port) != null) {
+					serialPorts.add(port);
+				} else {
+					port = matchPort();
+				}
+			} catch (NoSuchPortException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			port = matchPort();
+		}
+		return port;
+	}
+	
+	/**
+	 * Match Port
+	 * @return
+	 */
+	private String matchPort() {
+		Enumeration<?> ports = CommPortIdentifier.getPortIdentifiers();
+		while (ports.hasMoreElements()) {
+			String port = ((CommPortIdentifier) ports.nextElement()).getName();
+			if (!serialPorts.contains(port)) {
+				serialPorts.add(port);
+				return port;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Remove Port
+	 */
+	private void removePort() {
+		serialPorts.remove(((SerialAddress) session.getRemoteAddress()).getName());
 	}
 
 	/**

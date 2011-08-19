@@ -18,9 +18,9 @@ import com.tenline.pinecone.platform.osgi.monitor.AbstractProtocolBuilder;
 public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 	
 	/**
-	 * Protocol Meta Data
+	 * EFish Protocol Meta Data
 	 */
-	public final static Device META_DATA = new Device();
+	private static Device metaData;
 	
 	/**
 	 * 
@@ -29,11 +29,12 @@ public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 	public EfishProtocolBuilder(Device device) {
 		super(device);
 		// TODO Auto-generated constructor stub
-		if (META_DATA.getName() == null) {
-			META_DATA.setName(bundle.getHeaders().get("Bundle-Name").toString());
-			META_DATA.setSymbolicName(bundle.getSymbolicName());
-			META_DATA.setVersion(bundle.getVersion().toString());
-			META_DATA.setVariables(new ArrayList<Variable>());
+		if (metaData == null) {
+			metaData = new Device();
+			metaData.setName(bundle.getHeaders().get("Bundle-Name").toString());
+			metaData.setSymbolicName(bundle.getSymbolicName());
+			metaData.setVersion(bundle.getVersion().toString());
+			metaData.setVariables(new ArrayList<Variable>());
 			
 			Variable variable = new Variable();
 			variable.setName(bundle.getHeaders().get("Water-Temperature").toString()); // Localization
@@ -47,7 +48,7 @@ public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 				variable.getItems().add(item);
 			}
 			
-			META_DATA.getVariables().add(variable);	
+			metaData.getVariables().add(variable);	
 			
 			variable = new Variable();
 			variable.setName(bundle.getHeaders().get("Oxygen-Generation").toString());
@@ -64,8 +65,16 @@ public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 				}
 			}
 			
-			META_DATA.getVariables().add(variable);	
+			metaData.getVariables().add(variable);	
 		}
+	}
+	
+	/**
+	 * Get Meta Data
+	 * @return
+	 */
+	public static Device getMetaData() {
+		return metaData;
 	}
 
 	@Override

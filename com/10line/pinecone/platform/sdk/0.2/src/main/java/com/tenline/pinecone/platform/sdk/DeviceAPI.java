@@ -64,6 +64,7 @@ public class DeviceAPI extends AbstractAPI {
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
+		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		marshaller.marshal(device, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
@@ -86,6 +87,7 @@ public class DeviceAPI extends AbstractAPI {
 	public void delete(String id) throws Exception {
 		connection = (HttpURLConnection) new URL(url + "/api/device/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
+		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) listener.onMessage("Device Deleted!");
 		else listener.onError("Delete Device Error Code: Http (" + connection.getResponseCode() + ")");
@@ -103,6 +105,7 @@ public class DeviceAPI extends AbstractAPI {
 		connection.setRequestMethod("PUT");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
+		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		marshaller.marshal(device, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
@@ -124,6 +127,7 @@ public class DeviceAPI extends AbstractAPI {
 	 */
 	public void show(String filter) throws Exception {
 		connection = (HttpURLConnection) new URL(url + "/api/device/show/" + filter).openConnection();
+		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
@@ -146,6 +150,7 @@ public class DeviceAPI extends AbstractAPI {
 	 */
 	public void showByUser(String filter) throws Exception {
 		connection = (HttpURLConnection) new URL(url + "/api/device/show/" + filter + "/@User").openConnection();
+		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));

@@ -55,6 +55,7 @@ public class ChannelAPI extends AbstractAPI {
 	 */
 	public void subscribe(String subject) throws Exception {
 		connection = (HttpURLConnection) new URL(url + "/api/channel/subscribe/" + subject).openConnection();
+		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		byte[] bytes = new byte[connection.getInputStream().available()];
 		connection.getInputStream().read(bytes);
@@ -84,6 +85,7 @@ public class ChannelAPI extends AbstractAPI {
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", contentType + "; charset=utf-8");
 		connection.setUseCaches(false);
+		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (contentType.equals("application/json")) {
 			marshaller.marshal(content, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 

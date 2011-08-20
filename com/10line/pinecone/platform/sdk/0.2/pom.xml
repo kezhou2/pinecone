@@ -33,6 +33,12 @@
   		<artifactId>jettison</artifactId>
   		<version>1.2</version>
   	</dependency>
+  	<!-- Gson Library -->
+  	<dependency>
+		<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+		<version>1.7.1</version>
+  	</dependency>
   </dependencies>
   <build>
   	<plugins>

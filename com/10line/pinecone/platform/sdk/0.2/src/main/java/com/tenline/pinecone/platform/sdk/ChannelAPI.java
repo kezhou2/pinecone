@@ -3,21 +3,10 @@
  */
 package com.tenline.pinecone.platform.sdk;
 
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.codehaus.jettison.json.JSONObject;
-import org.codehaus.jettison.mapped.Configuration;
-import org.codehaus.jettison.mapped.MappedNamespaceConvention;
-import org.codehaus.jettison.mapped.MappedXMLStreamReader;
-import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
-
+import com.google.gson.Gson;
 import com.tenline.pinecone.platform.model.Device;
 
 /**
@@ -25,10 +14,11 @@ import com.tenline.pinecone.platform.model.Device;
  *
  */
 public class ChannelAPI extends AbstractAPI {
-
-	private JAXBContext context;
-	private Marshaller marshaller;
-	private Unmarshaller unmarshaller;
+	
+	/**
+	 * Google Json
+	 */
+	private Gson gson;
 	
 	/**
 	 * @param host
@@ -38,14 +28,7 @@ public class ChannelAPI extends AbstractAPI {
 	public ChannelAPI(String host, String port, APIListener listener) {
 		super(host, port, listener);
 		// TODO Auto-generated constructor stub
-		try {
-			context = JAXBContext.newInstance(Device.class);
-			marshaller = context.createMarshaller();
-			unmarshaller = context.createUnmarshaller();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		gson = new Gson();
 	}
 	
 	/**
@@ -62,9 +45,7 @@ public class ChannelAPI extends AbstractAPI {
 		connection.getInputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			if (connection.getContentType().indexOf("application/json") >= 0) {
-				JSONObject obj = new JSONObject(new String(bytes, "utf-8"));
-				listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
-						new MappedNamespaceConvention(new Configuration()))));
+				listener.onMessage(gson.fromJson(new String(bytes, "utf-8"), Device.class));
 			} else {
 				listener.onMessage(bytes);
 			}
@@ -88,8 +69,7 @@ public class ChannelAPI extends AbstractAPI {
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (contentType.indexOf("application/json") >= 0) {
-			marshaller.marshal(content, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
-					new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
+			connection.getOutputStream().write(gson.toJson(content).getBytes("utf-8"));
 		} else {
 			connection.getOutputStream().write((byte[]) content);
 		}

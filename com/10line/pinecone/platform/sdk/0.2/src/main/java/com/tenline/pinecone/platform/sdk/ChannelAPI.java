@@ -61,7 +61,7 @@ public class ChannelAPI extends AbstractAPI {
 		connection.getInputStream().read(bytes);
 		connection.getInputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			if (connection.getContentType().equals("application/json")) {
+			if (connection.getContentType().indexOf("application/json") >= 0) {
 				JSONObject obj = new JSONObject(new String(bytes, "utf-8"));
 				listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, 
 						new MappedNamespaceConvention(new Configuration()))));
@@ -87,7 +87,7 @@ public class ChannelAPI extends AbstractAPI {
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		if (contentType.equals("application/json")) {
+		if (contentType.indexOf("application/json") >= 0) {
 			marshaller.marshal(content, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 					new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		} else {

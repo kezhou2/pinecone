@@ -19,9 +19,9 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  */
 @XmlRootElement
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "rawtypes" })
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
-public class Device extends Entity {
+public class Device extends Entity implements Comparable {
 
 	@Persistent
 	private String name;
@@ -116,6 +116,12 @@ public class Device extends Entity {
 	 */
 	public Collection<Variable> getVariables() {
 		return variables;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		return getId().compareTo(((Device) o).getId());
 	}
 
 }

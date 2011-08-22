@@ -52,7 +52,7 @@ public class MinaProtocolCodecFactory implements ProtocolCodecFactory {
 			String tempName = symbolicName.substring(symbolicName.lastIndexOf(".") + 1);
 			String name = String.valueOf(tempName.charAt(0)).toUpperCase() + tempName.substring(1);
 			// No need to replace, actually
-			String packageName = symbolicName.replace("10line", "tenline") + "." + name;
+			String packageName = symbolicName + "." + name;
 			Class<?> decoderClass = Class.forName(packageName + "ProtocolDecoder");
 			Constructor<?> decoderConstructor = decoderClass.getDeclaredConstructor(Device.class);
 			decoder = (ProtocolDecoder) decoderConstructor.newInstance(device);

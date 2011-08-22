@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor;
+package com.tenline.pinecone.platform.monitor;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.sdk.APIListener;

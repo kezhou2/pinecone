@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor.mina;
+package com.tenline.pinecone.platform.monitor.mina;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
@@ -10,7 +10,7 @@ import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.osgi.monitor.Activator;
+import com.tenline.pinecone.platform.monitor.Activator;
 
 /**
  * @author Bill

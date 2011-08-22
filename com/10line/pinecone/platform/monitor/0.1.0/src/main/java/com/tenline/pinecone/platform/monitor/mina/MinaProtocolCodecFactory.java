@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor.mina;
+package com.tenline.pinecone.platform.monitor.mina;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +12,7 @@ import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.osgi.monitor.AbstractProtocolBuilder;
+import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
 
 /**
  * @author Bill

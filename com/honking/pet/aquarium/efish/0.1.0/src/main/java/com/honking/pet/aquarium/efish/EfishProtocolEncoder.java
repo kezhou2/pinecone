@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.device.efish;
+package com.honking.pet.aquarium.efish;
 
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
@@ -9,8 +9,8 @@ import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.osgi.monitor.BufferHelper;
-import com.tenline.pinecone.platform.osgi.monitor.mina.AbstractMinaProtocolEncoder;
+import com.tenline.pinecone.platform.monitor.BufferHelper;
+import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolEncoder;
 
 /**
  * @author Bill

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.device.efish;
+package com.honking.pet.aquarium.efish;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.osgi.monitor.mina.AbstractMinaProtocolDecoder;
+import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolDecoder;
 
 /**
  * @author Bill

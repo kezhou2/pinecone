@@ -1,13 +1,17 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.monitor;
+package com.tenline.pinecone.platform.osgi.monitor;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.mina.core.session.IoSession;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.model.Variable;
 
 /**
  * @author Bill
@@ -109,8 +113,20 @@ public class Scheduler {
 	 * @param device
 	 */
 	private void dispatch(Device device) {
-		session.write(device);
-		currentTimeMillis = System.currentTimeMillis();
+		try{
+			Collection<Variable> variables = device.getVariables();
+//			ArrayList<Variable> vars = (ArrayList<Variable>)device.getVariables();
+//			System.out.println(vars.get(0).getItems().size());
+//			
+//			ArrayList<Item> items = (ArrayList<Item>)vars.get(0).getItems();
+//			String value = items.get(0).getValue();
+//			System.out.println(value);
+			session.write(device);
+			currentTimeMillis = System.currentTimeMillis();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**

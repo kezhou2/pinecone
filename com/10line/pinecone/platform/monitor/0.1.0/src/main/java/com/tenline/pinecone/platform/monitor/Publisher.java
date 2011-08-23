@@ -1,9 +1,14 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.monitor;
+package com.tenline.pinecone.platform.osgi.monitor;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
 
@@ -51,6 +56,10 @@ public class Publisher {
 	 */
 	public void publish(Device content) {
 		try {
+			ArrayList<Variable> vars = (ArrayList<Variable>)content.getVariables();
+			ArrayList<Item> items = (ArrayList<Item>)vars.get(0).getItems();
+			String value = items.get(0).getValue();
+			System.out.println("publish: "+device.getId() + "-device"+",item value: "+value);
 			channel.publish(device.getId() + "-device", "application/json", content);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

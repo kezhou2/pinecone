@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.monitor.mina;
+package com.tenline.pinecone.platform.osgi.monitor.mina;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
@@ -26,8 +26,8 @@ import org.apache.mina.transport.serial.SerialAddress.StopBits;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.monitor.Activator;
-import com.tenline.pinecone.platform.monitor.IEndpoint;
+import com.tenline.pinecone.platform.osgi.monitor.Activator;
+import com.tenline.pinecone.platform.osgi.monitor.IEndpoint;
 
 /**
  * @author Bill
@@ -60,6 +60,10 @@ public class MinaSerialEndpoint implements IEndpoint {
 	 */
 	private MinaProtocolCodecFactory factory;
 	
+	public MinaProtocolCodecFactory getFactory() {
+		return factory;
+	}
+
 	/**
 	 * Serial Ports
 	 */
@@ -98,7 +102,10 @@ public class MinaSerialEndpoint implements IEndpoint {
 			connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(factory));
 			handler = new MinaHandler();
 			handler.initialize(factory.getBuilder());
+			System.out.println("mina serial endpoint device: "+device);
+			System.out.println("handler.getMapping(): "+handler.getMapping());
 			handler.getMapping().put(device, null);
+			System.out.println("handler.getMapping(): "+handler.getMapping());
 			connector.setHandler(handler);
 			Bundle bundle = Activator.getBundle(device.getSymbolicName());
 			ConnectFuture future = connector.connect(new SerialAddress(getPort(bundle), 
@@ -108,9 +115,9 @@ public class MinaSerialEndpoint implements IEndpoint {
 					getParity(bundle.getHeaders().get("Parity").toString()), 
 					getFlowControl(bundle.getHeaders().get("Flow-Control").toString())));
 			future.awaitUninterruptibly(); // wait until the connection is finished
-			if(future.isConnected()) session = future.getSession();
+			if(future.isConnected()) 
+				session = future.getSession();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}

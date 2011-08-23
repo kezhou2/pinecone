@@ -1,17 +1,13 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor;
+package com.tenline.pinecone.platform.monitor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.mina.core.session.IoSession;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Item;
-import com.tenline.pinecone.platform.model.Variable;
 
 /**
  * @author Bill
@@ -114,7 +110,7 @@ public class Scheduler {
 	 */
 	private void dispatch(Device device) {
 		try{
-			Collection<Variable> variables = device.getVariables();
+//			Collection<Variable> variables = device.getVariables();
 //			ArrayList<Variable> vars = (ArrayList<Variable>)device.getVariables();
 //			System.out.println(vars.get(0).getItems().size());
 //			

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor;
+package com.tenline.pinecone.platform.monitor;
 
 /**
  * @author Bill

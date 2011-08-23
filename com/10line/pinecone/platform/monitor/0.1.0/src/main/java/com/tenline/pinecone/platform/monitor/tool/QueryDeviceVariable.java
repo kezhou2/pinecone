@@ -1,4 +1,4 @@
-package com.tenline.pinecone.platform.osgi.monitor.tool;
+package com.tenline.pinecone.platform.monitor.tool;
 
 import java.util.Collection;
 

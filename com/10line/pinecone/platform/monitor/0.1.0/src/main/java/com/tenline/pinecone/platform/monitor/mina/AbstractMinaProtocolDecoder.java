@@ -1,14 +1,14 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor.mina;
+package com.tenline.pinecone.platform.monitor.mina;
 
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.osgi.monitor.Activator;
+import com.tenline.pinecone.platform.monitor.Activator;
 
 /**
  * @author Bill

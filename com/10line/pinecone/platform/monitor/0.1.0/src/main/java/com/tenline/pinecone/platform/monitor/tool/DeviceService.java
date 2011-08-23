@@ -1,10 +1,10 @@
-package com.tenline.pinecone.platform.osgi.monitor.tool;
+package com.tenline.pinecone.platform.monitor.tool;
 
 import java.util.ArrayList;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.osgi.monitor.IConstants;
+import com.tenline.pinecone.platform.monitor.IConstants;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor;
+package com.tenline.pinecone.platform.monitor;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -15,10 +15,10 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.osgi.monitor.mina.MinaSerialEndpoint;
-import com.tenline.pinecone.platform.osgi.monitor.tool.DeviceService;
-import com.tenline.pinecone.platform.osgi.monitor.tool.ItemService;
-import com.tenline.pinecone.platform.osgi.monitor.tool.VariableService;
+import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
+import com.tenline.pinecone.platform.monitor.tool.DeviceService;
+import com.tenline.pinecone.platform.monitor.tool.ItemService;
+import com.tenline.pinecone.platform.monitor.tool.VariableService;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
@@ -151,7 +151,8 @@ public class Activator implements BundleActivator {
 		}
 	}
 
-	private void test() {
+	@SuppressWarnings("null")
+	public void test() {
 		boolean has = false;
 		Object[] devices = null;
 		for (int i = 0; i < devices.length; i++) {

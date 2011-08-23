@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor.mina;
+package com.tenline.pinecone.platform.monitor.mina;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
@@ -26,8 +26,8 @@ import org.apache.mina.transport.serial.SerialAddress.StopBits;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.osgi.monitor.Activator;
-import com.tenline.pinecone.platform.osgi.monitor.IEndpoint;
+import com.tenline.pinecone.platform.monitor.Activator;
+import com.tenline.pinecone.platform.monitor.IEndpoint;
 
 /**
  * @author Bill

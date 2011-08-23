@@ -1,10 +1,9 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor;
+package com.tenline.pinecone.platform.monitor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;

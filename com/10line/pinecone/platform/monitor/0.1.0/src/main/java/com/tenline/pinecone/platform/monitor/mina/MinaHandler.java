@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.osgi.monitor.mina;
+package com.tenline.pinecone.platform.monitor.mina;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -11,10 +11,10 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.osgi.monitor.AbstractProtocolBuilder;
-import com.tenline.pinecone.platform.osgi.monitor.Publisher;
-import com.tenline.pinecone.platform.osgi.monitor.Scheduler;
-import com.tenline.pinecone.platform.osgi.monitor.Subscriber;
+import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
+import com.tenline.pinecone.platform.monitor.Publisher;
+import com.tenline.pinecone.platform.monitor.Scheduler;
+import com.tenline.pinecone.platform.monitor.Subscriber;
 
 /**
  * @author Bill

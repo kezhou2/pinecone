@@ -1,11 +1,11 @@
-package com.tenline.pinecone.platform.osgi.monitor.tool;
+package com.tenline.pinecone.platform.monitor.tool;
 
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
 import com.tenline.pinecone.platform.model.Record;
-import com.tenline.pinecone.platform.osgi.monitor.IConstants;
+import com.tenline.pinecone.platform.monitor.IConstants;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.RecordAPI;
 

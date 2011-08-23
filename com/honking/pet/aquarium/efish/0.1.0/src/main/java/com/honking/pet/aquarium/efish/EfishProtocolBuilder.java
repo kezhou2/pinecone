@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.honking.pet.aquarium.efish;
+package com.tenline.pinecone.platform.osgi.device.efish;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
+import com.tenline.pinecone.platform.osgi.monitor.AbstractProtocolBuilder;
 
 /**
  * @author Bill

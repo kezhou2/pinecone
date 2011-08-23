@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.honking.pet.aquarium.efish;
+package com.tenline.pinecone.platform.osgi.device.efish;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolDecoder;
+import com.tenline.pinecone.platform.osgi.monitor.mina.AbstractMinaProtocolDecoder;
 
 /**
  * @author Bill
@@ -44,6 +44,8 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 	@Override
 	protected void splitPacketType(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
+		System.out.println(packet.length + ":" + packet[0] + " " + packet[1]
+				+ " " + packet[2]);
 		if (packet[0] == 0x02) {
 			splitPacketData(packet, output);
 		} else if (packet[0] == 0x03) {
@@ -71,11 +73,14 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		Device device = new Device();
 		device.setVariables(new ArrayList<Variable>());
 		Variable variable = new Variable();
+		variable.setId("ahsxMGxpbmUtcGluZWNvbmUtd2ViLXNlcnZpY2VyJAsSBFVzZXIYAQwLEgZEZXZpY2UYAgwLEghWYXJpYWJsZRgDDA");
 		variable.setName(bundle.getHeaders().get("Water-Temperature")
 				.toString());
 		variable.setItems(new ArrayList<Item>());
 		Item item = new Item();
-		item.setValue(reverseStateValue(packet[1], packet[2]));
+		String state = reverseStateValue(packet[0], packet[1]);
+		item.setValue(state);
+		item.setText(state + "°C");
 		variable.getItems().add(item);
 		device.getVariables().add(variable);
 		output.write(device);
@@ -90,37 +95,29 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 	@Override
 	protected boolean doDecode(IoSession arg0, IoBuffer in,
 			ProtocolDecoderOutput output) throws Exception {
-		// TODO Auto-generated method stub
 		int start = in.position();
-		int count = -1;
 		while (in.hasRemaining()) {
 			byte current = in.get();
 			if (current == 0x02) {
-				start = in.position();
-				count = 2;
-			} else if (current == 0x03 || current == 0x04) {
-				start = in.position();
-				count = 1;
-			} else {
-				if (count > 0)
-					count--;
-				if (count == 0) {
-					int position = in.position();
-					int limit = in.limit();
-					try {
-						in.position(start);
-						in.limit(position);
-						splitPacket(in.slice().array(), output);
-					} finally {
-						in.position(position);
-						in.limit(limit);
-					}
-					return true;
+				int position = in.position();
+				int limit = in.limit();
+				try {
+					in.position(start);
+					in.limit(position);
+					splitPacketData(in.slice().array(), output);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					in.position(position);
+					in.limit(limit);
 				}
+				return true;
 			}
+
 		}
 		in.position(start);
 		return false;
+
 	}
 
 	/**
@@ -142,6 +139,7 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 			i = b;
 		}
 		temp += i;
+		System.out.println("temp:" + temp);
 		String str = "-1";
 		if (temp >= 752 && temp <= 767) {
 			str = "-1";
@@ -258,8 +256,9 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		} else if (temp >= 245 && temp <= 249) {
 			str = "55";
 		} else if (temp >= 240 && temp <= 244) {
-			str = "53";
+			str = "56";
 		}
+		System.out.println("reverseStateValue:" + str);
 		return str;
 	}
 

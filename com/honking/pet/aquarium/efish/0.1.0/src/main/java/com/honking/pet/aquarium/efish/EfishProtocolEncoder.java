@@ -1,7 +1,10 @@
 /**
  * 
  */
-package com.honking.pet.aquarium.efish;
+package com.tenline.pinecone.platform.osgi.device.efish;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
@@ -9,8 +12,8 @@ import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.BufferHelper;
-import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolEncoder;
+import com.tenline.pinecone.platform.osgi.monitor.BufferHelper;
+import com.tenline.pinecone.platform.osgi.monitor.mina.AbstractMinaProtocolEncoder;
 
 /**
  * @author Bill
@@ -31,7 +34,11 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	public void encode(IoSession arg0, Object arg1, ProtocolEncoderOutput arg2)
 			throws Exception {
 		// TODO Auto-generated method stub
-		transmitPacket(buildPacket((Device) arg1), arg2);
+		try{
+			transmitPacket(buildPacket((Device) arg1), arg2);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -66,7 +73,8 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	protected byte[] buildPacketData(Variable variable) {
 		// TODO Auto-generated method stub
 		byte[] bytes = null;
-		String temp = ((Item) variable.getItems().toArray()[0]).getValue();
+		ArrayList<Item> items = (ArrayList<Item>)variable.getItems();
+		String temp = items.get(0).getValue();
 		if (variable.getName().equals(
 				bundle.getHeaders().get("Water-Temperature"))) {
 			if (temp.equals("20")) {

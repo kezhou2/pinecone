@@ -118,7 +118,7 @@ public class Scheduler {
 		try{
 			session.write(device);
 			currentTimeMillis = System.currentTimeMillis();
-			logger.info("Dispatch: " + device.getId());
+			logger.info("Dispatch Successfully!");
 		}catch(Exception e){
 			e.printStackTrace();
 		}

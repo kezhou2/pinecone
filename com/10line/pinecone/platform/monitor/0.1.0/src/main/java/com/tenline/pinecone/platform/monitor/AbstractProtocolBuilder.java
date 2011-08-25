@@ -22,11 +22,11 @@ public abstract class AbstractProtocolBuilder {
 
 	/**
 	 * 
-	 * @param device
+	 * @param bundle
 	 */
-	public AbstractProtocolBuilder(Device device) {
+	public AbstractProtocolBuilder(Bundle bundle) {
 		// TODO Auto-generated constructor stub	
-		bundle = BundleHelper.getBundle(device.getSymbolicName());
+		this.bundle = bundle;
 	}
 	
 	/**

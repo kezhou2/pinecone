@@ -68,7 +68,7 @@ public class Subscriber {
 					@Override
 					public void onMessage(Object message) {
 						scheduler.addToWriteQueue((Device) message);
-						logger.info("Subscribe: " + ((Device) message).getId());
+						logger.info("Add to write queue");
 					}
 
 					@Override

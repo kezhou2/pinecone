@@ -10,8 +10,8 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
+import org.osgi.framework.Bundle;
 
-import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
 
 /**
@@ -44,23 +44,23 @@ public class MinaProtocolCodecFactory implements ProtocolCodecFactory {
 	
 	/**
 	 * Initialize Factory
-	 * @param device
+	 * @param bundle
 	 */
-	public void initialize(Device device) {
+	public void initialize(Bundle bundle) {
 		try {
-			String symbolicName = device.getSymbolicName();
+			String symbolicName = bundle.getSymbolicName();
 			String tempName = symbolicName.substring(symbolicName.lastIndexOf(".") + 1);
 			String name = String.valueOf(tempName.charAt(0)).toUpperCase() + tempName.substring(1);
 			String packageName = symbolicName + "." + name;
 			Class<?> decoderClass = Class.forName(packageName + "ProtocolDecoder");
-			Constructor<?> decoderConstructor = decoderClass.getDeclaredConstructor(Device.class);
-			decoder = (ProtocolDecoder) decoderConstructor.newInstance(device);
+			Constructor<?> decoderConstructor = decoderClass.getDeclaredConstructor(Bundle.class);
+			decoder = (ProtocolDecoder) decoderConstructor.newInstance(bundle);
 			Class<?> encoderClass = Class.forName(packageName + "ProtocolEncoder");
-			Constructor<?> encoderConstructor = encoderClass.getDeclaredConstructor(Device.class);
-			encoder = (ProtocolEncoder) encoderConstructor.newInstance(device);
+			Constructor<?> encoderConstructor = encoderClass.getDeclaredConstructor(Bundle.class);
+			encoder = (ProtocolEncoder) encoderConstructor.newInstance(bundle);
 			Class<?> builderClass = Class.forName(packageName + "ProtocolBuilder");
-			Constructor<?> builderConstructor = builderClass.getDeclaredConstructor(Device.class);
-			builder = (AbstractProtocolBuilder) builderConstructor.newInstance(device);
+			Constructor<?> builderConstructor = builderClass.getDeclaredConstructor(Bundle.class);
+			builder = (AbstractProtocolBuilder) builderConstructor.newInstance(bundle);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

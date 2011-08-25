@@ -11,7 +11,6 @@ import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.BundleHelper;
 
 /**
  * @author Bill
@@ -31,11 +30,11 @@ public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter
 	
 	/**
 	 * 
-	 * @param device
+	 * @param bundle
 	 */
-	public AbstractMinaProtocolEncoder(Device device) {
+	public AbstractMinaProtocolEncoder(Bundle bundle) {
 		// TODO Auto-generated constructor stub
-		bundle = BundleHelper.getBundle(device.getSymbolicName());
+		this.bundle = bundle;
 	}
 	
 	/**

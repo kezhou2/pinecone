@@ -90,6 +90,7 @@ public class MinaSerialEndpoint implements IEndpoint {
 			executor.shutdown();
 			factory.close();
 			handler.close();
+			logger.info("Close Endpoint");
 		}
 	}
 
@@ -97,17 +98,16 @@ public class MinaSerialEndpoint implements IEndpoint {
 	public void initialize(Device device) {
 		// TODO Auto-generated method stub
 		try {
+			Bundle bundle = BundleHelper.getBundle(device.getSymbolicName());
 			executor = Executors.newCachedThreadPool();
 			connector.getFilterChain().addLast("executor", new ExecutorFilter(executor));
 			factory = new MinaProtocolCodecFactory();
-			factory.initialize(device);
+			factory.initialize(bundle);
 			connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(factory));
 			handler = new MinaHandler();
 			handler.initialize(factory.getBuilder());
-			logger.info("Initialize : " + device.getId());
 			handler.getMapping().put(device, null);
 			connector.setHandler(handler);
-			Bundle bundle = BundleHelper.getBundle(device.getSymbolicName());
 			ConnectFuture future = connector.connect(new SerialAddress(getPort(bundle), 
 					Integer.valueOf(bundle.getHeaders().get("Baud-Rate").toString()), 
 					getDataBits(Integer.valueOf(bundle.getHeaders().get("Data-Bits").toString())), 
@@ -115,8 +115,10 @@ public class MinaSerialEndpoint implements IEndpoint {
 					getParity(bundle.getHeaders().get("Parity").toString()), 
 					getFlowControl(bundle.getHeaders().get("Flow-Control").toString())));
 			future.awaitUninterruptibly(); // wait until the connection is finished
-			if(future.isConnected()) 
+			if(future.isConnected()) {
 				session = future.getSession();
+				logger.info("Initialize Endpoint");	
+			}
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} 

@@ -26,7 +26,7 @@ public abstract class AbstractProtocolBuilder {
 	 */
 	public AbstractProtocolBuilder(Device device) {
 		// TODO Auto-generated constructor stub	
-		bundle = Activator.getBundle(device.getSymbolicName());
+		bundle = BundleHelper.getBundle(device.getSymbolicName());
 	}
 	
 	/**

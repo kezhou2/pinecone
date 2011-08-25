@@ -9,7 +9,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.monitor.Activator;
+import com.tenline.pinecone.platform.monitor.BundleHelper;
 
 /**
  * @author Bill
@@ -33,7 +33,7 @@ public abstract class AbstractMinaProtocolDecoder extends CumulativeProtocolDeco
 	 */
 	public AbstractMinaProtocolDecoder(Device device) {
 		// TODO Auto-generated constructor stub
-		bundle = Activator.getBundle(device.getSymbolicName());
+		bundle = BundleHelper.getBundle(device.getSymbolicName());
 	}
 	
 	/**

@@ -26,17 +26,12 @@ import com.tenline.pinecone.platform.sdk.VariableAPI;
  * @author Bill
  *
  */
-public class ProtocolAdministrator {
-	
-	/**
-	 * Singleton
-	 */
-	private static ProtocolAdministrator instance;
+public class ProtocolAdmin {
 	
 	/**
 	 * Logger
 	 */
-	private Logger logger = Logger.getLogger(ProtocolAdministrator.class);
+	private Logger logger = Logger.getLogger(ProtocolAdmin.class);
 	
 	/**
 	 * Repository Admin
@@ -59,7 +54,7 @@ public class ProtocolAdministrator {
 	 * 
 	 * @param context
 	 */
-	public ProtocolAdministrator(BundleContext context) {
+	public ProtocolAdmin(BundleContext context) {
 		// TODO Auto-generated constructor stub
 		try {
 			String serviceClass = RepositoryAdmin.class.getName();
@@ -121,17 +116,6 @@ public class ProtocolAdministrator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Get Instance
-	 * @return
-	 */
-	public static ProtocolAdministrator getInstance(BundleContext context) {
-		if (instance == null) {
-			instance = new ProtocolAdministrator(context);
-		}
-		return instance;
 	}
 	
 	/**

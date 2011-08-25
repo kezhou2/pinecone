@@ -27,7 +27,7 @@ import org.apache.mina.transport.serial.SerialAddress.StopBits;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.monitor.Activator;
+import com.tenline.pinecone.platform.monitor.BundleHelper;
 import com.tenline.pinecone.platform.monitor.IEndpoint;
 
 /**
@@ -107,7 +107,7 @@ public class MinaSerialEndpoint implements IEndpoint {
 			logger.info("Initialize : " + device.getId());
 			handler.getMapping().put(device, null);
 			connector.setHandler(handler);
-			Bundle bundle = Activator.getBundle(device.getSymbolicName());
+			Bundle bundle = BundleHelper.getBundle(device.getSymbolicName());
 			ConnectFuture future = connector.connect(new SerialAddress(getPort(bundle), 
 					Integer.valueOf(bundle.getHeaders().get("Baud-Rate").toString()), 
 					getDataBits(Integer.valueOf(bundle.getHeaders().get("Data-Bits").toString())), 

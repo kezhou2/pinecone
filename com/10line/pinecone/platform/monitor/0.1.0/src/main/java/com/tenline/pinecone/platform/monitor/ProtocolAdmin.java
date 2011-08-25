@@ -119,10 +119,10 @@ public class ProtocolAdmin {
 	}
 	
 	/**
-	 * Get Protocols from Remote Repository
+	 * Retrieve Protocols from Remote Repository
 	 * @return
 	 */
-	public Device[] getProtocols() {
+	public Device[] retrieveProtocols() {
 		Resource[] resources = admin.discoverResources(null);
 		Device[] devices = new Device[resources.length];
 		for (int i=0; i<resources.length; i++) {
@@ -136,7 +136,7 @@ public class ProtocolAdmin {
 	}
 	
 	/**
-	 * Install Protocol to Local OSGI Framework
+	 * Install Protocol to Local Runtime
 	 * @param metaData
 	 * @return
 	 */
@@ -153,11 +153,11 @@ public class ProtocolAdmin {
 	}
 	
 	/**
-	 * Merge Protocol to Remote DB
+	 * Deploy Protocol to Remote Database
 	 * @param user
 	 * @param metaData
 	 */
-	public void mergeProtocol(User user, Device metaData) {
+	public void deployProtocol(User user, Device metaData) {
 		try {
 			device = new Device();
 			device.setName(metaData.getName());

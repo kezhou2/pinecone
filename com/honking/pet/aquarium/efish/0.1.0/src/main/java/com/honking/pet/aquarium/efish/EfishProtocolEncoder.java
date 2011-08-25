@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
+import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
@@ -22,10 +23,10 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 
 	/**
 	 * 
-	 * @param device
+	 * @param bundle
 	 */
-	public EfishProtocolEncoder(Device device) {
-		super(device);
+	public EfishProtocolEncoder(Bundle bundle) {
+		super(bundle);
 		// TODO Auto-generated constructor stub
 	}
 

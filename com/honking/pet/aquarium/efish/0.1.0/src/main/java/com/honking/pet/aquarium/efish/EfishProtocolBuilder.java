@@ -6,6 +6,8 @@ package com.honking.pet.aquarium.efish;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.osgi.framework.Bundle;
+
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Variable;
@@ -24,10 +26,10 @@ public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 	
 	/**
 	 * 
-	 * @param device
+	 * @param bundle
 	 */
-	public EfishProtocolBuilder(Device device) {
-		super(device);
+	public EfishProtocolBuilder(Bundle bundle) {
+		super(bundle);
 		// TODO Auto-generated constructor stub
 		if (metaData == null) {
 			metaData = new Device();

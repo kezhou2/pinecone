@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
+import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
@@ -22,10 +23,10 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 
 	/**
 	 * 
-	 * @param device
+	 * @param bundle
 	 */
-	public EfishProtocolDecoder(Device device) {
-		super(device);
+	public EfishProtocolDecoder(Bundle bundle) {
+		super(bundle);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -44,8 +45,6 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 	@Override
 	protected void splitPacketType(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
-		System.out.println(packet.length + ":" + packet[0] + " " + packet[1]
-				+ " " + packet[2]);
 		if (packet[0] == 0x02) {
 			splitPacketData(packet, output);
 		} else if (packet[0] == 0x03) {
@@ -73,14 +72,11 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		Device device = new Device();
 		device.setVariables(new ArrayList<Variable>());
 		Variable variable = new Variable();
-		variable.setId("ahsxMGxpbmUtcGluZWNvbmUtd2ViLXNlcnZpY2VyJAsSBFVzZXIYAQwLEgZEZXZpY2UYAgwLEghWYXJpYWJsZRgDDA");
 		variable.setName(bundle.getHeaders().get("Water-Temperature")
 				.toString());
 		variable.setItems(new ArrayList<Item>());
 		Item item = new Item();
-		String state = reverseStateValue(packet[0], packet[1]);
-		item.setValue(state);
-		item.setText(state + "°C");
+		item.setValue(splitWaterTemperature(new byte[]{packet[0], packet[1]}));
 		variable.getItems().add(item);
 		device.getVariables().add(variable);
 		output.write(device);
@@ -117,29 +113,28 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		}
 		in.position(start);
 		return false;
-
 	}
 
 	/**
-	 * @param temp
-	 * @return reverse temp value 2 string
+	 * Split Water Temperature
+	 * @param bytes
+	 * @return
 	 */
-	private String reverseStateValue(byte a, byte b) {
+	private String splitWaterTemperature(byte[] bytes) {
 		int i = 0;
 		short temp = 0;
-		if (a < 0) {
-			i = 256 + a;
+		if (bytes[0] < 0) {
+			i = 256 + bytes[0];
 		} else {
-			i = a;
+			i = bytes[0];
 		}
 		temp += (i << 8);
-		if (b < 0) {
-			i = 256 + b;
+		if (bytes[1] < 0) {
+			i = 256 + bytes[1];
 		} else {
-			i = b;
+			i = bytes[1];
 		}
 		temp += i;
-		System.out.println("temp:" + temp);
 		String str = "-1";
 		if (temp >= 752 && temp <= 767) {
 			str = "-1";
@@ -258,7 +253,6 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		} else if (temp >= 240 && temp <= 244) {
 			str = "56";
 		}
-		System.out.println("reverseStateValue:" + str);
 		return str;
 	}
 

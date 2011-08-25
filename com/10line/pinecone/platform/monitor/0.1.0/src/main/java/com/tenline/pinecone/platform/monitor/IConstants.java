@@ -12,14 +12,12 @@ public interface IConstants {
 	/**
 	 * Web Service Host
 	 */
-	static final String WEB_SERVICE_HOST = "192.168.0.100";
-//	static final String WEB_SERVICE_HOST = "pinecone.web.service.10line.cc";
+	static final String WEB_SERVICE_HOST = "pinecone.web.service.10line.cc";
 	
 	/**
 	 * Web Service Port
 	 */
-	static final String WEB_SERVICE_PORT = "8080";
-//	static final String WEB_SERVICE_PORT = "80";
+	static final String WEB_SERVICE_PORT = "80";
 	
 	/**
 	 * Repository URL

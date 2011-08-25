@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.Logger;
 import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.service.IoConnector;
@@ -34,6 +35,11 @@ import com.tenline.pinecone.platform.monitor.IEndpoint;
  *
  */
 public class MinaSerialEndpoint implements IEndpoint {
+	
+	/**
+	 * Logger
+	 */
+	private Logger logger = Logger.getLogger(MinaSerialEndpoint.class);
 
 	/**
 	 * Concurrent Executor Service
@@ -59,10 +65,6 @@ public class MinaSerialEndpoint implements IEndpoint {
 	 * MINA Protocol Codec Factory
 	 */
 	private MinaProtocolCodecFactory factory;
-	
-	public MinaProtocolCodecFactory getFactory() {
-		return factory;
-	}
 
 	/**
 	 * Serial Ports
@@ -102,10 +104,8 @@ public class MinaSerialEndpoint implements IEndpoint {
 			connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(factory));
 			handler = new MinaHandler();
 			handler.initialize(factory.getBuilder());
-			System.out.println("mina serial endpoint device: "+device);
-			System.out.println("handler.getMapping(): "+handler.getMapping());
+			logger.info("Initialize : " + device.getId());
 			handler.getMapping().put(device, null);
-			System.out.println("handler.getMapping(): "+handler.getMapping());
 			connector.setHandler(handler);
 			Bundle bundle = Activator.getBundle(device.getSymbolicName());
 			ConnectFuture future = connector.connect(new SerialAddress(getPort(bundle), 

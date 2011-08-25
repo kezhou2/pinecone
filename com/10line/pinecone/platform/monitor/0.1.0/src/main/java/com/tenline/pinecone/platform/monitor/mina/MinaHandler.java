@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
 
@@ -21,6 +22,11 @@ import com.tenline.pinecone.platform.monitor.Subscriber;
  * 
  */
 public class MinaHandler extends IoHandlerAdapter {
+	
+	/**
+	 * Logger
+	 */
+	private Logger logger = Logger.getLogger(MinaHandler.class);
 
 	/**
 	 * The Mapping between Device and Session
@@ -127,6 +133,7 @@ public class MinaHandler extends IoHandlerAdapter {
 		for (Device device : mapping.keySet()) {
 			if (mapping.get(device).getId() == session.getId()) {
 				mapping.put(device, null);
+				logger.info("Remove Session (" + session.getId() + ") from Device (" + device.getId() + ")");
 				break;
 			}
 		}
@@ -137,21 +144,12 @@ public class MinaHandler extends IoHandlerAdapter {
 	 * @param session
 	 */
 	private void putMapping(IoSession session) {
-		try {
-//
-//			System.out.println("putMapping" + mapping.keySet().size());
-//			System.out.println("*****firstKey "
-//					+ mapping.firstKey().getSymbolicName());
-			for (Device device : mapping.keySet()) {
-//				System.out.println("*****1 " + device.getSymbolicName());
-//				System.out.println("*****2 " + mapping.get(device));
-				if (mapping.get(device) == null) {
-					mapping.put(device, session);
-					break;
-				}
+		for (Device device : mapping.keySet()) {
+			if (mapping.get(device) == null) {
+				mapping.put(device, session);
+				logger.info("Put Session (" + session.getId() + ") to Device (" + device.getId() + ")");
+				break;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

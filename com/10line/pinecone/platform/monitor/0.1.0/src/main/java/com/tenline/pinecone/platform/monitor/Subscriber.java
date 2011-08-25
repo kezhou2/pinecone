@@ -3,14 +3,12 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
+
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Item;
-import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
 
@@ -19,6 +17,11 @@ import com.tenline.pinecone.platform.sdk.ChannelAPI;
  * 
  */
 public class Subscriber {
+	
+	/**
+	 * Subscriber Logger
+	 */
+	private Logger logger = Logger.getLogger(Subscriber.class);
 
 	/**
 	 * Subscriber Device
@@ -64,22 +67,13 @@ public class Subscriber {
 
 					@Override
 					public void onMessage(Object message) {
-						System.out.println(((Device)message).getVariables());
-						Collection<Variable> variables = ((Device)message).getVariables();
-						System.out.println(variables.size());
-						
-						ArrayList<Variable> vars = (ArrayList<Variable>)((Device)message).getVariables();
-						System.out.println(vars.get(0).getItems().size());
-						
-						ArrayList<Item> items = (ArrayList<Item>)vars.get(0).getItems();
-						String value = items.get(0).getValue();
-						System.out.println("get a new message. "+value);
 						scheduler.addToWriteQueue((Device) message);
+						logger.info("Subscribe: " + ((Device) message).getId());
 					}
 
 					@Override
 					public void onError(String error) {
-//						System.out.println(error);
+						logger.error(error);
 					}
 
 				});

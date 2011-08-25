@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.monitor;
 
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
 import org.apache.mina.core.session.IoSession;
 
 import com.tenline.pinecone.platform.model.Device;
@@ -14,6 +15,11 @@ import com.tenline.pinecone.platform.model.Device;
  *
  */
 public class Scheduler {
+	
+	/**
+	 * Scheduler Logger
+	 */
+	private Logger logger = Logger.getLogger(Scheduler.class);
 	
 	/**
 	 * Scheduler Write Queue
@@ -110,15 +116,9 @@ public class Scheduler {
 	 */
 	private void dispatch(Device device) {
 		try{
-//			Collection<Variable> variables = device.getVariables();
-//			ArrayList<Variable> vars = (ArrayList<Variable>)device.getVariables();
-//			System.out.println(vars.get(0).getItems().size());
-//			
-//			ArrayList<Item> items = (ArrayList<Item>)vars.get(0).getItems();
-//			String value = items.get(0).getValue();
-//			System.out.println(value);
 			session.write(device);
 			currentTimeMillis = System.currentTimeMillis();
+			logger.info("Dispatch: " + device.getId());
 		}catch(Exception e){
 			e.printStackTrace();
 		}

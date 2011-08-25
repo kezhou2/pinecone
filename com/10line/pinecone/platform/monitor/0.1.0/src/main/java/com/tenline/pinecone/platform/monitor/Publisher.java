@@ -3,19 +3,26 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
-import java.util.ArrayList;
+import org.apache.log4j.Logger;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
+import com.tenline.pinecone.platform.sdk.RecordAPI;
 
 /**
  * @author Bill
  *
  */
 public class Publisher {
+	
+	/**
+	 * Publisher Logger
+	 */
+	private Logger logger = Logger.getLogger(Publisher.class);
 
 	/**
 	 * Publisher Device
@@ -28,6 +35,11 @@ public class Publisher {
 	private ChannelAPI channel;
 	
 	/**
+	 * Publisher Record API
+	 */
+	private RecordAPI recordAPI;
+	
+	/**
 	 * 
 	 */
 	public Publisher() {
@@ -37,13 +49,28 @@ public class Publisher {
 			@Override
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
-				System.out.println(message);
+				logger.info(message);
 			}
 
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.error(error);
+			}
+			
+		});
+		recordAPI = new RecordAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+
+			@Override
+			public void onError(String arg0) {
+				// TODO Auto-generated method stub
+				logger.error(arg0);
+			}
+
+			@Override
+			public void onMessage(Object arg0) {
+				// TODO Auto-generated method stub
+				logger.info("Record: " + ((Record) arg0).getId());
 			}
 			
 		});
@@ -55,15 +82,27 @@ public class Publisher {
 	 */
 	public void publish(Device content) {
 		try {
-			ArrayList<Variable> vars = (ArrayList<Variable>)content.getVariables();
-			ArrayList<Item> items = (ArrayList<Item>)vars.get(0).getItems();
-			String value = items.get(0).getValue();
-			System.out.println("publish: "+device.getId() + "-device"+",item value: "+value);
 			channel.publish(device.getId() + "-device", "application/json", content);
+			addRecord(content);
+			logger.info("Publish: " + device.getId() + "-device");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Add Record
+	 * @param device
+	 * @throws Exception
+	 */
+	private void addRecord(Device device) throws Exception {
+		Variable variable = (Variable) device.getVariables().toArray()[0];
+		Item item = (Item) variable.getItems().toArray()[0];
+		Record record = new Record();
+		record.setValue(item.getValue());
+		record.setVariable(variable);
+		recordAPI.create(record);
 	}
 
 	/**

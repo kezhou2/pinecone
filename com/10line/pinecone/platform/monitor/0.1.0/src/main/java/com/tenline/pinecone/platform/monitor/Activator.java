@@ -3,22 +3,17 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
-import com.tenline.pinecone.platform.monitor.tool.DeviceService;
-import com.tenline.pinecone.platform.monitor.tool.ItemService;
-import com.tenline.pinecone.platform.monitor.tool.VariableService;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
@@ -28,6 +23,8 @@ import com.tenline.pinecone.platform.sdk.UserAPI;
  * 
  */
 public class Activator implements BundleActivator {
+	
+	private Logger logger = Logger.getLogger(Activator.class);
 
 	private String snsId = "251760162";
 
@@ -66,7 +63,7 @@ public class Activator implements BundleActivator {
 					@Override
 					public void onError(String error) {
 						// TODO Auto-generated method stub
-						System.out.println(error);
+						logger.error(error);
 					}
 
 				});
@@ -79,8 +76,6 @@ public class Activator implements BundleActivator {
 						Object[] devices = ((Collection<?>) message).toArray();
 						for (int i = 0; i < devices.length; i++) {
 							try {
-								System.out.println(((Device) devices[i])
-										.getSymbolicName());
 								Activator.this
 										.initializeEndpoint((Device) devices[i]);
 							} catch (Exception e) {
@@ -93,7 +88,7 @@ public class Activator implements BundleActivator {
 					@Override
 					public void onError(String error) {
 						// TODO Auto-generated method stub
-						System.out.println(error);
+						logger.error(error);
 					}
 
 				});
@@ -138,7 +133,7 @@ public class Activator implements BundleActivator {
 		// window.open();
 		Activator.bundleContext = bundleContext;
 		userAPI.show("snsId=='" + snsId + "'");
-
+		ProtocolAdministrator.getInstance(bundleContext);
 	}
 
 	@Override
@@ -151,40 +146,4 @@ public class Activator implements BundleActivator {
 		}
 	}
 
-	@SuppressWarnings("null")
-	public void test() {
-		boolean has = false;
-		Object[] devices = null;
-		for (int i = 0; i < devices.length; i++) {
-			if (((Device) devices[0]).getSymbolicName().contains("efish")) {
-				has = true;
-				break;
-			}
-		}
-		if (!has) {
-			for (IEndpoint end : endpoints) {
-				try {
-					AbstractProtocolBuilder builder = ((MinaSerialEndpoint) end)
-							.getFactory().getBuilder();
-					if (builder.getClass().toString().contains("efish")) {
-						Field field = builder.getClass().getField("metaData");
-						Device dev = (Device) field.get(builder);
-						System.out.println(dev.getSymbolicName());
-						DeviceService.getInstance().saveDevice(dev);
-						Collection<Variable> variables = dev.getVariables();
-						for (Variable var : variables) {
-							VariableService.getInstance().saveVariable(var);
-							Collection<Item> items = var.getItems();
-							for (Item item : items) {
-								ItemService.getInstance().saveItem(item);
-							}
-						}
-						break;
-					}
-				} catch (Exception e) {
-
-				}
-			}
-		}
-	}
 }

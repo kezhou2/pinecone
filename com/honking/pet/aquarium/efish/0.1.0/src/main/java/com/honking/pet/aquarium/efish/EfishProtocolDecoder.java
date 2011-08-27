@@ -31,19 +31,19 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 	}
 
 	@Override
-	public byte[] checkPacket(byte[] packet) {
+	protected byte[] checkPacket(byte[] packet) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void splitPacket(byte[] packet, Object output) {
+	protected void splitPacket(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
 		splitPacketType(packet, output);
 	}
 
 	@Override
-	public void splitPacketType(byte[] packet, Object output) {
+	protected void splitPacketType(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
 		if (packet[0] == 0x02) {
 			splitPacketData(packet, output);
@@ -54,7 +54,7 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 			variable.setName(bundle.getHeaders().get("Oxygen-Generation")
 					.toString());
 			device.getVariables().add(variable);
-			((ProtocolDecoderOutput) output).write(device);
+			output.write(device);
 		} else if (packet[0] == 0x04) {
 			Device device = new Device();
 			device.setVariables(new ArrayList<Variable>());
@@ -62,12 +62,12 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 			variable.setName(bundle.getHeaders().get("Water-Temperature")
 					.toString());
 			device.getVariables().add(variable);
-			((ProtocolDecoderOutput) output).write(device);
+			output.write(device);
 		}
 	}
 
 	@Override
-	public void splitPacketData(byte[] packet, Object output) {
+	protected void splitPacketData(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
 		Device device = new Device();
 		device.setVariables(new ArrayList<Variable>());
@@ -79,11 +79,11 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		item.setValue(splitWaterTemperature(new byte[]{packet[0], packet[1]}));
 		variable.getItems().add(item);
 		device.getVariables().add(variable);
-		((ProtocolDecoderOutput) output).write(device);
+		output.write(device);
 	}
 
 	@Override
-	public String splitPacketRejectedDescription(byte[] rejectedCode) {
+	protected String splitPacketRejectedDescription(byte[] rejectedCode) {
 		// TODO Auto-generated method stub
 		return null;
 	}

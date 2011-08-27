@@ -10,11 +10,16 @@
     <host.bundle>com.10line.pinecone.platform.monitor</host.bundle>
   </properties>
   <dependencies>
+  	<dependency>
+  		<groupId>com.10line.pinecone.platform</groupId>
+  		<artifactId>monitor</artifactId>
+  		<version>0.1.0</version>
+  	</dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.5</version>
-      <scope>test</scope>
+      	<groupId>junit</groupId>
+      	<artifactId>junit</artifactId>
+      	<version>4.5</version>
+      	<scope>test</scope>
     </dependency>
   </dependencies>
   <build>

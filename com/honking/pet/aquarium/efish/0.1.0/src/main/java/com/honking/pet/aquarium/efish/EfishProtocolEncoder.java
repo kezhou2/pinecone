@@ -42,13 +42,13 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	}
 
 	@Override
-	protected byte[] buildPacket(Device device) {
+	public byte[] buildPacket(Device device) {
 		// TODO Auto-generated method stub
 		return buildPacketType((Variable) device.getVariables().toArray()[0]);
 	}
 
 	@Override
-	protected byte[] buildPacketType(Variable variable) {
+	public byte[] buildPacketType(Variable variable) {
 		// TODO Auto-generated method stub
 		byte[] bytes = null;
 		if (variable.getName().equals(
@@ -70,7 +70,7 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	}
 
 	@Override
-	protected byte[] buildPacketData(Variable variable) {
+	public byte[] buildPacketData(Variable variable) {
 		// TODO Auto-generated method stub
 		byte[] bytes = null;
 		ArrayList<Item> items = (ArrayList<Item>)variable.getItems();
@@ -110,7 +110,7 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	}
 
 	@Override
-	protected byte buildPacketCheck(byte[] bytes) {
+	public byte buildPacketCheck(byte[] bytes) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

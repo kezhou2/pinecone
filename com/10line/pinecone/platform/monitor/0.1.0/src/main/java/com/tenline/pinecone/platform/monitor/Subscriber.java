@@ -56,7 +56,7 @@ public class Subscriber {
 	/**
 	 * Subscriber Scheduler
 	 */
-	private Scheduler scheduler;
+	private AbstractScheduler scheduler;
 
 	/**
 	 * 
@@ -111,14 +111,14 @@ public class Subscriber {
 	 * @param scheduler
 	 *            the scheduler to set
 	 */
-	public void setScheduler(Scheduler scheduler) {
+	public void setScheduler(AbstractScheduler scheduler) {
 		this.scheduler = scheduler;
 	}
 
 	/**
 	 * @return the scheduler
 	 */
-	public Scheduler getScheduler() {
+	public AbstractScheduler getScheduler() {
 		return scheduler;
 	}
 

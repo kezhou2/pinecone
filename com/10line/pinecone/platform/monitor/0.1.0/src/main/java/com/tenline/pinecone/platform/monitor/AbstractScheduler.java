@@ -6,7 +6,6 @@ package com.tenline.pinecone.platform.monitor;
 import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
-import org.apache.mina.core.session.IoSession;
 
 import com.tenline.pinecone.platform.model.Device;
 
@@ -14,13 +13,13 @@ import com.tenline.pinecone.platform.model.Device;
  * @author Bill
  *
  */
-public class Scheduler {
+public abstract class AbstractScheduler {
 	
 	/**
 	 * Scheduler Logger
 	 */
-	private Logger logger = Logger.getLogger(Scheduler.class);
-	
+	protected Logger logger = Logger.getLogger(getClass());
+
 	/**
 	 * Scheduler Write Queue
 	 */
@@ -57,15 +56,11 @@ public class Scheduler {
 	private Device lastQueueItem;
 	
 	/**
-	 * Scheduler MINA Session
-	 */
-	private IoSession session;
-	
-	/**
 	 * 
 	 * @param builder
 	 */
-	public Scheduler(AbstractProtocolBuilder builder) {
+	public AbstractScheduler(AbstractProtocolBuilder builder) {
+		// TODO Auto-generated constructor stub
 		writeQueue = new LinkedList<Device>();
 		readQueue = new LinkedList<Device>();
 		builder.initializeReadQueue(readQueue);
@@ -114,15 +109,9 @@ public class Scheduler {
 	 * Dispatch to endpoint
 	 * @param device
 	 */
-	private void dispatch(Device device) {
-		try{
-			session.write(device);
-			currentTimeMillis = System.currentTimeMillis();
-			logger.info("Dispatch Successfully!");
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
+	protected void dispatch(Device device) {
+		currentTimeMillis = System.currentTimeMillis();
+		logger.info("Dispatch Successfully!");
 	}
 	
 	/**
@@ -166,18 +155,4 @@ public class Scheduler {
 		readQueue.remove(device);
 	}
 
-	/**
-	 * @param session the session to set
-	 */
-	public void setSession(IoSession session) {
-		this.session = session;
-	}
-
-	/**
-	 * @return the session
-	 */
-	public IoSession getSession() {
-		return session;
-	}
-	
 }

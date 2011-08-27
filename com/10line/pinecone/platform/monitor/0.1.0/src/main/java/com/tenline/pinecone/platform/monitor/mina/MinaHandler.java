@@ -14,7 +14,6 @@ import org.apache.mina.core.session.IoSession;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
 import com.tenline.pinecone.platform.monitor.Publisher;
-import com.tenline.pinecone.platform.monitor.Scheduler;
 import com.tenline.pinecone.platform.monitor.Subscriber;
 
 /**
@@ -41,7 +40,7 @@ public class MinaHandler extends IoHandlerAdapter {
 	/**
 	 * Schedulers
 	 */
-	private Hashtable<Long, Scheduler> schedulers;
+	private Hashtable<Long, MinaScheduler> schedulers;
 
 	/**
 	 * Subscribers
@@ -74,7 +73,7 @@ public class MinaHandler extends IoHandlerAdapter {
 		this.builder = builder;
 		mapping = new TreeMap<Device, IoSession>();
 		sessions = new Hashtable<Long, IoSession>();
-		schedulers = new Hashtable<Long, Scheduler>();
+		schedulers = new Hashtable<Long, MinaScheduler>();
 		subscribers = new Hashtable<Long, Subscriber>();
 		publishers = new Hashtable<Long, Publisher>();
 	}
@@ -113,7 +112,7 @@ public class MinaHandler extends IoHandlerAdapter {
 	private void putSession(IoSession session) {
 		sessions.put(session.getId(), session);
 		putMapping(session);
-		schedulers.put(session.getId(), new Scheduler(builder));
+		schedulers.put(session.getId(), new MinaScheduler(builder));
 		schedulers.get(session.getId()).setSession(session);
 		schedulers.get(session.getId()).start();
 		subscribers.put(session.getId(), new Subscriber());

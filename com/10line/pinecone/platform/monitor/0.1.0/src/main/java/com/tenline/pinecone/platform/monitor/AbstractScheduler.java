@@ -57,13 +57,11 @@ public abstract class AbstractScheduler {
 	
 	/**
 	 * 
-	 * @param builder
 	 */
-	public AbstractScheduler(AbstractProtocolBuilder builder) {
+	public AbstractScheduler() {
 		// TODO Auto-generated constructor stub
 		writeQueue = new LinkedList<Device>();
 		readQueue = new LinkedList<Device>();
-		builder.initializeReadQueue(readQueue);
 	}
 	
 	/**
@@ -153,6 +151,14 @@ public abstract class AbstractScheduler {
 	 */
 	public void removeFromReadQueue(Device device) {
 		readQueue.remove(device);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public LinkedList<Device> getReadQueue() {
+		return readQueue;
 	}
 
 }

@@ -6,7 +6,6 @@ package com.tenline.pinecone.platform.monitor.mina;
 import org.apache.mina.core.session.IoSession;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
 import com.tenline.pinecone.platform.monitor.AbstractScheduler;
 
 /**
@@ -22,10 +21,9 @@ public class MinaScheduler extends AbstractScheduler {
 	
 	/**
 	 * 
-	 * @param builder
 	 */
-	public MinaScheduler(AbstractProtocolBuilder builder) {
-		super(builder);
+	public MinaScheduler() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 	

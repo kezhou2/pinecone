@@ -9,13 +9,14 @@ import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.osgi.framework.Bundle;
 
-import com.tenline.pinecone.platform.monitor.IProtocolEncoder;
+import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Variable;
 
 /**
  * @author Bill
  *
  */
-public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter implements IProtocolEncoder {
+public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter {
 
 	/**
 	 * Protocol Bundle
@@ -35,6 +36,34 @@ public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter
 		// TODO Auto-generated constructor stub
 		this.bundle = bundle;
 	}
+	
+	/**
+	 * Build Packet
+	 * @param device
+	 * @return
+	 */
+	protected abstract byte[] buildPacket(Device device);
+
+	/**
+	 * Build Packet Type
+	 * @param variable
+	 * @return
+	 */
+	protected abstract byte[] buildPacketType(Variable variable);
+
+	/**
+	 * Build Packet Data
+	 * @param variable
+	 * @return
+	 */
+	protected abstract byte[] buildPacketData(Variable variable); 
+
+	/**
+	 * Build Packet Check
+	 * @param bytes
+	 * @return
+	 */
+	protected abstract byte buildPacketCheck(byte[] bytes);
 	
 	/**
 	 * Transmit Packet

@@ -112,7 +112,9 @@ public class MinaHandler extends IoHandlerAdapter {
 	private void putSession(IoSession session) {
 		sessions.put(session.getId(), session);
 		putMapping(session);
-		schedulers.put(session.getId(), new MinaScheduler(builder));
+		MinaScheduler scheduler = new MinaScheduler();
+		builder.initializeReadQueue(scheduler.getReadQueue());
+		schedulers.put(session.getId(), scheduler);
 		schedulers.get(session.getId()).setSession(session);
 		schedulers.get(session.getId()).start();
 		subscribers.put(session.getId(), new Subscriber());

@@ -1,14 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.huishi.security.camera</groupId>
-  <artifactId>huishi</artifactId>
+  <groupId>${company.category}.${company.name}.${domain.category}.${device.category}</groupId>
+  <artifactId>${device.name}</artifactId>
   <version>0.1.0</version>
   <packaging>bundle</packaging>
   <properties>
+  	<company.category>com</company.category>
+  	<company.name>huishi</company.name>
+  	<domain.category>security</domain.category>
+  	<device.category>camera</device.category>
+  	<device.name>huishi</device.name>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <bundle.path>/${company.category}/${company.name}/${domain.category}/${device.category}/${pom.artifactId}/${pom.version}/</bundle.path>
     <host.bundle>com.10line.pinecone.platform.monitor</host.bundle>
   </properties>
+  <repositories>
+  	<repository>
+    	<id>maven.2</id>
+        <name>Maven 2 Repository</name>
+        <url>http://repo2.maven.org/maven2/</url>
+    </repository>
+	<repository>
+    	<id>pinecone</id>
+        <name>pinecone repo</name>
+        <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+  </repositories>
   <dependencies>
   	<!-- Pinecone Monitor -->
   	<dependency>
@@ -32,9 +50,20 @@
         <version>2.3.4</version>
         <extensions>true</extensions>
         <configuration>
+        	<remoteOBR>releases.xml</remoteOBR>
+        	<groupId>${pom.groupId}</groupId>
+            <artifactId>${pom.artifactId}</artifactId>
+            <version>${pom.version}</version>
+            <packaging>${pom.packaging}</packaging>
+			<repositoryId>${project.distributionManagementArtifactRepository.id}</repositoryId>
+            <url>${project.distributionManagementArtifactRepository.url}</url>
+            <bundleUrl>${project.distributionManagementArtifactRepository.url}${bundle.path}${pom.artifactId}-${pom.version}.jar</bundleUrl>
         	<instructions>
         		<Bundle-Name>${pom.artifactId}</Bundle-Name>
         		<Fragment-Host>${host.bundle}</Fragment-Host>
+        		<Type>HttpClient</Type>
+        		<Address>192.168.0.1</Address>
+        		<Port>80</Port>
         	</instructions>
         </configuration>
       </plugin>
@@ -48,5 +77,19 @@
 		</configuration>
 	  </plugin>
   	</plugins>
+  	<extensions>
+	  <extension>
+	   <groupId>org.apache.maven.wagon</groupId>
+	   <artifactId>wagon-webdav</artifactId>
+	   <version>1.0-beta-2</version>
+	  </extension>
+	</extensions>
   </build>
+  <distributionManagement>
+  	<repository>
+    	<id>googlecode.pinecone.repo</id>
+        <name>Pinecone Repository</name>
+        <url>https://pinecone.googlecode.com/svn/repository</url>
+    </repository>
+  </distributionManagement>
 </project>

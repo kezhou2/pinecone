@@ -34,7 +34,7 @@ public class EndpointAdmin {
 	/**
 	 * Logger
 	 */
-	private Logger logger = Logger.getLogger(EndpointAdmin.class);
+	private Logger logger = Logger.getLogger(getClass());
 	
 	/**
 	 * 

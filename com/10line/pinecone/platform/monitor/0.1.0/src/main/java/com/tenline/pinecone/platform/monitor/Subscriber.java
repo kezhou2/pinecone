@@ -21,7 +21,7 @@ public class Subscriber {
 	/**
 	 * Subscriber Logger
 	 */
-	private Logger logger = Logger.getLogger(Subscriber.class);
+	private Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * Subscriber Device

@@ -25,7 +25,7 @@ public class MinaHandler extends IoHandlerAdapter {
 	/**
 	 * Logger
 	 */
-	private Logger logger = Logger.getLogger(MinaHandler.class);
+	private Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * The Mapping between Device and Session

@@ -31,7 +31,7 @@ public class ProtocolAdmin {
 	/**
 	 * Logger
 	 */
-	private Logger logger = Logger.getLogger(ProtocolAdmin.class);
+	private Logger logger = Logger.getLogger(getClass());
 	
 	/**
 	 * Repository Admin

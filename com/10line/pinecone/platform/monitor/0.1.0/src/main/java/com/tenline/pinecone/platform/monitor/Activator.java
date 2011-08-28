@@ -22,7 +22,7 @@ public class Activator implements BundleActivator {
 	/**
 	 * Logger
 	 */
-	private Logger logger = Logger.getLogger(Activator.class);
+	private Logger logger = Logger.getLogger(getClass());
 	
 	/**
 	 * Web Service API

@@ -39,7 +39,7 @@ public class MinaSerialEndpoint implements IEndpoint {
 	/**
 	 * Logger
 	 */
-	private Logger logger = Logger.getLogger(MinaSerialEndpoint.class);
+	private Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * Concurrent Executor Service

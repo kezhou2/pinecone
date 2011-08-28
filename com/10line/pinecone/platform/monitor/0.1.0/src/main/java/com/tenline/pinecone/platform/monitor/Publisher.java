@@ -25,7 +25,7 @@ public class Publisher {
 	/**
 	 * Publisher Logger
 	 */
-	private Logger logger = Logger.getLogger(Publisher.class);
+	private Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * Publisher Device

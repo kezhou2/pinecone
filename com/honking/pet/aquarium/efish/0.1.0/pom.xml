@@ -61,6 +61,7 @@
         	<instructions>
         		<Bundle-Name>${pom.artifactId}</Bundle-Name>
         		<Fragment-Host>${host.bundle}</Fragment-Host>
+        		<Type>Serial</Type>
         		<Port>COM1</Port>
         		<Baud-Rate>9600</Baud-Rate>
         		<Stop-Bits>1</Stop-Bits>

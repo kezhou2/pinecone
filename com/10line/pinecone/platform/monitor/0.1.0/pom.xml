@@ -41,8 +41,8 @@
     <!-- Apache Http Components -->
     <dependency>
     	<groupId>org.apache.httpcomponents</groupId>
-    	<artifactId>httpasyncclient</artifactId>
-    	<version>4.0-alpha2</version>
+    	<artifactId>httpclient</artifactId>
+    	<version>4.1.2</version>
 	</dependency>
     <!-- RXTX Library -->
     <dependency>

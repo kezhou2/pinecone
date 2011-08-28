@@ -57,5 +57,16 @@ public class BundleHelper {
 		}
 		return null;
 	}
+	
+	/**
+	 * 
+	 * @param symbolicName
+	 * @return
+	 */
+	public static String getPackageName(String symbolicName) {
+		String tempName = symbolicName.substring(symbolicName.lastIndexOf(".") + 1);
+		String name = String.valueOf(tempName.charAt(0)).toUpperCase() + tempName.substring(1);
+		return symbolicName + "." + name;
+	}
 
 }

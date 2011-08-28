@@ -3,6 +3,8 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -11,6 +13,7 @@ import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.monitor.http.AbstractHttpClientEndpoint;
 import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
@@ -91,11 +94,51 @@ public class EndpointAdmin {
 	 */
 	private void initializeEndpoint(Device device) {
 		Bundle bundle = BundleHelper.getBundle(device.getSymbolicName());
-		if (bundle.getHeaders().get("Baud-Rate") != null) {
+		String type = bundle.getHeaders().get("Type").toString();
+		if (type.equals("Serial")) {
 			MinaSerialEndpoint endpoint = new MinaSerialEndpoint();
 			endpoint.initialize(device);
 			endpoints.add(endpoint);
+		} else if (type.equals("HttpClient")) {
+			AbstractHttpClientEndpoint endpoint= getHttpClientEndpoint(bundle);
+			endpoint.initialize(device);
+			endpoints.add(endpoint);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param bundle
+	 * @return
+	 */
+	private AbstractHttpClientEndpoint getHttpClientEndpoint(Bundle bundle) {
+		try {
+			Class<?> endpointClass = Class.forName(BundleHelper.getPackageName(bundle.getSymbolicName()) + "Endpoint");
+			Constructor<?> endpointConstructor = endpointClass.getDeclaredConstructor();
+			return (AbstractHttpClientEndpoint) endpointConstructor.newInstance();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

@@ -13,9 +13,9 @@ import com.tenline.pinecone.platform.monitor.AbstractScheduler;
 public class HttpClientScheduler extends AbstractScheduler {
 	
 	/**
-	 * Protocol Encoder
+	 * Http Client Endpoint
 	 */
-	private AbstractHttpClientProtocolEncoder encoder;
+	private AbstractHttpClientEndpoint endpoint;
 
 	/**
 	 * 
@@ -27,22 +27,22 @@ public class HttpClientScheduler extends AbstractScheduler {
 	
 	@Override
 	protected void dispatch(Device device) {
-		encoder.encode(device);
+		endpoint.execute(device);
 		super.dispatch(device);
 	}
 
 	/**
-	 * @param encoder the encoder to set
+	 * @param endpoint the endpoint to set
 	 */
-	public void setEncoder(AbstractHttpClientProtocolEncoder encoder) {
-		this.encoder = encoder;
+	public void setEndpoint(AbstractHttpClientEndpoint endpoint) {
+		this.endpoint = endpoint;
 	}
 
 	/**
-	 * @return the encoder
+	 * @return the endpoint
 	 */
-	public AbstractHttpClientProtocolEncoder getEncoder() {
-		return encoder;
+	public AbstractHttpClientEndpoint getEndpoint() {
+		return endpoint;
 	}
 
 }

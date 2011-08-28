@@ -1,15 +1,11 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.monitor.mina;
+package com.tenline.pinecone.platform.monitor.http;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFactory;
-import org.apache.mina.filter.codec.ProtocolDecoder;
-import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.monitor.AbstractProtocolCodecFactory;
@@ -18,22 +14,23 @@ import com.tenline.pinecone.platform.monitor.AbstractProtocolCodecFactory;
  * @author Bill
  *
  */
-public class MinaProtocolCodecFactory extends AbstractProtocolCodecFactory implements ProtocolCodecFactory {
+public class HttpClientProtocolCodecFactory extends
+		AbstractProtocolCodecFactory {
 	
 	/**
 	 * Protocol Decoder
 	 */
-	private ProtocolDecoder decoder;
+	private AbstractHttpClientProtocolDecoder decoder;
 	
 	/**
 	 * Protocol Encoder
 	 */
-	private ProtocolEncoder encoder;
+	private AbstractHttpClientProtocolEncoder encoder;
 
 	/**
 	 * 
 	 */
-	public MinaProtocolCodecFactory() {
+	public HttpClientProtocolCodecFactory() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -42,10 +39,11 @@ public class MinaProtocolCodecFactory extends AbstractProtocolCodecFactory imple
 		try {
 			Class<?> decoderClass = Class.forName(getPackageName(bundle) + "ProtocolDecoder");
 			Constructor<?> decoderConstructor = decoderClass.getDeclaredConstructor(Bundle.class);
-			decoder = (ProtocolDecoder) decoderConstructor.newInstance(bundle);
+			decoder = (AbstractHttpClientProtocolDecoder) decoderConstructor.newInstance(bundle);
 			Class<?> encoderClass = Class.forName(getPackageName(bundle) + "ProtocolEncoder");
 			Constructor<?> encoderConstructor = encoderClass.getDeclaredConstructor(Bundle.class);
-			encoder = (ProtocolEncoder) encoderConstructor.newInstance(bundle);
+			encoder = (AbstractHttpClientProtocolEncoder) encoderConstructor.newInstance(bundle);
+			encoder.setDecoder(decoder);
 			super.initialize(bundle);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -78,15 +76,17 @@ public class MinaProtocolCodecFactory extends AbstractProtocolCodecFactory imple
 		super.close();
 	}
 
-	@Override
-	public ProtocolDecoder getDecoder(IoSession arg0) throws Exception {
-		// TODO Auto-generated method stub
+	/**
+	 * @return the decoder
+	 */
+	public AbstractHttpClientProtocolDecoder getDecoder() {
 		return decoder;
 	}
 
-	@Override
-	public ProtocolEncoder getEncoder(IoSession arg0) throws Exception {
-		// TODO Auto-generated method stub
+	/**
+	 * @return the encoder
+	 */
+	public AbstractHttpClientProtocolEncoder getEncoder() {
 		return encoder;
 	}
 

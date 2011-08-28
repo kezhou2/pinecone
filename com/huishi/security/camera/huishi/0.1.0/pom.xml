@@ -10,45 +10,19 @@
     <host.bundle>com.10line.pinecone.platform.monitor</host.bundle>
   </properties>
   <dependencies>
+  	<!-- Pinecone Monitor -->
   	<dependency>
   		<groupId>com.10line.pinecone.platform</groupId>
   		<artifactId>monitor</artifactId>
   		<version>0.1.0</version>
   	</dependency>
+  	<!-- JUnit -->
     <dependency>
       	<groupId>junit</groupId>
       	<artifactId>junit</artifactId>
       	<version>4.5</version>
       	<scope>test</scope>
     </dependency>
-    <!-- Apache Http Components --> 
-	<dependency>
-    	<groupId>org.apache.httpcomponents</groupId>
-    	<artifactId>httpclient</artifactId>
-    	<version>4.1.2</version>
-        <scope>compile</scope>
-    </dependency> 
-    <dependency>
-    	<groupId>org.apache.httpcomponents</groupId>
-    	<artifactId>httpcore</artifactId>
-    	<version>4.1.3</version>
-    </dependency>
-    <dependency>
-    	<groupId>javax.media</groupId>
-    	<artifactId>jai_core</artifactId>
-    	<version>1.1.3</version>
-	</dependency>
-	<dependency>
-    	<groupId>javax.media</groupId>
-    	<artifactId>jmf</artifactId>
-    	<version>2.1.1e</version>
-	</dependency>  
-	<dependency>
-		<groupId>com.10line.pinecone.platform</groupId>
-		<artifactId>monitor</artifactId>
-		<version>0.1.0</version>
-		<type>bundle</type>
-	</dependency>
   </dependencies>
   <build>
   	<plugins>

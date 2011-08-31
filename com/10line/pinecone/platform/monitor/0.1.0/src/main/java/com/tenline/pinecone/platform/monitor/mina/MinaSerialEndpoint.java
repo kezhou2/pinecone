@@ -98,7 +98,7 @@ public class MinaSerialEndpoint implements IEndpoint {
 	public void initialize(Device device) {
 		// TODO Auto-generated method stub
 		try {
-			Bundle bundle = BundleHelper.getBundle(device.getSymbolicName());
+			Bundle bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
 			executor = Executors.newCachedThreadPool();
 			connector.getFilterChain().addLast("executor", new ExecutorFilter(executor));
 			factory = new MinaProtocolCodecFactory();

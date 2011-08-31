@@ -3,13 +3,12 @@
  */
 package com.tenline.pinecone.platform.monitor.http;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
@@ -74,13 +73,18 @@ public abstract class AbstractHttpClientEndpoint implements IEndpoint {
 	@Override
 	public void initialize(Device device) {
 		// TODO Auto-generated method stub
-		bundle = BundleHelper.getBundle(device.getSymbolicName());
+		bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
 		
 		scheduler = new HttpClientScheduler();
 		scheduler.setEndpoint(this);
 		scheduler.start();
 		
-		getBuilder().initializeReadQueue(scheduler.getReadQueue());
+		try {
+			getBuilder().initializeReadQueue(scheduler.getReadQueue());
+		} catch (InvalidSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		subscriber = new Subscriber();
 		subscriber.setDevice(device);
@@ -96,35 +100,13 @@ public abstract class AbstractHttpClientEndpoint implements IEndpoint {
 	/**
 	 * 
 	 * @return
+	 * @throws InvalidSyntaxException
 	 */
-	private AbstractProtocolBuilder getBuilder() {
-		try {
-			Class<?> builderClass = Class.forName(BundleHelper.getPackageName(bundle.getSymbolicName()) + "ProtocolBuilder");
-			Constructor<?> builderConstructor = builderClass.getDeclaredConstructor(Bundle.class);
-			return (AbstractProtocolBuilder) builderConstructor.newInstance(bundle);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+	private AbstractProtocolBuilder getBuilder() throws InvalidSyntaxException {
+		BundleContext context = bundle.getBundleContext();
+		String filter = "(&(symbolicName="+bundle.getSymbolicName()+")(version="+bundle.getVersion().toString()+"))";
+		return (AbstractProtocolBuilder) context.getService(context.getServiceReferences
+				(AbstractProtocolBuilder.class.getName(), filter)[0]);
 	}
 	
 	/**

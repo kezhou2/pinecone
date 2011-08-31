@@ -3,8 +3,6 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -93,17 +91,16 @@ public class EndpointAdmin {
 	 * @param device
 	 */
 	private void initializeEndpoint(Device device) {
-		Bundle bundle = BundleHelper.getBundle(device.getSymbolicName());
+		Bundle bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
 		String type = bundle.getHeaders().get("Type").toString();
+		IEndpoint endpoint = null;
 		if (type.equals("Serial")) {
-			MinaSerialEndpoint endpoint = new MinaSerialEndpoint();
-			endpoint.initialize(device);
-			endpoints.add(endpoint);
+			endpoint = new MinaSerialEndpoint();
 		} else if (type.equals("HttpClient")) {
-			AbstractHttpClientEndpoint endpoint= getHttpClientEndpoint(bundle);
-			endpoint.initialize(device);
-			endpoints.add(endpoint);
-		}
+			endpoint= getHttpClientEndpoint(bundle);
+		}	
+		endpoint.initialize(device);
+		endpoints.add(endpoint);
 	}
 	
 	/**
@@ -112,32 +109,6 @@ public class EndpointAdmin {
 	 * @return
 	 */
 	private AbstractHttpClientEndpoint getHttpClientEndpoint(Bundle bundle) {
-		try {
-			Class<?> endpointClass = Class.forName(BundleHelper.getPackageName(bundle.getSymbolicName()) + "Endpoint");
-			Constructor<?> endpointConstructor = endpointClass.getDeclaredConstructor();
-			return (AbstractHttpClientEndpoint) endpointConstructor.newInstance();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return null;
 	}
 

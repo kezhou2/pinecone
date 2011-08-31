@@ -3,18 +3,16 @@
  */
 package com.tenline.pinecone.platform.monitor.mina;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.log4j.Logger;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
-import com.tenline.pinecone.platform.monitor.BundleHelper;
 
 /**
  * @author Bill
@@ -51,39 +49,18 @@ public class MinaProtocolCodecFactory implements ProtocolCodecFactory {
 	
 	public void initialize(Bundle bundle) {
 		try {
-			String packageName = BundleHelper.getPackageName(bundle.getSymbolicName());
-			Class<?> decoderClass = Class.forName(packageName + "ProtocolDecoder");
-			Constructor<?> decoderConstructor = decoderClass.getDeclaredConstructor(Bundle.class);
-			decoder = (ProtocolDecoder) decoderConstructor.newInstance(bundle);
-			Class<?> encoderClass = Class.forName(packageName + "ProtocolEncoder");
-			Constructor<?> encoderConstructor = encoderClass.getDeclaredConstructor(Bundle.class);
-			encoder = (ProtocolEncoder) encoderConstructor.newInstance(bundle);
-			Class<?> builderClass = Class.forName(packageName + "ProtocolBuilder");
-			Constructor<?> builderConstructor = builderClass.getDeclaredConstructor(Bundle.class);
-			builder = (AbstractProtocolBuilder) builderConstructor.newInstance(bundle);
-			logger.info("Initialize Factory");
-		} catch (InstantiationException e) {
+			BundleContext context = bundle.getBundleContext();
+			String filter = "(&(symbolicName="+bundle.getSymbolicName()+")(version="+bundle.getVersion().toString()+"))";
+			decoder = (ProtocolDecoder) context.getService(context.getServiceReferences
+					(AbstractMinaProtocolDecoder.class.getName(), filter)[0]);
+			encoder = (ProtocolEncoder) context.getService(context.getServiceReferences
+					(AbstractMinaProtocolEncoder.class.getName(), filter)[0]);
+			builder = (AbstractProtocolBuilder) context.getService(context.getServiceReferences
+					(AbstractProtocolBuilder.class.getName(), filter)[0]);
+		} catch (InvalidSyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		}
 	}
 	
 	public void close() {

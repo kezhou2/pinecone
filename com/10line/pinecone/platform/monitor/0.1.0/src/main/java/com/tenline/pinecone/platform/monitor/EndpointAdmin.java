@@ -11,7 +11,7 @@ import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.monitor.http.AbstractHttpClientEndpoint;
+import com.tenline.pinecone.platform.monitor.http.HttpClientEndpoint;
 import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
@@ -97,19 +97,10 @@ public class EndpointAdmin {
 		if (type.equals("Serial")) {
 			endpoint = new MinaSerialEndpoint();
 		} else if (type.equals("HttpClient")) {
-			endpoint= getHttpClientEndpoint(bundle);
+			endpoint= new HttpClientEndpoint();
 		}	
 		endpoint.initialize(device);
 		endpoints.add(endpoint);
-	}
-	
-	/**
-	 * 
-	 * @param bundle
-	 * @return
-	 */
-	private AbstractHttpClientEndpoint getHttpClientEndpoint(Bundle bundle) {
-		return null;
 	}
 
 }

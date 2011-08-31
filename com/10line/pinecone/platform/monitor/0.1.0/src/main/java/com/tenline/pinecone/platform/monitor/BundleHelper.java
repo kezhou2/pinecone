@@ -75,7 +75,8 @@ public class BundleHelper {
 	public static Bundle getBundle(String symbolicName, String version) {
 		for (int i = 0; i < bundleContext.getBundles().length; i++) {
 			Bundle bundle = bundleContext.getBundles()[i];
-			if (bundle.getSymbolicName().equals(symbolicName)) {
+			if (bundle.getSymbolicName().equals(symbolicName) &&
+				bundle.getVersion().toString().equals(version)) {
 				return bundle;
 			}
 		}

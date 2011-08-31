@@ -13,7 +13,6 @@
   	<device.name>huishi</device.name>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <bundle.path>/${company.category}/${company.name}/${domain.category}/${device.category}/${pom.artifactId}/${pom.version}/</bundle.path>
-    <host.bundle>com.10line.pinecone.platform.monitor</host.bundle>
   </properties>
   <repositories>
   	<repository>
@@ -60,7 +59,7 @@
             <bundleUrl>${project.distributionManagementArtifactRepository.url}${bundle.path}${pom.artifactId}-${pom.version}.jar</bundleUrl>
         	<instructions>
         		<Bundle-Name>${pom.artifactId}</Bundle-Name>
-        		<Fragment-Host>${host.bundle}</Fragment-Host>
+        		<Bundle-Activator>${pom.groupId}.${pom.artifactId}.Activator</Bundle-Activator>
         		<Type>HttpClient</Type>
         		<Address>192.168.0.1</Address>
         		<Port>80</Port>

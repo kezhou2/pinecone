@@ -20,11 +20,6 @@ import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
 public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 	
 	/**
-	 * EFish Protocol Meta Data
-	 */
-	private static Device metaData;
-	
-	/**
 	 * 
 	 * @param bundle
 	 */
@@ -71,14 +66,6 @@ public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 		}
 	}
 	
-	/**
-	 * Get Meta Data
-	 * @return
-	 */
-	public static Device getMetaData() {
-		return metaData;
-	}
-
 	@Override
 	public void initializeReadQueue(LinkedList<Device> queue) {
 		// TODO Auto-generated method stub

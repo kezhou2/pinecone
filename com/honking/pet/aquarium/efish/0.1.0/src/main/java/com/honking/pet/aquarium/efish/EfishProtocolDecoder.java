@@ -76,7 +76,8 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 				.toString());
 		variable.setItems(new ArrayList<Item>());
 		Item item = new Item();
-		item.setValue(splitWaterTemperature(new byte[]{packet[0], packet[1]}));
+		String splitWaterTemperature = splitWaterTemperature(packet[0], packet[1]);
+		item.setValue(splitWaterTemperature);
 		variable.getItems().add(item);
 		device.getVariables().add(variable);
 		output.write(device);
@@ -120,21 +121,9 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 	 * @param bytes
 	 * @return
 	 */
-	private String splitWaterTemperature(byte[] bytes) {
-		int i = 0;
-		short temp = 0;
-		if (bytes[0] < 0) {
-			i = 256 + bytes[0];
-		} else {
-			i = bytes[0];
-		}
-		temp += (i << 8);
-		if (bytes[1] < 0) {
-			i = 256 + bytes[1];
-		} else {
-			i = bytes[1];
-		}
-		temp += i;
+	private String splitWaterTemperature(byte a, byte b) {
+		short temp = (short) (a & 0xFF);
+		temp |= (b << 8) & 0xFF00;
 		String str = "-1";
 		if (temp >= 752 && temp <= 767) {
 			str = "-1";

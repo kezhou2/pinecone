@@ -16,17 +16,9 @@ import com.tenline.pinecone.platform.model.Device;
 public abstract class AbstractProtocolBuilder {
 	
 	/**
-	 * EFish Protocol Meta Data
+	 * Protocol Meta Data
 	 */
-	protected static Device metaData;
-
-	/**
-	 * Get Meta Data
-	 * @return
-	 */
-	public static Device getMetaData() {
-		return metaData;
-	}
+	protected Device metaData;
 
 	/**
 	 * Protocol Bundle
@@ -40,6 +32,14 @@ public abstract class AbstractProtocolBuilder {
 	public AbstractProtocolBuilder(Bundle bundle) {
 		// TODO Auto-generated constructor stub	
 		this.bundle = bundle;
+	}
+	
+	/**
+	 * Get Meta Data
+	 * @return
+	 */
+	public Device getMetaData() {
+		return metaData;
 	}
 	
 	/**

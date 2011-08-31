@@ -22,6 +22,6 @@ public interface IConstants {
 	/**
 	 * Repository URL
 	 */
-	static final String REPOSITORY_URL = "http://pinecone.googlecode.com/svn/repository";
+	static final String REPOSITORY_URL = "http://pinecone.googlecode.com/svn/repository/releases.xml";
 	
 }

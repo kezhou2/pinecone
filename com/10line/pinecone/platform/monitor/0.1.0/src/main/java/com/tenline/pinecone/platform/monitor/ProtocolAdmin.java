@@ -7,11 +7,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.obr.RepositoryAdmin;
 import org.osgi.service.obr.Resolver;
 import org.osgi.service.obr.Resource;
+import org.osgi.service.packageadmin.PackageAdmin;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
@@ -36,7 +38,12 @@ public class ProtocolAdmin {
 	/**
 	 * Repository Admin
 	 */
-	private RepositoryAdmin admin;
+	private RepositoryAdmin repositoryAdmin;
+	
+	/**
+	 * Package Admin
+	 */
+	private PackageAdmin packageAdmin;
 	
 	/**
 	 * Web Service API
@@ -57,10 +64,13 @@ public class ProtocolAdmin {
 	public ProtocolAdmin(BundleContext context) {
 		// TODO Auto-generated constructor stub
 		try {
-			String serviceClass = RepositoryAdmin.class.getName();
-			ServiceReference reference = context.getServiceReference(serviceClass);
-			admin = (RepositoryAdmin) context.getService(reference);
-			admin.addRepository(new URL(IConstants.REPOSITORY_URL));
+			String repositoryAdminClass = RepositoryAdmin.class.getName();
+			ServiceReference repositoryAdminreference = context.getServiceReference(repositoryAdminClass);
+			repositoryAdmin = (RepositoryAdmin) context.getService(repositoryAdminreference);
+			repositoryAdmin.addRepository(new URL(IConstants.REPOSITORY_URL));
+			String packageAdminClass = PackageAdmin.class.getName();
+			ServiceReference packageAdminReference = context.getServiceReference(packageAdminClass);
+			packageAdmin = (PackageAdmin) context.getService(packageAdminReference);
 			deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
 
 				@Override
@@ -123,7 +133,7 @@ public class ProtocolAdmin {
 	 * @return
 	 */
 	public Device[] retrieveProtocols() {
-		Resource[] resources = admin.discoverResources(null);
+		Resource[] resources = repositoryAdmin.discoverResources(null);
 		Device[] devices = new Device[resources.length];
 		for (int i=0; i<resources.length; i++) {
 			Resource resource = resources[i];
@@ -141,10 +151,11 @@ public class ProtocolAdmin {
 	 * @return
 	 */
 	public boolean installProtocol(Device metaData) {
-		Resolver resolver = admin.resolver();
-		resolver.add(admin.discoverResources("(symbolicname="+metaData.getSymbolicName()+")")[0]);
+		Resolver resolver = repositoryAdmin.resolver();
+		resolver.add(repositoryAdmin.discoverResources("(symbolicname="+metaData.getSymbolicName()+")")[0]);
 		if (resolver.resolve()) {
 			resolver.deploy(true);
+			packageAdmin.refreshPackages(new Bundle[]{BundleHelper.getBundle(metaData.getSymbolicName())});
 			return true;
 		} else {
 			logger.error("Unable to resolve: " + metaData.getSymbolicName());

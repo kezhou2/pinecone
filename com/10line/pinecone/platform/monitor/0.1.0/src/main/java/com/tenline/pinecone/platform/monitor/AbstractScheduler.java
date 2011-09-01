@@ -18,7 +18,7 @@ public abstract class AbstractScheduler {
 	/**
 	 * Scheduler Logger
 	 */
-	private Logger logger = Logger.getLogger(getClass());
+	protected Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * Scheduler Write Queue

@@ -8,6 +8,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
@@ -27,6 +28,11 @@ public class HttpClientScheduler extends AbstractScheduler {
 	private AbstractHttpClientProtocolExecutor executor;
 	
 	/**
+	 * Protocol Builder
+	 */
+	private AbstractProtocolBuilder builder;
+	
+	/**
 	 * Http Client
 	 */
 	private HttpClient client;
@@ -43,21 +49,57 @@ public class HttpClientScheduler extends AbstractScheduler {
 	public HttpClientScheduler(Device device) {
 		super();
 		// TODO Auto-generated constructor stub
+		Bundle bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
+		String filter = "(&(symbolicName="+bundle.getSymbolicName()+")(version="+bundle.getVersion().toString()+"))";
+		waitForServices(filter, bundle.getBundleContext());
+		builder.initializeReadQueue(getReadQueue());
+		publisher = new Publisher();
+		publisher.setDevice(device);
+		client = new DefaultHttpClient();
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param context
+	 * @return
+	 * @throws InvalidSyntaxException
+	 */
+	private AbstractProtocolBuilder getBuilderService(String filter, BundleContext context) throws InvalidSyntaxException {
+		ServiceReference[] references = context.getServiceReferences(AbstractProtocolBuilder.class.getName(), filter);
+		if(references != null) builder = (AbstractProtocolBuilder) context.getService(references[0]);
+		return builder;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param context
+	 * @return
+	 * @throws InvalidSyntaxException
+	 */
+	private AbstractHttpClientProtocolExecutor getExecutorService(String filter, BundleContext context) throws InvalidSyntaxException {
+		ServiceReference[] references = context.getServiceReferences(AbstractHttpClientProtocolExecutor.class.getName(), filter);
+		if(references != null) executor = (AbstractHttpClientProtocolExecutor) context.getService(references[0]);
+		return executor;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param context
+	 */
+	private void waitForServices(String filter, BundleContext context) {
+		int secondsToWait = 10;
+		int secondsPassed = 0;
 		try {
-			Bundle bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
-			BundleContext context = bundle.getBundleContext();
-			String filter = "(&(symbolicName="+bundle.getSymbolicName()+")(version="+bundle.getVersion().toString()+"))";
-			AbstractProtocolBuilder builder = (AbstractProtocolBuilder) context.getService(context.getServiceReferences
-					(AbstractProtocolBuilder.class.getName(), filter)[0]);
-			builder.initializeReadQueue(getReadQueue());
-			executor = (AbstractHttpClientProtocolExecutor) context.getService(context.getServiceReferences
-					(AbstractHttpClientProtocolExecutor.class.getName(), filter)[0]);
-			publisher = new Publisher();
-			publisher.setDevice(device);
-			client = new DefaultHttpClient();
-		} catch (InvalidSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			while (secondsPassed < secondsToWait && 
+				   getExecutorService(filter, context) == null && 
+				   getBuilderService(filter, context) == null) {
+				Thread.sleep(++secondsPassed * 1000);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
 		}
 	}
 	

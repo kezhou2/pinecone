@@ -11,6 +11,7 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
 
@@ -47,27 +48,82 @@ public class MinaProtocolCodecFactory implements ProtocolCodecFactory {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * 
+	 * @param bundle
+	 */
 	public void initialize(Bundle bundle) {
-		try {
-			BundleContext context = bundle.getBundleContext();
-			String filter = "(&(symbolicName="+bundle.getSymbolicName()+")(version="+bundle.getVersion().toString()+"))";
-			decoder = (ProtocolDecoder) context.getService(context.getServiceReferences
-					(AbstractMinaProtocolDecoder.class.getName(), filter)[0]);
-			encoder = (ProtocolEncoder) context.getService(context.getServiceReferences
-					(AbstractMinaProtocolEncoder.class.getName(), filter)[0]);
-			builder = (AbstractProtocolBuilder) context.getService(context.getServiceReferences
-					(AbstractProtocolBuilder.class.getName(), filter)[0]);
-		} catch (InvalidSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String filter = "(&(symbolicName="+bundle.getSymbolicName()+")(version="+bundle.getVersion().toString()+"))";
+		waitForServices(filter, bundle.getBundleContext());
 	}
 	
+	/**
+	 * 
+	 */
 	public void close() {
 		decoder = null;
 		encoder = null;
 		builder = null;
 		logger.info("Close Factory");
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param context
+	 * @return
+	 * @throws InvalidSyntaxException
+	 */
+	private ProtocolDecoder getDecoderService(String filter, BundleContext context) throws InvalidSyntaxException {
+		ServiceReference[] references = context.getServiceReferences(AbstractMinaProtocolDecoder.class.getName(), filter);
+		if(references != null) decoder = (ProtocolDecoder) context.getService(references[0]);
+		return decoder;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param context
+	 * @return
+	 * @throws InvalidSyntaxException
+	 */
+	private ProtocolEncoder getEncoderService(String filter, BundleContext context) throws InvalidSyntaxException {
+		ServiceReference[] references = context.getServiceReferences(AbstractMinaProtocolEncoder.class.getName(), filter);
+		if(references != null) encoder = (ProtocolEncoder) context.getService(references[0]);
+		return encoder;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param context
+	 * @return
+	 * @throws InvalidSyntaxException
+	 */
+	private AbstractProtocolBuilder getBuilderService(String filter, BundleContext context) throws InvalidSyntaxException {
+		ServiceReference[] references = context.getServiceReferences(AbstractProtocolBuilder.class.getName(), filter);
+		if(references != null) builder = (AbstractProtocolBuilder) context.getService(references[0]);
+		return builder;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param context
+	 */
+	private void waitForServices(String filter, BundleContext context) {
+		int secondsToWait = 10;
+		int secondsPassed = 0;
+		try {
+			while (secondsPassed < secondsToWait && 
+				   getDecoderService(filter, context) == null &&
+				   getEncoderService(filter, context) == null && 
+				   getBuilderService(filter, context) == null) {
+				Thread.sleep(++secondsPassed * 1000);
+			}
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+		}
 	}
 
 	@Override

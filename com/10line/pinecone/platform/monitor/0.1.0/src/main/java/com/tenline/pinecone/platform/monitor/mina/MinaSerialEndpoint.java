@@ -135,12 +135,10 @@ public class MinaSerialEndpoint implements IEndpoint {
 			try {
 				if (CommPortIdentifier.getPortIdentifier(port) != null) {
 					serialPorts.add(port);
-				} else {
-					port = matchPort();
 				}
 			} catch (NoSuchPortException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				port = matchPort();
 			}
 		} else {
 			port = matchPort();

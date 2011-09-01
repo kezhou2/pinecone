@@ -11,6 +11,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.obr.RepositoryAdmin;
 import org.osgi.service.obr.Resolver;
+import org.osgi.service.obr.Resource;
+
+import com.tenline.pinecone.platform.model.Device;
 
 /**
  * @author Bill
@@ -85,6 +88,24 @@ public class BundleHelper {
 		resolver.add(repositoryAdmin.discoverResources(filter)[0]);
 		resolver.deploy(true);
 		return getBundle(symbolicName, version);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static Device[] getRemoteBundles() {
+		Resource[] resources = repositoryAdmin.discoverResources(null);
+		Device[] devices = new Device[resources.length];
+		for (int i = 0; i < resources.length; i++) {
+			Resource resource = resources[i];
+			Device device = new Device();
+			device.setName(resource.getPresentationName());
+			device.setSymbolicName(resource.getSymbolicName());
+			device.setVersion(resource.getVersion().toString());
+			devices[i] = device;
+		}
+		return devices;
 	}
 
 }

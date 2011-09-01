@@ -90,7 +90,7 @@ public class EndpointAdmin {
 	 * Initialize Endpoint
 	 * @param device
 	 */
-	private void initializeEndpoint(Device device) {
+	public void initializeEndpoint(Device device) {
 		Bundle bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
 		String type = bundle.getHeaders().get("Type").toString();
 		IEndpoint endpoint = null;

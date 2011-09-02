@@ -3,12 +3,16 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
 
@@ -46,7 +50,7 @@ public class Subscriber {
 	/**
 	 * Subscriber Timer Task Interval
 	 */
-	private static final int INTERVAL = 500;
+	private static final int INTERVAL = 3000;
 
 	/**
 	 * Subscriber Timer Task Interval After Task Starting
@@ -67,6 +71,10 @@ public class Subscriber {
 
 					@Override
 					public void onMessage(Object message) {
+						Device dev = (Device)message;
+						ArrayList<Variable> variables = (ArrayList<Variable>) dev.getVariables();
+						ArrayList<Item> items = (ArrayList<Item>) variables.get(0).getItems();
+						System.out.println(items.get(0).getValue());
 						scheduler.addToWriteQueue((Device) message);
 						logger.info("Add to write queue");
 					}

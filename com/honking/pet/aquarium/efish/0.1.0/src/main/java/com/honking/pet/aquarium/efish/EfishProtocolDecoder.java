@@ -53,6 +53,7 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 			Variable variable = new Variable();
 			variable.setName(bundle.getHeaders().get("Oxygen-Generation")
 					.toString());
+			variable.setType("write_discrete");
 			device.getVariables().add(variable);
 			output.write(device);
 		} else if (packet[0] == 0x04) {
@@ -61,6 +62,7 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 			Variable variable = new Variable();
 			variable.setName(bundle.getHeaders().get("Water-Temperature")
 					.toString());
+			variable.setType("write_discrete");
 			device.getVariables().add(variable);
 			output.write(device);
 		}
@@ -74,6 +76,7 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		Variable variable = new Variable();
 		variable.setName(bundle.getHeaders().get("Water-Temperature")
 				.toString());
+		variable.setType("read_discrete");
 		variable.setItems(new ArrayList<Item>());
 		Item item = new Item();
 		item.setValue(splitWaterTemperature(packet[0], packet[1]));

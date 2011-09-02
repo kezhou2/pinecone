@@ -65,6 +65,7 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 				bundle.getHeaders().get("Oxygen-Generation"))) {
 			bytes = BufferHelper.appendBuffer(new byte[] { 0x03, 0x01 }, bytes);
 			bytes = BufferHelper.appendBuffer(buildPacketData(variable), bytes);
+			System.out.println(bytes[0]+"  "+bytes[1]+"  "+bytes[2]+"  "+bytes[3]);
 		}
 		return bytes;
 	}

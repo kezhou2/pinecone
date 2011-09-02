@@ -168,7 +168,7 @@ public class Publisher {
 			throws Exception {
 		Item item = (Item) variable.getItems().toArray()[0];
 		streamChannel.publish(variable.getId() + "-device",
-				"application/image", item.getValue());
+				"image/jpeg", item.getValue());
 		System.out.println("Publish: " + variable.getId() + "-device" + ", "
 				+ System.currentTimeMillis() / 1000 + " value: image.");
 	}

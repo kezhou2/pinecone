@@ -29,17 +29,11 @@ import com.tenline.pinecone.platform.monitor.http.AbstractHttpClientProtocolExec
 public class HuishiProtocolExecutor extends AbstractHttpClientProtocolExecutor {
 	
 	/**
-	 * 
-	 */
-	private static ArrayList<Integer> isStreamed; 
-
-	/**
 	 * @param bundle
 	 */
 	public HuishiProtocolExecutor(Bundle bundle) {
 		super(bundle);
 		// TODO Auto-generated constructor stub
-		isStreamed = new ArrayList<Integer>();
 	}
 
 	@Override
@@ -53,35 +47,22 @@ public class HuishiProtocolExecutor extends AbstractHttpClientProtocolExecutor {
 							 bundle.getHeaders().get("Port").toString() +
 							 "/decoder_control.cgi?command=" + item.getValue() +
 							 "&onestep=2&user=admin&passwd=123456";
-				HttpResponse response = client.execute((HttpUriRequest) new HttpGet(uri));
-				item.setValue(response.getEntity().getContent().toString());
-				response.getEntity().getContent().close();
+				HttpResponse resp = client.execute((HttpUriRequest) new HttpGet(uri));
+				logger.info(resp.getEntity().toString());
 				publisher.publish(device);
 			} else if (variable.getName().equals(bundle.getHeaders().get("Video-Stream").toString())) {
-				if (!isStreamed.contains(client.hashCode())) {
-					isStreamed.add(client.hashCode());
-					String uri = "http://" + bundle.getHeaders().get("Address").toString() + ":" +
-		 						bundle.getHeaders().get("Port").toString() + 
-		 						"/videostream.cgi?user=admin&pwd=123456";
-					HttpResponse response = client.execute((HttpUriRequest) new HttpGet(uri));
-					ByteArrayOutputStream output = new ByteArrayOutputStream();
-					String[] types = variable.getType().split("_");
-					for (String type : types) {
-						if (type.indexOf("image") >= 0) {
-							ImageIO.write(ImageIO.read(response.getEntity().getContent()), 
-									type.substring(type.indexOf("/") + 1), output);	break;
-						}
-					}
-					byte[] byteImage = output.toByteArray();
-					while (byteImage.length > 0) {
-						Item item = new Item();
-						item.setValue(new String(byteImage));
-						variable.setItems(new ArrayList<Item>());
-						variable.getItems().add(item);
-						publisher.publish(device);
-					}
-					isStreamed.remove(client.hashCode());	
-				}
+				String uri = "http://" + bundle.getHeaders().get("Address").toString() + ":" +
+					bundle.getHeaders().get("Port").toString() + 
+					"/snapshot.cgi?user=admin&pwd=123456";
+				HttpResponse response = client.execute((HttpUriRequest) new HttpGet(uri));
+				ByteArrayOutputStream output = new ByteArrayOutputStream();
+				ImageIO.write(ImageIO.read(response.getEntity().getContent()), "PNG", output);
+				Item item = new Item();
+				item.setValue(new String(output.toByteArray()));
+				logger.info("Image Length: " + item.getValue().getBytes().length);
+				variable.setItems(new ArrayList<Item>());
+				variable.getItems().add(item);
+				publisher.publish(device);
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block

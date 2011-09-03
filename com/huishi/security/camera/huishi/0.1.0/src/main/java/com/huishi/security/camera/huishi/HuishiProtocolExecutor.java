@@ -3,8 +3,12 @@
  */
 package com.huishi.security.camera.huishi;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -56,10 +60,20 @@ public class HuishiProtocolExecutor extends AbstractHttpClientProtocolExecutor {
 					bundle.getHeaders().get("Port").toString() + 
 					"/snapshot.cgi?user=admin&pwd=123456";
 				HttpResponse response = client.execute((HttpUriRequest) new HttpGet(uri));
-				ByteArrayOutputStream output = new ByteArrayOutputStream();
-				ImageIO.write(ImageIO.read(response.getEntity().getContent()), "PNG", output);
+				
+				InputStream in = response.getEntity().getContent();
+//				int len = in.available();
+//				int data;
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+//				while((data=in.read())!=-1){
+//					out.write(data);
+//				}
+//				byte []datas = new byte[len];
+//				in.read(datas);
+				ImageIO.write(ImageIO.read(in), "jpeg", out);
+				in.close();
 				Item item = new Item();
-				item.setValue(new String(output.toByteArray()));
+				item.setValue(new String(out.toByteArray()));
 				logger.info("Image Length: " + item.getValue().getBytes().length);
 				variable.setItems(new ArrayList<Item>());
 				variable.getItems().add(item);

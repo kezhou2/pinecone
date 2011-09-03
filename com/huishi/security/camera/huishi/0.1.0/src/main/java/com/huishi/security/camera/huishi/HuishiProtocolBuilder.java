@@ -62,7 +62,7 @@ public class HuishiProtocolBuilder extends AbstractProtocolBuilder {
 			
 			variable = new Variable();
 			variable.setName(bundle.getHeaders().get("Video-Stream").toString());
-			variable.setType("read_image/png");
+			variable.setType("read_image/jpeg");
 			
 			metaData.getVariables().add(variable);
 		}
@@ -75,6 +75,7 @@ public class HuishiProtocolBuilder extends AbstractProtocolBuilder {
 		device.setVariables(new ArrayList<Variable>());
 		Variable variable = new Variable();
 		variable.setName(bundle.getHeaders().get("Video-Stream").toString());
+		variable.setType("read_image/jpeg");
 		device.getVariables().add(variable);
 		queue.addLast(device);
 	}

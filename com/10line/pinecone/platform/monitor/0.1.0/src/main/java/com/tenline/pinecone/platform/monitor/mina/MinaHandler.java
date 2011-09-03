@@ -195,7 +195,7 @@ public class MinaHandler extends IoHandlerAdapter {
 	public void messageReceived(IoSession session, Object message)
 			throws Exception {
 		super.messageReceived(session, message);
-		schedulers.get(session.getId()).execute();
+		schedulers.get(session.getId()).update();
 		publishers.get(session.getId()).publish((Device) message);
 	}
 

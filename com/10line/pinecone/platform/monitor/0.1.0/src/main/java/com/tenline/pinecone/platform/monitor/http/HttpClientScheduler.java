@@ -57,7 +57,7 @@ public class HttpClientScheduler extends AbstractScheduler {
 	protected void dispatch(Device device) {
 		super.dispatch(device);
 		executor.execute(client, device, publisher);
-		execute();
+		update();
 	}
 
 	/**

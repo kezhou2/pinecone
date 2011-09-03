@@ -4,6 +4,8 @@
 package com.tenline.pinecone.platform.monitor;
 
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
@@ -36,29 +38,39 @@ public abstract class AbstractScheduler {
 	private int readIndex;
 
 	/**
+	 * Scheduler Last Queue Item
+	 */
+	private Device lastQueueItem;
+	
+	/**
 	 * Scheduler Timer
 	 */
-	private Thread timer;
+	private Timer timer;
 
 	/**
-	 * Scheduler Max Time Millis
+	 * Scheduler Timer Task
 	 */
-	private static final int MAX_TIME_MILLIS = 5000;
-
-	/**
-	 * Scheduler Thread Sleep Time Millis
-	 */
-	private static final int SLEEP_TIME_MILLIS = 1000;
-
+	private TimerTask task;
+	
 	/**
 	 * Scheduler Current Time Millis
 	 */
 	private long currentTimeMillis;
+	
+	/**
+	 * Scheduler Max Time Millis
+	 */
+	private static final int MAX_TIME_MILLIS = 5000;
+	
+	/**
+	 * Scheduler Task Interval
+	 */
+	private static final int INTERVAL = 1000;
 
 	/**
-	 * Scheduler Last Queue Item
+	 * Scheduler Task Interval After Task Starting
 	 */
-	private Device lastQueueItem;
+	private static final int AFTER_START_INTERVAL = 0;
 
 	/**
 	 * 
@@ -73,27 +85,22 @@ public abstract class AbstractScheduler {
 	 * Start Scheduler
 	 */
 	public void start() {
-		execute();
-		timer = new Thread(new Runnable() {
+		update();
+		timer = new Timer();
+		task = new TimerTask() {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				while (true) {
-					if (System.currentTimeMillis() - currentTimeMillis >= MAX_TIME_MILLIS) {
-						// offline - notify UI
-						execute();
-					} else {
-						try {
-							Thread.sleep(SLEEP_TIME_MILLIS);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
+				if (System.currentTimeMillis() - currentTimeMillis >= MAX_TIME_MILLIS) {
+					// offline - notify UI
+					update();
+				} else {
+					execute();
 				}
 			}
-		});
-		timer.start();
+
+		};
+		timer.schedule(task, AFTER_START_INTERVAL, INTERVAL);
 	}
 
 	/**
@@ -119,13 +126,6 @@ public abstract class AbstractScheduler {
 	 * @param device
 	 */
 	protected void dispatch(Device device) {
-		try {
-			Thread.sleep(SLEEP_TIME_MILLIS);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		currentTimeMillis = System.currentTimeMillis();
 		logger.info("Dispatch Successfully!");
 	}
 
@@ -133,9 +133,17 @@ public abstract class AbstractScheduler {
 	 * Stop Scheduler
 	 */
 	public void stop() {
-		timer.interrupt();
+		task.cancel();
+		timer.purge();
 		writeQueue.clear();
 		readQueue.clear();
+	}
+	
+	/**
+	 * Update Scheduler
+	 */
+	public void update() {
+		currentTimeMillis = System.currentTimeMillis();
 	}
 
 	/**

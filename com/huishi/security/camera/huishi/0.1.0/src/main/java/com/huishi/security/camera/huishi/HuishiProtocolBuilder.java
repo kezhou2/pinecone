@@ -71,7 +71,12 @@ public class HuishiProtocolBuilder extends AbstractProtocolBuilder {
 	@Override
 	public void initializeReadQueue(LinkedList<Device> queue) {
 		// TODO Auto-generated method stub
-		
+		Device device = new Device();
+		device.setVariables(new ArrayList<Variable>());
+		Variable variable = new Variable();
+		variable.setName(bundle.getHeaders().get("Video-Stream").toString());
+		device.getVariables().add(variable);
+		queue.addLast(device);
 	}
 
 }

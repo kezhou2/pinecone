@@ -10,11 +10,15 @@ import org.apache.log4j.Logger;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.monitor.http.HttpClientEndpoint;
 import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
+import com.tenline.pinecone.platform.sdk.ItemAPI;
+import com.tenline.pinecone.platform.sdk.VariableAPI;
 
 /**
  * @author Bill
@@ -25,7 +29,13 @@ public class EndpointAdmin {
 	/**
 	 * Web Service API
 	 */
+	private Device device;
 	private DeviceAPI deviceAPI;
+	
+	private Variable variable;
+	private VariableAPI variableAPI;
+	
+	private ItemAPI itemAPI;
 	
 	/**
 	 * Endpoints
@@ -48,8 +58,16 @@ public class EndpointAdmin {
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub		
 				Object[] devices = ((Collection<?>) message).toArray();
-				for (int i = 0; i < devices.length; i++) {
-					initializeEndpoint((Device) devices[i]);
+				for (Object object : devices) {
+					device = (Device) object;
+					device.setVariables(new ArrayList<Variable>());
+					initializeEndpoint(device);
+					try {
+						variableAPI.showByDevice("id=='"+device.getId()+"'");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}		
 			}
 
@@ -60,6 +78,51 @@ public class EndpointAdmin {
 			}
 
 		});
+		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				Object[] variables = ((Collection<?>) message).toArray();
+				for (Object object : variables) {
+					variable = (Variable) object;
+					variable.setItems(new ArrayList<Item>());
+					device.getVariables().add(variable);
+					try {
+						itemAPI.showByVariable("id=='"+variable.getId()+"'");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				logger.error(error);
+			}
+			
+		});
+		itemAPI = new ItemAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				Object[] items = ((Collection<?>) message).toArray();
+				for (Object item : items) {
+					variable.getItems().add((Item) item);
+				}
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				logger.error(error);
+			}
+			
+		});
+		
 	}
 	
 	/**

@@ -43,7 +43,17 @@ public abstract class AbstractScheduler {
 	/**
 	 * Scheduler Max Time Millis
 	 */
-	private static final int MAX_TIME_MILLIS = 3000;
+	private static final int MAX_TIME_MILLIS = 5000;
+	
+	/**
+	 * Scheduler Thread Sleep Millis
+	 */
+	private static final int SLEEP_MILLIS = 1000;
+	
+	/**
+	 * Scheduler Current Time Millis
+	 */
+	private long currentTimeMillis;
 	
 	/**
 	 * Scheduler Last Queue Item
@@ -70,13 +80,10 @@ public abstract class AbstractScheduler {
 			public void run() {
 				// TODO Auto-generated method stub
 				while(true) {
+					if (System.currentTimeMillis() - currentTimeMillis >= MAX_TIME_MILLIS) {
 						// offline - notify UI
 						execute();
-						try {
-							Thread.sleep(MAX_TIME_MILLIS);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+					}
 				}
 			}
 			
@@ -106,6 +113,13 @@ public abstract class AbstractScheduler {
 	 * @param device
 	 */
 	protected void dispatch(Device device) {
+		try {
+			Thread.sleep(SLEEP_MILLIS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		currentTimeMillis = System.currentTimeMillis();
 		logger.info("Dispatch Successfully!");
 	}
 	

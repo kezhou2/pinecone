@@ -3,16 +3,12 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Item;
-import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
 
@@ -66,25 +62,20 @@ public class Subscriber {
 	 * 
 	 */
 	public Subscriber() {
-		channel = new ChannelAPI(IConstants.WEB_SERVICE_HOST,
-				IConstants.WEB_SERVICE_PORT, new APIListener() {
+		channel = new ChannelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
 
-					@Override
-					public void onMessage(Object message) {
-						Device dev = (Device)message;
-						ArrayList<Variable> variables = (ArrayList<Variable>) dev.getVariables();
-						ArrayList<Item> items = (ArrayList<Item>) variables.get(0).getItems();
-						System.out.println(items.get(0).getValue());
-						scheduler.addToWriteQueue((Device) message);
-						logger.info("Add to write queue");
-					}
+			@Override
+			public void onMessage(Object message) {
+				scheduler.addToWriteQueue((Device) message);
+				logger.info("Add to write queue");
+			}
 
-					@Override
-					public void onError(String error) {
-						logger.error(error);
-					}
+			@Override
+			public void onError(String error) {
+				logger.error(error);
+			}
 
-				});
+		});
 	}
 
 	/**
@@ -116,8 +107,7 @@ public class Subscriber {
 	}
 
 	/**
-	 * @param scheduler
-	 *            the scheduler to set
+	 * @param scheduler the scheduler to set
 	 */
 	public void setScheduler(AbstractScheduler scheduler) {
 		this.scheduler = scheduler;
@@ -131,8 +121,7 @@ public class Subscriber {
 	}
 
 	/**
-	 * @param device
-	 *            the device to set
+	 * @param device the device to set
 	 */
 	public void setDevice(Device device) {
 		this.device = device;

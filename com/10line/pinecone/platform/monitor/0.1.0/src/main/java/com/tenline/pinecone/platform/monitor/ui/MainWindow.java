@@ -238,7 +238,6 @@ public class MainWindow extends JFrame {
 						device.setVersion(metaData.getVersion());
 						device.setUser(user);
 						deviceAPI.create(device);
-						endpointAdmin.initializeEndpoint(device);
 						for (Variable vMetaData : metaData.getVariables()) {
 							variable = new Variable();
 							variable.setName(vMetaData.getName());
@@ -253,6 +252,7 @@ public class MainWindow extends JFrame {
 								itemAPI.create(item);
 							}
 						}
+						endpointAdmin.initializeEndpoint(device);
 					} catch (Exception ex) {
 						// TODO Auto-generated catch block
 						ex.printStackTrace();

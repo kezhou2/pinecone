@@ -31,8 +31,7 @@ public class MinaScheduler extends AbstractScheduler {
 	protected void dispatch(Device device) {
 		try{
 			session.write(device);
-			logger.info("Dispatch Successfully!");
-//			super.dispatch(device);
+			super.dispatch(device);
 		}catch(Exception e){
 			e.printStackTrace();
 		}

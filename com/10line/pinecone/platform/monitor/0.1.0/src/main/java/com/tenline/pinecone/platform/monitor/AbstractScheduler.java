@@ -11,10 +11,10 @@ import com.tenline.pinecone.platform.model.Device;
 
 /**
  * @author Bill
- *
+ * 
  */
 public abstract class AbstractScheduler {
-	
+
 	/**
 	 * Scheduler Logger
 	 */
@@ -24,42 +24,42 @@ public abstract class AbstractScheduler {
 	 * Scheduler Write Queue
 	 */
 	private LinkedList<Device> writeQueue;
-	
+
 	/**
 	 * Scheduler Read Queue
 	 */
 	private LinkedList<Device> readQueue;
-	
+
 	/**
 	 * Scheduler Read Queue Index
 	 */
 	private int readIndex;
-	
+
 	/**
 	 * Scheduler Timer
 	 */
 	private Thread timer;
-	
+
 	/**
 	 * Scheduler Max Time Millis
 	 */
 	private static final int MAX_TIME_MILLIS = 5000;
-	
+
 	/**
 	 * Scheduler Thread Sleep Millis
 	 */
 	private static final int SLEEP_MILLIS = 1000;
-	
+
 	/**
 	 * Scheduler Current Time Millis
 	 */
 	private long currentTimeMillis;
-	
+
 	/**
 	 * Scheduler Last Queue Item
 	 */
 	private Device lastQueueItem;
-	
+
 	/**
 	 * 
 	 */
@@ -68,7 +68,7 @@ public abstract class AbstractScheduler {
 		writeQueue = new LinkedList<Device>();
 		readQueue = new LinkedList<Device>();
 	}
-	
+
 	/**
 	 * Start Scheduler
 	 */
@@ -79,18 +79,23 @@ public abstract class AbstractScheduler {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				while(true) {
+				while (true) {
 					if (System.currentTimeMillis() - currentTimeMillis >= MAX_TIME_MILLIS) {
 						// offline - notify UI
 						execute();
+					} else {
+						try {
+							Thread.sleep(MAX_TIME_MILLIS);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
-			
 		});
 		timer.start();
 	}
-	
+
 	/**
 	 * Execute Scheduler
 	 */
@@ -103,13 +108,14 @@ public abstract class AbstractScheduler {
 				readIndex %= readQueue.size();
 				lastQueueItem = readQueue.get(readIndex);
 				dispatch(lastQueueItem);
-				readIndex++;	
-			} 
+				readIndex++;
+			}
 		}
 	}
-	
+
 	/**
 	 * Dispatch to endpoint
+	 * 
 	 * @param device
 	 */
 	protected void dispatch(Device device) {
@@ -122,7 +128,7 @@ public abstract class AbstractScheduler {
 		currentTimeMillis = System.currentTimeMillis();
 		logger.info("Dispatch Successfully!");
 	}
-	
+
 	/**
 	 * Stop Scheduler
 	 */
@@ -131,7 +137,7 @@ public abstract class AbstractScheduler {
 		writeQueue.clear();
 		readQueue.clear();
 	}
-	
+
 	/**
 	 * 
 	 * @param device
@@ -139,7 +145,7 @@ public abstract class AbstractScheduler {
 	public void addToWriteQueue(Device device) {
 		writeQueue.addLast(device);
 	}
-	
+
 	/**
 	 * 
 	 * @param device
@@ -147,7 +153,7 @@ public abstract class AbstractScheduler {
 	public void removeFromWriteQueue(Device device) {
 		writeQueue.remove(device);
 	}
-	
+
 	/**
 	 * 
 	 * @param device
@@ -155,7 +161,7 @@ public abstract class AbstractScheduler {
 	public void addToReadQueue(Device device) {
 		readQueue.addLast(device);
 	}
-	
+
 	/**
 	 * 
 	 * @param device
@@ -163,7 +169,7 @@ public abstract class AbstractScheduler {
 	public void removeFromReadQueue(Device device) {
 		readQueue.remove(device);
 	}
-	
+
 	/**
 	 * 
 	 * @return

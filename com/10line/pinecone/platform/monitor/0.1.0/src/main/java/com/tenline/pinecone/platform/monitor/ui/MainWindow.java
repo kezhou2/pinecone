@@ -38,17 +38,17 @@ import com.tenline.pinecone.platform.sdk.VariableAPI;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-	
+
 	/**
 	 * Logger
 	 */
 	private Logger logger = Logger.getLogger(getClass());
-	
+
 	/**
 	 * Endpoint Admin
 	 */
 	private EndpointAdmin endpointAdmin;
-	
+
 	/**
 	 * Web Service API
 	 */
@@ -69,82 +69,86 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow() {
 		endpointAdmin = new EndpointAdmin();
-		userAPI = new UserAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+		userAPI = new UserAPI(IConstants.WEB_SERVICE_HOST,
+				IConstants.WEB_SERVICE_PORT, new APIListener() {
 
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				user = (User) ((Collection<?>) message).toArray()[0];
-				endpointAdmin.initialize(user);
-			}
+					@Override
+					public void onMessage(Object message) {
+						// TODO Auto-generated method stub
+						user = (User) ((Collection<?>) message).toArray()[0];
+						endpointAdmin.initialize(user);
+					}
 
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
+					@Override
+					public void onError(String error) {
+						// TODO Auto-generated method stub
+						logger.error(error);
+					}
 
-		});
-		deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+				});
+		deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST,
+				IConstants.WEB_SERVICE_PORT, new APIListener() {
 
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				device = (Device) message;
-				logger.info("Device: " + device.getId());
-			}
+					@Override
+					public void onMessage(Object message) {
+						// TODO Auto-generated method stub
+						device = (Device) message;
+						logger.info("Device: " + device.getId());
+					}
 
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
+					@Override
+					public void onError(String error) {
+						// TODO Auto-generated method stub
+						logger.error(error);
+					}
 
-		});
-		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+				});
+		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST,
+				IConstants.WEB_SERVICE_PORT, new APIListener() {
 
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				variable = (Variable) message;
-				logger.info("Variable: " + variable.getId());
-			}
+					@Override
+					public void onMessage(Object message) {
+						// TODO Auto-generated method stub
+						variable = (Variable) message;
+						logger.info("Variable: " + variable.getId());
+					}
 
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
+					@Override
+					public void onError(String error) {
+						// TODO Auto-generated method stub
+						logger.error(error);
+					}
 
-		});
-		itemAPI = new ItemAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+				});
+		itemAPI = new ItemAPI(IConstants.WEB_SERVICE_HOST,
+				IConstants.WEB_SERVICE_PORT, new APIListener() {
 
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				item = (Item) message;
-				logger.info("Item: " + item.getId());
-			}
+					@Override
+					public void onMessage(Object message) {
+						// TODO Auto-generated method stub
+						item = (Item) message;
+						logger.info("Item: " + item.getId());
+					}
 
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
+					@Override
+					public void onError(String error) {
+						// TODO Auto-generated method stub
+						logger.error(error);
+					}
 
-		});
+				});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 395, 427);
 		initializeMainPanel();
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void close() {
 		endpointAdmin.close();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -156,32 +160,41 @@ public class MainWindow extends JFrame {
 		JLabel label = new JLabel("SNS Id:");
 		label.setBounds(41, 32, 73, 15);
 		panel.add(label);
-		JTextField textField = new JTextField();
-		textField.setBounds(124, 29, 119, 21);
+		final JTextField textField = new JTextField();
+		textField.setBounds(124, 29, 119, 23);
 		panel.add(textField);
 		textField.setColumns(10);
 		textField.setText("251760162"); // SNS Id
-		try {
-			userAPI.show("snsId=='"+textField.getText()+"'");
-		} catch (Exception ex) {
-			// TODO Auto-generated catch block
-			logger.error(ex.getMessage());
-		}
-		JButton button = new JButton("Show Devices");
-		button.setActionCommand("Show Devices");
-		button.setBounds(100, 100, 50, 50);
+		JButton button = new JButton("Ok");
+		button.setActionCommand("Ok");
+		button.setBounds(260, 29, 50, 23);
 		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					userAPI.show("snsId=='" + textField.getText() + "'");
+				} catch (Exception ex) {
+					// TODO Auto-generated catch block
+					logger.error(ex.getMessage());
+				}
+			}
+		});
+		panel.add(button);
+
+		JButton showButton = new JButton("Show Devices");
+		showButton.setActionCommand("Show Devices");
+		showButton.setBounds(100, 100, 130, 25);
+		showButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new DeviceDialog().setVisible(true);
 			}
 		});
-		panel.add(button);
+		panel.add(showButton);
 	}
 
 	private class DeviceDialog extends JDialog {
-		
+
 		private JComboBox comboBox;
-		
+
 		/**
 		 * 
 		 */
@@ -192,7 +205,7 @@ public class MainWindow extends JFrame {
 			initializeDevicesPanel();
 			initializeOperationPanel();
 		}
-		
+
 		/**
 		 * 
 		 */
@@ -204,7 +217,8 @@ public class MainWindow extends JFrame {
 			comboBox = new JComboBox();
 			Device[] items = BundleHelper.getRemoteBundles();
 			for (Device item : items) {
-				comboBox.addItem(item.getName() + " (" + item.getSymbolicName() + "-" + item.getVersion() + ")");
+				comboBox.addItem(item.getName() + " (" + item.getSymbolicName()
+						+ "-" + item.getVersion() + ")");
 			}
 			comboBox.setBounds(26, 71, 398, 32);
 			panel.add(comboBox);
@@ -212,7 +226,7 @@ public class MainWindow extends JFrame {
 			label.setBounds(26, 29, 82, 15);
 			panel.add(label);
 		}
-		
+
 		/**
 		 * 
 		 */
@@ -228,10 +242,16 @@ public class MainWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						String temp = comboBox.getSelectedItem().toString();
-						String[] identifier = temp.substring(temp.indexOf("(") + 1, temp.length() - 1).split("-");
-						Bundle bundle = BundleHelper.getBundle(identifier[0], identifier[1]);
-						Device metaData = ((AbstractProtocolBuilder) ServiceHelper.waitForService(AbstractProtocolBuilder.class, 
-								bundle.getSymbolicName(), bundle.getVersion().toString())).getMetaData();
+						String[] identifier = temp.substring(
+								temp.indexOf("(") + 1, temp.length() - 1)
+								.split("-");
+						Bundle bundle = BundleHelper.getBundle(identifier[0],
+								identifier[1]);
+						Device metaData = ((AbstractProtocolBuilder) ServiceHelper
+								.waitForService(AbstractProtocolBuilder.class,
+										bundle.getSymbolicName(), bundle
+												.getVersion().toString()))
+								.getMetaData();
 						device = new Device();
 						device.setName(metaData.getName());
 						device.setSymbolicName(metaData.getSymbolicName());
@@ -244,13 +264,16 @@ public class MainWindow extends JFrame {
 							variable.setType(vMetaData.getType());
 							variable.setDevice(device);
 							variableAPI.create(variable);
-							for (Item iMetaData : vMetaData.getItems()) {
-								item = new Item();
-								item.setText(iMetaData.getText());
-								item.setValue(iMetaData.getValue());
-								item.setVariable(variable);
-								itemAPI.create(item);
+							if (vMetaData.getItems() != null) {
+								for (Item iMetaData : vMetaData.getItems()) {
+									item = new Item();
+									item.setText(iMetaData.getText());
+									item.setValue(iMetaData.getValue());
+									item.setVariable(variable);
+									itemAPI.create(item);
+								}
 							}
+
 						}
 						endpointAdmin.initializeEndpoint(device);
 					} catch (Exception ex) {
@@ -262,5 +285,5 @@ public class MainWindow extends JFrame {
 		}
 
 	}
-	
+
 }

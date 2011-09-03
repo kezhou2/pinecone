@@ -46,9 +46,9 @@ public abstract class AbstractScheduler {
 	private static final int MAX_TIME_MILLIS = 5000;
 
 	/**
-	 * Scheduler Thread Sleep Millis
+	 * Scheduler Thread Sleep Time Millis
 	 */
-	private static final int SLEEP_MILLIS = 1000;
+	private static final int SLEEP_TIME_MILLIS = 1000;
 
 	/**
 	 * Scheduler Current Time Millis
@@ -85,7 +85,7 @@ public abstract class AbstractScheduler {
 						execute();
 					} else {
 						try {
-							Thread.sleep(MAX_TIME_MILLIS);
+							Thread.sleep(SLEEP_TIME_MILLIS);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -120,7 +120,7 @@ public abstract class AbstractScheduler {
 	 */
 	protected void dispatch(Device device) {
 		try {
-			Thread.sleep(SLEEP_MILLIS);
+			Thread.sleep(SLEEP_TIME_MILLIS);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

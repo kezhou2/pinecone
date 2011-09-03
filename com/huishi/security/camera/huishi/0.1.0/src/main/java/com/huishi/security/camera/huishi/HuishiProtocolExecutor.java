@@ -45,10 +45,11 @@ public class HuishiProtocolExecutor extends AbstractHttpClientProtocolExecutor {
 				Item item = (Item) variable.getItems().toArray()[0];
 				String uri = "http://" + bundle.getHeaders().get("Address").toString() + ":" + 
 							 bundle.getHeaders().get("Port").toString() +
-							 "/decoder_control.cgi?command=" + item.getValue() +
-							 "&onestep=2&user=admin&passwd=123456";
+							 "/decoder_control.cgi?&user=admin&pwd=123456&command=" + item.getValue() +
+							 "&onestep=2";
 				HttpResponse resp = client.execute((HttpUriRequest) new HttpGet(uri));
 				logger.info(resp.getEntity().toString());
+				resp.getEntity().getContent().close();
 				publisher.publish(device);
 			} else if (variable.getName().equals(bundle.getHeaders().get("Video-Stream").toString())) {
 				String uri = "http://" + bundle.getHeaders().get("Address").toString() + ":" +

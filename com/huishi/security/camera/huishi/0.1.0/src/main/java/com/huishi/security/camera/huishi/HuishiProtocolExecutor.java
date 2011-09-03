@@ -56,7 +56,7 @@ public class HuishiProtocolExecutor extends AbstractHttpClientProtocolExecutor {
 				HttpResponse response = client.execute((HttpUriRequest) new HttpGet(uri));
 				item.setValue(response.getEntity().getContent().toString());
 				response.getEntity().getContent().close();
-//				publisher.publish(device);
+				publisher.publish(device);
 			} else if (variable.getName().equals(bundle.getHeaders().get("Video-Stream").toString())) {
 				if (!isStreamed.contains(client.hashCode())) {
 					isStreamed.add(client.hashCode());
@@ -78,7 +78,7 @@ public class HuishiProtocolExecutor extends AbstractHttpClientProtocolExecutor {
 						item.setValue(new String(byteImage));
 						variable.setItems(new ArrayList<Item>());
 						variable.getItems().add(item);
-//						publisher.publish(device);
+						publisher.publish(device);
 					}
 					isStreamed.remove(client.hashCode());	
 				}

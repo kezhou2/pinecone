@@ -61,8 +61,14 @@
         		<Bundle-Name>${pom.artifactId}</Bundle-Name>
         		<Bundle-Activator>${pom.groupId}.${pom.artifactId}.Activator</Bundle-Activator>
         		<Type>HttpClient</Type>
-        		<Address>192.168.0.1</Address>
+        		<Address>192.168.1.138</Address>
         		<Port>80</Port>
+        		<Angle-Control>%Angle-Control</Angle-Control>
+        		<Up>%Up</Up>
+        		<Down>%Down</Down>
+        		<Lef>%Lef</Lef>
+        		<Right>%Right</Right>
+        		<Video-Stream>%Video-Stream</Video-Stream>
         	</instructions>
         </configuration>
       </plugin>

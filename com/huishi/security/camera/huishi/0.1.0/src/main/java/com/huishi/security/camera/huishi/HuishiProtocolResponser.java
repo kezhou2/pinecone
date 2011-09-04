@@ -5,16 +5,14 @@ package com.huishi.security.camera.huishi;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 
 import org.apache.asyncweb.common.HttpResponse;
 import org.osgi.framework.Bundle;
 
-import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Item;
-import com.tenline.pinecone.platform.model.Variable;
+import com.tenline.pinecone.platform.monitor.ProtocolHelper;
 import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolResponser;
 
 /**
@@ -34,26 +32,19 @@ public class HuishiProtocolResponser extends AbstractMinaProtocolResponser {
 	@Override
 	public void onResponse(HttpResponse message) {
 		// TODO Auto-generated method stub
-		Device content = new Device();
+		super.onResponse(message);
 		if (message.getContentType().equals("image/jpeg")) {
 			try {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				ImageIO.write(ImageIO.read(message.getContent().asInputStream()), "jpeg", out);
-				content.setVariables(new ArrayList<Variable>());
-				Variable variable = new Variable();
-				Item item = new Item();
-				item.setValue(new String(out.toByteArray()));
-				variable.setItems(new ArrayList<Item>());
-				variable.getItems().add(item);
-				content.getVariables().add(variable);
+				ByteArrayOutputStream output = new ByteArrayOutputStream();
+				ImageIO.write(ImageIO.read(message.getContent().asInputStream()), "jpeg", output);
+				TreeMap<String, String> map = new TreeMap<String, String>();
+				map.put(bundle.getHeaders().get("Video-Stream").toString(), new String(output.toByteArray()));
+				publisher.addToReadQueue(ProtocolHelper.unmarshel(map));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
-		} else {
-			message.getContent().array();
-		}
-		publisher.publish(content);
+		} 
 	}
 
 }

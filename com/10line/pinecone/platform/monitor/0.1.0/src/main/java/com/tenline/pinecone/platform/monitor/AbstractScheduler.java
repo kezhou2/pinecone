@@ -4,8 +4,6 @@
 package com.tenline.pinecone.platform.monitor;
 
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
@@ -41,36 +39,6 @@ public abstract class AbstractScheduler {
 	 * Scheduler Last Queue Item
 	 */
 	private Device lastQueueItem;
-	
-	/**
-	 * Scheduler Timer
-	 */
-	private Timer timer;
-
-	/**
-	 * Scheduler Timer Task
-	 */
-	private TimerTask task;
-	
-	/**
-	 * Scheduler Current Time Millis
-	 */
-	private long currentTimeMillis;
-	
-	/**
-	 * Scheduler Max Time Millis
-	 */
-	private static final int MAX_TIME_MILLIS = 5000;
-	
-	/**
-	 * Scheduler Task Interval
-	 */
-	private static final int INTERVAL = 1000;
-
-	/**
-	 * Scheduler Task Interval After Task Starting
-	 */
-	private static final int AFTER_START_INTERVAL = 0;
 
 	/**
 	 * 
@@ -85,22 +53,7 @@ public abstract class AbstractScheduler {
 	 * Start Scheduler
 	 */
 	public void start() {
-		update();
-		timer = new Timer();
-		task = new TimerTask() {
-
-			@Override
-			public void run() {
-				if (System.currentTimeMillis() - currentTimeMillis >= MAX_TIME_MILLIS) {
-					// offline - notify UI
-					update();
-				} else {
-					execute();
-				}
-			}
-
-		};
-		timer.schedule(task, AFTER_START_INTERVAL, INTERVAL);
+		execute();
 	}
 
 	/**
@@ -118,32 +71,22 @@ public abstract class AbstractScheduler {
 				readIndex++;
 			}
 		}
+		logger.info("executed!");
 	}
 
 	/**
-	 * Dispatch to endpoint
+	 * Scheduler Dispatch
 	 * 
 	 * @param device
 	 */
-	protected void dispatch(Device device) {
-		logger.info("Dispatch Successfully!");
-	}
+	protected abstract void dispatch(Device device);
 
 	/**
 	 * Stop Scheduler
 	 */
 	public void stop() {
-		task.cancel();
-		timer.purge();
 		writeQueue.clear();
 		readQueue.clear();
-	}
-	
-	/**
-	 * Update Scheduler
-	 */
-	public void update() {
-		currentTimeMillis = System.currentTimeMillis();
 	}
 
 	/**

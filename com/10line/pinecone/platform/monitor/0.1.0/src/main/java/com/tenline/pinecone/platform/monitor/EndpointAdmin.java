@@ -13,7 +13,7 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.http.HttpClientEndpoint;
+import com.tenline.pinecone.platform.monitor.mina.MinaHttpClientEndpoint;
 import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
@@ -160,7 +160,7 @@ public class EndpointAdmin {
 		if (type.equals("Serial")) {
 			endpoint = new MinaSerialEndpoint();
 		} else if (type.equals("HttpClient")) {
-			endpoint= new HttpClientEndpoint();
+			endpoint= new MinaHttpClientEndpoint();
 		}	
 		endpoint.initialize(device);
 		endpoints.add(endpoint);

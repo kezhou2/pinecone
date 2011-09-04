@@ -29,7 +29,6 @@ public class MinaScheduler extends AbstractScheduler {
 	
 	@Override
 	protected void dispatch(Device device) {
-		super.dispatch(device);
 		session.write(device);	
 	}
 

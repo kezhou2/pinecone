@@ -4,6 +4,7 @@
 package com.tenline.pinecone.platform.monitor.mina;
 
 import org.apache.asyncweb.client.AsyncHttpClientCallback;
+import org.apache.asyncweb.common.HttpResponse;
 import org.apache.log4j.Logger;
 import org.osgi.framework.Bundle;
 
@@ -46,6 +47,12 @@ public abstract class AbstractMinaProtocolResponser implements
 	}
 	
 	@Override
+	public void onResponse(HttpResponse message) {
+		// TODO Auto-generated method stub
+		logger.info(message.getStatus().getDescription());
+	}
+	
+	@Override
 	public void onSent() {
 		// TODO Auto-generated method stub
 		requester.execute();
@@ -62,6 +69,14 @@ public abstract class AbstractMinaProtocolResponser implements
 	public void onClosed() {
 		// TODO Auto-generated method stub
 		logger.info("closed!");
+		// Offline
+	}
+	
+	@Override
+	public void onOpened() {
+		// TODO Auto-generated method stub
+		logger.info("opened!");
+		// Online
 	}
 
 	/**

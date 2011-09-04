@@ -3,6 +3,8 @@
  */
 package com.tenline.pinecone.platform.monitor.mina;
 
+import java.util.TreeMap;
+
 import org.apache.log4j.Logger;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
@@ -10,7 +12,6 @@ import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Variable;
 
 /**
  * @author Bill
@@ -46,17 +47,17 @@ public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter
 
 	/**
 	 * Build Packet Type
-	 * @param variable
+	 * @param map
 	 * @return
 	 */
-	protected abstract byte[] buildPacketType(Variable variable);
+	protected abstract byte[] buildPacketType(TreeMap<String, String> map);
 
 	/**
 	 * Build Packet Data
-	 * @param variable
+	 * @param map
 	 * @return
 	 */
-	protected abstract byte[] buildPacketData(Variable variable); 
+	protected abstract byte[] buildPacketData(TreeMap<String, String> map); 
 
 	/**
 	 * Build Packet Check

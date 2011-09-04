@@ -86,8 +86,8 @@ public class MinaHandler extends IoHandlerAdapter {
 				.hasMoreElements();) {
 			removeSession(elements.nextElement());
 		}
-		for (Device keys : mapping.keySet()) {
-			mapping.remove(keys);
+		for (Device device : mapping.keySet()) {
+			mapping.remove(device);
 		}
 	}
 
@@ -100,6 +100,7 @@ public class MinaHandler extends IoHandlerAdapter {
 		schedulers.remove(session.getId());
 		subscribers.get(session.getId()).stop();
 		subscribers.remove(session.getId());
+		publishers.get(session.getId()).stop();
 		publishers.remove(session.getId());
 		removeMapping(session);
 		sessions.remove(session.getId());
@@ -112,18 +113,17 @@ public class MinaHandler extends IoHandlerAdapter {
 	private void putSession(IoSession session) {
 		sessions.put(session.getId(), session);
 		putMapping(session);
-		MinaScheduler scheduler = new MinaScheduler();
-		builder.initializeReadQueue(scheduler.getReadQueue());
-		schedulers.put(session.getId(), scheduler);
+		schedulers.put(session.getId(), new MinaScheduler());
 		schedulers.get(session.getId()).setSession(session);
 		schedulers.get(session.getId()).start();
+		builder.initializeReadQueue(schedulers.get(session.getId()).getReadQueue());
 		subscribers.put(session.getId(), new Subscriber());
-		subscribers.get(session.getId()).setScheduler(
-				schedulers.get(session.getId()));
+		subscribers.get(session.getId()).setScheduler(schedulers.get(session.getId()));
 		subscribers.get(session.getId()).setDevice(getDevice(session));
 		subscribers.get(session.getId()).start();
 		publishers.put(session.getId(), new Publisher());
 		publishers.get(session.getId()).setDevice(getDevice(session));
+		publishers.get(session.getId()).start();
 	}
 
 	/**
@@ -183,19 +183,24 @@ public class MinaHandler extends IoHandlerAdapter {
 		// TODO Auto-generated method stub
 		removeSession(session);
 		super.sessionClosed(session);
+		logger.info("closed!");
+		// Offline
 	}
 
 	@Override
-	public void sessionCreated(IoSession session) throws Exception {
-		super.sessionCreated(session);
+	public void sessionOpened(IoSession session) throws Exception {
+		super.sessionOpened(session);
 		putSession(session);
+		logger.info("opened!");
+		// Online
 	}
 
 	@Override
 	public void messageReceived(IoSession session, Object message)
 			throws Exception {
 		super.messageReceived(session, message);
-		publishers.get(session.getId()).publish((Device) message);
+		publishers.get(session.getId()).addToReadQueue((Device) message);
+		logger.info("received!");
 	}
 	
 	@Override
@@ -203,6 +208,14 @@ public class MinaHandler extends IoHandlerAdapter {
 			throws Exception {
 		super.messageSent(session, message);
 		schedulers.get(session.getId()).execute();
+		logger.info("sent!");
+	}
+	
+	@Override
+    public void exceptionCaught(IoSession session, Throwable cause)
+			throws Exception {
+		super.exceptionCaught(session, cause);
+		logger.error(cause.getMessage());
 	}
 
 }

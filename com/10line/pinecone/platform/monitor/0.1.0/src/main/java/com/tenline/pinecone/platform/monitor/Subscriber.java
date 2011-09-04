@@ -87,10 +87,11 @@ public class Subscriber {
 
 			@Override
 			public void run() {
+				// TODO Auto-generated method stub
 				try {
 					channel.subscribe(device.getId() + "-application");
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
 

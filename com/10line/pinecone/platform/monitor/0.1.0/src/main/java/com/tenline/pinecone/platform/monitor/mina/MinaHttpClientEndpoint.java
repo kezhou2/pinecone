@@ -61,6 +61,7 @@ public class MinaHttpClientEndpoint implements IEndpoint {
 	public void close() {
 		// TODO Auto-generated method stub
 		requester.getClient().disconnect();
+		publisher.stop();
 		requester.stop();
 		subscriber.stop();
 		logger.info("Close Endpoint");
@@ -71,6 +72,7 @@ public class MinaHttpClientEndpoint implements IEndpoint {
 		// TODO Auto-generated method stub
 		publisher = new Publisher();
 		publisher.setDevice(device);
+		publisher.start();
 		responser = (AbstractMinaProtocolResponser) ServiceHelper.waitForService
 				(AbstractMinaProtocolResponser.class, device.getSymbolicName(), device.getVersion());
 		responser.setPublisher(publisher);

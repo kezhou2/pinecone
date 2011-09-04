@@ -10,7 +10,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
-import com.tenline.pinecone.platform.monitor.http.AbstractHttpClientProtocolExecutor;
+import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolRequester;
+import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolResponser;
 
 /**
  * @author Bill
@@ -20,7 +21,9 @@ public class Activator implements BundleActivator {
 	
 	private ServiceRegistration builderRegistration;
 	
-	private ServiceRegistration executorRegistration;
+	private ServiceRegistration requesterRegistration;
+	
+	private ServiceRegistration responserRegistration;
 
 	/**
 	 * 
@@ -37,15 +40,18 @@ public class Activator implements BundleActivator {
 		properties.put("version", context.getBundle().getVersion().toString());
 		builderRegistration = context.registerService(AbstractProtocolBuilder.class.getName(), 
 				new HuishiProtocolBuilder(context.getBundle()), properties);
-		executorRegistration = context.registerService(AbstractHttpClientProtocolExecutor.class.getName(), 
-				new HuishiProtocolExecutor(context.getBundle()), properties);
+		requesterRegistration = context.registerService(AbstractMinaProtocolRequester.class.getName(), 
+				new HuishiProtocolRequester(context.getBundle()), properties);
+		responserRegistration = context.registerService(AbstractMinaProtocolResponser.class.getName(), 
+				new HuishiProtocolResponser(context.getBundle()), properties);
 	}
 
 	@Override
 	public void stop(BundleContext arg0) throws Exception {
 		// TODO Auto-generated method stub
 		builderRegistration.unregister();
-		executorRegistration.unregister();
+		requesterRegistration.unregister();
+		responserRegistration.unregister();
 	}
 
 }

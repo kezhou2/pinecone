@@ -3,16 +3,14 @@
  */
 package com.honking.pet.aquarium.efish;
 
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.osgi.framework.Bundle;
 
-import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Item;
-import com.tenline.pinecone.platform.model.Variable;
+import com.tenline.pinecone.platform.monitor.ProtocolHelper;
 import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolDecoder;
 
 /**
@@ -47,42 +45,15 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 		// TODO Auto-generated method stub
 		if (packet[0] == 0x02) {
 			splitPacketData(packet, output);
-		} else if (packet[0] == 0x03) {
-			Device device = new Device();
-			device.setVariables(new ArrayList<Variable>());
-			Variable variable = new Variable();
-			variable.setName(bundle.getHeaders().get("Oxygen-Generation")
-					.toString());
-			variable.setType("write_discrete");
-			device.getVariables().add(variable);
-			output.write(device);
-		} else if (packet[0] == 0x04) {
-			Device device = new Device();
-			device.setVariables(new ArrayList<Variable>());
-			Variable variable = new Variable();
-			variable.setName(bundle.getHeaders().get("Water-Temperature")
-					.toString());
-			variable.setType("write_discrete");
-			device.getVariables().add(variable);
-			output.write(device);
 		}
 	}
 
 	@Override
 	protected void splitPacketData(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
-		Device device = new Device();
-		device.setVariables(new ArrayList<Variable>());
-		Variable variable = new Variable();
-		variable.setName(bundle.getHeaders().get("Water-Temperature")
-				.toString());
-		variable.setType("read_discrete");
-		variable.setItems(new ArrayList<Item>());
-		Item item = new Item();
-		item.setValue(splitWaterTemperature(packet[0], packet[1]));
-		variable.getItems().add(item);
-		device.getVariables().add(variable);
-		output.write(device);
+		TreeMap<String, String> map = new TreeMap<String, String>();
+		map.put(bundle.getHeaders().get("Water-Temperature").toString(), splitWaterTemperature(packet[0], packet[1]));
+		output.write(ProtocolHelper.unmarshel(map));
 	}
 
 	@Override

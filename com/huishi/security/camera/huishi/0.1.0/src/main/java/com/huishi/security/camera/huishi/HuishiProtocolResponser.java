@@ -3,10 +3,18 @@
  */
 package com.huishi.security.camera.huishi;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 import org.apache.asyncweb.common.HttpResponse;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolResponser;
 
 /**
@@ -28,7 +36,20 @@ public class HuishiProtocolResponser extends AbstractMinaProtocolResponser {
 		// TODO Auto-generated method stub
 		Device content = new Device();
 		if (message.getContentType().equals("image/jpeg")) {
-			message.getContent().asInputStream();
+			try {
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ImageIO.write(ImageIO.read(message.getContent().asInputStream()), "jpeg", out);
+				content.setVariables(new ArrayList<Variable>());
+				Variable variable = new Variable();
+				Item item = new Item();
+				item.setValue(new String(out.toByteArray()));
+				variable.setItems(new ArrayList<Item>());
+				variable.getItems().add(item);
+				content.getVariables().add(variable);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			message.getContent().array();
 		}

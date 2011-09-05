@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
+  <!--  <parent>
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
     <version>4</version>
-  </parent>
+  </parent> -->
   <organization>
     <name>Apache Asyncweb Project</name>
     <url>http://mina.apache.org/asyncweb</url>
@@ -31,10 +31,15 @@
   </scm>
 
   <distributionManagement>
-    <site>
+  	<repository>
+    	<id>googlecode.pinecone.repo</id>
+        <name>Pinecone Repository</name>
+        <url>https://pinecone.googlecode.com/svn/repository</url>
+    </repository>
+    <!--  <site>
       <id>apache.websites</id>
       <url>scp://people.apache.org/www/mina.apache.org/report/asyncweb/trunk/</url>
-    </site>
+    </site> -->
   </distributionManagement>
 
   <ciManagement>
@@ -115,14 +120,19 @@
   </developers>
 
   <repositories>
-    <repository>
+  	<repository>
+    	<id>pinecone</id>
+        <name>pinecone repo</name>
+        <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+    <!--  <repository>
       <id>apache.snapshots</id>
       <name>Apache Snapshot Repository</name>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
       <releases>
         <enabled>false</enabled>
       </releases>
-    </repository>
+    </repository> -->
   </repositories>
 
   <modules>
@@ -213,6 +223,14 @@
         </configuration>
       </plugin>
     </plugins>
+    
+    <extensions>
+	  <extension>
+	   <groupId>org.apache.maven.wagon</groupId>
+	   <artifactId>wagon-webdav</artifactId>
+	   <version>1.0-beta-2</version>
+	  </extension>
+	 </extensions>
   </build>
 
 

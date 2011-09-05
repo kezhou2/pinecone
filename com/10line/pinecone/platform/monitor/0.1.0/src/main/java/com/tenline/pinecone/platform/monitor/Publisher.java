@@ -10,8 +10,12 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.model.Record;
+import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
+import com.tenline.pinecone.platform.sdk.RecordAPI;
 
 /**
  * @author Bill
@@ -60,6 +64,16 @@ public class Publisher {
 	private LinkedList<Device> readQueue;
 	
 	/**
+	 * Publisher Max Read Queue Size
+	 */
+	private static final int MAX_QUEUE_SIZE = 100;
+	
+	/**
+	 * Publisher Web Service API
+	 */
+	private RecordAPI recordAPI;
+	
+	/**
 	 * 
 	 */
 	public Publisher() {
@@ -77,6 +91,21 @@ public class Publisher {
 			}
 
 		});
+		recordAPI = new RecordAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
+
+			@Override
+			public void onMessage(Object message) {
+				// TODO Auto-generated method stub
+				logger.info("Create Record: " + ((Record) message).getId());
+			}
+
+			@Override
+			public void onError(String error) {
+				// TODO Auto-generated method stub
+				logger.error(error);
+			}
+			
+		});
 	}
 	
 	/**
@@ -92,7 +121,7 @@ public class Publisher {
 				try {
 					Device content = execute();
 					if (content != null) {
-						channel.publish(device.getId() + "-device", "application/json", content);
+						publish(content);
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -102,6 +131,48 @@ public class Publisher {
 			
 		};
 		timer.schedule(task, AFTER_START_INTERVAL, INTERVAL);
+	}
+	
+	/**
+	 * Publisher Publish
+	 * @param content
+	 * @throws Exception 
+	 */
+	private void publish(Device content) throws Exception {
+		Object[] variables = content.getVariables().toArray();
+		for (Object object : variables) {
+			Variable variable = getVariable(((Variable) object).getName());
+			Item item = ((Item)((Variable) object).getItems().toArray()[0]);
+			int index = variable.getType().indexOf("image");
+			if (index >= 0) {
+				String subject = variable.getId() + "-device";
+				channel.publish(subject, variable.getType().substring(index), 
+								item.getValue().getBytes());
+				item.setValue(subject);
+			} else {
+				Record record = new Record();
+				record.setValue(item.getValue());
+				record.setVariable(variable);
+				recordAPI.create(record);	
+			}
+		}
+		channel.publish(device.getId() + "-device", "application/json", content);
+	}
+	
+	/**
+	 * Get Variable
+	 * @param name
+	 * @return
+	 */
+	private Variable getVariable(String name) {
+		Object[] variables = device.getVariables().toArray();
+		for (Object object : variables) {
+			Variable variable = ((Variable) object);
+			if (variable.getName().equals(name)) {
+				return variable;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -130,6 +201,9 @@ public class Publisher {
 	 * @param device
 	 */
 	public void addToReadQueue(Device device) {
+		if (readQueue.size() >= MAX_QUEUE_SIZE) {
+			readQueue.removeFirst();
+		}
 		readQueue.addLast(device);
 	}
 	

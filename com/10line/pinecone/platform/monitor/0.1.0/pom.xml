@@ -10,15 +10,15 @@
   </properties>
   <repositories>
   	<repository>
-    	<id>maven.2</id>
-        <name>Maven 2 Repository</name>
-        <url>http://repo2.maven.org/maven2/</url>
-    </repository>
-	<repository>
     	<id>pinecone</id>
         <name>pinecone repo</name>
         <url>http://pinecone.googlecode.com/svn/repository</url>
 	</repository>
+  	<repository>
+    	<id>maven.2</id>
+        <name>Maven 2 Repository</name>
+        <url>http://repo2.maven.org/maven2/</url>
+    </repository>
   </repositories>
   <dependencies>
   	<!-- Apache Felix -->

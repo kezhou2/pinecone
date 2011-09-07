@@ -13,7 +13,7 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.mina.MinaHttpClientEndpoint;
+import com.tenline.pinecone.platform.monitor.httpcomponents.HttpClientEndpoint;
 import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
 import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
@@ -61,12 +61,12 @@ public class EndpointAdmin {
 				for (Object object : devices) {
 					device = (Device) object;
 					device.setVariables(new ArrayList<Variable>());
-					initializeEndpoint(device);
 					try {
 						variableAPI.showByDevice("id=='"+device.getId()+"'");
+						initializeEndpoint();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error(e.getMessage());
 					}
 				}		
 			}
@@ -154,13 +154,25 @@ public class EndpointAdmin {
 	 * @param device
 	 */
 	public void initializeEndpoint(Device device) {
+		try {
+			deviceAPI.show("id=='"+device.getId()+"'");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Initialize Endpoint
+	 */
+	private void initializeEndpoint() {
 		Bundle bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
 		String type = bundle.getHeaders().get("Type").toString();
 		IEndpoint endpoint = null;
 		if (type.equals("Serial")) {
 			endpoint = new MinaSerialEndpoint();
 		} else if (type.equals("HttpClient")) {
-			endpoint= new MinaHttpClientEndpoint();
+			endpoint= new HttpClientEndpoint();
 		}	
 		endpoint.initialize(device);
 		endpoints.add(endpoint);

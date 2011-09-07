@@ -97,6 +97,7 @@ public class Subscriber {
 
 		};
 		timer.schedule(task, AFTER_START_INTERVAL, INTERVAL);
+		logger.info("Start Subscriber");
 	}
 
 	/**
@@ -105,6 +106,7 @@ public class Subscriber {
 	public void stop() {
 		task.cancel();
 		timer.purge();
+		logger.info("Stop Subscriber");
 	}
 
 	/**

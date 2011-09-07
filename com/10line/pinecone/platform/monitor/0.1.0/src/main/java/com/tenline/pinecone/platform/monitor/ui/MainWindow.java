@@ -153,7 +153,7 @@ public class MainWindow extends JFrame {
 	 * 
 	 */
 	private void initializeMainPanel() {
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panel.setLayout(null);
 		setContentPane(panel);
@@ -165,13 +165,22 @@ public class MainWindow extends JFrame {
 		panel.add(textField);
 		textField.setColumns(10);
 		textField.setText("251760162"); // SNS Id
-		JButton button = new JButton("Ok");
-		button.setActionCommand("Ok");
-		button.setBounds(260, 29, 50, 23);
+		JButton button = new JButton("Login");
+		button.setActionCommand("Login");
+		button.setBounds(260, 29, 150, 23);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					userAPI.show("snsId=='" + textField.getText() + "'");
+					JButton button = new JButton("Show Devices");
+					button.setActionCommand("Show Devices");
+					button.setBounds(100, 100, 130, 25);
+					button.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							new DeviceDialog().setVisible(true);
+						}
+					});
+					panel.add(button);
 				} catch (Exception ex) {
 					// TODO Auto-generated catch block
 					logger.error(ex.getMessage());
@@ -179,16 +188,6 @@ public class MainWindow extends JFrame {
 			}
 		});
 		panel.add(button);
-
-		JButton showButton = new JButton("Show Devices");
-		showButton.setActionCommand("Show Devices");
-		showButton.setBounds(100, 100, 130, 25);
-		showButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new DeviceDialog().setVisible(true);
-			}
-		});
-		panel.add(showButton);
 	}
 
 	private class DeviceDialog extends JDialog {
@@ -247,11 +246,9 @@ public class MainWindow extends JFrame {
 								.split("-");
 						Bundle bundle = BundleHelper.getBundle(identifier[0],
 								identifier[1]);
-						Device metaData = ((AbstractProtocolBuilder) ServiceHelper
-								.waitForService(AbstractProtocolBuilder.class,
-										bundle.getSymbolicName(), bundle
-												.getVersion().toString()))
-								.getMetaData();
+						Device metaData = ((AbstractProtocolBuilder) ServiceHelper.waitForService
+								(AbstractProtocolBuilder.class, bundle.getSymbolicName(), 
+								bundle.getVersion().toString())).getMetaData();
 						device = new Device();
 						device.setName(metaData.getName());
 						device.setSymbolicName(metaData.getSymbolicName());
@@ -273,12 +270,11 @@ public class MainWindow extends JFrame {
 									itemAPI.create(item);
 								}
 							}
-
 						}
 						endpointAdmin.initializeEndpoint(device);
 					} catch (Exception ex) {
 						// TODO Auto-generated catch block
-						ex.printStackTrace();
+						logger.error(ex.getMessage());
 					}
 				}
 			});

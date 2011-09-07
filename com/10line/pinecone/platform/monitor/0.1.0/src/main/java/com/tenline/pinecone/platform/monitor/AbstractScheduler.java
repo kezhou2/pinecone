@@ -53,6 +53,7 @@ public abstract class AbstractScheduler {
 	 * Start Scheduler
 	 */
 	public void start() {
+		logger.info("Start Scheduler");
 		execute();
 	}
 
@@ -87,6 +88,7 @@ public abstract class AbstractScheduler {
 	public void stop() {
 		writeQueue.clear();
 		readQueue.clear();
+		logger.info("Stop Scheduler");
 	}
 
 	/**

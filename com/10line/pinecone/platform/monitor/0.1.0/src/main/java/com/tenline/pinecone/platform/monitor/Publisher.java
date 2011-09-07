@@ -131,6 +131,7 @@ public class Publisher {
 			
 		};
 		timer.schedule(task, AFTER_START_INTERVAL, INTERVAL);
+		logger.info("Start Publisher");
 	}
 	
 	/**
@@ -153,7 +154,7 @@ public class Publisher {
 				Record record = new Record();
 				record.setValue(item.getValue());
 				record.setVariable(variable);
-				recordAPI.create(record);	
+				recordAPI.create(record);
 			}
 		}
 		channel.publish(device.getId() + "-device", "application/json", content);
@@ -194,6 +195,7 @@ public class Publisher {
 		task.cancel();
 		timer.purge();
 		readQueue.clear();
+		logger.info("Stop Publisher");
 	}
 	
 	/**

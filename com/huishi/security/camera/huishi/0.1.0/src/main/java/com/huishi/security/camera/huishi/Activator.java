@@ -10,8 +10,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
-import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolRequester;
-import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolResponser;
+import com.tenline.pinecone.platform.monitor.httpcomponents.AbstractProtocolRequester;
+import com.tenline.pinecone.platform.monitor.httpcomponents.AbstractProtocolResponser;
 
 /**
  * @author Bill
@@ -40,9 +40,9 @@ public class Activator implements BundleActivator {
 		properties.put("version", context.getBundle().getVersion().toString());
 		builderRegistration = context.registerService(AbstractProtocolBuilder.class.getName(), 
 				new HuishiProtocolBuilder(context.getBundle()), properties);
-		requesterRegistration = context.registerService(AbstractMinaProtocolRequester.class.getName(), 
+		requesterRegistration = context.registerService(AbstractProtocolRequester.class.getName(), 
 				new HuishiProtocolRequester(context.getBundle()), properties);
-		responserRegistration = context.registerService(AbstractMinaProtocolResponser.class.getName(), 
+		responserRegistration = context.registerService(AbstractProtocolResponser.class.getName(), 
 				new HuishiProtocolResponser(context.getBundle()), properties);
 	}
 

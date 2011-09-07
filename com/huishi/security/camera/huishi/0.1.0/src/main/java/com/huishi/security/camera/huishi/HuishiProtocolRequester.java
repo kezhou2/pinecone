@@ -9,13 +9,13 @@ import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.monitor.ProtocolHelper;
-import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolRequester;
+import com.tenline.pinecone.platform.monitor.httpcomponents.AbstractProtocolRequester;
 
 /**
  * @author Bill
  *
  */
-public class HuishiProtocolRequester extends AbstractMinaProtocolRequester {
+public class HuishiProtocolRequester extends AbstractProtocolRequester {
 
 	/**
 	 * @param bundle
@@ -25,18 +25,18 @@ public class HuishiProtocolRequester extends AbstractMinaProtocolRequester {
 		// TODO Auto-generated constructor stub
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
 	protected void dispatch(Device device) {
 		TreeMap<String, String> map = ProtocolHelper.marshel(device);
+		String uri = "http://" + bundle.getHeaders().get("Address").toString() + ":" + 
+			bundle.getHeaders().get("Port").toString();
 		for (String key : map.keySet()) {
 			if (key.equals(bundle.getHeaders().get("Angle-Control").toString())) {
-				request("/decoder_control.cgi?&user=admin&pwd=123456&command=" + map.get(key) + "&onestep=2");
+				uri += "/decoder_control.cgi?user=admin&pwd=123456&command=" + map.get(key) + "&onestep=2";
 			} else if (key.equals(bundle.getHeaders().get("Video-Stream").toString())) {
-				request("/snapshot.cgi?user=admin&pwd=123456");
+				uri += "/snapshot.cgi?user=admin&pwd=123456";
 			}
+			sendRequest(uri);
 		}
 	}
 

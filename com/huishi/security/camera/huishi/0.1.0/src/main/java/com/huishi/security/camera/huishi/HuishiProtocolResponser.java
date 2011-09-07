@@ -9,17 +9,17 @@ import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 
-import org.apache.asyncweb.common.HttpResponse;
+import org.apache.http.HttpResponse;
 import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.monitor.ProtocolHelper;
-import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolResponser;
+import com.tenline.pinecone.platform.monitor.httpcomponents.AbstractProtocolResponser;
 
 /**
  * @author Bill
  *
  */
-public class HuishiProtocolResponser extends AbstractMinaProtocolResponser {
+public class HuishiProtocolResponser extends AbstractProtocolResponser {
 
 	/**
 	 * @param bundle
@@ -30,21 +30,21 @@ public class HuishiProtocolResponser extends AbstractMinaProtocolResponser {
 	}
 
 	@Override
-	public void onResponse(HttpResponse message) {
+	public void completed(HttpResponse message) {
 		// TODO Auto-generated method stub
-		super.onResponse(message);
-		if (message.getContentType().equals("image/jpeg")) {
+		if (message.getEntity().getContentType().getValue().equals("image/jpeg")) {
 			try {
 				ByteArrayOutputStream output = new ByteArrayOutputStream();
-				ImageIO.write(ImageIO.read(message.getContent().asInputStream()), "jpeg", output);
+				ImageIO.write(ImageIO.read(message.getEntity().getContent()), "jpeg", output);
 				TreeMap<String, String> map = new TreeMap<String, String>();
 				map.put(bundle.getHeaders().get("Video-Stream").toString(), new String(output.toByteArray()));
 				publisher.addToReadQueue(ProtocolHelper.unmarshel(map));
+				logger.info(message.getStatusLine().getStatusCode());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				logger.error(e.getMessage());
 			}
 		} 
 	}
-
+	
 }

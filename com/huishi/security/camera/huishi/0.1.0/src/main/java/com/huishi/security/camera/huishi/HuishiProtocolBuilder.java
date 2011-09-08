@@ -40,22 +40,22 @@ public class HuishiProtocolBuilder extends AbstractProtocolBuilder {
 			
 			Item item = new Item();
 			item.setText(bundle.getHeaders().get("Up").toString());
-			item.setValue(String.valueOf(2));
+			item.setValue("2".getBytes());
 			variable.getItems().add(item);
 			
 			item = new Item();
 			item.setText(bundle.getHeaders().get("Down").toString());
-			item.setValue(String.valueOf(0));
+			item.setValue("0".getBytes());
 			variable.getItems().add(item);
 
 			item = new Item();
 			item.setText(bundle.getHeaders().get("Left").toString());
-			item.setValue(String.valueOf(6));
+			item.setValue("6".getBytes());
 			variable.getItems().add(item);
 
 			item = new Item();
 			item.setText(bundle.getHeaders().get("Right").toString());
-			item.setValue(String.valueOf(4));
+			item.setValue("4".getBytes());
 			variable.getItems().add(item);
 			
 			metaData.getVariables().add(variable);

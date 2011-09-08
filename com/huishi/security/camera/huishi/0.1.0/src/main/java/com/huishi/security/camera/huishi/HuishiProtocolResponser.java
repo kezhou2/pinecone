@@ -36,8 +36,8 @@ public class HuishiProtocolResponser extends AbstractProtocolResponser {
 			try {
 				ByteArrayOutputStream output = new ByteArrayOutputStream();
 				ImageIO.write(ImageIO.read(message.getEntity().getContent()), "jpeg", output);
-				TreeMap<String, String> map = new TreeMap<String, String>();
-				map.put(bundle.getHeaders().get("Video-Stream").toString(), new String(output.toByteArray()));
+				TreeMap<String, byte[]> map = new TreeMap<String, byte[]>();
+				map.put(bundle.getHeaders().get("Video-Stream").toString(), output.toByteArray());
 				publisher.addToReadQueue(ProtocolHelper.unmarshel(map));
 				logger.info(message.getStatusLine().getStatusCode());
 			} catch (IOException e) {

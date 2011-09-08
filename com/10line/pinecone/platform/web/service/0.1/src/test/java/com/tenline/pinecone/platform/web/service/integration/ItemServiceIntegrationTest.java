@@ -6,6 +6,7 @@ package com.tenline.pinecone.platform.web.service.integration;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.logging.Level;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +26,7 @@ import com.tenline.pinecone.platform.model.Variable;
  * @author Bill
  *
  */
-public class ItemServiceIntegrationTest {
+public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 
 	private User user;
 	
@@ -85,7 +86,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -104,7 +105,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -123,7 +124,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -142,7 +143,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -161,7 +162,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -180,7 +181,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -196,7 +197,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -213,7 +214,7 @@ public class ItemServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});

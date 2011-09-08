@@ -5,6 +5,8 @@ package com.tenline.pinecone.platform.web.service.integration;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.logging.Level;
+
 import javax.ws.rs.core.MediaType;
 
 import org.junit.After;
@@ -18,7 +20,7 @@ import com.tenline.pinecone.platform.sdk.ChannelAPI;
  * @author Bill
  *
  */
-public class ChannelServiceIntegrationTest {
+public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	
 	private String subject;
 	
@@ -48,7 +50,7 @@ public class ChannelServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -68,7 +70,7 @@ public class ChannelServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});

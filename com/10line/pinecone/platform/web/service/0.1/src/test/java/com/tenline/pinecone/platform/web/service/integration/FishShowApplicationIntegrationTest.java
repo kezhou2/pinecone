@@ -5,6 +5,8 @@ package com.tenline.pinecone.platform.web.service.integration;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.logging.Level;
+
 import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.Device;
@@ -21,7 +23,7 @@ import com.tenline.pinecone.platform.sdk.VariableAPI;
  * @author Bill
  *
  */
-public class FishShowApplicationIntegrationTest {
+public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrationTest {
 
 	private static User user;
 	
@@ -57,7 +59,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -76,7 +78,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -98,7 +100,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -119,7 +121,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -140,7 +142,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -161,7 +163,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -182,7 +184,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -203,7 +205,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -224,7 +226,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -245,7 +247,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -266,7 +268,7 @@ public class FishShowApplicationIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});

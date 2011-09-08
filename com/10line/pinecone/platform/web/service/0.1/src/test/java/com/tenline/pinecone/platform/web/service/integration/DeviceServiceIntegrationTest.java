@@ -6,6 +6,7 @@ package com.tenline.pinecone.platform.web.service.integration;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.logging.Level;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,7 +22,7 @@ import com.tenline.pinecone.platform.model.User;
  * @author Bill
  *
  */
-public class DeviceServiceIntegrationTest {
+public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	
 	private User user;
 	
@@ -63,7 +64,7 @@ public class DeviceServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -82,7 +83,7 @@ public class DeviceServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -102,7 +103,7 @@ public class DeviceServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -122,7 +123,7 @@ public class DeviceServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -138,7 +139,7 @@ public class DeviceServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});
@@ -155,7 +156,7 @@ public class DeviceServiceIntegrationTest {
 			@Override
 			public void onError(String error) {
 				// TODO Auto-generated method stub
-				System.out.println(error);
+				logger.log(Level.SEVERE, error);
 			}
 			
 		});

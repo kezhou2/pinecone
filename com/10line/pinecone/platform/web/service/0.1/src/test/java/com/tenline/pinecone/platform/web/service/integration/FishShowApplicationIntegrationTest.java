@@ -125,7 +125,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		item = new Item();
 		item.setText("12°C");
-		item.setValue("23810");
+		item.setValue("23810".getBytes());
 		item.setVariable(variable);
 		itemAPI.create(item);
 		itemAPI = new ItemAPI(host, port, new APIListener() {
@@ -146,7 +146,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		item = new Item();
 		item.setText("13°C");
-		item.setValue("21250");
+		item.setValue("21250".getBytes());
 		item.setVariable(variable);
 		itemAPI.create(item);
 		variableAPI = new VariableAPI(host, port, new APIListener() {
@@ -188,7 +188,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		item = new Item();
 		item.setText("1-5");
-		item.setValue("281");
+		item.setValue("281".getBytes());
 		item.setVariable(variable);
 		itemAPI.create(item);
 		itemAPI = new ItemAPI(host, port, new APIListener() {
@@ -209,7 +209,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		item = new Item();
 		item.setText("1-6");
-		item.setValue("286");
+		item.setValue("286".getBytes());
 		item.setVariable(variable);
 		itemAPI.create(item);
 		variableAPI = new VariableAPI(host, port, new APIListener() {
@@ -251,7 +251,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		item = new Item();
 		item.setText("离线");
-		item.setValue("0");
+		item.setValue("0".getBytes());
 		item.setVariable(variable);
 		itemAPI.create(item);
 		itemAPI = new ItemAPI(host, port, new APIListener() {
@@ -272,7 +272,7 @@ public class FishShowApplicationIntegrationTest {
 		});
 		item = new Item();
 		item.setText("在线");
-		item.setValue("1");
+		item.setValue("1".getBytes());
 		item.setVariable(variable);
 		itemAPI.create(item);
 	}

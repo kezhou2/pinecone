@@ -56,7 +56,7 @@ public class ItemServiceIntegrationTest {
 		variable.setType("read_only");
 		item = new Item();
 		item.setText("A");
-		item.setValue("0");
+		item.setValue("0".getBytes());
 	}
 	
 	@After
@@ -136,7 +136,7 @@ public class ItemServiceIntegrationTest {
 				// TODO Auto-generated method stub
 				item = (Item) message;
 				assertEquals("A", item.getText());
-				assertEquals("0", item.getValue());
+				assertEquals("0", new String(item.getValue()));
 			}
 
 			@Override
@@ -155,7 +155,7 @@ public class ItemServiceIntegrationTest {
 				// TODO Auto-generated method stub
 				item = (Item) message;
 				assertEquals("B", item.getText());
-				assertEquals("1", item.getValue());
+				assertEquals("1", new String(item.getValue()));
 			}
 
 			@Override
@@ -166,7 +166,7 @@ public class ItemServiceIntegrationTest {
 			
 		});
 		item.setText("B");
-		item.setValue("1");
+		item.setValue("1".getBytes());
 		itemAPI.update(item);
 		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
 

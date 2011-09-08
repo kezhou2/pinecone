@@ -42,7 +42,7 @@ public class ItemServiceTest extends AbstractServiceTest {
 		itemService.setJdoTemplate(jdoTemplate);
 		item = new Item();
 		item.setId("asa");
-		item.setValue("1");
+		item.setValue("1".getBytes());
 		item.setText("1");
 		variable = new Variable();
 		variable.setId("asa");
@@ -67,7 +67,7 @@ public class ItemServiceTest extends AbstractServiceTest {
 		Item result = itemService.create(item);
 		verify(jdoTemplate).getObjectById(Variable.class, variable.getId());
 		verify(jdoTemplate).makePersistent(item);
-		assertEquals("1", result.getValue());
+		assertEquals("1", new String(result.getValue()));
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ public class ItemServiceTest extends AbstractServiceTest {
 		Item result = itemService.update(item);
 		verify(jdoTemplate).getObjectById(Item.class, item.getId());
 		verify(jdoTemplate).makePersistent(item);
-		assertEquals("1", result.getValue());
+		assertEquals("1", new String(result.getValue()));
 	}
 	
 	@Test

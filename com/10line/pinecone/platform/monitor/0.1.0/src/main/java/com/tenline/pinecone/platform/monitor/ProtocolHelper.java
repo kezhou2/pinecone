@@ -29,13 +29,13 @@ public class ProtocolHelper {
 	 * @param map
 	 * @return
 	 */
-	public static Device unmarshel(TreeMap<String, String> map) {
+	public static Device unmarshel(TreeMap<String, byte[]> map) {
 		Device device = new Device();
 		device.setVariables(new ArrayList<Variable>());
 		for (String name : map.keySet()) {
 			Variable variable = new Variable();
 			variable.setName(name);
-			String value = map.get(name);
+			byte[] value = map.get(name);
 			if (value != null) {
 				variable.setItems(new ArrayList<Item>());
 				Item item = new Item();
@@ -52,8 +52,8 @@ public class ProtocolHelper {
 	 * @param device
 	 * @return
 	 */
-	public static TreeMap<String, String> marshel(Device device) {
-		TreeMap<String, String> map = new TreeMap<String, String>();
+	public static TreeMap<String, byte[]> marshel(Device device) {
+		TreeMap<String, byte[]> map = new TreeMap<String, byte[]>();
 		Object[] variables = device.getVariables().toArray();
 		for (Object object : variables) {
 			Variable variable = (Variable) object;

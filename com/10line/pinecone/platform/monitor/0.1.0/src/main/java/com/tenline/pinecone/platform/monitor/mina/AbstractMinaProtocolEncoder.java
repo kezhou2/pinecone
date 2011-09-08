@@ -50,14 +50,14 @@ public abstract class AbstractMinaProtocolEncoder extends ProtocolEncoderAdapter
 	 * @param map
 	 * @return
 	 */
-	protected abstract byte[] buildPacketType(TreeMap<String, String> map);
+	protected abstract byte[] buildPacketType(TreeMap<String, byte[]> map);
 
 	/**
 	 * Build Packet Data
 	 * @param map
 	 * @return
 	 */
-	protected abstract byte[] buildPacketData(TreeMap<String, String> map); 
+	protected abstract byte[] buildPacketData(TreeMap<String, byte[]> map); 
 
 	/**
 	 * Build Packet Check

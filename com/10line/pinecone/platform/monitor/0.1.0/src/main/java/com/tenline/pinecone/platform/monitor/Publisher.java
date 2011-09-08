@@ -148,11 +148,11 @@ public class Publisher {
 			if (index >= 0) {
 				String subject = variable.getId() + "-device";
 				channel.publish(subject, variable.getType().substring(index), 
-								item.getValue().getBytes());
-				item.setValue(subject);
+								item.getValue());
+				item.setValue(subject.getBytes());
 			} else {
 				Record record = new Record();
-				record.setValue(item.getValue());
+				record.setValue(new String(item.getValue()));
 				record.setVariable(variable);
 				recordAPI.create(record);
 			}

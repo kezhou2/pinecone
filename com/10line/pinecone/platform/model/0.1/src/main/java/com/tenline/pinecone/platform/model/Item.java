@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Item extends Entity {
 	
 	@Persistent
-	private String value;
+	private byte[] value;
 	
 	@Persistent
 	private String text;
@@ -36,14 +36,14 @@ public class Item extends Entity {
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(String value) {
+	public void setValue(byte[] value) {
 		this.value = value;
 	}
 
 	/**
 	 * @return the value
 	 */
-	public String getValue() {
+	public byte[] getValue() {
 		return value;
 	}
 

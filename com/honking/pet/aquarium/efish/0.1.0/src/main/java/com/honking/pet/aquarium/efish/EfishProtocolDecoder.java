@@ -51,8 +51,9 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 	@Override
 	protected void splitPacketData(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
-		TreeMap<String, String> map = new TreeMap<String, String>();
-		map.put(bundle.getHeaders().get("Water-Temperature").toString(), splitWaterTemperature(packet[0], packet[1]));
+		TreeMap<String, byte[]> map = new TreeMap<String, byte[]>();
+		map.put(bundle.getHeaders().get("Water-Temperature").toString(),
+				splitWaterTemperature(packet[0], packet[1]).getBytes());
 		output.write(ProtocolHelper.unmarshel(map));
 	}
 

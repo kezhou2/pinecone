@@ -41,7 +41,7 @@ public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 			for (int i=20; i<=30; i++) {
 				Item item = new Item();
 				item.setText(String.valueOf(i) + "°C");
-				item.setValue(String.valueOf(i));
+				item.setValue(String.valueOf(i).getBytes());
 				variable.getItems().add(item);
 			}
 			
@@ -57,7 +57,7 @@ public class EfishProtocolBuilder extends AbstractProtocolBuilder {
 					Item item = new Item();
 					item.setText(bundle.getHeaders().get("Work").toString() + i + bundle.getHeaders().get("Minute").toString() + 
 							", " + bundle.getHeaders().get("Stop").toString() + j + bundle.getHeaders().get("Minute").toString());
-					item.setValue(i + "-" + j);
+					item.setValue((i + "-" + j).getBytes());
 					variable.getItems().add(item);
 				}
 			}

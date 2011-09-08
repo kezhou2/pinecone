@@ -47,7 +47,7 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	}
 
 	@Override
-	protected byte[] buildPacketType(TreeMap<String, String> map) {
+	protected byte[] buildPacketType(TreeMap<String, byte[]> map) {
 		// TODO Auto-generated method stub
 		byte[] bytes = null;
 		for (String key : map.keySet()) {
@@ -67,11 +67,11 @@ public class EfishProtocolEncoder extends AbstractMinaProtocolEncoder {
 	}
 
 	@Override
-	protected byte[] buildPacketData(TreeMap<String, String> map) {
+	protected byte[] buildPacketData(TreeMap<String, byte[]> map) {
 		// TODO Auto-generated method stub
 		byte[] bytes = null;
 		for (String key : map.keySet()) {
-			String temp = map.get(key);
+			String temp = new String(map.get(key));
 			if (key.equals(bundle.getHeaders().get("Water-Temperature"))) {
 				if (temp.equals("20")) {
 					bytes = new byte[] { (byte) 0x08, (byte) 0x02 };

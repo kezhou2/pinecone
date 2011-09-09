@@ -115,8 +115,8 @@ public class MinaHandler extends IoHandlerAdapter {
 		putMapping(session);
 		schedulers.put(session.getId(), new MinaScheduler());
 		schedulers.get(session.getId()).setSession(session);
-		schedulers.get(session.getId()).start();
 		builder.initializeReadQueue(schedulers.get(session.getId()).getReadQueue());
+		schedulers.get(session.getId()).start();
 		subscribers.put(session.getId(), new Subscriber());
 		subscribers.get(session.getId()).setScheduler(schedulers.get(session.getId()));
 		subscribers.get(session.getId()).setDevice(getDevice(session));

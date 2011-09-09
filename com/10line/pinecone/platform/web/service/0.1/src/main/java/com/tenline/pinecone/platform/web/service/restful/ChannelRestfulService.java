@@ -31,7 +31,7 @@ import com.tenline.pinecone.platform.web.service.ChannelService;
 public class ChannelRestfulService implements ChannelService {
 	
 	private Cache cache;
-	private final static int EXPIRATION = 3; // seconds
+	private final static int EXPIRATION_MILLIS = 1900; // 1.9 seconds
 
 	/**
 	 * 
@@ -40,7 +40,7 @@ public class ChannelRestfulService implements ChannelService {
 		// TODO Auto-generated constructor stub
 		try {
 			Map<Integer, Integer> props = new HashMap<Integer, Integer>();
-	        props.put(GCacheFactory.EXPIRATION_DELTA, EXPIRATION); 
+	        props.put(GCacheFactory.EXPIRATION_DELTA_MILLIS, EXPIRATION_MILLIS); 
 	        cache = CacheManager.getInstance().getCacheFactory().createCache(props);
 		} catch (CacheException e) {
 			// TODO Auto-generated catch block

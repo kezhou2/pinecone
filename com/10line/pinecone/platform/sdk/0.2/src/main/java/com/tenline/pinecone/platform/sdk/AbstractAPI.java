@@ -13,7 +13,7 @@ public abstract class AbstractAPI {
 	
 	protected String url;
 	
-	protected final static int TIMEOUT = 5000;
+	protected final static int TIMEOUT = 10000;
 	
 	protected HttpURLConnection connection;
 	

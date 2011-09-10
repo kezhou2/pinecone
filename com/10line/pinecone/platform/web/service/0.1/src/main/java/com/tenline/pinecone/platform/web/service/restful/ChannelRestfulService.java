@@ -3,6 +3,7 @@
  */
 package com.tenline.pinecone.platform.web.service.restful;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -73,13 +74,18 @@ public class ChannelRestfulService implements ChannelService {
 		// TODO Auto-generated method stub
 		try {
 			InputStream input = request.getInputStream();
-			byte[] bytes = new byte[input.available()];
-			input.read(bytes);
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			int data;
+			while ((data = input.read()) != -1) {
+				output.write(data);	
+			}
+			output.flush();
+			output.close();
 			Message message = new Message();
 			message.setCharacterEncoding(request.getCharacterEncoding());
 			message.setContentType(request.getContentType());
 			message.setContentLength(request.getContentLength());
-			message.setContentBytes(bytes);
+			message.setContentBytes(output.toByteArray());
 			cache.put(subject, message);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

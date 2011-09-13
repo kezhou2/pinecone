@@ -3,11 +3,8 @@
  */
 package com.tenline.pinecone.platform.sdk;
 
-import java.io.ByteArrayOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import com.google.gson.Gson;
 import com.tenline.pinecone.platform.model.Device;
@@ -43,15 +40,14 @@ public class ChannelAPI extends AbstractAPI {
 		connection = (HttpURLConnection) new URL(url + "/api/channel/subscribe/" + subject).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		GZIPInputStream input = new GZIPInputStream(connection.getInputStream());
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		int data; while ((data = input.read()) != -1) { output.write(data); }
-		input.close(); output.flush(); output.close();
+		byte[] bytes = new byte[connection.getInputStream().available()];
+		connection.getInputStream().read(bytes);
+		connection.getInputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			if (connection.getContentType().indexOf("application/json") >= 0) {
-				listener.onMessage(gson.fromJson(new String(output.toByteArray(), "utf-8"), Device.class));
+				listener.onMessage(gson.fromJson(new String(bytes, "utf-8"), Device.class));
 			} else {
-				listener.onMessage(output.toByteArray());
+				listener.onMessage(bytes);
 			}
 		}else listener.onError("Subscribe Channel Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
@@ -72,14 +68,13 @@ public class ChannelAPI extends AbstractAPI {
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		GZIPOutputStream output = new GZIPOutputStream(connection.getOutputStream());
 		if (contentType.indexOf("application/json") >= 0) {
-			output.write(gson.toJson(content).getBytes("utf-8"));
+			connection.getOutputStream().write(gson.toJson(content).getBytes("utf-8"));
 		} else {
-			output.write((byte[]) content);
+			connection.getOutputStream().write((byte[]) content);
 		}
-		output.flush();
-        output.close();
+		connection.getOutputStream().flush();
+		connection.getOutputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) listener.onMessage("Publish Successful!");
 		else listener.onError("Publish Channel Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();

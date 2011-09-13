@@ -18,7 +18,7 @@ import com.tenline.pinecone.platform.monitor.mina.AbstractMinaProtocolDecoder;
  * 
  */
 public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
-
+	private long lastHandlerTime = 0;
 	/**
 	 * 
 	 * @param bundle
@@ -51,25 +51,54 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 	@Override
 	protected void splitPacketData(byte[] packet, ProtocolDecoderOutput output) {
 		// TODO Auto-generated method stub
+		
 		TreeMap<String, byte[]> map = new TreeMap<String, byte[]>();
 		map.put(bundle.getHeaders().get("Water-Temperature").toString(),
-				splitWaterTemperature(packet[0], packet[1]).getBytes());
+				splitWaterTemperature(packet[1], packet[2]).getBytes());
 		output.write(ProtocolHelper.unmarshel(map));
 	}
 
 	@Override
-	protected String splitPacketRejectedDescription(byte[] rejectedCode) {
+	protected String splitPacketRejectedDescription(byte[] packet) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	protected String splitControlResp(byte[] packet, ProtocolDecoderOutput output) {
+		// TODO Auto-generated method stub
+		IoBuffer buffer = IoBuffer.allocate(1).setAutoExpand(true);
+		buffer.put((byte) 0x02);
+		buffer.flip();
+		output.write(buffer);
+		return null;
+	}
 	@Override
 	protected boolean doDecode(IoSession arg0, IoBuffer in,
 			ProtocolDecoderOutput output) throws Exception {
 		int start = in.position();
+		int count = 1;
+		if (this.lastHandlerTime == 0) {
+			this.lastHandlerTime = System.currentTimeMillis();
+		}
 		while (in.hasRemaining()) {
 			byte current = in.get();
+			if ((System.currentTimeMillis() - this.lastHandlerTime > 200)
+					&& (current == 0x03 || current == 0x04)) {
+				this.lastHandlerTime = System.currentTimeMillis();
+				splitControlResp(in.slice().array(),output);
+				count = 1;
+				return true;
+			}
+			this.lastHandlerTime = System.currentTimeMillis();
+
 			if (current == 0x02) {
+				count = 1;
+			} else {
+				count++;
+			}
+			if (count == 3) {
+				// 2 bytes
+				count = 1;
 				int position = in.position();
 				int limit = in.limit();
 				try {
@@ -82,9 +111,9 @@ public class EfishProtocolDecoder extends AbstractMinaProtocolDecoder {
 					in.position(position);
 					in.limit(limit);
 				}
+
 				return true;
 			}
-
 		}
 		in.position(start);
 		return false;

@@ -64,6 +64,8 @@ public class MainWindow extends JFrame {
 	private Item item;
 	private ItemAPI itemAPI;
 
+	private JButton deivceDlgButton;
+
 	/**
 	 * 
 	 */
@@ -77,11 +79,13 @@ public class MainWindow extends JFrame {
 						// TODO Auto-generated method stub
 						user = (User) ((Collection<?>) message).toArray()[0];
 						endpointAdmin.initialize(user);
+						deivceDlgButton.setEnabled(true);
 					}
 
 					@Override
 					public void onError(String error) {
 						// TODO Auto-generated method stub
+						deivceDlgButton.setEnabled(false);
 						logger.error(error);
 					}
 
@@ -167,20 +171,11 @@ public class MainWindow extends JFrame {
 		textField.setText("251760162"); // SNS Id
 		JButton button = new JButton("Login");
 		button.setActionCommand("Login");
-		button.setBounds(260, 29, 150, 23);
+		button.setBounds(260, 29, 80, 23);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					userAPI.show("snsId=='" + textField.getText() + "'");
-					JButton button = new JButton("Show Devices");
-					button.setActionCommand("Show Devices");
-					button.setBounds(100, 100, 130, 25);
-					button.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							new DeviceDialog().setVisible(true);
-						}
-					});
-					panel.add(button);
 				} catch (Exception ex) {
 					// TODO Auto-generated catch block
 					logger.error(ex.getMessage());
@@ -188,6 +183,16 @@ public class MainWindow extends JFrame {
 			}
 		});
 		panel.add(button);
+		deivceDlgButton = new JButton("Show Devices");
+		deivceDlgButton.setActionCommand("Show Devices");
+		deivceDlgButton.setBounds(100, 100, 130, 25);
+		deivceDlgButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new DeviceDialog().setVisible(true);
+			}
+		});
+		panel.add(deivceDlgButton);
+		deivceDlgButton.setEnabled(false);
 	}
 
 	private class DeviceDialog extends JDialog {
@@ -276,6 +281,7 @@ public class MainWindow extends JFrame {
 						// TODO Auto-generated catch block
 						logger.error(ex.getMessage());
 					}
+					System.out.println("add ok");
 				}
 			});
 		}

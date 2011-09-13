@@ -28,6 +28,7 @@
   		<groupId>com.10line.pinecone.platform</groupId>
   		<artifactId>sdk</artifactId>
   		<version>0.2</version>
+  		<scope>provided</scope>
   	</dependency>
   	<!-- Google App Engine meta-package -->
     <dependency>

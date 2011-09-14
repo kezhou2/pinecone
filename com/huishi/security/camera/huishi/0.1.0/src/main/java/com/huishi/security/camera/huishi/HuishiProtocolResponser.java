@@ -32,6 +32,7 @@ public class HuishiProtocolResponser extends AbstractProtocolResponser {
 	@Override
 	public void completed(HttpResponse message) {
 		// TODO Auto-generated method stub
+		super.completed(message);
 		if (message.getEntity().getContentType().getValue().equals("image/jpeg")) {
 			try {
 				ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -39,7 +40,6 @@ public class HuishiProtocolResponser extends AbstractProtocolResponser {
 				TreeMap<String, byte[]> map = new TreeMap<String, byte[]>();
 				map.put(bundle.getHeaders().get("Video-Stream").toString(), output.toByteArray());
 				publisher.addToReadQueue(ProtocolHelper.unmarshel(map));
-				logger.info(message.getStatusLine().getStatusCode());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				logger.error(e.getMessage());

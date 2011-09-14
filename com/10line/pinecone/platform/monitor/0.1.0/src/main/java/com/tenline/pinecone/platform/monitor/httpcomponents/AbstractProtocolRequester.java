@@ -4,9 +4,7 @@
 package com.tenline.pinecone.platform.monitor.httpcomponents;
 
 import java.net.URI;
-import java.util.concurrent.Future;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.DefaultHttpAsyncClient;
 import org.apache.http.nio.client.HttpAsyncClient;
@@ -67,7 +65,7 @@ public abstract class AbstractProtocolRequester extends AbstractScheduler {
 					.initializeReadQueue(getReadQueue());
 			responser = (AbstractProtocolResponser) ServiceHelper.waitForService
 				(AbstractProtocolResponser.class, bundle.getSymbolicName(), bundle.getVersion().toString());
-			responser.start(device);
+			responser.start(this, device);
 			super.start();
 			logger.info("Start Requester");
 		} catch (IOReactorException e) {
@@ -100,8 +98,7 @@ public abstract class AbstractProtocolRequester extends AbstractScheduler {
 	protected void sendRequest(String uri) {
 		try {
 			get.setURI(new URI(uri));
-			Future<HttpResponse> future = client.execute(get, responser);
-			if (future.get().getStatusLine().getStatusCode() == 200) execute();
+			client.execute(get, responser);
 		} catch (Exception ex) {
 			// TODO Auto-generated catch block
 			logger.error(ex.getMessage());

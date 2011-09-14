@@ -64,7 +64,10 @@ public class MainWindow extends JFrame {
 	private Item item;
 	private ItemAPI itemAPI;
 
-	private JButton deivceDlgButton;
+	/**
+	 * UI Controls
+	 */
+	private JButton showDevicesButton;
 
 	/**
 	 * 
@@ -78,14 +81,14 @@ public class MainWindow extends JFrame {
 					public void onMessage(Object message) {
 						// TODO Auto-generated method stub
 						user = (User) ((Collection<?>) message).toArray()[0];
+						showDevicesButton.setEnabled(true);
 						endpointAdmin.initialize(user);
-						deivceDlgButton.setEnabled(true);
 					}
 
 					@Override
 					public void onError(String error) {
 						// TODO Auto-generated method stub
-						deivceDlgButton.setEnabled(false);
+						showDevicesButton.setEnabled(false);
 						logger.error(error);
 					}
 
@@ -183,16 +186,16 @@ public class MainWindow extends JFrame {
 			}
 		});
 		panel.add(button);
-		deivceDlgButton = new JButton("Show Devices");
-		deivceDlgButton.setActionCommand("Show Devices");
-		deivceDlgButton.setBounds(100, 100, 130, 25);
-		deivceDlgButton.addActionListener(new ActionListener() {
+		showDevicesButton = new JButton("Show Devices");
+		showDevicesButton.setActionCommand("Show Devices");
+		showDevicesButton.setBounds(100, 100, 130, 25);
+		showDevicesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new DeviceDialog().setVisible(true);
 			}
 		});
-		panel.add(deivceDlgButton);
-		deivceDlgButton.setEnabled(false);
+		panel.add(showDevicesButton);
+		showDevicesButton.setEnabled(false);
 	}
 
 	private class DeviceDialog extends JDialog {
@@ -281,7 +284,6 @@ public class MainWindow extends JFrame {
 						// TODO Auto-generated catch block
 						logger.error(ex.getMessage());
 					}
-					System.out.println("add ok");
 				}
 			});
 		}

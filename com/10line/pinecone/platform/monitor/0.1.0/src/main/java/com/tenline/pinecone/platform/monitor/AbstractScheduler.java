@@ -68,11 +68,6 @@ public abstract class AbstractScheduler {
 			if (!readQueue.isEmpty()) {
 				readIndex %= readQueue.size();
 				lastQueueItem = readQueue.get(readIndex);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				dispatch(lastQueueItem);
 				readIndex++;
 			}

@@ -32,6 +32,11 @@ public abstract class AbstractProtocolResponser implements
 	 * Publisher
 	 */
 	protected Publisher publisher;
+	
+	/**
+	 * Requester
+	 */
+	private AbstractProtocolRequester requester;
 
 	/**
 	 * 
@@ -40,6 +45,13 @@ public abstract class AbstractProtocolResponser implements
 	public AbstractProtocolResponser(Bundle bundle) {
 		// TODO Auto-generated constructor stub
 		this.bundle = bundle;
+	}
+	
+	@Override
+	public void completed(HttpResponse message) {
+		// TODO Auto-generated method stub
+		requester.execute();
+		logger.info(message.getStatusLine().getStatusCode());
 	}
 	
 	@Override
@@ -56,9 +68,11 @@ public abstract class AbstractProtocolResponser implements
 	
 	/**
 	 * Start Responser
+	 * @param requester
 	 * @param device
 	 */
-	public void start(Device device) {
+	public void start(AbstractProtocolRequester requester, Device device) {
+		this.requester = requester;
 		publisher = new Publisher();
 		publisher.setDevice(device);
 		publisher.start();

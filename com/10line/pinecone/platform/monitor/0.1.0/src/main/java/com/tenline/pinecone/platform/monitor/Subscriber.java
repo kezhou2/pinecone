@@ -46,7 +46,7 @@ public class Subscriber {
 	/**
 	 * Subscriber Timer Task Interval
 	 */
-	private static final int INTERVAL = 1000;
+	private static final int INTERVAL = 500;
 
 	/**
 	 * Subscriber Timer Task Interval After Task Starting

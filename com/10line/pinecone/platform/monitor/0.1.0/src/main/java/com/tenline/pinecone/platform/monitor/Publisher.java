@@ -51,7 +51,7 @@ public class Publisher {
 	/**
 	 * Publisher Timer Task Interval
 	 */
-	private static final int INTERVAL = 1000;
+	private static final int INTERVAL = 500;
 
 	/**
 	 * Publisher Timer Task Interval After Task Starting
@@ -66,7 +66,7 @@ public class Publisher {
 	/**
 	 * Publisher Max Read Queue Size
 	 */
-	private static final int MAX_QUEUE_SIZE = 100;
+	private static final int MAX_QUEUE_SIZE = 3;
 	
 	/**
 	 * Publisher Web Service API

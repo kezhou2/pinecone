@@ -24,12 +24,31 @@ import javax.xml.bind.annotation.XmlTransient;
 public class User extends Entity {
 	
     @Persistent
-	private String snsId;
+	private String name;
+    
+    @Persistent
+    private String email;
+    
+    @Persistent
+    private String password;
+    
+    @Persistent
+    private String avatarUrl;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
     private Collection<Device> devices;
+    
+    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
+    private Collection<User> friends;
+    
+    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
+    private Collection<Application> applications;
 
 	/**
 	 * 
@@ -39,17 +58,59 @@ public class User extends Entity {
 	}
 
 	/**
-	 * @param snsId the snsId to set
+	 * @param name the name to set
 	 */
-	public void setSnsId(String snsId) {
-		this.snsId = snsId;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * @return the snsId
+	 * @return the name
 	 */
-	public String getSnsId() {
-		return snsId;
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param avatarUrl the avatarUrl to set
+	 */
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
+
+	/**
+	 * @return the avatarUrl
+	 */
+	public String getAvatarUrl() {
+		return avatarUrl;
 	}
 
 	/**
@@ -65,6 +126,36 @@ public class User extends Entity {
 	 */
 	public Collection<Device> getDevices() {
 		return devices;
+	}
+
+	/**
+	 * @param friends the friends to set
+	 */
+	@XmlTransient
+	public void setFriends(Collection<User> friends) {
+		this.friends = friends;
+	}
+
+	/**
+	 * @return the friends
+	 */
+	public Collection<User> getFriends() {
+		return friends;
+	}
+
+	/**
+	 * @param applications the applications to set
+	 */
+	@XmlTransient
+	public void setApplications(Collection<Application> applications) {
+		this.applications = applications;
+	}
+
+	/**
+	 * @return the applications
+	 */
+	public Collection<Application> getApplications() {
+		return applications;
 	}
 
 }

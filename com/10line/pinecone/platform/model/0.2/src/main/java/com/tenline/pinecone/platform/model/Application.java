@@ -21,6 +21,12 @@ public class Application extends Entity {
 	private String name;
 	
 	@Persistent
+	private String symbolicName;
+	
+	@Persistent
+	private String version;
+	
+	@Persistent
 	private String iconUrl;
 	
 	@Persistent
@@ -48,6 +54,34 @@ public class Application extends Entity {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * @param symbolicName the symbolicName to set
+	 */
+	public void setSymbolicName(String symbolicName) {
+		this.symbolicName = symbolicName;
+	}
+
+	/**
+	 * @return the symbolicName
+	 */
+	public String getSymbolicName() {
+		return symbolicName;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
 	}
 
 	/**

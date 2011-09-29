@@ -27,6 +27,9 @@ public class User extends Entity {
 	private String name;
     
     @Persistent
+    private String type;
+    
+    @Persistent
     private String email;
     
     @Persistent
@@ -40,10 +43,10 @@ public class User extends Entity {
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
     private Collection<Device> devices;
     
-    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
+    @Persistent(mappedBy = "owner", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
-    private Collection<User> friends;
+    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="type asc"))
+    private Collection<UserRelation> userRelations;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
@@ -69,6 +72,20 @@ public class User extends Entity {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
 	}
 
 	/**
@@ -129,18 +146,18 @@ public class User extends Entity {
 	}
 
 	/**
-	 * @param friends the friends to set
+	 * @param userRelations the userRelations to set
 	 */
 	@XmlTransient
-	public void setFriends(Collection<User> friends) {
-		this.friends = friends;
+	public void setUserRelations(Collection<UserRelation> userRelations) {
+		this.userRelations = userRelations;
 	}
 
 	/**
-	 * @return the friends
+	 * @return the userRelations
 	 */
-	public Collection<User> getFriends() {
-		return friends;
+	public Collection<UserRelation> getUserRelations() {
+		return userRelations;
 	}
 
 	/**

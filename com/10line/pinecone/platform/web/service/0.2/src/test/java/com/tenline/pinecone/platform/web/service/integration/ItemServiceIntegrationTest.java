@@ -47,7 +47,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	@Before
 	public void testSetup() {
 		user = new User();
-		user.setSnsId("251417324");
+		user.setName("bill");
 		device = new Device();
 		device.setName("LNB");
 		device.setSymbolicName("com.10line.pinecone");
@@ -80,7 +80,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				user = (User) message;
-				assertEquals("251417324", user.getSnsId());
+				assertEquals("bill", user.getName());
 			}
 
 			@Override

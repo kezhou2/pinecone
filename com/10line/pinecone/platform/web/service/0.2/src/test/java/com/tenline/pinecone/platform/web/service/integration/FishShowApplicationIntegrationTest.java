@@ -53,7 +53,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				user = (User) message;
-				assertEquals("251760162", user.getSnsId());
+				assertEquals("bill", user.getName());
 			}
 
 			@Override
@@ -64,7 +64,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 			
 		});
 		user = new User();
-		user.setSnsId("251760162");
+		user.setName("bill");
 		userAPI.create(user);
 		deviceAPI = new DeviceAPI(host, port, new APIListener() {
 

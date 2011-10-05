@@ -39,7 +39,7 @@ public class UserServiceTest extends AbstractServiceTest {
 		userService.setJdoTemplate(jdoTemplate);
 		user = new User();
 		user.setId("asa");
-		user.setSnsId("23");		
+		user.setName("bill");		
 		users = new ArrayList();
 		users.add(user);
 	}
@@ -57,7 +57,7 @@ public class UserServiceTest extends AbstractServiceTest {
 		when(jdoTemplate.makePersistent(user)).thenReturn(user);
 		User result = userService.create(user);
 		verify(jdoTemplate).makePersistent(user);
-		assertEquals("23", result.getSnsId());
+		assertEquals("bill", result.getName());
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ public class UserServiceTest extends AbstractServiceTest {
 		User result = userService.update(user);
 		verify(jdoTemplate).getObjectById(User.class, user.getId());
 		verify(jdoTemplate).makePersistent(user);
-		assertEquals("23", result.getSnsId());
+		assertEquals("bill", result.getName());
 	}
 	
 	@Test

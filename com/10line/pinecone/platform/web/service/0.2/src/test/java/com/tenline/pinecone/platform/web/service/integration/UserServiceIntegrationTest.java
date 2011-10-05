@@ -29,7 +29,11 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	@Before
 	public void testSetup() {
 		user = new User();
-		user.setSnsId("251417324");
+		user.setName("bill");
+		user.setAvatarUrl("http://avatar/1");
+		user.setEmail("billmse@gmail.com");
+		user.setPassword("19821027");
+		user.setType("individual");
 	}
 	
 	@After
@@ -52,7 +56,11 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				user = (User) message;
-				assertEquals("251417324", user.getSnsId());
+				assertEquals("bill", user.getName());
+				assertEquals("individual", user.getType());
+				assertEquals("http://avatar/1", user.getAvatarUrl());
+				assertEquals("19821027", user.getPassword());
+				assertEquals("billmse@gmail.com", user.getEmail());
 			}
 			
 		});
@@ -69,11 +77,19 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				user = (User) message;
-				assertEquals("251417333", user.getSnsId());
+				assertEquals("jack", user.getName());
+				assertEquals("enterprise", user.getType());
+				assertEquals("http://avatar/2", user.getAvatarUrl());
+				assertEquals("666666", user.getPassword());
+				assertEquals("jack@gmail.com", user.getEmail());
 			}
 			
 		});
-		user.setSnsId("251417333");
+		user.setName("jack");
+		user.setAvatarUrl("http://avatar/2");
+		user.setEmail("jack@gmail.com");
+		user.setPassword("666666");
+		user.setType("enterprise");
 		userAPI.update(user);
 		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
@@ -91,7 +107,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			}
 			
 		});
-		userAPI.show("snsId=='"+user.getSnsId()+"'");
+		userAPI.show("id=='"+user.getId()+"'");
 		userAPI = new UserAPI("localhost", "8080", new APIListener() {
 
 			@Override

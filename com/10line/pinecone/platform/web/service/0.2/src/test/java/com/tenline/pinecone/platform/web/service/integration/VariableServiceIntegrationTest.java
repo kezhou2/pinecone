@@ -41,7 +41,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 	@Before
 	public void testSetup() {
 		user = new User();
-		user.setSnsId("251417324");
+		user.setName("bill");
 		device = new Device();
 		device.setName("LNB");
 		device.setSymbolicName("com.10line.pinecone");
@@ -69,7 +69,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 			public void onMessage(Object message) {
 				// TODO Auto-generated method stub
 				user = (User) message;
-				assertEquals("251417324", user.getSnsId());
+				assertEquals("bill", user.getName());
 			}
 
 			@Override

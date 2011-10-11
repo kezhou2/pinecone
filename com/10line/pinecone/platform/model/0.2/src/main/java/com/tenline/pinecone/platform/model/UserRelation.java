@@ -20,11 +20,11 @@ public class UserRelation extends Entity {
 	@Persistent
 	private String type;
 	
-	@Persistent(defaultFetchGroup = "true")
-	private User owner;
+	@Persistent
+	private String userId;
 	
 	@Persistent(defaultFetchGroup = "true")
-	private User user;
+	private User owner;
 
 	/**
 	 * 
@@ -48,6 +48,20 @@ public class UserRelation extends Entity {
 	}
 
 	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public String getUserId() {
+		return userId;
+	}
+
+	/**
 	 * @param owner the owner to set
 	 */
 	public void setOwner(User owner) {
@@ -59,20 +73,6 @@ public class UserRelation extends Entity {
 	 */
 	public User getOwner() {
 		return owner;
-	}
-
-	/**
-	 * @param user the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
 	}
 
 }

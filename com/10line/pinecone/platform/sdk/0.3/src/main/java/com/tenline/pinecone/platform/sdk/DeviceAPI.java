@@ -29,7 +29,7 @@ import com.tenline.pinecone.platform.model.Device;
  * @author Bill
  *
  */
-public class DeviceAPI extends AbstractAPI {
+public class DeviceAPI extends ResourceAPI {
 
 	private JAXBContext context;
 	private Marshaller marshaller;

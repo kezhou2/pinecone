@@ -13,7 +13,7 @@ import com.tenline.pinecone.platform.model.Device;
  * @author Bill
  *
  */
-public class ChannelAPI extends AbstractAPI {
+public class ChannelAPI extends ResourceAPI {
 	
 	/**
 	 * Google Json

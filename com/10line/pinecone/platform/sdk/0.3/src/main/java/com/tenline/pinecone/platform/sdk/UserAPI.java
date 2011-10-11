@@ -29,7 +29,7 @@ import com.tenline.pinecone.platform.model.User;
  * @author Bill
  *
  */
-public class UserAPI extends AbstractAPI {
+public class UserAPI extends ResourceAPI {
 	
 	private JAXBContext context;
 	private Marshaller marshaller;

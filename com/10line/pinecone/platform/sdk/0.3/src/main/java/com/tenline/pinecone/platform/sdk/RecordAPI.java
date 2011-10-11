@@ -29,7 +29,7 @@ import com.tenline.pinecone.platform.model.Record;
  * @author Bill
  *
  */
-public class RecordAPI extends AbstractAPI {
+public class RecordAPI extends ResourceAPI {
 
 	private JAXBContext context;
 	private Marshaller marshaller;

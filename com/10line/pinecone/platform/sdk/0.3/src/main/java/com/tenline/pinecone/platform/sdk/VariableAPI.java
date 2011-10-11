@@ -29,7 +29,7 @@ import com.tenline.pinecone.platform.model.Variable;
  * @author Bill
  *
  */
-public class VariableAPI extends AbstractAPI {
+public class VariableAPI extends ResourceAPI {
 
 	private JAXBContext context;
 	private Marshaller marshaller;

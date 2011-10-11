@@ -3,19 +3,13 @@
  */
 package com.tenline.pinecone.platform.sdk;
 
-import java.net.HttpURLConnection;
-
 /**
  * @author Bill
  *
  */
 public abstract class AbstractAPI {
-	
+
 	protected String url;
-	
-	protected final static int TIMEOUT = 10000;
-	
-	protected HttpURLConnection connection;
 	
 	protected APIListener listener;
 

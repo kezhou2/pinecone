@@ -13,8 +13,6 @@ import java.util.Collection;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -23,25 +21,24 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
+import com.google.api.client.http.HttpMethod;
 import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
 
 /**
  * @author Bill
  *
  */
-public class ItemAPI extends ResourceAPI {
+public class ItemAPI extends JaxbAPI {
 
-	private JAXBContext context;
-	private Marshaller marshaller;
-	private Unmarshaller unmarshaller;
-	
 	/**
+	 * 
 	 * @param host
 	 * @param port
-	 * @param listener
+	 * @param authorizationAPI
 	 */
-	public ItemAPI(String host, String port, APIListener listener) {
-		super(host, port, listener);
+	public ItemAPI(String host, String port, AuthorizationAPI authorizationAPI) {
+		super(host, port, authorizationAPI);
 		// TODO Auto-generated constructor stub
 		try {
 			context = JAXBContext.newInstance(Item.class);
@@ -56,9 +53,11 @@ public class ItemAPI extends ResourceAPI {
 	/**
 	 * 
 	 * @param item
+	 * @return
 	 * @throws Exception
 	 */
-	public void create(Item item) throws Exception {
+	public APIResponse create(Item item) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/item/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
@@ -72,34 +71,48 @@ public class ItemAPI extends ResourceAPI {
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
+			response.setDone(true);
+        	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Create Item Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Create Item Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param id
+	 * @return
 	 * @throws Exception
 	 */
-	public void delete(String id) throws Exception {
+	public APIResponse delete(String id) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/item/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) listener.onMessage("Item Deleted!");
-		else listener.onError("Delete Item Error Code: Http (" + connection.getResponseCode() + ")");
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			response.setDone(true);
+			response.setMessage("Item Deleted!");
+		} else {
+			response.setDone(false);
+			response.setMessage("Delete Item Error Code: Http (" + connection.getResponseCode() + ")");
+		}
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param item
+	 * @return
 	 * @throws Exception
 	 */
-	public void update(Item item) throws Exception {
+	public APIResponse update(Item item) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/item/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
@@ -113,20 +126,32 @@ public class ItemAPI extends ResourceAPI {
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-        	listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
+        	response.setDone(true);
+        	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Update Item Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Update Item Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param filter
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void show(String filter) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/item/show/" + filter).openConnection();
+	public APIResponse show(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/item/show/" + filter;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -136,20 +161,32 @@ public class ItemAPI extends ResourceAPI {
 				message.add((Item) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
-			listener.onMessage(message);
+			response.setDone(true);
+			response.setMessage(message);
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Item Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Show Item Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param filter
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void showByVariable(String filter) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/item/show/" + filter + "/@Variable").openConnection();
+	public APIResponse showByVariable(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/item/show/" + filter + "/@Variable";
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -159,11 +196,15 @@ public class ItemAPI extends ResourceAPI {
 				message.add((Item) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
-			listener.onMessage(message);
+			response.setDone(true);
+			response.setMessage(message);
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Item By Variable Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Show Item By Variable Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 
 }

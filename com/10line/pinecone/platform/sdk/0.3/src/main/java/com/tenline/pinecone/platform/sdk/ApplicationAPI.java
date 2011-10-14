@@ -13,8 +13,6 @@ import java.util.Collection;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -23,25 +21,24 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
+import com.google.api.client.http.HttpMethod;
 import com.tenline.pinecone.platform.model.Application;
+import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
 
 /**
  * @author Bill
  *
  */
-public class ApplicationAPI extends ResourceAPI {
+public class ApplicationAPI extends JaxbAPI {
 
-	private JAXBContext context;
-	private Marshaller marshaller;
-	private Unmarshaller unmarshaller;
-	
 	/**
+	 * 
 	 * @param host
 	 * @param port
-	 * @param listener
+	 * @param authorizationAPI
 	 */
-	public ApplicationAPI(String host, String port, APIListener listener) {
-		super(host, port, listener);
+	public ApplicationAPI(String host, String port, AuthorizationAPI authorizationAPI) {
+		super(host, port, authorizationAPI);
 		// TODO Auto-generated constructor stub
 		try {
 			context = JAXBContext.newInstance(Application.class);
@@ -56,9 +53,11 @@ public class ApplicationAPI extends ResourceAPI {
 	/**
 	 * 
 	 * @param application
+	 * @return
 	 * @throws Exception
 	 */
-	public void create(Application application) throws Exception {
+	public APIResponse create(Application application) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/application/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
@@ -72,34 +71,48 @@ public class ApplicationAPI extends ResourceAPI {
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-        	listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
+        	response.setDone(true);
+        	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Create Application Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Create Application Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param id
+	 * @return
 	 * @throws Exception
 	 */
-	public void delete(String id) throws Exception {
+	public APIResponse delete(String id) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/application/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) listener.onMessage("Application Deleted!");
-		else listener.onError("Delete Application Error Code: Http (" + connection.getResponseCode() + ")");
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			response.setDone(true);
+			response.setMessage("Application Deleted!");
+		} else {
+			response.setDone(false);
+			response.setMessage("Delete Application Error Code: Http (" + connection.getResponseCode() + ")");
+		}
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param application
+	 * @return
 	 * @throws Exception
 	 */
-	public void update(Application application) throws Exception {
+	public APIResponse update(Application application) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/application/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
@@ -113,20 +126,32 @@ public class ApplicationAPI extends ResourceAPI {
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-        	listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
+        	response.setDone(true);
+        	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Update Application Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Update Application Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param filter
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void show(String filter) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/application/show/" + filter).openConnection();
+	public APIResponse show(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/application/show/" + filter;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -136,20 +161,32 @@ public class ApplicationAPI extends ResourceAPI {
 				message.add((Application) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
-			listener.onMessage(message);
+			response.setDone(true);
+			response.setMessage(message);
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Application Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Show Application Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param filter
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void showByUser(String filter) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/application/show/" + filter + "/@User").openConnection();
+	public APIResponse showByUser(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/application/show/" + filter + "/@User";
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -159,11 +196,15 @@ public class ApplicationAPI extends ResourceAPI {
 				message.add((Application) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
-			listener.onMessage(message);
+			response.setDone(true);
+			response.setMessage(message);
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Application By User Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Show Application By User Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 
 }

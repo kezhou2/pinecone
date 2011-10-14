@@ -13,8 +13,6 @@ import java.util.Collection;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -23,25 +21,24 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
+import com.google.api.client.http.HttpMethod;
 import com.tenline.pinecone.platform.model.UserRelation;
+import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
 
 /**
  * @author Bill
  *
  */
-public class UserRelationAPI extends ResourceAPI {
+public class UserRelationAPI extends JaxbAPI {
 
-	private JAXBContext context;
-	private Marshaller marshaller;
-	private Unmarshaller unmarshaller;
-	
 	/**
+	 * 
 	 * @param host
 	 * @param port
-	 * @param listener
+	 * @param authorizationAPI
 	 */
-	public UserRelationAPI(String host, String port, APIListener listener) {
-		super(host, port, listener);
+	public UserRelationAPI(String host, String port, AuthorizationAPI authorizationAPI) {
+		super(host, port, authorizationAPI);
 		// TODO Auto-generated constructor stub
 		try {
 			context = JAXBContext.newInstance(UserRelation.class);
@@ -56,9 +53,11 @@ public class UserRelationAPI extends ResourceAPI {
 	/**
 	 * 
 	 * @param userRelation
+	 * @return
 	 * @throws Exception
 	 */
-	public void create(UserRelation userRelation) throws Exception {
+	public APIResponse create(UserRelation userRelation) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/user/relation/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
@@ -72,34 +71,48 @@ public class UserRelationAPI extends ResourceAPI {
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-        	listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
+        	response.setDone(true);
+        	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Create User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Create User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param id
+	 * @return
 	 * @throws Exception
 	 */
-	public void delete(String id) throws Exception {
+	public APIResponse delete(String id) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/user/relation/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) listener.onMessage("User Relation Deleted!");
-		else listener.onError("Delete User Relation Error Code: Http (" + connection.getResponseCode() + ")");
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			response.setDone(true);
+			response.setMessage("User Relation Deleted!");
+		} else {
+			response.setDone(false);
+			response.setMessage("Delete User Relation Error Code: Http (" + connection.getResponseCode() + ")");
+		}
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param userRelation
+	 * @return
 	 * @throws Exception
 	 */
-	public void update(UserRelation userRelation) throws Exception {
+	public APIResponse update(UserRelation userRelation) throws Exception {
+		APIResponse response = new APIResponse();
 		connection = (HttpURLConnection) new URL(url + "/api/user/relation/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
@@ -113,20 +126,32 @@ public class UserRelationAPI extends ResourceAPI {
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-        	listener.onMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
+        	response.setDone(true);
+        	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Update User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Update User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param filter
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void show(String filter) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/user/relation/show/" + filter).openConnection();
+	public APIResponse show(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/user/relation/show/" + filter;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -136,20 +161,32 @@ public class UserRelationAPI extends ResourceAPI {
 				message.add((UserRelation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
-			listener.onMessage(message);
+			response.setDone(true);
+			response.setMessage(message);
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Show User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param filter
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void showByUser(String filter) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/user/relation/show/" + filter + "/@User").openConnection();
+	public APIResponse showByUser(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/user/relation/show/" + filter + "/@User";
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -159,11 +196,15 @@ public class UserRelationAPI extends ResourceAPI {
 				message.add((UserRelation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
-			listener.onMessage(message);
+			response.setDone(true);
+			response.setMessage(message);
 			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show User Relation By User Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-		else listener.onError("Show User Relation By User Error Code: Http (" + connection.getResponseCode() + ")");
-		connection.disconnect();	
+		connection.disconnect();
+		return response;
 	}
 
 }

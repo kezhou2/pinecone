@@ -6,8 +6,10 @@ package com.tenline.pinecone.platform.sdk;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.google.api.client.http.HttpMethod;
 import com.google.gson.Gson;
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
 
 /**
  * @author Bill
@@ -21,12 +23,13 @@ public class ChannelAPI extends ResourceAPI {
 	private Gson gson;
 	
 	/**
+	 * 
 	 * @param host
 	 * @param port
-	 * @param listener
+	 * @param authorizationAPI
 	 */
-	public ChannelAPI(String host, String port, APIListener listener) {
-		super(host, port, listener);
+	public ChannelAPI(String host, String port, AuthorizationAPI authorizationAPI) {
+		super(host, port, authorizationAPI);
 		// TODO Auto-generated constructor stub
 		gson = new Gson();
 	}
@@ -34,23 +37,36 @@ public class ChannelAPI extends ResourceAPI {
 	/**
 	 * 
 	 * @param subject
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void subscribe(String subject) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/channel/subscribe/" + subject).openConnection();
+	public APIResponse subscribe(String subject, String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/channel/subscribe/" + subject;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		byte[] bytes = new byte[connection.getInputStream().available()];
 		connection.getInputStream().read(bytes);
 		connection.getInputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			response.setDone(true);
 			if (connection.getContentType().indexOf("application/json") >= 0) {
-				listener.onMessage(gson.fromJson(new String(bytes, "utf-8"), Device.class));
+				response.setMessage(gson.fromJson(new String(bytes, "utf-8"), Device.class));
 			} else {
-				listener.onMessage(bytes);
+				response.setMessage(bytes);
 			}
-		}else listener.onError("Subscribe Channel Error Code: Http (" + connection.getResponseCode() + ")");
+		} else {
+			response.setDone(false);
+			response.setMessage("Subscribe Channel Error Code: Http (" + connection.getResponseCode() + ")");
+		}
 		connection.disconnect();
+		return response;
 	}
 	
 	/**
@@ -58,13 +74,22 @@ public class ChannelAPI extends ResourceAPI {
 	 * @param subject
 	 * @param contentType
 	 * @param content
+	 * @param consumerKey
+	 * @param token
+	 * @param tokenSecret
+	 * @return
 	 * @throws Exception
 	 */
-	public void publish(String subject, String contentType, Object content) throws Exception {
-		connection = (HttpURLConnection) new URL(url + "/api/channel/publish/" + subject).openConnection();
+	public APIResponse publish(String subject, String contentType, Object content, 
+			String consumerKey, String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/channel/publish/" + subject;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", contentType + "; charset=utf-8");
+		connection.setRequestProperty("Authorization", 
+				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.POST.name(), consumerKey, token, tokenSecret));
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
@@ -75,9 +100,15 @@ public class ChannelAPI extends ResourceAPI {
 		}
 		connection.getOutputStream().flush();
 		connection.getOutputStream().close();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) listener.onMessage("Publish Successful!");
-		else listener.onError("Publish Channel Error Code: Http (" + connection.getResponseCode() + ")");
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			response.setDone(true);
+			response.setMessage("Publish Successful!");
+		} else {
+			response.setDone(false);
+			response.setMessage("Publish Channel Error Code: Http (" + connection.getResponseCode() + ")");
+		}
 		connection.disconnect();
+		return response;
 	}
 
 }

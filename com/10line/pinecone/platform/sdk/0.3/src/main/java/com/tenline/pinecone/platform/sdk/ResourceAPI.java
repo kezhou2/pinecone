@@ -5,6 +5,8 @@ package com.tenline.pinecone.platform.sdk;
 
 import java.net.HttpURLConnection;
 
+import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
+
 /**
  * @author Bill
  *
@@ -15,15 +17,18 @@ public abstract class ResourceAPI extends AbstractAPI {
 	
 	protected HttpURLConnection connection;
 	
+	protected AuthorizationAPI authorizationAPI;
+	
 	/**
 	 * 
 	 * @param host
 	 * @param port
-	 * @param listener
+	 * @param authorizationAPI
 	 */
-	public ResourceAPI(String host, String port, APIListener listener) {
-		super(host, port, listener);
+	public ResourceAPI(String host, String port, AuthorizationAPI authorizationAPI) {
+		super(host, port);
 		// TODO Auto-generated constructor stub
+		this.authorizationAPI = authorizationAPI;
 	}
 
 }

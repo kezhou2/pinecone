@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.RecordAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
@@ -46,6 +46,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 	
 	@Before
 	public void testSetup() {
+		super.testSetup();
 		user = new User();
 		user.setName("bill");
 		device = new Device();
@@ -57,6 +58,10 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		variable.setType("read_only");
 		record = new Record();
 		record.setValue("0");
+		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
+		deviceAPI = new DeviceAPI("localhost", "8080", authorizationAPI);
+		variableAPI = new VariableAPI("localhost", "8080", authorizationAPI);
+		recordAPI = new RecordAPI("localhost", "8080", authorizationAPI);
 	}
 	
 	@After
@@ -69,152 +74,72 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		deviceAPI = null;
 		variableAPI = null;
 		recordAPI = null;
+		super.testShutdown();
 	}
 	
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				user = (User) message;
-				assertEquals("bill", user.getName());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		userAPI.create(user);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				device = (Device) message;
-				assertEquals("LNB", device.getName());
-				assertEquals("com.10line.pinecone", device.getSymbolicName());
-				assertEquals("1.1", device.getVersion());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		APIResponse response = userAPI.create(user);
+		if (response.isDone()) {
+			user = (User) response.getMessage();
+			assertEquals("bill", user.getName());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		device.setUser(user);
-		deviceAPI.create(device);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				variable = (Variable) message;
-				assertEquals("A", variable.getName());
-				assertEquals("read_only", variable.getType());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		response = deviceAPI.create(device);
+		if (response.isDone()) {
+			device = (Device) response.getMessage();
+			assertEquals("LNB", device.getName());
+			assertEquals("com.10line.pinecone", device.getSymbolicName());
+			assertEquals("1.1", device.getVersion());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		variable.setDevice(device);
-		variableAPI.create(variable);
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				record = (Record) message;
-				assertEquals("0", record.getValue());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		response = variableAPI.create(variable);
+		if (response.isDone()) {
+			variable = (Variable) response.getMessage();
+			assertEquals("A", variable.getName());
+			assertEquals("read_only", variable.getType());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		record.setVariable(variable);
-		recordAPI.create(record);
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				record = (Record) message;
-				assertEquals("1", record.getValue());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		response = recordAPI.create(record);
+		if (response.isDone()) {
+			record = (Record) response.getMessage();
+			assertEquals("0", record.getValue());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		record.setValue("1");
-		recordAPI.update(record);
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(1, ((Collection<Record>) message).size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		recordAPI.show("id=='"+record.getId()+"'");
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals("Record Deleted!", message.toString());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		recordAPI.delete(record.getId());
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(0, ((Collection<Record>) message).size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		recordAPI.showByVariable("id=='"+variable.getId()+"'");
+		response = recordAPI.update(record);
+		if (response.isDone()) {
+			record = (Record) response.getMessage();
+			assertEquals("1", record.getValue());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = recordAPI.show("id=='"+record.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(1, ((Collection<Record>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = recordAPI.delete(record.getId());
+		if (response.isDone()) {
+			assertEquals("Record Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = recordAPI.showByVariable("id=='"+variable.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(0, ((Collection<Record>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 	}
 
 }

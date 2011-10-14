@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.ApplicationAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 
@@ -34,6 +34,7 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 	
 	@Before
 	public void testSetup() {
+		super.testSetup();
 		user = new User();
 		user.setName("bill");
 		application = new Application();
@@ -42,6 +43,8 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		application.setTargetUrl("http://fishshow");
 		application.setSymbolicName("com.10line.life.pet.fishshow");
 		application.setVersion("1.1");
+		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
+		applicationAPI = new ApplicationAPI("localhost", "8080", authorizationAPI);
 	}
 	
 	@After
@@ -50,125 +53,65 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		application = null;
 		userAPI = null;
 		applicationAPI = null;
+		super.testShutdown();
 	}
 	
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				user = (User) message;
-				assertEquals("bill", user.getName());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		userAPI.create(user);
-		applicationAPI = new ApplicationAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				application = (Application) message;
-				assertEquals("fishshow", application.getName());
-				assertEquals("http://icon/1", application.getIconUrl());
-				assertEquals("http://fishshow", application.getTargetUrl());
-				assertEquals("com.10line.life.pet.fishshow", application.getSymbolicName());
-				assertEquals("1.1", application.getVersion());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		APIResponse response = userAPI.create(user);
+		if (response.isDone()) {
+			user = (User) response.getMessage();
+			assertEquals("bill", user.getName());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		application.setUser(user);
-		applicationAPI.create(application);
-		applicationAPI = new ApplicationAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				application = (Application) message;
-				assertEquals("fishshow2", application.getName());
-				assertEquals("http://icon/2", application.getIconUrl());
-				assertEquals("http://fishshow/2", application.getTargetUrl());
-				assertEquals("com.10line.life.pet.fishshow.2", application.getSymbolicName());
-				assertEquals("2.1", application.getVersion());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		response = applicationAPI.create(application);
+		if (response.isDone()) {
+			application = (Application) response.getMessage();
+			assertEquals("fishshow", application.getName());
+			assertEquals("http://icon/1", application.getIconUrl());
+			assertEquals("http://fishshow", application.getTargetUrl());
+			assertEquals("com.10line.life.pet.fishshow", application.getSymbolicName());
+			assertEquals("1.1", application.getVersion());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		application.setName("fishshow2");
 		application.setIconUrl("http://icon/2");
 		application.setTargetUrl("http://fishshow/2");
 		application.setSymbolicName("com.10line.life.pet.fishshow.2");
 		application.setVersion("2.1");
-		applicationAPI.update(application);
-		applicationAPI = new ApplicationAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(1, ((Collection<Application>) message).size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		applicationAPI.show("id=='"+application.getId()+"'");
-		applicationAPI = new ApplicationAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals("Application Deleted!", message.toString());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		applicationAPI.delete(application.getId());
-		applicationAPI = new ApplicationAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(0, ((Collection<Application>) message).size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		applicationAPI.showByUser("id=='"+user.getId()+"'");
+		response = applicationAPI.update(application);
+		if (response.isDone()) {
+			application = (Application) response.getMessage();
+			assertEquals("fishshow2", application.getName());
+			assertEquals("http://icon/2", application.getIconUrl());
+			assertEquals("http://fishshow/2", application.getTargetUrl());
+			assertEquals("com.10line.life.pet.fishshow.2", application.getSymbolicName());
+			assertEquals("2.1", application.getVersion());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = applicationAPI.show("id=='"+application.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(1, ((Collection<Application>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = applicationAPI.delete(application.getId());
+		if (response.isDone()) {
+			assertEquals("Application Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = applicationAPI.showByUser("id=='"+user.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(0, ((Collection<Application>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 	}
 
 }

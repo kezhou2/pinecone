@@ -43,6 +43,31 @@
   		<url-pattern>/api/device/show/*</url-pattern>
 	</filter-mapping>
 	
+	<filter-mapping>
+  		<filter-name>OAuth Filter</filter-name>
+  		<url-pattern>/api/variable/show/*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+  		<filter-name>OAuth Filter</filter-name>
+  		<url-pattern>/api/item/show/*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+  		<filter-name>OAuth Filter</filter-name>
+  		<url-pattern>/api/record/show/*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+  		<filter-name>OAuth Filter</filter-name>
+  		<url-pattern>/api/user/relation/show/*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+  		<filter-name>OAuth Filter</filter-name>
+  		<url-pattern>/api/application/show/*</url-pattern>
+	</filter-mapping>
+	
 	<!-- The OAuth Servlet handles token exchange -->
 	<servlet>
   		<servlet-name>OAuth</servlet-name>

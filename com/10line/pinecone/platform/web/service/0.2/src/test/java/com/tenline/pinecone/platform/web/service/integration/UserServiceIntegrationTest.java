@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.model.User;
 
@@ -28,119 +28,71 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	
 	@Before
 	public void testSetup() {
+		super.testSetup();
 		user = new User();
 		user.setName("bill");
 		user.setAvatarUrl("http://avatar/1");
 		user.setEmail("billmse@gmail.com");
 		user.setPassword("19821027");
 		user.setType("individual");
+		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
 	}
 	
 	@After
 	public void testShutdown() {
 		user = null;
 		userAPI = null;
+		super.testShutdown();
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				user = (User) message;
-				assertEquals("bill", user.getName());
-				assertEquals("individual", user.getType());
-				assertEquals("http://avatar/1", user.getAvatarUrl());
-				assertEquals("19821027", user.getPassword());
-				assertEquals("billmse@gmail.com", user.getEmail());
-			}
-			
-		});
-		userAPI.create(user);
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				user = (User) message;
-				assertEquals("jack", user.getName());
-				assertEquals("enterprise", user.getType());
-				assertEquals("http://avatar/2", user.getAvatarUrl());
-				assertEquals("666666", user.getPassword());
-				assertEquals("jack@gmail.com", user.getEmail());
-			}
-			
-		});
+		APIResponse response = userAPI.create(user);
+		if (response.isDone()) {
+			user = (User) response.getMessage();
+			assertEquals("bill", user.getName());
+			assertEquals("individual", user.getType());
+			assertEquals("http://avatar/1", user.getAvatarUrl());
+			assertEquals("19821027", user.getPassword());
+			assertEquals("billmse@gmail.com", user.getEmail());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		user.setName("jack");
 		user.setAvatarUrl("http://avatar/2");
 		user.setEmail("jack@gmail.com");
 		user.setPassword("666666");
 		user.setType("enterprise");
-		userAPI.update(user);
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(1, ((Collection<User>) message).size());
-			}
-			
-		});
-		userAPI.show("id=='"+user.getId()+"'");
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals("User Deleted!", message.toString());
-			}
-			
-		});
-		userAPI.delete(user.getId());
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(0, ((Collection<User>) message).size());
-			}
-			
-		});
-		userAPI.show("id=='"+user.getId()+"'");
+		response = userAPI.update(user);
+		if (response.isDone()) {
+			user = (User) response.getMessage();
+			assertEquals("jack", user.getName());
+			assertEquals("enterprise", user.getType());
+			assertEquals("http://avatar/2", user.getAvatarUrl());
+			assertEquals("666666", user.getPassword());
+			assertEquals("jack@gmail.com", user.getEmail());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = userAPI.show("id=='"+user.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(1, ((Collection<User>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = userAPI.delete(user.getId());
+		if (response.isDone()) {
+			assertEquals("User Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = userAPI.show("id=='"+user.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(0, ((Collection<User>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 	}
 
 }

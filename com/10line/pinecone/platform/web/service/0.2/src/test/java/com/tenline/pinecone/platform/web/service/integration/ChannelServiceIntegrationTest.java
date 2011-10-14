@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.ChannelAPI;
 
 /**
@@ -28,53 +28,37 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	
 	@Before
 	public void testSetup() {
+		super.testSetup();
 		subject = "test";
+		channelAPI = new ChannelAPI("localhost", "8080", authorizationAPI);
 	}
 	
 	@After
 	public void testShutdown() {
 		subject = null;
 		channelAPI = null;
+		super.testShutdown();
 	}
 	
 	@Test
 	public void testPublish() throws Exception {
-		channelAPI = new ChannelAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals("Publish Successful!", message.toString());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		channelAPI.publish(subject, MediaType.TEXT_PLAIN, "Hello World".getBytes());
+		APIResponse response = channelAPI.publish(subject, MediaType.TEXT_PLAIN, "Hello World".getBytes(),
+				consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals("Publish Successful!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 	}
 	
 	@Test
 	public void testSubscribe() throws Exception {
-		channelAPI = new ChannelAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals("Hello World", new String((byte[]) message));
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		channelAPI.subscribe(subject);
+		APIResponse response = channelAPI.subscribe(subject, consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals("Hello World", new String((byte[]) response.getMessage()));
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 	}
 
 }

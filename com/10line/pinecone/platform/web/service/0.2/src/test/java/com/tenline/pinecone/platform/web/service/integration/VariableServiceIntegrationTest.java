@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIListener;
+import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
@@ -40,6 +40,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 	
 	@Before
 	public void testSetup() {
+		super.testSetup();
 		user = new User();
 		user.setName("bill");
 		device = new Device();
@@ -49,6 +50,9 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		variable = new Variable();
 		variable.setName("A");
 		variable.setType("read_only");
+		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
+		deviceAPI = new DeviceAPI("localhost", "8080", authorizationAPI);
+		variableAPI = new VariableAPI("localhost", "8080", authorizationAPI);
 	}
 	
 	@After
@@ -59,136 +63,66 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		userAPI = null;
 		deviceAPI = null;
 		variableAPI = null;
+		super.testShutdown();
 	}
 	
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				user = (User) message;
-				assertEquals("bill", user.getName());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		userAPI.create(user);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				device = (Device) message;
-				assertEquals("LNB", device.getName());
-				assertEquals("com.10line.pinecone", device.getSymbolicName());
-				assertEquals("1.1", device.getVersion());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		APIResponse response = userAPI.create(user);
+		if (response.isDone()) {
+			user = (User) response.getMessage();
+			assertEquals("bill", user.getName());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		device.setUser(user);
-		deviceAPI.create(device);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				variable = (Variable) message;
-				assertEquals("A", variable.getName());
-				assertEquals("read_only", variable.getType());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		response = deviceAPI.create(device);
+		if (response.isDone()) {
+			device = (Device) response.getMessage();
+			assertEquals("LNB", device.getName());
+			assertEquals("com.10line.pinecone", device.getSymbolicName());
+			assertEquals("1.1", device.getVersion());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		variable.setDevice(device);
-		variableAPI.create(variable);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				variable = (Variable) message;
-				assertEquals("B", variable.getName());
-				assertEquals("write_only", variable.getType());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
+		response = variableAPI.create(variable);
+		if (response.isDone()) {
+			variable = (Variable) response.getMessage();
+			assertEquals("A", variable.getName());
+			assertEquals("read_only", variable.getType());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		variable.setName("B");
 		variable.setType("write_only");
-		variableAPI.update(variable);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(1, ((Collection<Variable>) message).size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		variableAPI.show("id=='"+variable.getId()+"'");
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals("Variable Deleted!", message.toString());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		variableAPI.delete(variable.getId());	
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				assertEquals(0, ((Collection<Variable>) message).size());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.log(Level.SEVERE, error);
-			}
-			
-		});
-		variableAPI.showByDevice("id=='"+device.getId()+"'");
+		response = variableAPI.update(variable);
+		if (response.isDone()) {
+			variable = (Variable) response.getMessage();
+			assertEquals("B", variable.getName());
+			assertEquals("write_only", variable.getType());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = variableAPI.show("id=='"+variable.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(1, ((Collection<Variable>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = variableAPI.delete(variable.getId());
+		if (response.isDone()) {
+			assertEquals("Variable Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = variableAPI.showByDevice("id=='"+device.getId()+"'", consumerKey, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(0, ((Collection<Variable>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 	}
 
 }

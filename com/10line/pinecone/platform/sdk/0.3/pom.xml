@@ -21,30 +21,12 @@
 	</repository>
   </repositories>
   <dependencies>
-    <!-- Pinecone Model -->
+    <!-- Pinecone Development SDK -->
   	<dependency>
-  		<groupId>com.10line.pinecone.platform</groupId>
-  		<artifactId>model</artifactId>
-  		<version>0.2</version>
+  		<groupId>com.10line.pinecone.platform.sdk</groupId>
+  		<artifactId>development</artifactId>
+  		<version>0.1</version>
   	</dependency>
-  	<!-- Jettison Library -->
-  	<dependency>
-  		<groupId>org.codehaus.jettison</groupId>
-  		<artifactId>jettison</artifactId>
-  		<version>1.2</version>
-  	</dependency>
-  	<!-- Gson Library -->
-  	<dependency>
-		<groupId>com.google.code.gson</groupId>
-		<artifactId>gson</artifactId>
-		<version>1.7.1</version>
-  	</dependency>
-  	<!-- OAuth Client -->
-  	<dependency>
-		<groupId>com.google.oauth-client</groupId>
-		<artifactId>google-oauth-client</artifactId>
-		<version>1.5.0-beta</version>
-    </dependency>
   </dependencies>
   <build>
   	<plugins>

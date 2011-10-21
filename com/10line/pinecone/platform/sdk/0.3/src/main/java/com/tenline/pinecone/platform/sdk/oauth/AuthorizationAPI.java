@@ -4,22 +4,19 @@
 package com.tenline.pinecone.platform.sdk.oauth;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 import com.google.api.client.auth.oauth.OAuthAuthorizeTemporaryTokenUrl;
 import com.google.api.client.auth.oauth.OAuthCallbackUrl;
 import com.google.api.client.auth.oauth.OAuthGetAccessToken;
 import com.google.api.client.auth.oauth.OAuthGetTemporaryToken;
 import com.google.api.client.auth.oauth.OAuthHmacSigner;
-import com.google.api.client.auth.oauth.OAuthParameters;
-import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpMethod;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.UrlEncodedParser;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.tenline.pinecone.platform.sdk.APIResponse;
-import com.tenline.pinecone.platform.sdk.AbstractAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.AbstractAPI;
 
 /**
  * @author Bill
@@ -30,8 +27,6 @@ public class AuthorizationAPI extends AbstractAPI {
 	private HttpTransport transport;
 	
 	private HttpRequestFactory requestFactory;
-	
-	private OAuthHmacSigner signer;
 
 	/**
 	 * @param host
@@ -43,7 +38,6 @@ public class AuthorizationAPI extends AbstractAPI {
 		url += "/oauth";
 		transport = new NetHttpTransport();
 		requestFactory = transport.createRequestFactory();
-		signer = new OAuthHmacSigner();
 	}
 	
 	/**
@@ -83,6 +77,7 @@ public class AuthorizationAPI extends AbstractAPI {
 		try {
 			OAuthGetTemporaryToken temporaryToken = new OAuthGetTemporaryToken(url + "/requestToken");
 			temporaryToken.transport = transport;
+			OAuthHmacSigner signer = new OAuthHmacSigner();
 			temporaryToken.signer = signer;
 			temporaryToken.consumerKey = consumerKey;
 			signer.clientSharedSecret = consumerSecret;
@@ -143,19 +138,22 @@ public class AuthorizationAPI extends AbstractAPI {
 	/**
 	 * Access Long-Lived Token
 	 * @param consumerKey
+	 * @param consumerSecret
 	 * @param token
 	 * @param tokenSecret
 	 * @param verifier
 	 * @return
 	 */
-	public APIResponse accessToken(String consumerKey, String token, String tokenSecret, String verifier) {
+	public APIResponse accessToken(String consumerKey, String consumerSecret, String token, String tokenSecret, String verifier) {
 		APIResponse response = new APIResponse();
 		try {
 			OAuthGetAccessToken accessToken = new OAuthGetAccessToken(url + "/accessToken");
 			accessToken.transport = transport;
+			OAuthHmacSigner signer = new OAuthHmacSigner();
 			accessToken.signer = signer;
 			accessToken.consumerKey = consumerKey;
 			accessToken.temporaryToken = token;
+			signer.clientSharedSecret = consumerSecret;
 			signer.tokenSharedSecret = tokenSecret;
 			accessToken.verifier = verifier;
 			response.setDone(true);
@@ -166,29 +164,6 @@ public class AuthorizationAPI extends AbstractAPI {
 			response.setMessage(e.getMessage());
 		}
 		return response;
-	}
-	
-	/**
-	 * Get Authorization Header
-	 * @param requestUrl
-	 * @param requestMethod
-	 * @param consumerKey
-	 * @param token
-	 * @param tokenSecret
-	 * @return
-	 * @throws GeneralSecurityException
-	 */
-	public String getAuthorizationHeader(String requestUrl, String requestMethod, String consumerKey, String token, String tokenSecret) 
-		throws GeneralSecurityException {
-		OAuthParameters result = new OAuthParameters();
-		result.signer = signer;
-		result.consumerKey = consumerKey;
-		result.token = token;
-		signer.tokenSharedSecret = tokenSecret;
-		result.computeNonce();
-		result.computeTimestamp();
-		result.computeSignature(requestMethod, new GenericUrl(requestUrl));
-		return result.getAuthorizationHeader();
 	}
 
 }

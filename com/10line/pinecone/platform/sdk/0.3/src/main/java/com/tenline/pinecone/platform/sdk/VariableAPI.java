@@ -8,37 +8,32 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
 import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
-import com.google.api.client.http.HttpMethod;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
  *
  */
-public class VariableAPI extends JaxbAPI {
+public class VariableAPI extends com.tenline.pinecone.platform.sdk.development.VariableAPI {
 
 	/**
 	 * 
 	 * @param host
 	 * @param port
-	 * @param authorizationAPI
 	 */
-	public VariableAPI(String host, String port, AuthorizationAPI authorizationAPI) {
-		super(host, port, authorizationAPI);
+	public VariableAPI(String host, String port) {
+		super(host, port);
 		// TODO Auto-generated constructor stub
 		try {
 			context = JAXBContext.newInstance(Variable.class);
@@ -132,76 +127,6 @@ public class VariableAPI extends JaxbAPI {
 		} else {
 			response.setDone(false);
 			response.setMessage("Update Variable Error Code: Http (" + connection.getResponseCode() + ")");
-		}
-		connection.disconnect();
-		return response;
-	}
-	
-	/**
-	 * 
-	 * @param filter
-	 * @param consumerKey
-	 * @param token
-	 * @param tokenSecret
-	 * @return
-	 * @throws Exception
-	 */
-	public APIResponse show(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
-		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/variable/show/" + filter;
-		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", 
-				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
-		connection.setConnectTimeout(TIMEOUT);
-		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Variable> message = new ArrayList<Variable>();
-			for (int i=0; i<array.length(); i++) {
-				message.add((Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-						new MappedNamespaceConvention(new Configuration()))));
-			}
-			response.setDone(true);
-			response.setMessage(message);
-			connection.getInputStream().close();
-		} else {
-			response.setDone(false);
-			response.setMessage("Show Variable Error Code: Http (" + connection.getResponseCode() + ")");
-		}
-		connection.disconnect();
-		return response;
-	}
-	
-	/**
-	 * 
-	 * @param filter
-	 * @param consumerKey
-	 * @param token
-	 * @param tokenSecret
-	 * @return
-	 * @throws Exception
-	 */
-	public APIResponse showByDevice(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
-		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/variable/show/" + filter + "/@Device";
-		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", 
-				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
-		connection.setConnectTimeout(TIMEOUT);
-		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Variable> message = new ArrayList<Variable>();
-			for (int i=0; i<array.length(); i++) {
-				message.add((Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-						new MappedNamespaceConvention(new Configuration()))));
-			}
-			response.setDone(true);
-			response.setMessage(message);
-			connection.getInputStream().close();
-		} else {
-			response.setDone(false);
-			response.setMessage("Show Variable By Device Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

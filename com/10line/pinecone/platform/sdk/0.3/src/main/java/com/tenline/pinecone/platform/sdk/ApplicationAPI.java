@@ -23,7 +23,8 @@ import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
 import com.google.api.client.http.HttpMethod;
 import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
 /**
  * @author Bill
@@ -35,10 +36,9 @@ public class ApplicationAPI extends JaxbAPI {
 	 * 
 	 * @param host
 	 * @param port
-	 * @param authorizationAPI
 	 */
-	public ApplicationAPI(String host, String port, AuthorizationAPI authorizationAPI) {
-		super(host, port, authorizationAPI);
+	public ApplicationAPI(String host, String port) {
+		super(host, port);
 		// TODO Auto-generated constructor stub
 		try {
 			context = JAXBContext.newInstance(Application.class);
@@ -141,17 +141,19 @@ public class ApplicationAPI extends JaxbAPI {
 	 * 
 	 * @param filter
 	 * @param consumerKey
+	 * @param consumerSecret
 	 * @param token
 	 * @param tokenSecret
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse show(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+	public APIResponse show(String filter, String consumerKey, String consumerSecret, 
+			String token, String tokenSecret) throws Exception {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/api/application/show/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", 
-				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
+		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
+				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -176,17 +178,19 @@ public class ApplicationAPI extends JaxbAPI {
 	 * 
 	 * @param filter
 	 * @param consumerKey
+	 * @param consumerSecret
 	 * @param token
 	 * @param tokenSecret
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByUser(String filter, String consumerKey, String token, String tokenSecret) throws Exception {
+	public APIResponse showByUser(String filter, String consumerKey, String consumerSecret, 
+			String token, String tokenSecret) throws Exception {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/api/application/show/" + filter + "/@User";
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", 
-				authorizationAPI.getAuthorizationHeader(requestUrl, HttpMethod.GET.name(), consumerKey, token, tokenSecret));
+		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
+				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {

@@ -18,6 +18,7 @@ import org.codehaus.jettison.mapped.Configuration;
 import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 
+import com.google.api.client.http.HttpMethod;
 import com.tenline.pinecone.platform.model.Variable;
 
 /**
@@ -47,15 +48,20 @@ public class VariableAPI extends JaxbAPI {
 	/**
 	 * 
 	 * @param filter
-	 * @param authorization
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param token
+	 * @param tokenSecret
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse show(String filter, String authorization) throws Exception {
+	public APIResponse show(String filter, String consumerKey, String consumerSecret, 
+			String token, String tokenSecret) throws Exception {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/api/variable/show/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", authorization);
+		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
+				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -79,15 +85,20 @@ public class VariableAPI extends JaxbAPI {
 	/**
 	 * 
 	 * @param filter
-	 * @param authorization
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param token
+	 * @param tokenSecret
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByDevice(String filter, String authorization) throws Exception {
+	public APIResponse showByDevice(String filter, String consumerKey, String consumerSecret, 
+			String token, String tokenSecret) throws Exception {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/api/variable/show/" + filter + "/@Device";
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", authorization);
+		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
+				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {

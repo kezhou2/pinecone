@@ -6,6 +6,7 @@ package com.tenline.pinecone.platform.sdk.development;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.google.api.client.http.HttpMethod;
 import com.google.gson.Gson;
 import com.tenline.pinecone.platform.model.Device;
 
@@ -34,15 +35,20 @@ public class ChannelAPI extends ResourceAPI {
 	/**
 	 * 
 	 * @param subject
-	 * @param authorization
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param token
+	 * @param tokenSecret
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse subscribe(String subject, String authorization) throws Exception {
+	public APIResponse subscribe(String subject, String consumerKey, String consumerSecret, 
+			String token, String tokenSecret) throws Exception {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/api/channel/subscribe/" + subject;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", authorization);
+		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
+				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		byte[] bytes = new byte[connection.getInputStream().available()];
@@ -68,18 +74,23 @@ public class ChannelAPI extends ResourceAPI {
 	 * @param subject
 	 * @param contentType
 	 * @param content
-	 * @param authorization
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param token
+	 * @param tokenSecret
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse publish(String subject, String contentType, Object content, String authorization) throws Exception {
+	public APIResponse publish(String subject, String contentType, Object content, 
+			String consumerKey, String consumerSecret, String token, String tokenSecret) throws Exception {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/api/channel/publish/" + subject;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", contentType + "; charset=utf-8");
-		connection.setRequestProperty("Authorization", authorization);
+		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.POST.name(), 
+				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();

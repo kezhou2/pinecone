@@ -13,8 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIResponse;
-import com.tenline.pinecone.platform.sdk.ChannelAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.ChannelAPI;
 
 /**
  * @author Bill
@@ -24,13 +24,13 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	
 	private String subject;
 	
-	private ChannelAPI channelAPI;
+	private com.tenline.pinecone.platform.sdk.development.ChannelAPI channelAPI;
 	
 	@Before
 	public void testSetup() {
 		super.testSetup();
 		subject = "test";
-		channelAPI = new ChannelAPI("localhost", "8080", authorizationAPI);
+		channelAPI = new ChannelAPI("localhost", "8080");
 	}
 	
 	@After
@@ -43,7 +43,7 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	@Test
 	public void testPublish() throws Exception {
 		APIResponse response = channelAPI.publish(subject, MediaType.TEXT_PLAIN, "Hello World".getBytes(),
-				consumerKey, token, tokenSecret);
+				consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals("Publish Successful!", response.getMessage().toString());
 		} else {
@@ -53,7 +53,7 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	
 	@Test
 	public void testSubscribe() throws Exception {
-		APIResponse response = channelAPI.subscribe(subject, consumerKey, token, tokenSecret);
+		APIResponse response = channelAPI.subscribe(subject, consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals("Hello World", new String((byte[]) response.getMessage()));
 		} else {

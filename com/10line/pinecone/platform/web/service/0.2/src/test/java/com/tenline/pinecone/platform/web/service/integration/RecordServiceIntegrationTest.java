@@ -12,11 +12,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.RecordAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.model.User;
@@ -58,10 +58,10 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		variable.setType("read_only");
 		record = new Record();
 		record.setValue("0");
-		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
-		deviceAPI = new DeviceAPI("localhost", "8080", authorizationAPI);
-		variableAPI = new VariableAPI("localhost", "8080", authorizationAPI);
-		recordAPI = new RecordAPI("localhost", "8080", authorizationAPI);
+		userAPI = new UserAPI("localhost", "8080");
+		deviceAPI = new DeviceAPI("localhost", "8080");
+		variableAPI = new VariableAPI("localhost", "8080");
+		recordAPI = new RecordAPI("localhost", "8080");
 	}
 	
 	@After
@@ -122,7 +122,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = recordAPI.show("id=='"+record.getId()+"'", consumerKey, token, tokenSecret);
+		response = recordAPI.show("id=='"+record.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Record>) response.getMessage()).size());
 		} else {
@@ -134,7 +134,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = recordAPI.showByVariable("id=='"+variable.getId()+"'", consumerKey, token, tokenSecret);
+		response = recordAPI.showByVariable("id=='"+variable.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<Record>) response.getMessage()).size());
 		} else {

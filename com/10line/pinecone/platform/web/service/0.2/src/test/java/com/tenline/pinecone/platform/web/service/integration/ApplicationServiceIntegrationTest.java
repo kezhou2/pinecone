@@ -14,9 +14,9 @@ import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.ApplicationAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
@@ -43,8 +43,8 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		application.setTargetUrl("http://fishshow");
 		application.setSymbolicName("com.10line.life.pet.fishshow");
 		application.setVersion("1.1");
-		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
-		applicationAPI = new ApplicationAPI("localhost", "8080", authorizationAPI);
+		userAPI = new UserAPI("localhost", "8080");
+		applicationAPI = new ApplicationAPI("localhost", "8080");
 	}
 	
 	@After
@@ -94,7 +94,7 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = applicationAPI.show("id=='"+application.getId()+"'", consumerKey, token, tokenSecret);
+		response = applicationAPI.show("id=='"+application.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Application>) response.getMessage()).size());
 		} else {
@@ -106,7 +106,7 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = applicationAPI.showByUser("id=='"+user.getId()+"'", consumerKey, token, tokenSecret);
+		response = applicationAPI.showByUser("id=='"+user.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<Application>) response.getMessage()).size());
 		} else {

@@ -13,7 +13,7 @@ import org.junit.Before;
 
 import com.google.api.client.auth.oauth.OAuthCallbackUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
-import com.tenline.pinecone.platform.sdk.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
 import com.tenline.pinecone.platform.sdk.oauth.OAuthConsumerUrl;
 
@@ -27,13 +27,15 @@ public abstract class AbstractServiceIntegrationTest {
 	
 	protected String consumerKey;
 	
+	protected String consumerSecret;
+	
 	protected String token;
 	
 	protected String tokenSecret;
 	
 	private String verifier;
 	
-	protected AuthorizationAPI authorizationAPI;
+	private AuthorizationAPI authorizationAPI;
 	
 	@Before
 	public void testSetup() {
@@ -41,12 +43,12 @@ public abstract class AbstractServiceIntegrationTest {
 		authorizationAPI = new AuthorizationAPI("localhost", "8080");
 		APIResponse response = authorizationAPI.registerConsumer(consumerKey, "fishshow", null);
 		if (response.isDone()) {
-			tokenSecret = ((OAuthConsumerUrl) response.getMessage()).consumerSecret;
-			assertNotNull(tokenSecret);
+			consumerSecret = ((OAuthConsumerUrl) response.getMessage()).consumerSecret;
+			assertNotNull(consumerSecret);
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = authorizationAPI.requestToken(consumerKey, tokenSecret, null);
+		response = authorizationAPI.requestToken(consumerKey, consumerSecret, null);
 		if (response.isDone()) {
 			token = ((OAuthCredentialsResponse) response.getMessage()).token;
 			tokenSecret = ((OAuthCredentialsResponse) response.getMessage()).tokenSecret;
@@ -69,7 +71,7 @@ public abstract class AbstractServiceIntegrationTest {
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = authorizationAPI.accessToken(consumerKey, token, tokenSecret, verifier);
+		response = authorizationAPI.accessToken(consumerKey, consumerSecret, token, tokenSecret, verifier);
 		if (response.isDone()) {
 			token = ((OAuthCredentialsResponse) response.getMessage()).token;
 			tokenSecret = ((OAuthCredentialsResponse) response.getMessage()).tokenSecret;
@@ -83,6 +85,7 @@ public abstract class AbstractServiceIntegrationTest {
 	@After
 	public void testShutdown() {
 		consumerKey = null;
+		consumerSecret = null;
 		token = null;
 		tokenSecret = null;
 		verifier = null;

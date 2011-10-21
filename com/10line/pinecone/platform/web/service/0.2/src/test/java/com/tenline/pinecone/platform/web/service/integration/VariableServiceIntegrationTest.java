@@ -12,10 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
@@ -50,9 +50,9 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		variable = new Variable();
 		variable.setName("A");
 		variable.setType("read_only");
-		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
-		deviceAPI = new DeviceAPI("localhost", "8080", authorizationAPI);
-		variableAPI = new VariableAPI("localhost", "8080", authorizationAPI);
+		userAPI = new UserAPI("localhost", "8080");
+		deviceAPI = new DeviceAPI("localhost", "8080");
+		variableAPI = new VariableAPI("localhost", "8080");
 	}
 	
 	@After
@@ -105,7 +105,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = variableAPI.show("id=='"+variable.getId()+"'", consumerKey, token, tokenSecret);
+		response = variableAPI.show("id=='"+variable.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Variable>) response.getMessage()).size());
 		} else {
@@ -117,7 +117,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = variableAPI.showByDevice("id=='"+device.getId()+"'", consumerKey, token, tokenSecret);
+		response = variableAPI.showByDevice("id=='"+device.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<Variable>) response.getMessage()).size());
 		} else {

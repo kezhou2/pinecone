@@ -14,9 +14,9 @@ import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.UserRelation;
-import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.UserRelationAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
@@ -43,8 +43,8 @@ public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrati
 		owner.setName("jack");
 		userRelation = new UserRelation();
 		userRelation.setType("classmate");
-		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
-		userRelationAPI = new UserRelationAPI("localhost", "8080", authorizationAPI);
+		userAPI = new UserAPI("localhost", "8080");
+		userRelationAPI = new UserRelationAPI("localhost", "8080");
 	}
 	
 	@After
@@ -102,7 +102,7 @@ public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrati
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = userRelationAPI.show("id=='"+userRelation.getId()+"'", consumerKey, token, tokenSecret);
+		response = userRelationAPI.show("id=='"+userRelation.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<UserRelation>) response.getMessage()).size());
 		} else {
@@ -114,7 +114,7 @@ public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrati
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = userRelationAPI.showByUser("id=='"+owner.getId()+"'", consumerKey, token, tokenSecret);
+		response = userRelationAPI.showByUser("id=='"+owner.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<UserRelation>) response.getMessage()).size());
 		} else {

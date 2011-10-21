@@ -12,11 +12,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.ItemAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
@@ -59,10 +59,10 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		item = new Item();
 		item.setText("A");
 		item.setValue("0".getBytes());
-		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
-		deviceAPI = new DeviceAPI("localhost", "8080", authorizationAPI);
-		variableAPI = new VariableAPI("localhost", "8080", authorizationAPI);
-		itemAPI = new ItemAPI("localhost", "8080", authorizationAPI);
+		userAPI = new UserAPI("localhost", "8080");
+		deviceAPI = new DeviceAPI("localhost", "8080");
+		variableAPI = new VariableAPI("localhost", "8080");
+		itemAPI = new ItemAPI("localhost", "8080");
 	}
 	
 	@After
@@ -126,7 +126,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = itemAPI.show("id=='"+item.getId()+"'", consumerKey, token, tokenSecret);
+		response = itemAPI.show("id=='"+item.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Item>) response.getMessage()).size());
 		} else {
@@ -138,7 +138,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = itemAPI.showByVariable("id=='"+variable.getId()+"'", consumerKey, token, tokenSecret);
+		response = itemAPI.showByVariable("id=='"+variable.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<Item>) response.getMessage()).size());
 		} else {

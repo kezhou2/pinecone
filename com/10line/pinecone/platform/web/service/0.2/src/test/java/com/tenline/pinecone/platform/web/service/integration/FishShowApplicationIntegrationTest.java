@@ -15,11 +15,11 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.sdk.APIResponse;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.ItemAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
@@ -58,10 +58,10 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		item = new Item();
 		item.setText("12°C");
 		item.setValue("23810".getBytes());
-		userAPI = new UserAPI("localhost", "8080", authorizationAPI);
-		deviceAPI = new DeviceAPI("localhost", "8080", authorizationAPI);
-		variableAPI = new VariableAPI("localhost", "8080", authorizationAPI);
-		itemAPI = new ItemAPI("localhost", "8080", authorizationAPI);
+		userAPI = new UserAPI("localhost", "8080");
+		deviceAPI = new DeviceAPI("localhost", "8080");
+		variableAPI = new VariableAPI("localhost", "8080");
+		itemAPI = new ItemAPI("localhost", "8080");
 	}
 	
 	@After

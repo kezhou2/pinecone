@@ -42,16 +42,15 @@ public class AuthorizationAPI extends AbstractAPI {
 	
 	/**
 	 * Register Consumer
-	 * @param consumerKey
 	 * @param displayName
 	 * @param connectUrl
 	 * @return
 	 */
-	public APIResponse registerConsumer(String consumerKey, String displayName, String connectUrl) {
+	public APIResponse registerConsumer(String displayName, String connectUrl) {
 		APIResponse response = new APIResponse();
 	    try {
 	    	OAuthConsumerUrl consumerUrl = new OAuthConsumerUrl(url + "/consumer/registration" +
-	    			"?oauth_consumer_key=" + consumerKey + "&xoauth_consumer_display_name=" + displayName +
+	    			"?oauth_consumer_key=pinecone&xoauth_consumer_display_name=" + displayName +
 	    			"&xoauth_consumer_connect_uri=" + connectUrl);
 			UrlEncodedParser.parse(requestFactory.buildRequest(HttpMethod.GET, consumerUrl, null)
 					.execute().parseAsString(), consumerUrl);

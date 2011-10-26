@@ -12,6 +12,9 @@ import com.google.api.client.util.Key;
  */
 public class OAuthConsumerUrl extends GenericUrl {
 
+	@Key("oauth_consumer_key")
+	public String consumerKey;
+	
 	@Key("xoauth_consumer_secret")
 	public String consumerSecret;
 

@@ -20,10 +20,10 @@
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 	
-	<!-- The OAuth Provider that keeps all data in memory -->
+	<!-- The OAuth Provider that keeps all data in GAE -->
 	<context-param>
 		<param-name>oauth.provider.provider-class</param-name>
-		<param-value>org.jboss.resteasy.auth.oauth.OAuthMemoryProvider</param-value>
+		<param-value>com.tenline.pinecone.platform.web.service.oauth.OAuthGaeProvider</param-value>
 	</context-param>
 	
 	<!-- The OAuth Filter handles authentication for protected resources -->

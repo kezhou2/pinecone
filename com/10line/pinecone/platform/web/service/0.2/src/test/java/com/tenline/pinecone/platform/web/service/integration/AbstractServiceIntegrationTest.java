@@ -39,11 +39,12 @@ public abstract class AbstractServiceIntegrationTest {
 	
 	@Before
 	public void testSetup() {
-		consumerKey = "12";
 		authorizationAPI = new AuthorizationAPI("localhost", "8080");
-		APIResponse response = authorizationAPI.registerConsumer(consumerKey, "fishshow", null);
+		APIResponse response = authorizationAPI.registerConsumer("fishshow", null);
 		if (response.isDone()) {
+			consumerKey = ((OAuthConsumerUrl) response.getMessage()).consumerKey;
 			consumerSecret = ((OAuthConsumerUrl) response.getMessage()).consumerSecret;
+			assertNotNull(consumerKey);
 			assertNotNull(consumerSecret);
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());

@@ -18,19 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Application extends Entity {
 	
 	@Persistent
-	private String name;
-	
-	@Persistent
-	private String symbolicName;
-	
-	@Persistent
-	private String version;
-	
-	@Persistent
-	private String iconUrl;
-	
-	@Persistent
-	private String targetUrl;
+	private String consumerId;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private User user;
@@ -43,73 +31,17 @@ public class Application extends Entity {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param consumerId the consumerId to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setConsumerId(String consumerId) {
+		this.consumerId = consumerId;
 	}
 
 	/**
-	 * @return the name
+	 * @return the consumerId
 	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param symbolicName the symbolicName to set
-	 */
-	public void setSymbolicName(String symbolicName) {
-		this.symbolicName = symbolicName;
-	}
-
-	/**
-	 * @return the symbolicName
-	 */
-	public String getSymbolicName() {
-		return symbolicName;
-	}
-
-	/**
-	 * @param version the version to set
-	 */
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	/**
-	 * @return the version
-	 */
-	public String getVersion() {
-		return version;
-	}
-
-	/**
-	 * @param iconUrl the iconUrl to set
-	 */
-	public void setIconUrl(String iconUrl) {
-		this.iconUrl = iconUrl;
-	}
-
-	/**
-	 * @return the iconUrl
-	 */
-	public String getIconUrl() {
-		return iconUrl;
-	}
-
-	/**
-	 * @param targetUrl the targetUrl to set
-	 */
-	public void setTargetUrl(String targetUrl) {
-		this.targetUrl = targetUrl;
-	}
-
-	/**
-	 * @return the targetUrl
-	 */
-	public String getTargetUrl() {
-		return targetUrl;
+	public String getConsumerId() {
+		return consumerId;
 	}
 
 	/**

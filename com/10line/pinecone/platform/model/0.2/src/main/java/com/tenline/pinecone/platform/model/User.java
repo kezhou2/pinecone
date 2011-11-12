@@ -45,12 +45,12 @@ public class User extends Entity {
     
     @Persistent(mappedBy = "owner", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="type asc"))
+    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="userId asc"))
     private Collection<UserRelation> userRelations;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
+    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="consumerId asc"))
     private Collection<Application> applications;
 
 	/**

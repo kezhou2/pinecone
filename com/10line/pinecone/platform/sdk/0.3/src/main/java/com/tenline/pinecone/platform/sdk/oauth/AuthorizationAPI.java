@@ -41,30 +41,6 @@ public class AuthorizationAPI extends AbstractAPI {
 	}
 	
 	/**
-	 * Register Consumer
-	 * @param displayName
-	 * @param connectUrl
-	 * @return
-	 */
-	public APIResponse registerConsumer(String displayName, String connectUrl) {
-		APIResponse response = new APIResponse();
-	    try {
-	    	OAuthConsumerUrl consumerUrl = new OAuthConsumerUrl(url + "/consumer/registration" +
-	    			"?oauth_consumer_key=pinecone&xoauth_consumer_display_name=" + displayName +
-	    			"&xoauth_consumer_connect_uri=" + connectUrl);
-			UrlEncodedParser.parse(requestFactory.buildRequest(HttpMethod.GET, consumerUrl, null)
-					.execute().parseAsString(), consumerUrl);
-			response.setDone(true);
-			response.setMessage(consumerUrl);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			response.setDone(false);
-			response.setMessage(e.getMessage());
-		}
-		return response;
-	}
-	
-	/**
 	 * Request Temporary Token
 	 * @param consumerKey
 	 * @param consumerSecret

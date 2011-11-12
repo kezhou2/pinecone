@@ -8,48 +8,65 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
 import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
-import com.tenline.pinecone.platform.model.UserRelation;
+import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
 /**
  * @author Bill
  *
  */
-public class UserRelationAPI extends com.tenline.pinecone.platform.sdk.development.UserRelationAPI {
+public class ConsumerAPI extends JaxbAPI {
 
 	/**
-	 * 
 	 * @param host
 	 * @param port
 	 */
-	public UserRelationAPI(String host, String port) {
+	public ConsumerAPI(String host, String port) {
 		super(host, port);
 		// TODO Auto-generated constructor stub
+		try {
+			context = JAXBContext.newInstance(Consumer.class);
+			marshaller = context.createMarshaller();
+			unmarshaller = context.createUnmarshaller();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
 	 * 
-	 * @param userRelation
+	 * @param consumer
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse create(UserRelation userRelation) throws Exception {
+	public APIResponse create(Consumer consumer) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/user/relation/create").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/consumer/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(userRelation, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		consumer.setKey(UUID.randomUUID().toString());
+		consumer.setSecret(UUID.randomUUID().toString());
+		marshaller.marshal(consumer, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -60,7 +77,7 @@ public class UserRelationAPI extends com.tenline.pinecone.platform.sdk.developme
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Create User Relation Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Create Consumer Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -74,16 +91,16 @@ public class UserRelationAPI extends com.tenline.pinecone.platform.sdk.developme
 	 */
 	public APIResponse delete(String id) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/user/relation/delete/" + id).openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/consumer/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			response.setDone(true);
-			response.setMessage("User Relation Deleted!");
+			response.setMessage("Consumer Deleted!");
 		} else {
 			response.setDone(false);
-			response.setMessage("Delete User Relation Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Delete Consumer Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -91,20 +108,20 @@ public class UserRelationAPI extends com.tenline.pinecone.platform.sdk.developme
 	
 	/**
 	 * 
-	 * @param userRelation
+	 * @param consumer
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse update(UserRelation userRelation) throws Exception {
+	public APIResponse update(Consumer consumer) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/user/relation/update").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/consumer/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(userRelation, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(consumer, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -115,7 +132,36 @@ public class UserRelationAPI extends com.tenline.pinecone.platform.sdk.developme
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Update User Relation Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Update Consumer Error Code: Http (" + connection.getResponseCode() + ")");
+		}
+		connection.disconnect();
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 * @throws Exception
+	 */
+	public APIResponse show(String filter) throws Exception {
+		APIResponse response = new APIResponse();
+		connection = (HttpURLConnection) new URL(url + "/api/consumer/show/" + filter).openConnection();
+		connection.setConnectTimeout(TIMEOUT);
+		connection.connect();
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
+			Collection<Consumer> message = new ArrayList<Consumer>();
+			for (int i=0; i<array.length(); i++) {
+				message.add((Consumer) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration()))));
+			}
+			response.setDone(true);
+			response.setMessage(message);
+			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Consumer Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

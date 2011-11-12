@@ -9,9 +9,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
 import org.codehaus.jettison.mapped.MappedNamespaceConvention;
@@ -35,14 +32,6 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	public RecordAPI(String host, String port) {
 		super(host, port);
 		// TODO Auto-generated constructor stub
-		try {
-			context = JAXBContext.newInstance(Record.class);
-			marshaller = context.createMarshaller();
-			unmarshaller = context.createUnmarshaller();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/**

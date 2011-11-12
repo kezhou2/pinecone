@@ -8,14 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
 import org.codehaus.jettison.mapped.MappedNamespaceConvention;
@@ -24,13 +18,12 @@ import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
-import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
 /**
  * @author Bill
  *
  */
-public class ConsumerAPI extends JaxbAPI {
+public class ConsumerAPI extends com.tenline.pinecone.platform.sdk.development.ConsumerAPI {
 
 	/**
 	 * @param host
@@ -39,14 +32,6 @@ public class ConsumerAPI extends JaxbAPI {
 	public ConsumerAPI(String host, String port) {
 		super(host, port);
 		// TODO Auto-generated constructor stub
-		try {
-			context = JAXBContext.newInstance(Consumer.class);
-			marshaller = context.createMarshaller();
-			unmarshaller = context.createUnmarshaller();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -133,35 +118,6 @@ public class ConsumerAPI extends JaxbAPI {
 		} else {
 			response.setDone(false);
 			response.setMessage("Update Consumer Error Code: Http (" + connection.getResponseCode() + ")");
-		}
-		connection.disconnect();
-		return response;
-	}
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public APIResponse show(String filter) throws Exception {
-		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/consumer/show/" + filter).openConnection();
-		connection.setConnectTimeout(TIMEOUT);
-		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Consumer> message = new ArrayList<Consumer>();
-			for (int i=0; i<array.length(); i++) {
-				message.add((Consumer) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-						new MappedNamespaceConvention(new Configuration()))));
-			}
-			response.setDone(true);
-			response.setMessage(message);
-			connection.getInputStream().close();
-		} else {
-			response.setDone(false);
-			response.setMessage("Show Consumer Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

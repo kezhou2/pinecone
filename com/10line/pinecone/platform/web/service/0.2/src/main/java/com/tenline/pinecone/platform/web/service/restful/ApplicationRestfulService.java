@@ -53,11 +53,7 @@ public class ApplicationRestfulService extends JdoDaoSupport implements Applicat
 	public Application update(Application application) {
 		// TODO Auto-generated method stub
 		Application detachedApplication = getJdoTemplate().getObjectById(Application.class, application.getId());
-		if (application.getIconUrl() != null) detachedApplication.setIconUrl(application.getIconUrl());
-		if (application.getName() != null) detachedApplication.setName(application.getName());
-		if (application.getSymbolicName() != null) detachedApplication.setSymbolicName(application.getSymbolicName());
-		if (application.getTargetUrl() != null) detachedApplication.setTargetUrl(application.getTargetUrl());
-		if (application.getVersion() != null) detachedApplication.setVersion(application.getVersion());
+		if (application.getConsumerId() != null) detachedApplication.setConsumerId(application.getConsumerId());
 		return getJdoTemplate().makePersistent(detachedApplication);
 	}
 

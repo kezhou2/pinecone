@@ -24,7 +24,7 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	
 	private String subject;
 	
-	private com.tenline.pinecone.platform.sdk.development.ChannelAPI channelAPI;
+	private ChannelAPI channelAPI;
 	
 	@Before
 	public void testSetup() {

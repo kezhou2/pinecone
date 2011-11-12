@@ -38,11 +38,7 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		user = new User();
 		user.setName("bill");
 		application = new Application();
-		application.setName("fishshow");
-		application.setIconUrl("http://icon/1");
-		application.setTargetUrl("http://fishshow");
-		application.setSymbolicName("com.10line.life.pet.fishshow");
-		application.setVersion("1.1");
+		application.setConsumerId("aaa");
 		userAPI = new UserAPI("localhost", "8080");
 		applicationAPI = new ApplicationAPI("localhost", "8080");
 	}
@@ -70,27 +66,15 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		response = applicationAPI.create(application);
 		if (response.isDone()) {
 			application = (Application) response.getMessage();
-			assertEquals("fishshow", application.getName());
-			assertEquals("http://icon/1", application.getIconUrl());
-			assertEquals("http://fishshow", application.getTargetUrl());
-			assertEquals("com.10line.life.pet.fishshow", application.getSymbolicName());
-			assertEquals("1.1", application.getVersion());
+			assertEquals("aaa", application.getConsumerId());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		application.setName("fishshow2");
-		application.setIconUrl("http://icon/2");
-		application.setTargetUrl("http://fishshow/2");
-		application.setSymbolicName("com.10line.life.pet.fishshow.2");
-		application.setVersion("2.1");
+		application.setConsumerId("bbb");
 		response = applicationAPI.update(application);
 		if (response.isDone()) {
 			application = (Application) response.getMessage();
-			assertEquals("fishshow2", application.getName());
-			assertEquals("http://icon/2", application.getIconUrl());
-			assertEquals("http://fishshow/2", application.getTargetUrl());
-			assertEquals("com.10line.life.pet.fishshow.2", application.getSymbolicName());
-			assertEquals("2.1", application.getVersion());
+			assertEquals("bbb", application.getConsumerId());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

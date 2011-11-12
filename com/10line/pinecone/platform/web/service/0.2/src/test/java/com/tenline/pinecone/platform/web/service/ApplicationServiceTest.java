@@ -42,7 +42,7 @@ public class ApplicationServiceTest extends AbstractServiceTest {
 		applicationService.setJdoTemplate(jdoTemplate);
 		application = new Application();
 		application.setId("asa");
-		application.setName("fishshow");
+		application.setConsumerId("aaa");
 		user = new User();
 		user.setId("asa");
 		application.setUser(user);
@@ -66,7 +66,7 @@ public class ApplicationServiceTest extends AbstractServiceTest {
 		Application result = applicationService.create(application);
 		verify(jdoTemplate).getObjectById(User.class, user.getId()); 
 		verify(jdoTemplate).makePersistent(application);
-		assertEquals("fishshow", result.getName());
+		assertEquals("aaa", result.getConsumerId());
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ public class ApplicationServiceTest extends AbstractServiceTest {
 		Application result = applicationService.update(application);
 		verify(jdoTemplate).getObjectById(Application.class, application.getId());
 		verify(jdoTemplate).makePersistent(application);
-		assertEquals("fishshow", result.getName());
+		assertEquals("aaa", result.getConsumerId());
 	}
 	
 	@Test

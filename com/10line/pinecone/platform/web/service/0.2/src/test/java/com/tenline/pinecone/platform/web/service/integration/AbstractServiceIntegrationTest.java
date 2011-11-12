@@ -13,9 +13,10 @@ import org.junit.Before;
 
 import com.google.api.client.auth.oauth.OAuthCallbackUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
+import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.sdk.ConsumerAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
-import com.tenline.pinecone.platform.sdk.oauth.OAuthConsumerUrl;
 
 /**
  * @author Bill
@@ -35,20 +36,34 @@ public abstract class AbstractServiceIntegrationTest {
 	
 	private String verifier;
 	
+	private Consumer consumer;
+	
+	private ConsumerAPI consumerAPI;
+	
 	private AuthorizationAPI authorizationAPI;
 	
 	@Before
 	public void testSetup() {
-		authorizationAPI = new AuthorizationAPI("localhost", "8080");
-		APIResponse response = authorizationAPI.registerConsumer("fishshow", null);
+		consumer = new Consumer();
+		consumer.setConnectURI("123");
+		consumer.setDisplayName("fishshow");
+		consumerAPI = new ConsumerAPI("localhost", "8080");
+		APIResponse response = null;
+		try {
+			response = consumerAPI.create(consumer);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (response.isDone()) {
-			consumerKey = ((OAuthConsumerUrl) response.getMessage()).consumerKey;
-			consumerSecret = ((OAuthConsumerUrl) response.getMessage()).consumerSecret;
+			consumerKey = ((Consumer) response.getMessage()).getKey();
+			consumerSecret = ((Consumer) response.getMessage()).getSecret();
 			assertNotNull(consumerKey);
 			assertNotNull(consumerSecret);
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
+		authorizationAPI = new AuthorizationAPI("localhost", "8080");
 		response = authorizationAPI.requestToken(consumerKey, consumerSecret, null);
 		if (response.isDone()) {
 			token = ((OAuthCredentialsResponse) response.getMessage()).token;
@@ -90,6 +105,8 @@ public abstract class AbstractServiceIntegrationTest {
 		token = null;
 		tokenSecret = null;
 		verifier = null;
+		consumer = null;
+		consumerAPI = null;
 		authorizationAPI = null;
 	}
 

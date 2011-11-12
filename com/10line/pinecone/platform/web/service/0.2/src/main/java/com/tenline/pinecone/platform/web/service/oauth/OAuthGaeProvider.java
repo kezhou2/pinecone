@@ -19,13 +19,13 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
-import org.jboss.resteasy.auth.oauth.OAuthConsumer;
 import org.jboss.resteasy.auth.oauth.OAuthException;
 import org.jboss.resteasy.auth.oauth.OAuthProvider;
 import org.jboss.resteasy.auth.oauth.OAuthRequestToken;
 import org.jboss.resteasy.auth.oauth.OAuthToken;
 
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
+import com.tenline.pinecone.platform.model.Consumer;
 
 /**
  * @author Bill
@@ -67,10 +67,10 @@ public class OAuthGaeProvider implements OAuthProvider {
 	}
 
 	@Override
-	public OAuthConsumer registerConsumer(String consumerKey,
+	public Consumer registerConsumer(String consumerKey,
 			String displayName, String connectURI) throws OAuthException {
 		// TODO Auto-generated method stub
-		OAuthConsumer consumer;
+		Consumer consumer;
 		PersistenceManager pm = pmf.getPersistenceManager();
         Transaction tx = pm.currentTransaction();
         try { 
@@ -78,7 +78,7 @@ public class OAuthGaeProvider implements OAuthProvider {
             do{
     			consumerKey = makeRandomString();
     	    } while(findConsumer(consumerKey) != null);
-            consumer = pm.makePersistent(new OAuthConsumer(consumerKey, makeRandomString(), displayName, connectURI));
+            consumer = pm.makePersistent(new Consumer(consumerKey, makeRandomString(), displayName, connectURI));
             tx.commit();
         } finally {
             if (tx.isActive()) {
@@ -93,19 +93,19 @@ public class OAuthGaeProvider implements OAuthProvider {
 	public void registerConsumerScopes(String consumerKey, String[] scopes)
 			throws OAuthException {
 		// TODO Auto-generated method stub
-		OAuthConsumer consumer = findConsumer(consumerKey);
+		Consumer consumer = findConsumer(consumerKey);
 		consumer.setScopes(scopes);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private OAuthConsumer findConsumer(String consumerKey) throws OAuthException {
-		OAuthConsumer consumer = null;
+	private Consumer findConsumer(String consumerKey) throws OAuthException {
+		Consumer consumer = null;
 		PersistenceManager pm = pmf.getPersistenceManager();
-		Query query = pm.newQuery(OAuthConsumer.class);
+		Query query = pm.newQuery(Consumer.class);
 		query.setFilter("key == consumerKey");
 		query.declareParameters("String consumerKey");
 		try {
-			List<OAuthConsumer> results = (List<OAuthConsumer>) query.execute(consumerKey);
+			List<Consumer> results = (List<Consumer>) query.execute(consumerKey);
 	        if (!results.isEmpty()) {
 	            consumer = results.get(0);
 	        } 
@@ -130,7 +130,7 @@ public class OAuthGaeProvider implements OAuthProvider {
 	}
 
 	@Override
-	public OAuthConsumer getConsumer(String consumerKey) throws OAuthException {
+	public Consumer getConsumer(String consumerKey) throws OAuthException {
 		// TODO Auto-generated method stub
 		return findConsumer(consumerKey);
 	}
@@ -190,7 +190,7 @@ public class OAuthGaeProvider implements OAuthProvider {
 	@SuppressWarnings("unchecked")
 	private OAuthRequestToken doMakeRequestToken(String consumerKey, String callback, 
 			String[] scopes, String[] permissions) throws OAuthException {
-		OAuthConsumer consumer = findConsumer(consumerKey);
+		Consumer consumer = findConsumer(consumerKey);
 		String newToken;
 		do{
 			newToken = makeRandomString();

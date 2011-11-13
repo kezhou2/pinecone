@@ -1,0 +1,215 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.10line.pinecone.platform.web</groupId>
+  <artifactId>service</artifactId>
+  <version>0.3</version>
+  <packaging>war</packaging>
+  <repositories>
+  	<repository>
+    	<id>maven.2</id>
+        <name>Maven 2 Repository</name>
+        <url>http://repo2.maven.org/maven2/</url>
+    </repository>
+  	<repository>
+    	<id>jboss</id>
+        <name>jboss repo</name>
+        <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+	</repository>
+	<repository>
+    	<id>pinecone</id>
+        <name>pinecone repo</name>
+        <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+  </repositories>
+  <dependencies>
+  	<!-- Pinecone SDK -->
+  	<dependency>
+  		<groupId>com.10line.pinecone.platform</groupId>
+  		<artifactId>sdk</artifactId>
+  		<version>0.3</version>
+  	</dependency>
+	<!-- Spring Framework -->
+	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-webmvc</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-orm</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-aop</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-jdbc</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+	<!-- JAX-RS RESTEasy -->
+	<dependency>
+    	<groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-spring</artifactId>
+        <version>${resteasy.version}</version>
+	</dependency>
+    <dependency>
+    	<groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jaxrs</artifactId>
+        <version>${resteasy.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-oauth</artifactId>
+        <version>${resteasy.version}</version>
+    </dependency>
+	<!-- Test scope -->
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.5</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+	  <groupId>org.mockito</groupId>
+	  <artifactId>mockito-all</artifactId>
+	  <version>1.8.0</version>
+	  <scope>test</scope>
+	</dependency>
+	<!-- Servlet API -->
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>servlet-api</artifactId>
+		<version>2.5</version>
+		<scope>provided</scope>
+	</dependency>
+	<!-- Datanucleus JDO -->
+	<dependency>
+		<groupId>org.datanucleus</groupId>
+		<artifactId>datanucleus-api-jdo</artifactId>
+		<version>3.0.3</version>
+	</dependency>
+	<!-- MYSQL -->
+	<dependency>
+    	<groupId>mysql</groupId>
+    	<artifactId>mysql-connector-java</artifactId>
+    	<version>5.1.18</version>
+	</dependency>
+  </dependencies>
+  <build>
+	<plugins>
+		<plugin>
+    		<!-- Separates the unit tests from the integration tests. -->
+    		<groupId>org.apache.maven.plugins</groupId>
+    		<artifactId>maven-surefire-plugin</artifactId>
+    		<version>2.8.1</version>
+    		<configuration>
+       			<!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
+       			<skip>true</skip>
+       			<!-- Show 100% of the lines from the stack trace (doesn't work) -->
+       			<trimStackTrace>false</trimStackTrace>
+    		</configuration>
+    		<executions>
+       			<execution>
+          			<id>unit-tests</id>
+          			<phase>test</phase>
+          			<goals>
+             			<goal>test</goal>
+          			</goals>
+          			<configuration>
+                		<!-- Never skip running the tests when the test phase is invoked -->
+                		<skip>false</skip>
+             			<includes>
+                   			<!-- Include unit tests within integration-test phase. -->
+                			<include>**/*Test.java</include>
+             			</includes>
+             			<excludes>
+               				<!-- Exclude integration tests within (unit) test phase. -->
+                			<exclude>**/*IntegrationTest.java</exclude>
+            			</excludes>
+          			</configuration>
+       			</execution>
+       			<execution>
+          			<id>integration-tests</id>
+          			<phase>integration-test</phase>
+          			<goals>
+             			<goal>test</goal>
+          			</goals>
+          			<configuration>
+            			<!-- Never skip running the tests when the integration-test phase is invoked -->
+             			<skip>false</skip>
+             			<includes>
+               				<!-- Include integration tests within integration-test phase. -->
+               				<include>**/*IntegrationTest.java</include>
+             			</includes>
+          			</configuration>
+       			</execution>
+    		</executions>
+  		</plugin>
+		<!-- 
+				maven-jetty-plugin
+		 -->
+		<plugin>
+        	<groupId>org.mortbay.jetty</groupId>
+        	<artifactId>maven-jetty-plugin</artifactId>
+        	<version>6.1.10</version>
+        	<configuration>
+                <scanIntervalSeconds>10</scanIntervalSeconds>
+                <stopKey>foo</stopKey>
+                <stopPort>9999</stopPort>
+        	</configuration>
+        	<executions>
+            	<execution>
+                	<id>start-jetty</id>
+                    <phase>pre-integration-test</phase>
+                    <goals>
+                    	<goal>run</goal>
+                    </goals>
+                    <configuration>
+                    	<scanIntervalSeconds>0</scanIntervalSeconds>
+                        <daemon>true</daemon>
+                    </configuration>
+                </execution>
+                <execution>
+                	<id>stop-jetty</id>
+                    <phase>post-integration-test</phase>
+                    <goals>
+                    	<goal>stop</goal>
+                    </goals>
+                </execution>
+        	</executions>
+		</plugin>
+		<!-- 
+				maven-compiler-plugin
+		-->
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>2.0</version>
+			<configuration>
+				<source>1.6</source>
+				<target>1.6</target>
+			</configuration>
+		</plugin>
+	</plugins>
+  </build>
+  <!-- Specify hard-coded project properties here -->
+  <properties>
+  	<!-- 
+  		 	Sets the project's default encoding.
+         	http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding
+  	-->
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- 
+			Specify RESTEasy Version for your project
+	-->
+    <resteasy.version>2.2.0.GA</resteasy.version>
+    <!-- 
+			Specify Spring Version for your project
+	-->
+    <spring.version>3.0.5.RELEASE</spring.version>
+  </properties>
+</project>

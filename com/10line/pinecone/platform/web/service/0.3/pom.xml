@@ -89,8 +89,13 @@
 	<!-- Datanucleus JDO -->
 	<dependency>
 		<groupId>org.datanucleus</groupId>
-		<artifactId>datanucleus-api-jdo</artifactId>
-		<version>3.0.3</version>
+		<artifactId>datanucleus-core</artifactId>
+		<version>${datanucleus.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.datanucleus</groupId>
+		<artifactId>datanucleus-rdbms</artifactId>
+		<version>${datanucleus.version}</version>
 	</dependency>
 	<!-- MYSQL -->
 	<dependency>
@@ -211,5 +216,9 @@
 			Specify Spring Version for your project
 	-->
     <spring.version>3.0.5.RELEASE</spring.version>
+    <!-- 
+    		Specify Datanucleus Version for your project
+     -->
+    <datanucleus.version>2.0.0-release</datanucleus.version>
   </properties>
 </project>

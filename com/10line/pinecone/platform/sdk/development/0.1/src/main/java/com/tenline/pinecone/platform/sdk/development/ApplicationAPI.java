@@ -31,14 +31,15 @@ public class ApplicationAPI extends JaxbAPI {
 	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public ApplicationAPI(String host, String port) {
-		super(host, port);
+	public ApplicationAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 		try {
-			context = JAXBContext.newInstance(Application.class);
-			marshaller = context.createMarshaller();
-			unmarshaller = context.createUnmarshaller();
+			jaxbContext = JAXBContext.newInstance(Application.class);
+			marshaller = jaxbContext.createMarshaller();
+			unmarshaller = jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

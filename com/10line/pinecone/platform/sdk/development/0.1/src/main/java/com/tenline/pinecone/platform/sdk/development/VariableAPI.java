@@ -31,14 +31,15 @@ public class VariableAPI extends JaxbAPI {
 	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public VariableAPI(String host, String port) {
-		super(host, port);
+	public VariableAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 		try {
-			context = JAXBContext.newInstance(Variable.class);
-			marshaller = context.createMarshaller();
-			unmarshaller = context.createUnmarshaller();
+			jaxbContext = JAXBContext.newInstance(Variable.class);
+			marshaller = jaxbContext.createMarshaller();
+			unmarshaller = jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

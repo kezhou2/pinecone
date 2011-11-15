@@ -25,9 +25,10 @@ public class ChannelAPI extends ResourceAPI {
 	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public ChannelAPI(String host, String port) {
-		super(host, port);
+	public ChannelAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 		gson = new Gson();
 	}

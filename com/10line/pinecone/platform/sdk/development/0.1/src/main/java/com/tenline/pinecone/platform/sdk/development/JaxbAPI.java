@@ -13,7 +13,7 @@ import javax.xml.bind.Unmarshaller;
  */
 public abstract class JaxbAPI extends ResourceAPI {
 
-	protected JAXBContext context;
+	protected JAXBContext jaxbContext;
 	protected Marshaller marshaller;
 	protected Unmarshaller unmarshaller;
 	
@@ -21,9 +21,10 @@ public abstract class JaxbAPI extends ResourceAPI {
 	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public JaxbAPI(String host, String port) {
-		super(host, port);
+	public JaxbAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 	}
 

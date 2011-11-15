@@ -41,8 +41,8 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 		device.setName("LNB");
 		device.setSymbolicName("com.10line.pinecone");
 		device.setVersion("1.1");
-		userAPI = new UserAPI("localhost", "8080");
-		deviceAPI = new DeviceAPI("localhost", "8080");
+		userAPI = new UserAPI("localhost", "8080", null);
+		deviceAPI = new DeviceAPI("localhost", "8080", null);
 	}
 	
 	@After

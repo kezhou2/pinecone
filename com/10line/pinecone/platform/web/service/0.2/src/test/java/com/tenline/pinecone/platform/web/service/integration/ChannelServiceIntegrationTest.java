@@ -30,7 +30,7 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	public void testSetup() {
 		super.testSetup();
 		subject = "test";
-		channelAPI = new ChannelAPI("localhost", "8080");
+		channelAPI = new ChannelAPI("localhost", "8080", null);
 	}
 	
 	@After

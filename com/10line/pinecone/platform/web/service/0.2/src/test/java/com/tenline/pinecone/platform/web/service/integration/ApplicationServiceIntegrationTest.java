@@ -39,8 +39,8 @@ public class ApplicationServiceIntegrationTest extends AbstractServiceIntegratio
 		user.setName("bill");
 		application = new Application();
 		application.setConsumerId("aaa");
-		userAPI = new UserAPI("localhost", "8080");
-		applicationAPI = new ApplicationAPI("localhost", "8080");
+		userAPI = new UserAPI("localhost", "8080", null);
+		applicationAPI = new ApplicationAPI("localhost", "8080", null);
 	}
 	
 	@After

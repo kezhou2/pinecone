@@ -50,9 +50,9 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		variable = new Variable();
 		variable.setName("A");
 		variable.setType("read_only");
-		userAPI = new UserAPI("localhost", "8080");
-		deviceAPI = new DeviceAPI("localhost", "8080");
-		variableAPI = new VariableAPI("localhost", "8080");
+		userAPI = new UserAPI("localhost", "8080", null);
+		deviceAPI = new DeviceAPI("localhost", "8080", null);
+		variableAPI = new VariableAPI("localhost", "8080", null);
 	}
 	
 	@After

@@ -29,11 +29,13 @@ public class AuthorizationAPI extends AbstractAPI {
 	private HttpRequestFactory requestFactory;
 
 	/**
+	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public AuthorizationAPI(String host, String port) {
-		super(host, port);
+	public AuthorizationAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 		url += "/oauth";
 		transport = new NetHttpTransport();

@@ -28,9 +28,10 @@ public class UserRelationAPI extends com.tenline.pinecone.platform.sdk.developme
 	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public UserRelationAPI(String host, String port) {
-		super(host, port);
+	public UserRelationAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 	}
 	

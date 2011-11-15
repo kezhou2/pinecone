@@ -26,11 +26,13 @@ import com.tenline.pinecone.platform.sdk.development.APIResponse;
 public class ConsumerAPI extends com.tenline.pinecone.platform.sdk.development.ConsumerAPI {
 
 	/**
+	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public ConsumerAPI(String host, String port) {
-		super(host, port);
+	public ConsumerAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 	}
 	

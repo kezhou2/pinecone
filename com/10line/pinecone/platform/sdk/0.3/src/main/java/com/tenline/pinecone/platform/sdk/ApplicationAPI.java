@@ -25,11 +25,13 @@ import com.tenline.pinecone.platform.sdk.development.APIResponse;
 public class ApplicationAPI extends com.tenline.pinecone.platform.sdk.development.ApplicationAPI {
 
 	/**
+	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public ApplicationAPI(String host, String port) {
-		super(host, port);
+	public ApplicationAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 	}
 

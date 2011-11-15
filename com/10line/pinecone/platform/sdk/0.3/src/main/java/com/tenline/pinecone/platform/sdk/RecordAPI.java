@@ -28,9 +28,10 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	 * 
 	 * @param host
 	 * @param port
+	 * @param context
 	 */
-	public RecordAPI(String host, String port) {
-		super(host, port);
+	public RecordAPI(String host, String port, String context) {
+		super(host, port, context);
 		// TODO Auto-generated constructor stub
 	}
 	

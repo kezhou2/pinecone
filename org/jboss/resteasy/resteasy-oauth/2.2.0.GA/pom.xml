@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>resteasy-jaxrs-all</artifactId>
+        <groupId>org.jboss.resteasy</groupId>
+        <version>2.2.0.GA</version>
+    </parent>
+
+    <artifactId>resteasy-oauth</artifactId>
+    <name>RESTEasy JAX-RS OAuth</name>
+    <description/>
+    
+    <properties>
+    	<datanucleus.version>1.1.5</datanucleus.version>
+    	<model.version>0.3</model.version>
+    </properties>
+
+    <dependencies>
+    	<dependency>
+  			<groupId>com.10line.pinecone.platform</groupId>
+  			<artifactId>model</artifactId>
+  			<version>${model.version}</version>
+  		</dependency>
+        <dependency>
+            <groupId>net.oauth.core</groupId>
+            <artifactId>oauth-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

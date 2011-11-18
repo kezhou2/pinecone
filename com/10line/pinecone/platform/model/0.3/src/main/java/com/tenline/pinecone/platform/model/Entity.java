@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.model;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
@@ -26,6 +27,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public abstract class Entity implements Serializable {
 
 	@PrimaryKey
+	@Column(length = 255)
     @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)
     private String id;
 	

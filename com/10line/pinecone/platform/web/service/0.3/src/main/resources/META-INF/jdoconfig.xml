@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/jdo/jdoconfig">
     <persistence-manager-factory name="transactions-optional">
         <property name="javax.jdo.PersistenceManagerFactoryClass"
-            value="org.datanucleus.jdo.JDOPersistenceManagerFactory"/>
+            value="org.datanucleus.api.jdo.JDOPersistenceManagerFactory"/>
         <property name="javax.jdo.option.ConnectionURL" value="jdbc:mysql://localhost/pinecone"/>
         <property name="javax.jdo.option.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
         <property name="javax.jdo.option.ConnectionUserName" value="root"/>

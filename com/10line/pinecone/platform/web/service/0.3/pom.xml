@@ -6,7 +6,12 @@
   <version>0.3</version>
   <packaging>war</packaging>
   <repositories>
-  	<repository>
+    <repository>
+    	<id>pinecone</id>
+        <name>pinecone repo</name>
+        <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+	<repository>
     	<id>maven.2</id>
         <name>Maven 2 Repository</name>
         <url>http://repo2.maven.org/maven2/</url>
@@ -16,18 +21,13 @@
         <name>jboss repo</name>
         <url>http://repository.jboss.org/nexus/content/groups/public/</url>
 	</repository>
-	<repository>
-    	<id>pinecone</id>
-        <name>pinecone repo</name>
-        <url>http://pinecone.googlecode.com/svn/repository</url>
-	</repository>
   </repositories>
   <dependencies>
   	<!-- Pinecone SDK -->
   	<dependency>
   		<groupId>com.10line.pinecone.platform</groupId>
   		<artifactId>sdk</artifactId>
-  		<version>0.3</version>
+  		<version>0.4</version>
   	</dependency>
 	<!-- Spring Framework -->
 	<dependency>
@@ -90,6 +90,11 @@
 	<dependency>
 		<groupId>org.datanucleus</groupId>
 		<artifactId>datanucleus-core</artifactId>
+		<version>${datanucleus.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.datanucleus</groupId>
+		<artifactId>datanucleus-api-jdo</artifactId>
 		<version>${datanucleus.version}</version>
 	</dependency>
 	<dependency>
@@ -219,6 +224,6 @@
     <!-- 
     		Specify Datanucleus Version for your project
      -->
-    <datanucleus.version>2.0.0-release</datanucleus.version>
+    <datanucleus.version>3.0.3</datanucleus.version>
   </properties>
 </project>

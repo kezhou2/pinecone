@@ -47,7 +47,7 @@ public abstract class AbstractServiceIntegrationTest {
 		consumer = new Consumer();
 		consumer.setConnectURI("123");
 		consumer.setDisplayName("fishshow");
-		consumerAPI = new ConsumerAPI("localhost", "8080");
+		consumerAPI = new ConsumerAPI("localhost", "8080", "service");
 		APIResponse response = null;
 		try {
 			response = consumerAPI.create(consumer);
@@ -63,7 +63,7 @@ public abstract class AbstractServiceIntegrationTest {
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		authorizationAPI = new AuthorizationAPI("localhost", "8080");
+		authorizationAPI = new AuthorizationAPI("localhost", "8080", "service");
 		response = authorizationAPI.requestToken(consumerKey, consumerSecret, null);
 		if (response.isDone()) {
 			token = ((OAuthCredentialsResponse) response.getMessage()).token;

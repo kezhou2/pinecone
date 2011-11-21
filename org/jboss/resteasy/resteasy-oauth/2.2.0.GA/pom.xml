@@ -15,6 +15,14 @@
     	<datanucleus.version>1.1.5</datanucleus.version>
     	<model.version>0.3</model.version>
     </properties>
+    
+    <repositories>
+    	<repository>
+    		<id>pinecone</id>
+        	<name>pinecone repo</name>
+        	<url>http://pinecone.googlecode.com/svn/repository</url>
+		</repository>
+    </repositories>
 
     <dependencies>
     	<dependency>

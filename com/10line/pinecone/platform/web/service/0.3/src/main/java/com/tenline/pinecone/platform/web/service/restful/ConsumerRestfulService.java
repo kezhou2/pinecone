@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.service.ConsumerService;
 
 /**
@@ -63,6 +64,12 @@ public class ConsumerRestfulService extends JdoDaoSupport implements ConsumerSer
 		String queryString = "select from " + Consumer.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
 		return getJdoTemplate().find(queryString);
+	}
+
+	@Override
+	public Collection<Consumer> showByUser(String filter) {
+		// TODO Auto-generated method stub
+		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getConsumers();
 	}
 
 }

@@ -55,4 +55,14 @@ public interface ConsumerService extends AbstractService {
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<Consumer> show(@PathParam("filter") String filter);
 	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/{filter}/@User")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<Consumer> showByUser(@PathParam("filter") String filter);
+	
 }

@@ -78,6 +78,11 @@
   		<url-pattern>/api/channel/*</url-pattern>
 	</filter-mapping>
 	
+	<filter-mapping>
+  		<filter-name>OAuth Filter</filter-name>
+  		<url-pattern>/api/static/resource/download/*</url-pattern>
+	</filter-mapping>
+	
 	<!-- The OAuth Servlet handles token exchange -->
 	<servlet>
   		<servlet-name>OAuth</servlet-name>

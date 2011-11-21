@@ -52,6 +52,11 @@ public class User extends Entity {
     @Element(dependent = "true")
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="consumerId asc"))
     private Collection<Application> applications;
+    
+    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="key asc"))
+    private Collection<Consumer> consumers;
 
 	/**
 	 * 
@@ -173,6 +178,21 @@ public class User extends Entity {
 	 */
 	public Collection<Application> getApplications() {
 		return applications;
+	}
+
+	/**
+	 * @param consumers the consumers to set
+	 */
+	@XmlTransient
+	public void setConsumers(Collection<Consumer> consumers) {
+		this.consumers = consumers;
+	}
+
+	/**
+	 * @return the consumers
+	 */
+	public Collection<Consumer> getConsumers() {
+		return consumers;
 	}
 
 }

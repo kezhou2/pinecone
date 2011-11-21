@@ -28,7 +28,7 @@ public abstract class Entity implements Serializable {
 
 	@PrimaryKey
 	@Column(length = 255)
-    @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)
+    @Persistent(valueStrategy = IdGeneratorStrategy.UUIDHEX)
     private String id;
 	
 	/**

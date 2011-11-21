@@ -37,8 +37,14 @@ public class Consumer extends Entity {
 	@NotPersistent
     private String[] permissions;
 	
+	@Persistent(defaultFetchGroup = "true")
+	private User user;
+	
+	/**
+	 * 
+	 */
 	public Consumer() {
-		
+		// TODO Auto-generated constructor stub
 	}
     
     public Consumer(String key, String secret, String displayName, String connectURI) {
@@ -145,6 +151,20 @@ public class Consumer extends Entity {
 	 */
 	public String[] getPermissions() {
 		return permissions;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
 	}
     
 }

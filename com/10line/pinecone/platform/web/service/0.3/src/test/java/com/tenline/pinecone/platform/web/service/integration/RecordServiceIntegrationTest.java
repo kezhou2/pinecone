@@ -26,7 +26,7 @@ import com.tenline.pinecone.platform.model.Variable;
  * @author Bill
  *
  */
-public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class RecordServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
 
 	private User user;
 	
@@ -45,7 +45,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 	private RecordAPI recordAPI;
 	
 	@Before
-	public void testSetup() {
+	public void testSetup() throws Exception {
 		super.testSetup();
 		user = new User();
 		user.setName("bill");
@@ -62,24 +62,6 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		deviceAPI = new DeviceAPI("localhost", "8080", "service");
 		variableAPI = new VariableAPI("localhost", "8080", "service");
 		recordAPI = new RecordAPI("localhost", "8080", "service");
-	}
-	
-	@After
-	public void testShutdown() {
-		user = null;
-		device = null;
-		variable = null;
-		record = null;
-		userAPI = null;
-		deviceAPI = null;
-		variableAPI = null;
-		recordAPI = null;
-		super.testShutdown();
-	}
-	
-	@Test
-	@SuppressWarnings("unchecked")
-	public void testCRUD() throws Exception {
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();
@@ -107,7 +89,31 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		record.setVariable(variable);
-		response = recordAPI.create(record);
+	}
+	
+	@After
+	public void testShutdown() throws Exception {
+		APIResponse response = userAPI.delete(user.getId());
+		if (response.isDone()) {
+			assertEquals("User Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		user = null;
+		device = null;
+		variable = null;
+		record = null;
+		userAPI = null;
+		deviceAPI = null;
+		variableAPI = null;
+		recordAPI = null;
+		super.testShutdown();
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testCRUD() throws Exception {
+		APIResponse response = recordAPI.create(record);
 		if (response.isDone()) {
 			record = (Record) response.getMessage();
 			assertEquals("0", record.getValue());
@@ -122,7 +128,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = recordAPI.show("id=='"+record.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		response = recordAPI.show("id=='"+record.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Record>) response.getMessage()).size());
 		} else {

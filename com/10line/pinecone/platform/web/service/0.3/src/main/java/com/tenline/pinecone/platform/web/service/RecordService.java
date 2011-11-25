@@ -61,7 +61,7 @@ public interface RecordService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/{filter}/@Variable")
+	@Path("/show/@Variable/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<Record> showByVariable(@PathParam("filter") String filter);
 	

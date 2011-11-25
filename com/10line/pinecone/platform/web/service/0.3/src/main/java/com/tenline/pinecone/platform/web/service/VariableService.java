@@ -61,7 +61,7 @@ public interface VariableService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/{filter}/@Device")
+	@Path("/show/@Device/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<Variable> showByDevice(@PathParam("filter") String filter);
 	

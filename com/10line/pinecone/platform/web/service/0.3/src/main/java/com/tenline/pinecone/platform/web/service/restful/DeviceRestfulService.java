@@ -65,6 +65,7 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 		if (device.getName() != null) detachedDevice.setName(device.getName());
 		if (device.getSymbolicName() != null) detachedDevice.setSymbolicName(device.getSymbolicName());
 		if (device.getVersion() != null) detachedDevice.setVersion(device.getVersion());
+		if (device.getIcon() != null) detachedDevice.setIcon(device.getIcon());
 		return getJdoTemplate().makePersistent(detachedDevice);
 	}
 

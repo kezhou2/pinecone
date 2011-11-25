@@ -28,13 +28,11 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	
 	@Before
 	public void testSetup() {
-		super.testSetup();
 		user = new User();
 		user.setName("bill");
-		user.setAvatarUrl("http://avatar/1");
+		user.setAvatar("http://avatar/1".getBytes());
 		user.setEmail("billmse@gmail.com");
 		user.setPassword("19821027");
-		user.setType("individual");
 		userAPI = new UserAPI("localhost", "8080", "service");
 	}
 	
@@ -42,7 +40,6 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	public void testShutdown() {
 		user = null;
 		userAPI = null;
-		super.testShutdown();
 	}
 
 	@Test
@@ -52,30 +49,27 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		if (response.isDone()) {
 			user = (User) response.getMessage();
 			assertEquals("bill", user.getName());
-			assertEquals("individual", user.getType());
-			assertEquals("http://avatar/1", user.getAvatarUrl());
+			assertEquals("http://avatar/1", new String(user.getAvatar()));
 			assertEquals("19821027", user.getPassword());
 			assertEquals("billmse@gmail.com", user.getEmail());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		user.setName("jack");
-		user.setAvatarUrl("http://avatar/2");
+		user.setAvatar("http://avatar/2".getBytes());
 		user.setEmail("jack@gmail.com");
 		user.setPassword("666666");
-		user.setType("enterprise");
 		response = userAPI.update(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();
 			assertEquals("jack", user.getName());
-			assertEquals("enterprise", user.getType());
-			assertEquals("http://avatar/2", user.getAvatarUrl());
+			assertEquals("http://avatar/2", new String(user.getAvatar()));
 			assertEquals("666666", user.getPassword());
 			assertEquals("jack@gmail.com", user.getEmail());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = userAPI.show("id=='"+user.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		response = userAPI.show("id=='"+user.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<User>) response.getMessage()).size());
 		} else {
@@ -87,7 +81,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = userAPI.show("id=='"+user.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		response = userAPI.show("id=='"+user.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<User>) response.getMessage()).size());
 		} else {

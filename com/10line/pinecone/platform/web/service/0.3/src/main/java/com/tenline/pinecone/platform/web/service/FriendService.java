@@ -8,42 +8,30 @@ import java.util.Collection;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.Application;
+import com.tenline.pinecone.platform.model.Friend;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/application")
-public interface ApplicationService extends AbstractService {
+@Path("/api/friend")
+public interface FriendService extends AbstractService {
 
 	/**
 	 * 
-	 * @param application
+	 * @param friend
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Application create(Application application);
-	
-	/**
-	 * 
-	 * @param application
-	 * @return
-	 */
-	@PUT
-	@Path("/update")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	Application update(Application application);
+	Friend create(Friend friend);
 	
 	/**
 	 * 
@@ -53,7 +41,7 @@ public interface ApplicationService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Application> show(@PathParam("filter") String filter);
+	Collection<Friend> show(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -61,8 +49,8 @@ public interface ApplicationService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/{filter}/@User")
+	@Path("/show/@User/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Application> showByUser(@PathParam("filter") String filter);
+	Collection<Friend> showByUser(@PathParam("filter") String filter);
 	
 }

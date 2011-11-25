@@ -26,7 +26,7 @@ import com.tenline.pinecone.platform.model.Variable;
  * @author Bill
  *
  */
-public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class ItemServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
 
 	private User user;
 	
@@ -45,7 +45,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	private ItemAPI itemAPI;
 	
 	@Before
-	public void testSetup() {
+	public void testSetup() throws Exception {
 		super.testSetup();
 		user = new User();
 		user.setName("bill");
@@ -63,24 +63,6 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		deviceAPI = new DeviceAPI("localhost", "8080", "service");
 		variableAPI = new VariableAPI("localhost", "8080", "service");
 		itemAPI = new ItemAPI("localhost", "8080", "service");
-	}
-	
-	@After
-	public void testShutdown() {
-		user = null;
-		device = null;
-		variable = null;
-		item = null;
-		userAPI = null;
-		deviceAPI = null;
-		variableAPI = null;
-		itemAPI = null;
-		super.testShutdown();
-	}
-	
-	@Test
-	@SuppressWarnings("unchecked")
-	public void testCRUD() throws Exception {
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();
@@ -108,7 +90,31 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		item.setVariable(variable);
-		response = itemAPI.create(item);
+	}
+	
+	@After
+	public void testShutdown() throws Exception {
+		APIResponse response = userAPI.delete(user.getId());
+		if (response.isDone()) {
+			assertEquals("User Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		user = null;
+		device = null;
+		variable = null;
+		item = null;
+		userAPI = null;
+		deviceAPI = null;
+		variableAPI = null;
+		itemAPI = null;
+		super.testShutdown();
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testCRUD() throws Exception {
+		APIResponse response = itemAPI.create(item);
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
 			assertEquals("A", item.getText());
@@ -126,7 +132,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = itemAPI.show("id=='"+item.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		response = itemAPI.show("id=='"+item.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Item>) response.getMessage()).size());
 		} else {

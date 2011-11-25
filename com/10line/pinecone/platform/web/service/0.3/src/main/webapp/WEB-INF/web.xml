@@ -35,52 +35,27 @@
 	<!-- This defines the URLs which should require OAuth authentication for your protected resources -->
 	<filter-mapping>
   		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/user/show/*</url-pattern>
+  		<url-pattern>/api/device/show/@User/*</url-pattern>
 	</filter-mapping>
 	
 	<filter-mapping>
   		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/device/show/*</url-pattern>
+  		<url-pattern>/api/variable/show/@Device/*</url-pattern>
 	</filter-mapping>
 	
 	<filter-mapping>
   		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/variable/show/*</url-pattern>
+  		<url-pattern>/api/item/show/@Variable/*</url-pattern>
 	</filter-mapping>
 	
 	<filter-mapping>
   		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/item/show/*</url-pattern>
-	</filter-mapping>
-	
-	<filter-mapping>
-  		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/record/show/*</url-pattern>
-	</filter-mapping>
-	
-	<filter-mapping>
-  		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/user/relation/show/*</url-pattern>
-	</filter-mapping>
-	
-	<filter-mapping>
-  		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/application/show/*</url-pattern>
-	</filter-mapping>
-	
-	<filter-mapping>
-  		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/consumer/show/*</url-pattern>
+  		<url-pattern>/api/record/show/@Variable/*</url-pattern>
 	</filter-mapping>
 	
 	<filter-mapping>
   		<filter-name>OAuth Filter</filter-name>
   		<url-pattern>/api/channel/*</url-pattern>
-	</filter-mapping>
-	
-	<filter-mapping>
-  		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/static/resource/download/*</url-pattern>
 	</filter-mapping>
 	
 	<!-- The OAuth Servlet handles token exchange -->

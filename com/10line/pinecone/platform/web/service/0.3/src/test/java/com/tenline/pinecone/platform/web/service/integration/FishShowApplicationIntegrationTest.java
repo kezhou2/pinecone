@@ -45,7 +45,6 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 	
 	@Before
 	public void testSetup() {
-		super.testSetup();
 		user = new User();
 		user.setName("bill");
 		device = new Device();
@@ -74,7 +73,6 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		deviceAPI = null;
 		variableAPI = null;
 		itemAPI = null;
-		super.testShutdown();
 	}
 	
 	@Test
@@ -185,6 +183,12 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
 			assertEquals("在线", item.getText());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = userAPI.delete(user.getId());
+		if (response.isDone()) {
+			assertEquals("User Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

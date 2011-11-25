@@ -24,7 +24,7 @@ import com.tenline.pinecone.platform.model.Variable;
  * @author Bill
  *
  */
-public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class VariableServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
 
 	private User user;
 	
@@ -39,7 +39,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 	private VariableAPI variableAPI;
 	
 	@Before
-	public void testSetup() {
+	public void testSetup() throws Exception {
 		super.testSetup();
 		user = new User();
 		user.setName("bill");
@@ -53,22 +53,6 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		userAPI = new UserAPI("localhost", "8080", "service");
 		deviceAPI = new DeviceAPI("localhost", "8080", "service");
 		variableAPI = new VariableAPI("localhost", "8080", "service");
-	}
-	
-	@After
-	public void testShutdown() {
-		user = null;
-		device = null;
-		variable = null;
-		userAPI = null;
-		deviceAPI = null;
-		variableAPI = null;
-		super.testShutdown();
-	}
-	
-	@Test
-	@SuppressWarnings("unchecked")
-	public void testCRUD() throws Exception {
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();
@@ -87,7 +71,29 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		variable.setDevice(device);
-		response = variableAPI.create(variable);
+	}
+	
+	@After
+	public void testShutdown() throws Exception {
+		APIResponse response = userAPI.delete(user.getId());
+		if (response.isDone()) {
+			assertEquals("User Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		user = null;
+		device = null;
+		variable = null;
+		userAPI = null;
+		deviceAPI = null;
+		variableAPI = null;
+		super.testShutdown();
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testCRUD() throws Exception {
+		APIResponse response = variableAPI.create(variable);
 		if (response.isDone()) {
 			variable = (Variable) response.getMessage();
 			assertEquals("A", variable.getName());
@@ -105,7 +111,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = variableAPI.show("id=='"+variable.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		response = variableAPI.show("id=='"+variable.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Variable>) response.getMessage()).size());
 		} else {

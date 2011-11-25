@@ -61,7 +61,7 @@ public interface ItemService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/{filter}/@Variable")
+	@Path("/show/@Variable/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<Item> showByVariable(@PathParam("filter") String filter);
 

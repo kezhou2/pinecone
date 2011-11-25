@@ -22,7 +22,7 @@ import com.tenline.pinecone.platform.model.User;
  * @author Bill
  *
  */
-public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class DeviceServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
 	
 	private User user;
 	
@@ -33,7 +33,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 	private DeviceAPI deviceAPI;
 	
 	@Before
-	public void testSetup() {
+	public void testSetup() throws Exception {
 		super.testSetup();
 		user = new User();
 		user.setName("bill");
@@ -43,10 +43,24 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 		device.setVersion("1.1");
 		userAPI = new UserAPI("localhost", "8080", "service");
 		deviceAPI = new DeviceAPI("localhost", "8080", "service");
+		APIResponse response = userAPI.create(user);
+		if (response.isDone()) {
+			user = (User) response.getMessage();
+			assertEquals("bill", user.getName());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		device.setUser(user);
 	}
 	
 	@After
-	public void testShutdown() {
+	public void testShutdown() throws Exception {
+		APIResponse response = userAPI.delete(user.getId());
+		if (response.isDone()) {
+			assertEquals("User Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		user = null;
 		device = null;
 		userAPI = null;
@@ -57,15 +71,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		APIResponse response = userAPI.create(user);
-		if (response.isDone()) {
-			user = (User) response.getMessage();
-			assertEquals("bill", user.getName());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		device.setUser(user);
-		response = deviceAPI.create(device);
+		APIResponse response = deviceAPI.create(device);
 		if (response.isDone()) {
 			device = (Device) response.getMessage();
 			assertEquals("LNB", device.getName());
@@ -86,7 +92,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = deviceAPI.show("id=='"+device.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		response = deviceAPI.show("id=='"+device.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Device>) response.getMessage()).size());
 		} else {

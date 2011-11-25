@@ -20,21 +20,21 @@ import com.tenline.pinecone.platform.sdk.development.ChannelAPI;
  * @author Bill
  *
  */
-public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class ChannelServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
 	
 	private String subject;
 	
 	private ChannelAPI channelAPI;
 	
 	@Before
-	public void testSetup() {
+	public void testSetup() throws Exception {
 		super.testSetup();
 		subject = "test";
 		channelAPI = new ChannelAPI("localhost", "8080", "service");
 	}
 	
 	@After
-	public void testShutdown() {
+	public void testShutdown() throws Exception {
 		subject = null;
 		channelAPI = null;
 		super.testShutdown();

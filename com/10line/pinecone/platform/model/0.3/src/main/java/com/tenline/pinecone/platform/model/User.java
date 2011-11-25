@@ -6,9 +6,7 @@ package com.tenline.pinecone.platform.model;
 import java.util.Collection;
 
 import javax.jdo.annotations.Element;
-import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Order;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,36 +25,25 @@ public class User extends Entity {
 	private String name;
     
     @Persistent
-    private String type;
-    
-    @Persistent
     private String email;
     
     @Persistent
     private String password;
     
     @Persistent
-    private String avatarUrl;
+    private byte[] avatar;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
     private Collection<Device> devices;
     
-    @Persistent(mappedBy = "owner", defaultFetchGroup = "true")
+    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="userId asc"))
-    private Collection<UserRelation> userRelations;
+    private Collection<Friend> friends;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="consumerId asc"))
-    private Collection<Application> applications;
-    
-    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
-    @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="key asc"))
-    private Collection<Consumer> consumers;
+    private Collection<ConsumerInstallation> consumerInstallations;
 
 	/**
 	 * 
@@ -77,20 +64,6 @@ public class User extends Entity {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
 	}
 
 	/**
@@ -122,17 +95,17 @@ public class User extends Entity {
 	}
 
 	/**
-	 * @param avatarUrl the avatarUrl to set
+	 * @param avatar the avatar to set
 	 */
-	public void setAvatarUrl(String avatarUrl) {
-		this.avatarUrl = avatarUrl;
+	public void setAvatar(byte[] avatar) {
+		this.avatar = avatar;
 	}
 
 	/**
-	 * @return the avatarUrl
+	 * @return the avatar
 	 */
-	public String getAvatarUrl() {
-		return avatarUrl;
+	public byte[] getAvatar() {
+		return avatar;
 	}
 
 	/**
@@ -151,48 +124,33 @@ public class User extends Entity {
 	}
 
 	/**
-	 * @param userRelations the userRelations to set
+	 * @param friends the friends to set
 	 */
 	@XmlTransient
-	public void setUserRelations(Collection<UserRelation> userRelations) {
-		this.userRelations = userRelations;
+	public void setFriends(Collection<Friend> friends) {
+		this.friends = friends;
 	}
 
 	/**
-	 * @return the userRelations
+	 * @return the friends
 	 */
-	public Collection<UserRelation> getUserRelations() {
-		return userRelations;
+	public Collection<Friend> getFriends() {
+		return friends;
 	}
 
 	/**
-	 * @param applications the applications to set
-	 */
-	@XmlTransient
-	public void setApplications(Collection<Application> applications) {
-		this.applications = applications;
-	}
-
-	/**
-	 * @return the applications
-	 */
-	public Collection<Application> getApplications() {
-		return applications;
-	}
-
-	/**
-	 * @param consumers the consumers to set
+	 * @param consumerInstallations the consumerInstallations to set
 	 */
 	@XmlTransient
-	public void setConsumers(Collection<Consumer> consumers) {
-		this.consumers = consumers;
+	public void setConsumerInstallations(Collection<ConsumerInstallation> consumerInstallations) {
+		this.consumerInstallations = consumerInstallations;
 	}
 
 	/**
-	 * @return the consumers
+	 * @return the consumerInstallations
 	 */
-	public Collection<Consumer> getConsumers() {
-		return consumers;
+	public Collection<ConsumerInstallation> getConsumerInstallations() {
+		return consumerInstallations;
 	}
 
 }

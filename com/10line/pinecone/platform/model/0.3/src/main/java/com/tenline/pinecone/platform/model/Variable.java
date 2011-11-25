@@ -6,9 +6,7 @@ package com.tenline.pinecone.platform.model;
 import java.util.Collection;
 
 import javax.jdo.annotations.Element;
-import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Order;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -34,12 +32,10 @@ public class Variable extends Entity {
 	
 	@Persistent(mappedBy = "variable", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="value asc, timestamp asc"))
 	private Collection<Record> records;
 	
 	@Persistent(mappedBy = "variable", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="value asc"))
 	private Collection<Item> items;
 	
 	/**

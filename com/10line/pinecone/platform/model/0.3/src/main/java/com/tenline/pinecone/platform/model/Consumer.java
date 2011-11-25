@@ -1,14 +1,17 @@
 package com.tenline.pinecone.platform.model;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Bill
@@ -31,14 +34,18 @@ public class Consumer extends Entity {
 	@Persistent
     private String connectURI;
 	
+	@Persistent
+	private byte[] icon;
+	
 	@NotPersistent
     private Set<String> scopes;
 	
 	@NotPersistent
     private String[] permissions;
 	
-	@Persistent(defaultFetchGroup = "true")
-	private User user;
+	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    private Collection<ConsumerInstallation> consumerInstallations;
 	
 	/**
 	 * 
@@ -124,6 +131,20 @@ public class Consumer extends Entity {
 	}
 
 	/**
+	 * @param icon the icon to set
+	 */
+	public void setIcon(byte[] icon) {
+		this.icon = icon;
+	}
+
+	/**
+	 * @return the icon
+	 */
+	public byte[] getIcon() {
+		return icon;
+	}
+
+	/**
      * Returns the OAuth Consumer's scopes. These are the scopes the consumer
      * will be able to access directly 
      */
@@ -154,17 +175,18 @@ public class Consumer extends Entity {
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param consumerInstallations the consumerInstallations to set
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	@XmlTransient
+	public void setConsumerInstallations(Collection<ConsumerInstallation> consumerInstallations) {
+		this.consumerInstallations = consumerInstallations;
 	}
 
 	/**
-	 * @return the user
+	 * @return the consumerInstallations
 	 */
-	public User getUser() {
-		return user;
+	public Collection<ConsumerInstallation> getConsumerInstallations() {
+		return consumerInstallations;
 	}
     
 }

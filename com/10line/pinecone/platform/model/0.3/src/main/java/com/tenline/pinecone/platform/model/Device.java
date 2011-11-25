@@ -6,9 +6,7 @@ package com.tenline.pinecone.platform.model;
 import java.util.Collection;
 
 import javax.jdo.annotations.Element;
-import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Order;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,12 +30,14 @@ public class Device extends Entity implements Comparable {
 	@Persistent
 	private String version;
 	
+	@Persistent
+	private byte[] icon;
+	
 	@Persistent(defaultFetchGroup = "true")
 	private User user;
 
 	@Persistent(mappedBy = "device", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="name asc"))
 	private Collection<Variable> variables;
 	
 	/**
@@ -87,6 +87,20 @@ public class Device extends Entity implements Comparable {
 	 */
 	public String getVersion() {
 		return version;
+	}
+
+	/**
+	 * @param icon the icon to set
+	 */
+	public void setIcon(byte[] icon) {
+		this.icon = icon;
+	}
+
+	/**
+	 * @return the icon
+	 */
+	public byte[] getIcon() {
+		return icon;
 	}
 
 	/**

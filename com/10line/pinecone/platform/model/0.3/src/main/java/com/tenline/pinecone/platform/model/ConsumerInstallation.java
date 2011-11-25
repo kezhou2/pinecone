@@ -14,11 +14,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @SuppressWarnings("serial")
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
-public class Application extends Entity {
+@PersistenceCapable(identityType = IdentityType.APPLICATION, 
+		detachable = "true", table = "consumer_installation")
+public class ConsumerInstallation extends Entity {
 	
-	@Persistent
-	private String consumerId;
+	@Persistent(defaultFetchGroup = "true")
+	private Consumer consumer;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private User user;
@@ -26,22 +27,22 @@ public class Application extends Entity {
 	/**
 	 * 
 	 */
-	public Application() {
+	public ConsumerInstallation() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @param consumerId the consumerId to set
+	 * @param consumer the consumer to set
 	 */
-	public void setConsumerId(String consumerId) {
-		this.consumerId = consumerId;
+	public void setConsumer(Consumer consumer) {
+		this.consumer = consumer;
 	}
 
 	/**
-	 * @return the consumerId
+	 * @return the consumer
 	 */
-	public String getConsumerId() {
-		return consumerId;
+	public Consumer getConsumer() {
+		return consumer;
 	}
 
 	/**

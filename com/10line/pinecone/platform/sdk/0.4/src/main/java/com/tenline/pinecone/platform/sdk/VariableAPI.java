@@ -8,7 +8,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
 import org.codehaus.jettison.mapped.MappedNamespaceConvention;
@@ -117,6 +120,36 @@ public class VariableAPI extends com.tenline.pinecone.platform.sdk.development.V
 		} else {
 			response.setDone(false);
 			response.setMessage("Update Variable Error Code: Http (" + connection.getResponseCode() + ")");
+		}
+		connection.disconnect();
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 * @throws Exception
+	 */
+	public APIResponse show(String filter) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/variable/show/" + filter;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setConnectTimeout(TIMEOUT);
+		connection.connect();
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
+			Collection<Variable> message = new ArrayList<Variable>();
+			for (int i=0; i<array.length(); i++) {
+				message.add((Variable) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration()))));
+			}
+			response.setDone(true);
+			response.setMessage(message);
+			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Variable Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

@@ -48,7 +48,7 @@ public class ChannelAPI extends ResourceAPI {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/api/channel/subscribe/" + subject;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
+		connection.setRequestProperty("Authorization", APIHelper.getAuthorization(requestUrl, HttpMethod.GET.name(), 
 				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
@@ -90,7 +90,7 @@ public class ChannelAPI extends ResourceAPI {
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", contentType + "; charset=utf-8");
-		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.POST.name(), 
+		connection.setRequestProperty("Authorization", APIHelper.getAuthorization(requestUrl, HttpMethod.POST.name(), 
 				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);

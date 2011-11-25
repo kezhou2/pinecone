@@ -56,49 +56,12 @@ public class RecordAPI extends JaxbAPI {
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse show(String filter, String consumerKey, String consumerSecret, 
-			String token, String tokenSecret) throws Exception {
-		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/record/show/" + filter;
-		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
-				consumerKey, consumerSecret, token, tokenSecret));
-		connection.setConnectTimeout(TIMEOUT);
-		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Record> message = new ArrayList<Record>();
-			for (int i=0; i<array.length(); i++) {
-				message.add((Record) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-						new MappedNamespaceConvention(new Configuration()))));
-			}
-			response.setDone(true);
-			response.setMessage(message);
-			connection.getInputStream().close();
-		} else {
-			response.setDone(false);
-			response.setMessage("Show Record Error Code: Http (" + connection.getResponseCode() + ")");
-		}
-		connection.disconnect();
-		return response;
-	}
-	
-	/**
-	 * 
-	 * @param filter
-	 * @param consumerKey
-	 * @param consumerSecret
-	 * @param token
-	 * @param tokenSecret
-	 * @return
-	 * @throws Exception
-	 */
 	public APIResponse showByVariable(String filter, String consumerKey, String consumerSecret, 
 			String token, String tokenSecret) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/record/show/" + filter + "/@Variable";
+		String requestUrl = url + "/api/record/show/@Variable/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", getAuthorization(requestUrl, HttpMethod.GET.name(), 
+		connection.setRequestProperty("Authorization", APIHelper.getAuthorization(requestUrl, HttpMethod.GET.name(), 
 				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();

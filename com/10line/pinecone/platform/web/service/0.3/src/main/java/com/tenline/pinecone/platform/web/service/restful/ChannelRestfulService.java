@@ -7,8 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
+import javax.cache.Cache;
+import javax.cache.CacheConfiguration.Duration;
+import javax.cache.CacheConfiguration.ExpiryType;
+import javax.cache.Caching;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
@@ -26,14 +30,17 @@ import com.tenline.pinecone.platform.web.service.ChannelService;
 @Service
 public class ChannelRestfulService implements ChannelService {
 	
-	private ConcurrentHashMap<String, Object> cache;
+	private Cache<Object, Object> cache;
+    private final static int EXPIRATION_MILLISECONDS = 1900; // 1.9 seconds
 
 	/**
 	 * 
 	 */
 	public ChannelRestfulService() {
 		// TODO Auto-generated constructor stub
-		cache = new ConcurrentHashMap<String, Object>();
+		cache = Caching.getCacheManager().createCacheBuilder("channel")
+        .setExpiry(ExpiryType.MODIFIED, new Duration(TimeUnit.MILLISECONDS, EXPIRATION_MILLISECONDS))
+        .build();
 	}
 
 	@Override

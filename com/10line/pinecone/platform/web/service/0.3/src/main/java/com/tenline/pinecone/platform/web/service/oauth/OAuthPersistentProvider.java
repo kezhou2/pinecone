@@ -7,8 +7,12 @@ import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
+import javax.cache.Cache;
+import javax.cache.Caching;
+import javax.cache.CacheConfiguration.Duration;
+import javax.cache.CacheConfiguration.ExpiryType;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -30,8 +34,9 @@ public class OAuthPersistentProvider implements OAuthProvider {
 
 	private String realm;
 	private PersistenceManagerFactory pmf;
-	private ConcurrentHashMap<String, OAuthRequestToken> requestTokens;
-	private ConcurrentHashMap<String, OAuthToken> accessTokens;
+	private Cache<Object, Object> requestTokens;
+	private Cache<Object, Object> accessTokens;
+    private final static int EXPIRATION_SECONDS = 3600; // 1 hour
 	
 	/**
 	 * 
@@ -49,8 +54,11 @@ public class OAuthPersistentProvider implements OAuthProvider {
 		// TODO Auto-generated constructor stub
 		this.realm = realm;
 		pmf = JDOHelper.getPersistenceManagerFactory("transactions-optional");
-		requestTokens = new ConcurrentHashMap<String,OAuthRequestToken>();
-		accessTokens = new ConcurrentHashMap<String,OAuthToken>();
+		requestTokens = Caching.getCacheManager().createCacheBuilder("requestTokens")
+        .build();
+		accessTokens = Caching.getCacheManager().createCacheBuilder("accessTokens")
+        .setExpiry(ExpiryType.MODIFIED, new Duration(TimeUnit.SECONDS, EXPIRATION_SECONDS))
+        .build();
 	}
 
 	@Override
@@ -219,7 +227,9 @@ public class OAuthPersistentProvider implements OAuthProvider {
         if(verifier == null || !verifier.equals(request.getVerifier()))
             throw new OAuthException(HttpURLConnection.HTTP_UNAUTHORIZED, "Invalid verifier code for token "+requestToken);
         // then let's go through and exchange this for an access token
-        return (OAuthRequestToken) requestTokens.remove(requestToken);
+        OAuthRequestToken token = (OAuthRequestToken) requestTokens.get(requestToken);
+        requestTokens.remove(requestToken);
+        return token;
     }
 
 	@Override

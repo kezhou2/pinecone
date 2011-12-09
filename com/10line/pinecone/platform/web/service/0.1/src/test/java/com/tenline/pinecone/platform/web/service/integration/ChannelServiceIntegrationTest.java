@@ -39,7 +39,7 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	
 	@Test
 	public void testPublish() throws Exception {
-		channelAPI = new ChannelAPI("localhost", "8080", new APIListener() {
+		channelAPI = new ChannelAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -59,7 +59,7 @@ public class ChannelServiceIntegrationTest extends AbstractServiceIntegrationTes
 	
 	@Test
 	public void testSubscribe() throws Exception {
-		channelAPI = new ChannelAPI("localhost", "8080", new APIListener() {
+		channelAPI = new ChannelAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {

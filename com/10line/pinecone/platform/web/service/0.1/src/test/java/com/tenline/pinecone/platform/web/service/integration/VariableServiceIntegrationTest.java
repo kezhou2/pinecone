@@ -63,7 +63,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 	
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -80,7 +80,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 			
 		});
 		userAPI.create(user);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -100,7 +100,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		});
 		device.setUser(user);
 		deviceAPI.create(device);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
+		variableAPI = new VariableAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -119,7 +119,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		});
 		variable.setDevice(device);
 		variableAPI.create(variable);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
+		variableAPI = new VariableAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -139,7 +139,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 		variable.setName("B");
 		variable.setType("write_only");
 		variableAPI.update(variable);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
+		variableAPI = new VariableAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")
@@ -156,7 +156,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 			
 		});
 		variableAPI.show("id=='"+variable.getId()+"'");
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
+		variableAPI = new VariableAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -172,7 +172,7 @@ public class VariableServiceIntegrationTest extends AbstractServiceIntegrationTe
 			
 		});
 		variableAPI.delete(variable.getId());	
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
+		variableAPI = new VariableAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")

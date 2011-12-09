@@ -74,7 +74,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 	
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -91,7 +91,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			
 		});
 		userAPI.create(user);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -111,7 +111,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		});
 		device.setUser(user);
 		deviceAPI.create(device);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
+		variableAPI = new VariableAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -130,7 +130,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		});
 		variable.setDevice(device);
 		variableAPI.create(variable);
-		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
+		itemAPI = new ItemAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -149,7 +149,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		});
 		item.setVariable(variable);
 		itemAPI.create(item);
-		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
+		itemAPI = new ItemAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -169,7 +169,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		item.setText("B");
 		item.setValue("1".getBytes());
 		itemAPI.update(item);
-		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
+		itemAPI = new ItemAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")
@@ -186,7 +186,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			
 		});
 		itemAPI.show("id=='"+item.getId()+"'");
-		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
+		itemAPI = new ItemAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -202,7 +202,7 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			
 		});
 		itemAPI.delete(item.getId());
-		itemAPI = new ItemAPI("localhost", "8080", new APIListener() {
+		itemAPI = new ItemAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")

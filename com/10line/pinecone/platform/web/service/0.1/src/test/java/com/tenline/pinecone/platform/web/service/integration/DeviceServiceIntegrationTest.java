@@ -52,7 +52,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -69,7 +69,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 			
 		});
 		userAPI.create(user);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -89,7 +89,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 		});
 		device.setUser(user);
 		deviceAPI.create(device);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -111,7 +111,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 		device.setSymbolicName("com.sun");
 		device.setVersion("2.1");
 		deviceAPI.update(device);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")
@@ -128,7 +128,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 			
 		});
 		deviceAPI.show("id=='"+device.getId()+"'");
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -144,7 +144,7 @@ public class DeviceServiceIntegrationTest extends AbstractServiceIntegrationTest
 			
 		});
 		deviceAPI.delete(device.getId());
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")

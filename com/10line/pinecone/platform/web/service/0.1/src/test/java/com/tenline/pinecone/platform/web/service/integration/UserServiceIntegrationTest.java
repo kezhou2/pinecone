@@ -40,7 +40,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -57,7 +57,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			
 		});
 		userAPI.create(user);
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -75,7 +75,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		});
 		user.setSnsId("251417333");
 		userAPI.update(user);
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -92,7 +92,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			
 		});
 		userAPI.show("snsId=='"+user.getSnsId()+"'");
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onError(String error) {
@@ -108,7 +108,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			
 		});
 		userAPI.delete(user.getId());
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onError(String error) {

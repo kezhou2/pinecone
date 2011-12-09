@@ -42,7 +42,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 	private static ItemAPI itemAPI;
 	
 	private static String host = "localhost";
-	private static String port = "8080";
+	private static String port = "8888";
 	
 	@Test
 	public void test() throws Exception {

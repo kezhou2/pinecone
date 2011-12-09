@@ -73,7 +73,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 	
 	@Test
 	public void testCRUD() throws Exception {
-		userAPI = new UserAPI("localhost", "8080", new APIListener() {
+		userAPI = new UserAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -90,7 +90,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 			
 		});
 		userAPI.create(user);
-		deviceAPI = new DeviceAPI("localhost", "8080", new APIListener() {
+		deviceAPI = new DeviceAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -110,7 +110,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		});
 		device.setUser(user);
 		deviceAPI.create(device);
-		variableAPI = new VariableAPI("localhost", "8080", new APIListener() {
+		variableAPI = new VariableAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -129,7 +129,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		});
 		variable.setDevice(device);
 		variableAPI.create(variable);
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
+		recordAPI = new RecordAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -147,7 +147,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		});
 		record.setVariable(variable);
 		recordAPI.create(record);
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
+		recordAPI = new RecordAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -165,7 +165,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		});
 		record.setValue("1");
 		recordAPI.update(record);
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
+		recordAPI = new RecordAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")
@@ -182,7 +182,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 			
 		});
 		recordAPI.show("id=='"+record.getId()+"'");
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
+		recordAPI = new RecordAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			public void onMessage(Object message) {
@@ -198,7 +198,7 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 			
 		});
 		recordAPI.delete(record.getId());
-		recordAPI = new RecordAPI("localhost", "8080", new APIListener() {
+		recordAPI = new RecordAPI("localhost", "8888", new APIListener() {
 
 			@Override
 			@SuppressWarnings("unchecked")

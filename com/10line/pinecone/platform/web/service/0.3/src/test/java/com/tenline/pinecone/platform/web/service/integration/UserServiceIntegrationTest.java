@@ -33,7 +33,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		user.setAvatar("http://avatar/1".getBytes());
 		user.setEmail("billmse@gmail.com");
 		user.setPassword("19821027");
-		userAPI = new UserAPI("localhost", "8080", "service");
+		userAPI = new UserAPI("localhost", "8888", "service");
 	}
 	
 	@After

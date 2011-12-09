@@ -45,7 +45,7 @@ public abstract class AuthorizationServiceIntegrationTest extends AbstractServic
 		consumer = new Consumer();
 		consumer.setConnectURI("123");
 		consumer.setDisplayName("fishshow");
-		consumerAPI = new ConsumerAPI("localhost", "8080", "service");
+		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
 		APIResponse response = consumerAPI.create(consumer);
 		if (response.isDone()) {
 			consumer = (Consumer) response.getMessage();
@@ -56,7 +56,7 @@ public abstract class AuthorizationServiceIntegrationTest extends AbstractServic
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		authorizationAPI = new AuthorizationAPI("localhost", "8080", "service");
+		authorizationAPI = new AuthorizationAPI("localhost", "8888", "service");
 		response = authorizationAPI.requestToken(consumerKey, consumerSecret, null);
 		if (response.isDone()) {
 			token = ((OAuthCredentialsResponse) response.getMessage()).token;

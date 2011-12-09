@@ -41,8 +41,8 @@ public class DeviceServiceIntegrationTest extends AuthorizationServiceIntegratio
 		device.setName("LNB");
 		device.setSymbolicName("com.10line.pinecone");
 		device.setVersion("1.1");
-		userAPI = new UserAPI("localhost", "8080", "service");
-		deviceAPI = new DeviceAPI("localhost", "8080", "service");
+		userAPI = new UserAPI("localhost", "8888", "service");
+		deviceAPI = new DeviceAPI("localhost", "8888", "service");
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();

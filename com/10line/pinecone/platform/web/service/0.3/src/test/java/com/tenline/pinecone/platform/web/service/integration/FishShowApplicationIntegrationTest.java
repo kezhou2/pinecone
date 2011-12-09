@@ -57,10 +57,10 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		item = new Item();
 		item.setText("12°C");
 		item.setValue("23810".getBytes());
-		userAPI = new UserAPI("localhost", "8080", "service");
-		deviceAPI = new DeviceAPI("localhost", "8080", "service");
-		variableAPI = new VariableAPI("localhost", "8080", "service");
-		itemAPI = new ItemAPI("localhost", "8080", "service");
+		userAPI = new UserAPI("localhost", "8888", "service");
+		deviceAPI = new DeviceAPI("localhost", "8888", "service");
+		variableAPI = new VariableAPI("localhost", "8888", "service");
+		itemAPI = new ItemAPI("localhost", "8888", "service");
 	}
 	
 	@After

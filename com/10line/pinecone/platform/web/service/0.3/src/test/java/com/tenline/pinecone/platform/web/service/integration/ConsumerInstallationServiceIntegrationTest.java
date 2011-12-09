@@ -45,9 +45,9 @@ public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceI
 		consumer = new Consumer();
 		consumer.setDisplayName("App");
 		installation = new ConsumerInstallation();
-		userAPI = new UserAPI("localhost", "8080", "service");
-		consumerAPI = new ConsumerAPI("localhost", "8080", "service");
-		installationAPI = new ConsumerInstallationAPI("localhost", "8080", "service");
+		userAPI = new UserAPI("localhost", "8888", "service");
+		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
+		installationAPI = new ConsumerInstallationAPI("localhost", "8888", "service");
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();

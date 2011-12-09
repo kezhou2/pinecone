@@ -41,8 +41,8 @@ public class FriendServiceIntegrationTest extends AbstractServiceIntegrationTest
 		person = new User();
 		person.setName("jack");
 		friend = new Friend();
-		userAPI = new UserAPI("localhost", "8080", "service");
-		friendAPI = new FriendAPI("localhost", "8080", "service");
+		userAPI = new UserAPI("localhost", "8888", "service");
+		friendAPI = new FriendAPI("localhost", "8888", "service");
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();

@@ -30,7 +30,7 @@ public class ChannelServiceIntegrationTest extends AuthorizationServiceIntegrati
 	public void testSetup() throws Exception {
 		super.testSetup();
 		subject = "test";
-		channelAPI = new ChannelAPI("localhost", "8080", "service");
+		channelAPI = new ChannelAPI("localhost", "8888", "service");
 	}
 	
 	@After

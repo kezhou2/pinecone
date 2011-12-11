@@ -3,7 +3,7 @@
  */
 package com.tenline.pinecone.platform.web.service.integration;
 
-//import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.logging.Level;
 
@@ -81,7 +81,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();
-//			assertEquals("bill", user.getName());
+			assertEquals("bill", user.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -89,7 +89,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = deviceAPI.create(device);
 		if (response.isDone()) {
 			device = (Device) response.getMessage();
-//			assertEquals("e-fish智能鱼缸", device.getName());
+			assertEquals("e-fish智能鱼缸", device.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -97,7 +97,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = variableAPI.create(variable);
 		if (response.isDone()) {
 			variable = (Variable) response.getMessage();
-//			assertEquals("鱼缸水温", variable.getName());
+			assertEquals("鱼缸水温", variable.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -105,7 +105,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = itemAPI.create(item);
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
-//			assertEquals("12°C", item.getText());
+			assertEquals("12°C", item.getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -116,7 +116,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = itemAPI.create(item);
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
-//			assertEquals("13°C", item.getText());
+			assertEquals("13°C", item.getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -127,7 +127,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = variableAPI.create(variable);
 		if (response.isDone()) {
 			variable = (Variable) response.getMessage();
-//			assertEquals("制氧频率", variable.getName());
+			assertEquals("制氧频率", variable.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -138,7 +138,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = itemAPI.create(item);
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
-//			assertEquals("1-5", item.getText());
+			assertEquals("1-5", item.getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -149,7 +149,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = itemAPI.create(item);
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
-//			assertEquals("1-6", item.getText());
+			assertEquals("1-6", item.getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -160,7 +160,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = variableAPI.create(variable);
 		if (response.isDone()) {
 			variable = (Variable) response.getMessage();
-//			assertEquals("鱼缸状态", variable.getName());
+			assertEquals("鱼缸状态", variable.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -171,7 +171,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = itemAPI.create(item);
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
-//			assertEquals("离线", item.getText());
+			assertEquals("离线", item.getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -182,16 +182,16 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		response = itemAPI.create(item);
 		if (response.isDone()) {
 			item = (Item) response.getMessage();
-//			assertEquals("在线", item.getText());
+			assertEquals("在线", item.getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-//		response = userAPI.delete(user.getId());
-//		if (response.isDone()) {
-//			assertEquals("User Deleted!", response.getMessage().toString());
-//		} else {
-//			logger.log(Level.SEVERE, response.getMessage().toString());
-//		}
+		response = userAPI.delete(user.getId());
+		if (response.isDone()) {
+			assertEquals("User Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 	}
 
 }

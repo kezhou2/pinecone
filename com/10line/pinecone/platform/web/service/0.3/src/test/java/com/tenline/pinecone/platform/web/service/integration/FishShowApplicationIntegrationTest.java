@@ -186,12 +186,12 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = userAPI.delete(user.getId());
-		if (response.isDone()) {
-			assertEquals("User Deleted!", response.getMessage().toString());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
+//		response = userAPI.delete(user.getId());
+//		if (response.isDone()) {
+//			assertEquals("User Deleted!", response.getMessage().toString());
+//		} else {
+//			logger.log(Level.SEVERE, response.getMessage().toString());
+//		}
 	}
 
 }

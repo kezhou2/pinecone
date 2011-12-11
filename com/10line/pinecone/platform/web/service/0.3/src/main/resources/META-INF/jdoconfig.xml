@@ -5,10 +5,10 @@
     <persistence-manager-factory name="transactions-optional">
         <property name="javax.jdo.PersistenceManagerFactoryClass"
             value="org.datanucleus.api.jdo.JDOPersistenceManagerFactory"/>
-        <property name="javax.jdo.option.ConnectionURL" value="jdbc:mysql://mysql.sql48.cdncenter.net:3306/sq_pinecone"/>
+        <property name="javax.jdo.option.ConnectionURL" value="jdbc:mysql://localhost:3309/pinecone"/>
         <property name="javax.jdo.option.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
-        <property name="javax.jdo.option.ConnectionUserName" value="sq_pinecone"/>
-        <property name="javax.jdo.option.ConnectionPassword" value="www10linecc"/>
+        <property name="javax.jdo.option.ConnectionUserName" value="root"/>
+        <property name="javax.jdo.option.ConnectionPassword" value="root"/>
         <property name="javax.jdo.option.NontransactionalRead" value="true"/>
         <property name="javax.jdo.option.NontransactionalWrite" value="true"/>
         <property name="javax.jdo.option.RetainValues" value="true"/>

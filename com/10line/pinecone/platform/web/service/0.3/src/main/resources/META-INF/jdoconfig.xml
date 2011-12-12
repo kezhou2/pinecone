@@ -5,7 +5,8 @@
     <persistence-manager-factory name="transactions-optional">
         <property name="javax.jdo.PersistenceManagerFactoryClass"
             value="org.datanucleus.api.jdo.JDOPersistenceManagerFactory"/>
-        <property name="datanucleus.ConnectionURL" value="jdbc:mysql://localhost:3309/pinecone?useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="datanucleus.ConnectionURL" 
+        	value="jdbc:mysql://localhost:3309/pinecone?useUnicode=true&amp;characterEncoding=UTF-8&amp;characterSetResults=UTF-8"/>
         <property name="datanucleus.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
         <property name="datanucleus.ConnectionUserName" value="root"/>
         <property name="datanucleus.ConnectionPassword" value="root"/>

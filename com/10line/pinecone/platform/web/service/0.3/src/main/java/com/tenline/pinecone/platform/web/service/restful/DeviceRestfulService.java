@@ -38,6 +38,7 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 	@Override
 	public Device create(Device device) {
 		// TODO Auto-generated method stub
+		System.out.println(device.getName());
 		device.setUser((User) getJdoTemplate().getObjectById(User.class, device.getUser().getId()));
 		Device d = getJdoTemplate().makePersistent(device);
 		System.out.println("==============" + d.getName());

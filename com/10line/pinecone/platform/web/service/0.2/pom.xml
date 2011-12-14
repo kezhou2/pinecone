@@ -79,10 +79,11 @@
         <artifactId>resteasy-jaxrs</artifactId>
         <version>${resteasy.version}</version>
     </dependency>
+    <!-- OAuth -->
     <dependency>
-    	<groupId>org.jboss.resteasy</groupId>
-        <artifactId>resteasy-oauth</artifactId>
-        <version>${resteasy.version}</version>
+    	<groupId>net.oauth.core</groupId>
+        <artifactId>oauth-provider</artifactId>
+        <version>20100527</version>
     </dependency>
 	<!-- Test scope -->
 	<dependency>

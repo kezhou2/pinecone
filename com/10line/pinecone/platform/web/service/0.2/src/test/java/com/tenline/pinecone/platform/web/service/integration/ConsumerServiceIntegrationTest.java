@@ -32,7 +32,7 @@ public class ConsumerServiceIntegrationTest extends AbstractServiceIntegrationTe
 		consumer = new Consumer();
 		consumer.setConnectURI("123");
 		consumer.setDisplayName("fishshow");
-		consumerAPI = new ConsumerAPI("localhost", "8080", null);
+		consumerAPI = new ConsumerAPI("localhost", "8888", null);
 	}
 	
 	@After

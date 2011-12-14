@@ -43,8 +43,8 @@ public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrati
 		owner.setName("jack");
 		userRelation = new UserRelation();
 		userRelation.setType("classmate");
-		userAPI = new UserAPI("localhost", "8080", null);
-		userRelationAPI = new UserRelationAPI("localhost", "8080", null);
+		userAPI = new UserAPI("localhost", "8888", null);
+		userRelationAPI = new UserRelationAPI("localhost", "8888", null);
 	}
 	
 	@After

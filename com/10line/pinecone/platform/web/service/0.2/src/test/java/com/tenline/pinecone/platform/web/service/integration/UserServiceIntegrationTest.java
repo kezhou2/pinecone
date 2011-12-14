@@ -35,7 +35,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		user.setEmail("billmse@gmail.com");
 		user.setPassword("19821027");
 		user.setType("individual");
-		userAPI = new UserAPI("localhost", "8080", null);
+		userAPI = new UserAPI("localhost", "8888", null);
 	}
 	
 	@After

@@ -59,10 +59,10 @@ public class ItemServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		item = new Item();
 		item.setText("A");
 		item.setValue("0".getBytes());
-		userAPI = new UserAPI("localhost", "8080", null);
-		deviceAPI = new DeviceAPI("localhost", "8080", null);
-		variableAPI = new VariableAPI("localhost", "8080", null);
-		itemAPI = new ItemAPI("localhost", "8080", null);
+		userAPI = new UserAPI("localhost", "8888", null);
+		deviceAPI = new DeviceAPI("localhost", "8888", null);
+		variableAPI = new VariableAPI("localhost", "8888", null);
+		itemAPI = new ItemAPI("localhost", "8888", null);
 	}
 	
 	@After

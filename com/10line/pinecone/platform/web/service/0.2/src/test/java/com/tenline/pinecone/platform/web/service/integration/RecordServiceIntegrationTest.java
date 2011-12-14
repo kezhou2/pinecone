@@ -58,10 +58,10 @@ public class RecordServiceIntegrationTest extends AbstractServiceIntegrationTest
 		variable.setType("read_only");
 		record = new Record();
 		record.setValue("0");
-		userAPI = new UserAPI("localhost", "8080", null);
-		deviceAPI = new DeviceAPI("localhost", "8080", null);
-		variableAPI = new VariableAPI("localhost", "8080", null);
-		recordAPI = new RecordAPI("localhost", "8080", null);
+		userAPI = new UserAPI("localhost", "8888", null);
+		deviceAPI = new DeviceAPI("localhost", "8888", null);
+		variableAPI = new VariableAPI("localhost", "8888", null);
+		recordAPI = new RecordAPI("localhost", "8888", null);
 	}
 	
 	@After

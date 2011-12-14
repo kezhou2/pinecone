@@ -19,11 +19,6 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
-import org.jboss.resteasy.auth.oauth.OAuthException;
-import org.jboss.resteasy.auth.oauth.OAuthProvider;
-import org.jboss.resteasy.auth.oauth.OAuthRequestToken;
-import org.jboss.resteasy.auth.oauth.OAuthToken;
-
 import com.tenline.pinecone.platform.model.Consumer;
 
 /**

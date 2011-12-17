@@ -21,6 +21,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class Variable extends Entity {
 
+	/**
+	 * Variable's Type
+	 */
+	public static String READ = "read";
+	public static String WRITE = "write";
+	public static String DISCRETE = "discrete";
+	public static String CONTINUOUS = "continuous";
+	public static String IMAGE_JPEG = "image/jpeg";
+	
 	@Persistent
 	private String name;
 	

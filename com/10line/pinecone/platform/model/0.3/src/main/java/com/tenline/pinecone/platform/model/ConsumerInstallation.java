@@ -18,6 +18,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 		detachable = "true", table = "consumer_installation")
 public class ConsumerInstallation extends Entity {
 	
+	/**
+	 * Whether is default to open or not
+	 */
+	@Persistent
+	private Boolean isDefault;
+	
 	@Persistent(defaultFetchGroup = "true")
 	private Consumer consumer;
 	
@@ -29,6 +35,20 @@ public class ConsumerInstallation extends Entity {
 	 */
 	public ConsumerInstallation() {
 		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @param isDefault the isDefault to set
+	 */
+	public void setDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	/**
+	 * @return the isDefault
+	 */
+	public Boolean isDefault() {
+		return isDefault;
 	}
 
 	/**

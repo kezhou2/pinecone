@@ -8,6 +8,7 @@ import java.util.Collection;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -32,6 +33,17 @@ public interface ConsumerInstallationService extends AbstractService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	ConsumerInstallation create(ConsumerInstallation consumerInstallation);
+	
+	/**
+	 * 
+	 * @param consumerInstallation
+	 * @return
+	 */
+	@PUT
+	@Path("/update")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	ConsumerInstallation update(ConsumerInstallation consumerInstallation);
 	
 	/**
 	 * 

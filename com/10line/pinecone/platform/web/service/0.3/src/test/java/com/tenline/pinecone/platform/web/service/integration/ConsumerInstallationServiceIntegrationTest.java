@@ -45,6 +45,7 @@ public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceI
 		consumer = new Consumer();
 		consumer.setDisplayName("App");
 		installation = new ConsumerInstallation();
+		installation.setDefault(false);
 		userAPI = new UserAPI("localhost", "8888", "service");
 		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
 		installationAPI = new ConsumerInstallationAPI("localhost", "8888", "service");
@@ -103,8 +104,17 @@ public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceI
 		APIResponse response = installationAPI.create(installation);
 		if (response.isDone()) {
 			installation = (ConsumerInstallation) response.getMessage();
+			assertEquals(false, installation.isDefault());
 			assertEquals("bill", installation.getUser().getName());
 			assertEquals("App", installation.getConsumer().getDisplayName());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		installation.setDefault(true);
+		response = installationAPI.update(installation);
+		if (response.isDone()) {
+			installation = (ConsumerInstallation) response.getMessage();
+			assertEquals(true, installation.isDefault());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

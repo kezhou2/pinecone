@@ -64,4 +64,12 @@ public class ConsumerInstallationRestfulService extends JdoDaoSupport implements
 		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getConsumerInstallations();
 	}
 
+	@Override
+	public ConsumerInstallation update(ConsumerInstallation installation) {
+		// TODO Auto-generated method stub
+		ConsumerInstallation detachedInstallation = getJdoTemplate().getObjectById(ConsumerInstallation.class, installation.getId());
+		if (installation.isDefault() != null) detachedInstallation.setDefault(installation.isDefault());
+		return getJdoTemplate().makePersistent(detachedInstallation);
+	}
+
 }

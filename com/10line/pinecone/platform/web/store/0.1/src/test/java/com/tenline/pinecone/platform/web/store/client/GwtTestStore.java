@@ -1,6 +1,6 @@
 package com.tenline.pinecone.platform.web.store.client;
 
-import com.tenline.pinecone.platform.web.store.shared.FieldVerifier;
+import com.tenline.pinecone.platform.web.store.client.model.FieldVerifier;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;

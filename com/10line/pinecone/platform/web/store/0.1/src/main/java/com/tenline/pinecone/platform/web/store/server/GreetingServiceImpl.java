@@ -1,7 +1,7 @@
 package com.tenline.pinecone.platform.web.store.server;
 
 import com.tenline.pinecone.platform.web.store.client.GreetingService;
-import com.tenline.pinecone.platform.web.store.shared.FieldVerifier;
+import com.tenline.pinecone.platform.web.store.client.model.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

@@ -17,8 +17,8 @@ public class EnvConfig {
 	
 	private static PineconeServiceAsync pineconeService = null;
 	
+	@SuppressWarnings("unused")
 	private static List<ConsumerInfo> myApps = null;
-
 	
 	public static UserHomePage getHomePage(){
 		if(homePage == null){

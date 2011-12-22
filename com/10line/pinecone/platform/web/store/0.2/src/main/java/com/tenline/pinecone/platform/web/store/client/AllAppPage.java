@@ -44,6 +44,7 @@ public class AllAppPage extends ContentPanel {
 	
 	private int count;
 
+	@SuppressWarnings("unused")
 	public AllAppPage() {
 		setHeaderVisible(false);
 		setLayout(new BorderLayout());

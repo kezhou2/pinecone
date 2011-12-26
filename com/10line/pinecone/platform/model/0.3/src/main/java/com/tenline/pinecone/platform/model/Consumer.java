@@ -47,6 +47,10 @@ public class Consumer extends Entity {
     @Element(dependent = "true")
     private Collection<ConsumerInstallation> consumerInstallations;
 	
+	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<DeviceDependency> deviceDependencies;
+	
 	/**
 	 * 
 	 */
@@ -187,6 +191,21 @@ public class Consumer extends Entity {
 	 */
 	public Collection<ConsumerInstallation> getConsumerInstallations() {
 		return consumerInstallations;
+	}
+
+	/**
+	 * @param deviceDependencies the deviceDependencies to set
+	 */
+	@XmlTransient
+	public void setDeviceDependencies(Collection<DeviceDependency> deviceDependencies) {
+		this.deviceDependencies = deviceDependencies;
+	}
+
+	/**
+	 * @return the deviceDependencies
+	 */
+	public Collection<DeviceDependency> getDeviceDependencies() {
+		return deviceDependencies;
 	}
     
 }

@@ -24,11 +24,11 @@ public class Variable extends Entity {
 	/**
 	 * Variable's Type
 	 */
-	public static String READ = "read";
-	public static String WRITE = "write";
-	public static String DISCRETE = "discrete";
-	public static String CONTINUOUS = "continuous";
-	public static String IMAGE_JPEG = "image/jpeg";
+	public static final String READ = "read";
+	public static final String WRITE = "write";
+	public static final String DISCRETE = "discrete";
+	public static final String CONTINUOUS = "continuous";
+	public static final String IMAGE_JPEG = "image/jpeg";
 	
 	@Persistent
 	private String name;
@@ -41,11 +41,11 @@ public class Variable extends Entity {
 	
 	@Persistent(mappedBy = "variable", defaultFetchGroup = "true")
     @Element(dependent = "true")
-	private Collection<Record> records;
+	private Collection<Item> items;
 	
 	@Persistent(mappedBy = "variable", defaultFetchGroup = "true")
     @Element(dependent = "true")
-	private Collection<Item> items;
+	private Collection<Record> records;
 	
 	/**
 	 * 

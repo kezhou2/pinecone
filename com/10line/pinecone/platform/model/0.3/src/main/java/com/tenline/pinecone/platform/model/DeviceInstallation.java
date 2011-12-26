@@ -15,8 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION, 
-		detachable = "true", table = "consumer_installation")
-public class ConsumerInstallation extends Entity {
+		detachable = "true", table = "device_installation")
+public class DeviceInstallation extends Entity {
+	
+	/**
+	 * Device Installation's Status
+	 */
+	public static final String CLOSED = "closed";
+	public static final String OPENED = "opened";
 	
 	/**
 	 * Whether is default to open or not
@@ -24,16 +30,19 @@ public class ConsumerInstallation extends Entity {
 	@Persistent
 	private Boolean isDefault = false;
 	
+	@Persistent
+	private String status;
+
 	@Persistent(defaultFetchGroup = "true")
-	private Consumer consumer;
+	private Device device;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private User user;
-
+	
 	/**
 	 * 
 	 */
-	public ConsumerInstallation() {
+	public DeviceInstallation() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -52,17 +61,31 @@ public class ConsumerInstallation extends Entity {
 	}
 
 	/**
-	 * @param consumer the consumer to set
+	 * @param status the status to set
 	 */
-	public void setConsumer(Consumer consumer) {
-		this.consumer = consumer;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	/**
-	 * @return the consumer
+	 * @return the status
 	 */
-	public Consumer getConsumer() {
-		return consumer;
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param device the device to set
+	 */
+	public void setDevice(Device device) {
+		this.device = device;
+	}
+
+	/**
+	 * @return the device
+	 */
+	public Device getDevice() {
+		return device;
 	}
 
 	/**

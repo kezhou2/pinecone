@@ -18,35 +18,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class Record extends Entity {
-
-	@Persistent
-	private String value;
 	
 	@Persistent
 	private Date timestamp;
 	
 	@Persistent(defaultFetchGroup = "true")
+	private Device device;
+	
+	@Persistent(defaultFetchGroup = "true")
 	private Variable variable;
+	
+	@Persistent(defaultFetchGroup = "true")
+	private Item item;
 	
 	/**
 	 * 
 	 */
 	public Record() {
 		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param value the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
 	}
 
 	/**
@@ -64,6 +53,20 @@ public class Record extends Entity {
 	}
 
 	/**
+	 * @param device the device to set
+	 */
+	public void setDevice(Device device) {
+		this.device = device;
+	}
+
+	/**
+	 * @return the device
+	 */
+	public Device getDevice() {
+		return device;
+	}
+
+	/**
 	 * @param variable the variable to set
 	 */
 	public void setVariable(Variable variable) {
@@ -75,6 +78,20 @@ public class Record extends Entity {
 	 */
 	public Variable getVariable() {
 		return variable;
+	}
+
+	/**
+	 * @param item the item to set
+	 */
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
+	/**
+	 * @return the item
+	 */
+	public Item getItem() {
+		return item;
 	}
 
 }

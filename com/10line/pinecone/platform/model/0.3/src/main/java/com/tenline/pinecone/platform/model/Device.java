@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  */
 @XmlRootElement
-@SuppressWarnings({ "serial", "rawtypes" })
+@SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
-public class Device extends Entity implements Comparable {
+public class Device extends Entity {
 
 	@Persistent
 	private String name;
@@ -32,13 +32,22 @@ public class Device extends Entity implements Comparable {
 	
 	@Persistent
 	private byte[] icon;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private User user;
 
 	@Persistent(mappedBy = "device", defaultFetchGroup = "true")
     @Element(dependent = "true")
 	private Collection<Variable> variables;
+	
+	@Persistent(mappedBy = "device", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<DeviceDependency> deviceDependencies;
+	
+	@Persistent(mappedBy = "device", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<DeviceInstallation> deviceInstallations;
+	
+	@Persistent(mappedBy = "device", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Record> records;
 	
 	/**
 	 * 
@@ -104,20 +113,6 @@ public class Device extends Entity implements Comparable {
 	}
 
 	/**
-	 * @param user the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
 	 * @param variables the variables to set
 	 */
 	@XmlTransient
@@ -132,10 +127,49 @@ public class Device extends Entity implements Comparable {
 		return variables;
 	}
 
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return getId().compareTo(((Device) o).getId());
+	/**
+	 * @param deviceDependencies the deviceDependencies to set
+	 */
+	@XmlTransient
+	public void setDeviceDependencies(Collection<DeviceDependency> deviceDependencies) {
+		this.deviceDependencies = deviceDependencies;
+	}
+
+	/**
+	 * @return the deviceDependencies
+	 */
+	public Collection<DeviceDependency> getDeviceDependencies() {
+		return deviceDependencies;
+	}
+
+	/**
+	 * @param deviceInstallations the deviceInstallations to set
+	 */
+	@XmlTransient
+	public void setDeviceInstallations(Collection<DeviceInstallation> deviceInstallations) {
+		this.deviceInstallations = deviceInstallations;
+	}
+
+	/**
+	 * @return the deviceInstallations
+	 */
+	public Collection<DeviceInstallation> getDeviceInstallations() {
+		return deviceInstallations;
+	}
+
+	/**
+	 * @param records the records to set
+	 */
+	@XmlTransient
+	public void setRecords(Collection<Record> records) {
+		this.records = records;
+	}
+
+	/**
+	 * @return the records
+	 */
+	public Collection<Record> getRecords() {
+		return records;
 	}
 
 }

@@ -3,10 +3,14 @@
  */
 package com.tenline.pinecone.platform.model;
 
+import java.util.Collection;
+
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Bill
@@ -25,6 +29,10 @@ public class Item extends Entity {
 	
 	@Persistent(defaultFetchGroup = "true")
 	private Variable variable;
+	
+	@Persistent(mappedBy = "item", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Record> records;
 
 	/**
 	 * 
@@ -73,6 +81,21 @@ public class Item extends Entity {
 	 */
 	public Variable getVariable() {
 		return variable;
+	}
+
+	/**
+	 * @param records the records to set
+	 */
+	@XmlTransient
+	public void setRecords(Collection<Record> records) {
+		this.records = records;
+	}
+
+	/**
+	 * @return the records
+	 */
+	public Collection<Record> getRecords() {
+		return records;
 	}
 
 }

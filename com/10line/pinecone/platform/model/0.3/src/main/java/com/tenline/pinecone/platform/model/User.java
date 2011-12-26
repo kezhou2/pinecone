@@ -35,15 +35,27 @@ public class User extends Entity {
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    private Collection<Device> devices;
-    
-    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
-    @Element(dependent = "true")
-    private Collection<Friend> friends;
+	private Collection<DeviceInstallation> deviceInstallations;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
     private Collection<ConsumerInstallation> consumerInstallations;
+    
+    @Persistent(mappedBy = "sender", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    private Collection<UserRelation> sentRelations;
+    
+    @Persistent(mappedBy = "receiver", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    private Collection<UserRelation> receivedRelations;
+    
+    @Persistent(mappedBy = "sender", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    private Collection<UserMessage> sentMessages;
+    
+    @Persistent(mappedBy = "receiver", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+    private Collection<UserMessage> receivedMessages;
 
 	/**
 	 * 
@@ -109,33 +121,18 @@ public class User extends Entity {
 	}
 
 	/**
-	 * @param devices the devices to set
+	 * @param deviceInstallations the deviceInstallations to set
 	 */
 	@XmlTransient
-	public void setDevices(Collection<Device> devices) {
-		this.devices = devices;
+	public void setDeviceInstallations(Collection<DeviceInstallation> deviceInstallations) {
+		this.deviceInstallations = deviceInstallations;
 	}
 
 	/**
-	 * @return the devices
+	 * @return the deviceInstallations
 	 */
-	public Collection<Device> getDevices() {
-		return devices;
-	}
-
-	/**
-	 * @param friends the friends to set
-	 */
-	@XmlTransient
-	public void setFriends(Collection<Friend> friends) {
-		this.friends = friends;
-	}
-
-	/**
-	 * @return the friends
-	 */
-	public Collection<Friend> getFriends() {
-		return friends;
+	public Collection<DeviceInstallation> getDeviceInstallations() {
+		return deviceInstallations;
 	}
 
 	/**
@@ -151,6 +148,66 @@ public class User extends Entity {
 	 */
 	public Collection<ConsumerInstallation> getConsumerInstallations() {
 		return consumerInstallations;
+	}
+
+	/**
+	 * @param sentRelations the sentRelations to set
+	 */
+	@XmlTransient
+	public void setSentRelations(Collection<UserRelation> sentRelations) {
+		this.sentRelations = sentRelations;
+	}
+
+	/**
+	 * @return the sentRelations
+	 */
+	public Collection<UserRelation> getSentRelations() {
+		return sentRelations;
+	}
+
+	/**
+	 * @param receivedRelations the receivedRelations to set
+	 */
+	@XmlTransient
+	public void setReceivedRelations(Collection<UserRelation> receivedRelations) {
+		this.receivedRelations = receivedRelations;
+	}
+
+	/**
+	 * @return the receivedRelations
+	 */
+	public Collection<UserRelation> getReceivedRelations() {
+		return receivedRelations;
+	}
+
+	/**
+	 * @param sentMessages the sentMessages to set
+	 */
+	@XmlTransient
+	public void setSentMessages(Collection<UserMessage> sentMessages) {
+		this.sentMessages = sentMessages;
+	}
+
+	/**
+	 * @return the sentMessages
+	 */
+	public Collection<UserMessage> getSentMessages() {
+		return sentMessages;
+	}
+
+	/**
+	 * @param receivedMessages the receivedMessages to set
+	 */
+	@XmlTransient
+	public void setReceivedMessages(Collection<UserMessage> receivedMessages) {
+		this.receivedMessages = receivedMessages;
+	}
+
+	/**
+	 * @return the receivedMessages
+	 */
+	public Collection<UserMessage> getReceivedMessages() {
+		return receivedMessages;
 	}
 
 }

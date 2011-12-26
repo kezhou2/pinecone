@@ -11,6 +11,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
@@ -18,14 +21,15 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
-import com.tenline.pinecone.platform.model.Record;
+import com.tenline.pinecone.platform.model.UserRelation;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
 /**
  * @author Bill
  *
  */
-public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.RecordAPI {
+public class UserRelationAPI extends JaxbAPI {
 
 	/**
 	 * 
@@ -33,41 +37,49 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	 * @param port
 	 * @param context
 	 */
-	public RecordAPI(String host, String port, String context) {
+	public UserRelationAPI(String host, String port, String context) {
 		super(host, port, context);
 		// TODO Auto-generated constructor stub
+		try {
+			jaxbContext = JAXBContext.newInstance(UserRelation.class);
+			marshaller = jaxbContext.createMarshaller();
+			unmarshaller = jaxbContext.createUnmarshaller();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
 	 * 
-	 * @param record
+	 * @param userRelation
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse create(Record record) throws Exception {
+	public APIResponse create(UserRelation userRelation) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/record/create").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/user/relation/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(record, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(userRelation, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			response.setDone(true);
+        	response.setDone(true);
         	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Create Record Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Create User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		}
-        connection.disconnect();
-        return response;
+		connection.disconnect();
+		return response;
 	}
 	
 	/**
@@ -78,16 +90,16 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	 */
 	public APIResponse delete(String id) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/record/delete/" + id).openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/user/relation/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			response.setDone(true);
-			response.setMessage("Record Deleted!");
+			response.setMessage("User Relation Deleted!");
 		} else {
 			response.setDone(false);
-			response.setMessage("Delete Record Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Delete User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -95,31 +107,31 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	
 	/**
 	 * 
-	 * @param record
+	 * @param userRelation
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse update(Record record) throws Exception {
+	public APIResponse update(UserRelation userRelation) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/record/update").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/user/relation/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(record, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(userRelation, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
         	JSONObject obj = new JSONObject(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			response.setDone(true);
+        	response.setDone(true);
         	response.setMessage(unmarshaller.unmarshal(new MappedXMLStreamReader(obj, new MappedNamespaceConvention(new Configuration()))));
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Update Record Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Update User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -133,15 +145,15 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	 */
 	public APIResponse show(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/record/show/" + filter;
+		String requestUrl = url + "/api/user/relation/show/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Record> message = new ArrayList<Record>();
+			Collection<UserRelation> message = new ArrayList<UserRelation>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Record) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((UserRelation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -149,7 +161,7 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Record Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show User Relation Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -161,17 +173,17 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByDevice(String filter) throws Exception {
+	public APIResponse showBySender(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/record/show/@Device/" + filter;
+		String requestUrl = url + "/api/user/relation/show/@Sender/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Record> message = new ArrayList<Record>();
+			Collection<UserRelation> message = new ArrayList<UserRelation>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Record) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((UserRelation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -179,7 +191,7 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Record By Device Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show User Relation By Sender Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -191,17 +203,17 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByItem(String filter) throws Exception {
+	public APIResponse showByReceiver(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/record/show/@Item/" + filter;
+		String requestUrl = url + "/api/user/relation/show/@Receiver/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Record> message = new ArrayList<Record>();
+			Collection<UserRelation> message = new ArrayList<UserRelation>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Record) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((UserRelation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -209,7 +221,7 @@ public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.Rec
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Record By Item Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show User Relation By Receiver Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

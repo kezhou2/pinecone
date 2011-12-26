@@ -11,6 +11,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
@@ -20,12 +23,13 @@ import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
 /**
  * @author Bill
  *
  */
-public class DeviceAPI extends com.tenline.pinecone.platform.sdk.development.DeviceAPI {
+public class DeviceAPI extends JaxbAPI {
 	
 	/**
 	 * 
@@ -36,6 +40,14 @@ public class DeviceAPI extends com.tenline.pinecone.platform.sdk.development.Dev
 	public DeviceAPI(String host, String port, String context) {
 		super(host, port, context);
 		// TODO Auto-generated constructor stub
+		try {
+			jaxbContext = JAXBContext.newInstance(Device.class);
+			marshaller = jaxbContext.createMarshaller();
+			unmarshaller = jaxbContext.createUnmarshaller();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

@@ -38,7 +38,7 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 	@Override
 	public Variable create(Variable variable) {
 		// TODO Auto-generated method stub
-		variable.setDevice((Device) getJdoTemplate().getObjectById(Device.class, variable.getDevice().getId()));
+		variable.setDevice(getJdoTemplate().getObjectById(Device.class, variable.getDevice().getId()));
 		return getJdoTemplate().makePersistent(variable);
 	}
 
@@ -70,7 +70,8 @@ public class VariableRestfulService extends JdoDaoSupport implements VariableSer
 	@Override
 	public Collection<Variable> showByDevice(String filter) {
 		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(Device.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getVariables();
+		return getJdoTemplate().getObjectById(Device.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getVariables();
 	}
 
 }

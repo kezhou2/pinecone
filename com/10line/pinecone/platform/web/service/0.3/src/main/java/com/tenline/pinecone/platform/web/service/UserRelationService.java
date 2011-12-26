@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.Record;
+import com.tenline.pinecone.platform.model.UserRelation;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/record")
-public interface RecordService extends AbstractService {
+@Path("/api/user/relation")
+public interface UserRelationService extends AbstractService {
 
 	/**
 	 * 
-	 * @param record
+	 * @param userRelation
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Record create(Record record);
+	UserRelation create(UserRelation userRelation);
 	
 	/**
 	 * 
-	 * @param record
+	 * @param userRelation
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Record update(Record record);
+	UserRelation update(UserRelation userRelation);
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public interface RecordService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> show(@PathParam("filter") String filter);
+	Collection<UserRelation> show(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -61,9 +61,9 @@ public interface RecordService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/@Device/{filter}")
+	@Path("/show/@Sender/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByDevice(@PathParam("filter") String filter);
+	Collection<UserRelation> showBySender(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -71,18 +71,8 @@ public interface RecordService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/@Variable/{filter}")
+	@Path("/show/@Receiver/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByVariable(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Item/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByItem(@PathParam("filter") String filter);
-	
+	Collection<UserRelation> showByReceiver(@PathParam("filter") String filter);
+
 }

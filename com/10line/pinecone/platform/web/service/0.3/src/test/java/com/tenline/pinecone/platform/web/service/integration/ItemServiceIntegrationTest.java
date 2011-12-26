@@ -14,12 +14,10 @@ import org.junit.Test;
 
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.ItemAPI;
-import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 
 /**
@@ -27,16 +25,12 @@ import com.tenline.pinecone.platform.model.Variable;
  *
  */
 public class ItemServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
-
-	private User user;
 	
 	private Device device;
 	
 	private Variable variable;
 	
 	private Item item;
-	
-	private UserAPI userAPI;
 	
 	private DeviceAPI deviceAPI;
 	
@@ -47,8 +41,6 @@ public class ItemServiceIntegrationTest extends AuthorizationServiceIntegrationT
 	@Before
 	public void testSetup() throws Exception {
 		super.testSetup();
-		user = new User();
-		user.setName("bill");
 		device = new Device();
 		device.setName("LNB");
 		device.setSymbolicName("com.10line.pinecone");
@@ -59,19 +51,10 @@ public class ItemServiceIntegrationTest extends AuthorizationServiceIntegrationT
 		item = new Item();
 		item.setText("A");
 		item.setValue("0".getBytes());
-		userAPI = new UserAPI("localhost", "8888", "service");
 		deviceAPI = new DeviceAPI("localhost", "8888", "service");
 		variableAPI = new VariableAPI("localhost", "8888", "service");
 		itemAPI = new ItemAPI("localhost", "8888", "service");
-		APIResponse response = userAPI.create(user);
-		if (response.isDone()) {
-			user = (User) response.getMessage();
-			assertEquals("bill", user.getName());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		device.setUser(user);
-		response = deviceAPI.create(device);
+		APIResponse response = deviceAPI.create(device);
 		if (response.isDone()) {
 			device = (Device) response.getMessage();
 			assertEquals("LNB", device.getName());
@@ -94,17 +77,15 @@ public class ItemServiceIntegrationTest extends AuthorizationServiceIntegrationT
 	
 	@After
 	public void testShutdown() throws Exception {
-		APIResponse response = userAPI.delete(user.getId());
+		APIResponse response = deviceAPI.delete(device.getId());
 		if (response.isDone()) {
-			assertEquals("User Deleted!", response.getMessage().toString());
+			assertEquals("Device Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		user = null;
 		device = null;
 		variable = null;
 		item = null;
-		userAPI = null;
 		deviceAPI = null;
 		variableAPI = null;
 		itemAPI = null;

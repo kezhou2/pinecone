@@ -64,6 +64,7 @@ public class UserServiceTest extends AbstractServiceTest {
 	public void testDelete() {
 		when(jdoTemplate.getObjectById(User.class, user.getId())).thenReturn(user);
 		Response result = userService.delete(user.getId());
+		verify(jdoTemplate).getObjectById(User.class, user.getId());
 		verify(jdoTemplate).deletePersistent(user);
 		assertEquals(200, result.getStatus());
 	}

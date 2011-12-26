@@ -6,6 +6,7 @@ package com.tenline.pinecone.platform.web.service.integration;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Level;
 
 import org.junit.After;
@@ -13,13 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
+import com.tenline.pinecone.platform.sdk.ItemAPI;
 import com.tenline.pinecone.platform.sdk.RecordAPI;
-import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Record;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 
 /**
@@ -27,28 +28,26 @@ import com.tenline.pinecone.platform.model.Variable;
  *
  */
 public class RecordServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
-
-	private User user;
 	
 	private Device device;
 	
 	private Variable variable;
 	
-	private Record record;
+	private Item item;
 	
-	private UserAPI userAPI;
+	private Record record;
 	
 	private DeviceAPI deviceAPI;
 	
 	private VariableAPI variableAPI;
+	
+	private ItemAPI itemAPI;
 	
 	private RecordAPI recordAPI;
 	
 	@Before
 	public void testSetup() throws Exception {
 		super.testSetup();
-		user = new User();
-		user.setName("bill");
 		device = new Device();
 		device.setName("LNB");
 		device.setSymbolicName("com.10line.pinecone");
@@ -56,21 +55,15 @@ public class RecordServiceIntegrationTest extends AuthorizationServiceIntegratio
 		variable = new Variable();
 		variable.setName("A");
 		variable.setType("read_only");
+		item = new Item();
+		item.setText("AA");
 		record = new Record();
-		record.setValue("0");
-		userAPI = new UserAPI("localhost", "8888", "service");
+		record.setTimestamp(new Date());
 		deviceAPI = new DeviceAPI("localhost", "8888", "service");
 		variableAPI = new VariableAPI("localhost", "8888", "service");
 		recordAPI = new RecordAPI("localhost", "8888", "service");
-		APIResponse response = userAPI.create(user);
-		if (response.isDone()) {
-			user = (User) response.getMessage();
-			assertEquals("bill", user.getName());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		device.setUser(user);
-		response = deviceAPI.create(device);
+		itemAPI = new ItemAPI("localhost", "8888", "service");
+		APIResponse response = deviceAPI.create(device);
 		if (response.isDone()) {
 			device = (Device) response.getMessage();
 			assertEquals("LNB", device.getName());
@@ -88,24 +81,34 @@ public class RecordServiceIntegrationTest extends AuthorizationServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
+		item.setVariable(variable);
+		response = itemAPI.create(item);
+		if (response.isDone()) {
+			item = (Item) response.getMessage();
+			assertEquals("AA", item.getText());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		record.setItem(item);
 		record.setVariable(variable);
+		record.setDevice(device);
 	}
 	
 	@After
 	public void testShutdown() throws Exception {
-		APIResponse response = userAPI.delete(user.getId());
+		APIResponse response = deviceAPI.delete(device.getId());
 		if (response.isDone()) {
-			assertEquals("User Deleted!", response.getMessage().toString());
+			assertEquals("Device Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		user = null;
 		device = null;
 		variable = null;
+		item = null;
 		record = null;
-		userAPI = null;
 		deviceAPI = null;
 		variableAPI = null;
+		itemAPI = null;
 		recordAPI = null;
 		super.testShutdown();
 	}
@@ -116,15 +119,21 @@ public class RecordServiceIntegrationTest extends AuthorizationServiceIntegratio
 		APIResponse response = recordAPI.create(record);
 		if (response.isDone()) {
 			record = (Record) response.getMessage();
-			assertEquals("0", record.getValue());
+			assertEquals("LNB", record.getDevice().getName());
+			assertEquals("A", record.getVariable().getName());
+			assertEquals("AA", record.getItem().getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		record.setValue("1");
+		Date timestamp = new Date();
+		record.setTimestamp(timestamp);
 		response = recordAPI.update(record);
 		if (response.isDone()) {
 			record = (Record) response.getMessage();
-			assertEquals("1", record.getValue());
+			assertEquals(timestamp, record.getTimestamp());
+			assertEquals("LNB", record.getDevice().getName());
+			assertEquals("A", record.getVariable().getName());
+			assertEquals("AA", record.getItem().getText());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -140,7 +149,19 @@ public class RecordServiceIntegrationTest extends AuthorizationServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
+		response = recordAPI.showByDevice("id=='"+device.getId()+"'");
+		if (response.isDone()) {
+			assertEquals(0, ((Collection<Record>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
 		response = recordAPI.showByVariable("id=='"+variable.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		if (response.isDone()) {
+			assertEquals(0, ((Collection<Record>) response.getMessage()).size());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = recordAPI.showByItem("id=='"+item.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<Record>) response.getMessage()).size());
 		} else {

@@ -13,11 +13,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
-import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 
 /**
@@ -25,14 +23,10 @@ import com.tenline.pinecone.platform.model.Variable;
  *
  */
 public class VariableServiceIntegrationTest extends AuthorizationServiceIntegrationTest {
-
-	private User user;
 	
 	private Device device;
 	
 	private Variable variable;
-	
-	private UserAPI userAPI;
 	
 	private DeviceAPI deviceAPI;
 	
@@ -41,8 +35,6 @@ public class VariableServiceIntegrationTest extends AuthorizationServiceIntegrat
 	@Before
 	public void testSetup() throws Exception {
 		super.testSetup();
-		user = new User();
-		user.setName("bill");
 		device = new Device();
 		device.setName("LNB");
 		device.setSymbolicName("com.10line.pinecone");
@@ -50,18 +42,9 @@ public class VariableServiceIntegrationTest extends AuthorizationServiceIntegrat
 		variable = new Variable();
 		variable.setName("A");
 		variable.setType("read_only");
-		userAPI = new UserAPI("localhost", "8888", "service");
 		deviceAPI = new DeviceAPI("localhost", "8888", "service");
 		variableAPI = new VariableAPI("localhost", "8888", "service");
-		APIResponse response = userAPI.create(user);
-		if (response.isDone()) {
-			user = (User) response.getMessage();
-			assertEquals("bill", user.getName());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		device.setUser(user);
-		response = deviceAPI.create(device);
+		APIResponse response = deviceAPI.create(device);
 		if (response.isDone()) {
 			device = (Device) response.getMessage();
 			assertEquals("LNB", device.getName());
@@ -75,16 +58,14 @@ public class VariableServiceIntegrationTest extends AuthorizationServiceIntegrat
 	
 	@After
 	public void testShutdown() throws Exception {
-		APIResponse response = userAPI.delete(user.getId());
+		APIResponse response = deviceAPI.delete(device.getId());
 		if (response.isDone()) {
-			assertEquals("User Deleted!", response.getMessage().toString());
+			assertEquals("Device Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		user = null;
 		device = null;
 		variable = null;
-		userAPI = null;
 		deviceAPI = null;
 		variableAPI = null;
 		super.testShutdown();
@@ -98,6 +79,7 @@ public class VariableServiceIntegrationTest extends AuthorizationServiceIntegrat
 			variable = (Variable) response.getMessage();
 			assertEquals("A", variable.getName());
 			assertEquals("read_only", variable.getType());
+			assertEquals("LNB", variable.getDevice().getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

@@ -13,11 +13,9 @@ import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.ItemAPI;
-import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
@@ -26,16 +24,12 @@ import com.tenline.pinecone.platform.sdk.development.APIResponse;
  *
  */
 public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrationTest {
-
-	private User user;
 	
 	private Device device;
 	
 	private Variable variable;
 	
 	private Item item;
-	
-	private UserAPI userAPI;
 	
 	private DeviceAPI deviceAPI;
 	
@@ -45,8 +39,6 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 	
 	@Before
 	public void testSetup() {
-		user = new User();
-		user.setName("bill");
 		device = new Device();
 		device.setName("e-fish智能鱼缸");
 		device.setSymbolicName("com.tenline.pinecone.platform.osgi.device.efish");
@@ -57,7 +49,6 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		item = new Item();
 		item.setText("12°C");
 		item.setValue("23810".getBytes());
-		userAPI = new UserAPI("localhost", "8888", "service");
 		deviceAPI = new DeviceAPI("localhost", "8888", "service");
 		variableAPI = new VariableAPI("localhost", "8888", "service");
 		itemAPI = new ItemAPI("localhost", "8888", "service");
@@ -65,11 +56,9 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 	
 	@After
 	public void testShutdown() {
-		user = null;
 		device = null;
 		variable = null;
 		item = null;
-		userAPI = null;
 		deviceAPI = null;
 		variableAPI = null;
 		itemAPI = null;
@@ -78,15 +67,7 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 	@Test
 	public void test() throws Exception {
 		// TODO Auto-generated constructor stub
-		APIResponse response = userAPI.create(user);
-		if (response.isDone()) {
-			user = (User) response.getMessage();
-			assertEquals("bill", user.getName());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		device.setUser(user);
-		response = deviceAPI.create(device);
+		APIResponse response = deviceAPI.create(device);
 		if (response.isDone()) {
 			device = (Device) response.getMessage();
 			assertEquals("e-fish智能鱼缸", device.getName());
@@ -186,9 +167,9 @@ public class FishShowApplicationIntegrationTest extends AbstractServiceIntegrati
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = userAPI.delete(user.getId());
+		response = deviceAPI.delete(device.getId());
 		if (response.isDone()) {
-			assertEquals("User Deleted!", response.getMessage().toString());
+			assertEquals("Device Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

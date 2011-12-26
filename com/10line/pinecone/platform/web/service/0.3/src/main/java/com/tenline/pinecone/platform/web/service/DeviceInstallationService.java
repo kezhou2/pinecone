@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.Record;
+import com.tenline.pinecone.platform.model.DeviceInstallation;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/record")
-public interface RecordService extends AbstractService {
+@Path("/api/device/installation")
+public interface DeviceInstallationService extends AbstractService {
 
 	/**
 	 * 
-	 * @param record
+	 * @param deviceInstallation
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Record create(Record record);
+	DeviceInstallation create(DeviceInstallation deviceInstallation);
 	
 	/**
 	 * 
-	 * @param record
+	 * @param deviceInstallation
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Record update(Record record);
+	DeviceInstallation update(DeviceInstallation deviceInstallation);
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public interface RecordService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> show(@PathParam("filter") String filter);
+	Collection<DeviceInstallation> show(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -63,7 +63,7 @@ public interface RecordService extends AbstractService {
 	@GET
 	@Path("/show/@Device/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByDevice(@PathParam("filter") String filter);
+	Collection<DeviceInstallation> showByDevice(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -71,18 +71,8 @@ public interface RecordService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/@Variable/{filter}")
+	@Path("/show/@User/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByVariable(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Item/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByItem(@PathParam("filter") String filter);
+	Collection<DeviceInstallation> showByUser(@PathParam("filter") String filter);
 	
 }

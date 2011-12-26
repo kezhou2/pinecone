@@ -14,6 +14,7 @@ import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.ConsumerInstallation;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.service.ConsumerInstallationService;
@@ -45,8 +46,17 @@ public class ConsumerInstallationRestfulService extends JdoDaoSupport implements
 	@Override
 	public ConsumerInstallation create(ConsumerInstallation consumerInstallation) {
 		// TODO Auto-generated method stub
-		consumerInstallation.setUser((User) getJdoTemplate().getObjectById(User.class, consumerInstallation.getUser().getId()));
+		consumerInstallation.setUser(getJdoTemplate().getObjectById(User.class, consumerInstallation.getUser().getId()));
+		consumerInstallation.setConsumer(getJdoTemplate().getObjectById(Consumer.class, consumerInstallation.getConsumer().getId()));
 		return getJdoTemplate().makePersistent(consumerInstallation);
+	}
+	
+	@Override
+	public ConsumerInstallation update(ConsumerInstallation consumerInstallation) {
+		// TODO Auto-generated method stub
+		ConsumerInstallation detachedInstallation = getJdoTemplate().getObjectById(ConsumerInstallation.class, consumerInstallation.getId());
+		if (consumerInstallation.isDefault() != null) detachedInstallation.setDefault(consumerInstallation.isDefault());
+		return getJdoTemplate().makePersistent(detachedInstallation);
 	}
 
 	@Override
@@ -61,15 +71,15 @@ public class ConsumerInstallationRestfulService extends JdoDaoSupport implements
 	@Override
 	public Collection<ConsumerInstallation> showByUser(String filter) {
 		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getConsumerInstallations();
+		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getConsumerInstallations();
 	}
 
 	@Override
-	public ConsumerInstallation update(ConsumerInstallation installation) {
+	public Collection<ConsumerInstallation> showByConsumer(String filter) {
 		// TODO Auto-generated method stub
-		ConsumerInstallation detachedInstallation = getJdoTemplate().getObjectById(ConsumerInstallation.class, installation.getId());
-		if (installation.isDefault() != null) detachedInstallation.setDefault(installation.isDefault());
-		return getJdoTemplate().makePersistent(detachedInstallation);
+		return getJdoTemplate().getObjectById(Consumer.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getConsumerInstallations();
 	}
 
 }

@@ -18,6 +18,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.web.service.restful.RecordRestfulService;
@@ -29,7 +31,13 @@ import com.tenline.pinecone.platform.web.service.restful.RecordRestfulService;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class RecordServiceTest extends AbstractServiceTest {
 	
+	private Date date = new Date();
+	
+	private Device device;
+	
 	private Variable variable;
+	
+	private Item item;
 	
 	private Record record;
 	
@@ -43,11 +51,16 @@ public class RecordServiceTest extends AbstractServiceTest {
 		recordService.setJdoTemplate(jdoTemplate);
 		record = new Record();
 		record.setId("asa");
-		record.setValue("1");
-		record.setTimestamp(new Date());
+		record.setTimestamp(date);
+		device = new Device();
+		device.setId("aaa");
+		record.setDevice(device);
 		variable = new Variable();
 		variable.setId("asa");
 		record.setVariable(variable);
+		item = new Item();
+		item.setId("bbb");
+		record.setItem(item);
 		records = new ArrayList();
 		records.add(record);
 	}
@@ -56,25 +69,32 @@ public class RecordServiceTest extends AbstractServiceTest {
 	public void testShutdown() {	
 		recordService = null;
 		records.remove(record);
+		device = null;
 		variable = null;
+		item = null;
 		record = null;
 		records = null;
 	}
 
 	@Test
 	public void testCreate() {
+		when(jdoTemplate.getObjectById(Device.class, device.getId())).thenReturn(device);
 		when(jdoTemplate.getObjectById(Variable.class, variable.getId())).thenReturn(variable);
+		when(jdoTemplate.getObjectById(Item.class, item.getId())).thenReturn(item);
 		when(jdoTemplate.makePersistent(record)).thenReturn(record);
 		Record result = recordService.create(record);
+		verify(jdoTemplate).getObjectById(Device.class, device.getId());
 		verify(jdoTemplate).getObjectById(Variable.class, variable.getId());
+		verify(jdoTemplate).getObjectById(Item.class, item.getId());
 		verify(jdoTemplate).makePersistent(record);
-		assertEquals("1", result.getValue());
+		assertEquals(date, result.getTimestamp());
 	}
 	
 	@Test
 	public void testDelete() {
 		when(jdoTemplate.getObjectById(Record.class, record.getId())).thenReturn(record);
 		Response result = recordService.delete(record.getId());
+		verify(jdoTemplate).getObjectById(Record.class, record.getId());
 		verify(jdoTemplate).deletePersistent(record);
 		assertEquals(200, result.getStatus());
 	}
@@ -86,7 +106,7 @@ public class RecordServiceTest extends AbstractServiceTest {
 		Record result = recordService.update(record);
 		verify(jdoTemplate).getObjectById(Record.class, record.getId());
 		verify(jdoTemplate).makePersistent(record);
-		assertEquals("1", result.getValue());
+		assertEquals(date, result.getTimestamp());
 	}
 	
 	@Test

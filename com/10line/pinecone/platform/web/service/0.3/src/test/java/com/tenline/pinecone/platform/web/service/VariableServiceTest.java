@@ -74,6 +74,7 @@ public class VariableServiceTest extends AbstractServiceTest {
 	public void testDelete() {
 		when(jdoTemplate.getObjectById(Variable.class, variable.getId())).thenReturn(variable);
 		Response result = variableService.delete(variable.getId());
+		verify(jdoTemplate).getObjectById(Variable.class, variable.getId());
 		verify(jdoTemplate).deletePersistent(variable);
 		assertEquals(200, result.getStatus());
 	}

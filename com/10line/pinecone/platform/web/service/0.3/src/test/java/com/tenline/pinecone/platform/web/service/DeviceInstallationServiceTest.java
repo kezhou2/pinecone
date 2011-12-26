@@ -17,41 +17,42 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.model.ConsumerInstallation;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.web.service.restful.ConsumerInstallationRestfulService;
+import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.DeviceInstallation;
+import com.tenline.pinecone.platform.web.service.restful.DeviceInstallationRestfulService;
 
 /**
  * @author Bill
  *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class ConsumerInstallationServiceTest extends AbstractServiceTest {
+public class DeviceInstallationServiceTest extends AbstractServiceTest {
+
+	private Device device;
 	
 	private User user;
 	
-	private Consumer consumer;
-	
-	private ConsumerInstallation installation;
+	private DeviceInstallation installation;
 	
 	private List installations;
 	
-	private ConsumerInstallationRestfulService installationService;
-
+	private DeviceInstallationRestfulService installationService;
+	
 	@Before
 	public void testSetup() {
-		installationService = new ConsumerInstallationRestfulService(persistenceManagerFactory);
+		installationService = new DeviceInstallationRestfulService(persistenceManagerFactory);
 		installationService.setJdoTemplate(jdoTemplate);
-		installation = new ConsumerInstallation();
+		installation = new DeviceInstallation();
 		installation.setId("asa");
 		installation.setDefault(false);
+		installation.setStatus(DeviceInstallation.CLOSED);
 		user = new User();
-		user.setId("asa");
+		user.setId("ddd");
 		installation.setUser(user);
-		consumer = new Consumer();
-		consumer.setId("ddd");
-		installation.setConsumer(consumer);
+		device = new Device();
+		device.setId("ccc");
+		installation.setDevice(device);
 		installations = new ArrayList();
 		installations.add(installation);
 	}
@@ -60,39 +61,39 @@ public class ConsumerInstallationServiceTest extends AbstractServiceTest {
 	public void testShutdown() {	
 		installationService = null;
 		installations.remove(installation);
+		device = null;
 		user = null;
-		consumer = null;
 		installation = null;
 		installations = null;
 	}
 	
 	@Test
 	public void testCreate() {
+		when(jdoTemplate.getObjectById(Device.class, device.getId())).thenReturn(device);
 		when(jdoTemplate.getObjectById(User.class, user.getId())).thenReturn(user);
-		when(jdoTemplate.getObjectById(Consumer.class, consumer.getId())).thenReturn(consumer);
 		when(jdoTemplate.makePersistent(installation)).thenReturn(installation);
-		ConsumerInstallation result = installationService.create(installation);
-		verify(jdoTemplate).getObjectById(User.class, user.getId()); 
-		verify(jdoTemplate).getObjectById(Consumer.class, consumer.getId()); 
+		DeviceInstallation result = installationService.create(installation);
+		verify(jdoTemplate).getObjectById(Device.class, device.getId());
+		verify(jdoTemplate).getObjectById(User.class, user.getId());
 		verify(jdoTemplate).makePersistent(installation);
 		assertEquals("asa", result.getId());
 	}
 	
 	@Test
 	public void testDelete() {
-		when(jdoTemplate.getObjectById(ConsumerInstallation.class, installation.getId())).thenReturn(installation);
+		when(jdoTemplate.getObjectById(DeviceInstallation.class, installation.getId())).thenReturn(installation);
 		Response result = installationService.delete(installation.getId());
-		verify(jdoTemplate).getObjectById(ConsumerInstallation.class, installation.getId());
+		verify(jdoTemplate).getObjectById(DeviceInstallation.class, installation.getId());
 		verify(jdoTemplate).deletePersistent(installation);
 		assertEquals(200, result.getStatus());
 	}
 	
 	@Test
 	public void testUpdate() {
-		when(jdoTemplate.getObjectById(ConsumerInstallation.class, installation.getId())).thenReturn(installation);
+		when(jdoTemplate.getObjectById(DeviceInstallation.class, installation.getId())).thenReturn(installation);
 		when(jdoTemplate.makePersistent(installation)).thenReturn(installation);
-		ConsumerInstallation result = installationService.update(installation);
-		verify(jdoTemplate).getObjectById(ConsumerInstallation.class, installation.getId());
+		DeviceInstallation result = installationService.update(installation);
+		verify(jdoTemplate).getObjectById(DeviceInstallation.class, installation.getId());
 		verify(jdoTemplate).makePersistent(installation);
 		assertEquals("asa", result.getId());
 	}
@@ -100,9 +101,9 @@ public class ConsumerInstallationServiceTest extends AbstractServiceTest {
 	@Test
 	public void testShow() {
 		String filter = "id=='asa'";
-		String queryString = "select from " + ConsumerInstallation.class.getName() + " where " + filter;
+		String queryString = "select from " + DeviceInstallation.class.getName() + " where " + filter;
 		when(jdoTemplate.find(queryString)).thenReturn(installations);
-		Collection<ConsumerInstallation> result = installationService.show(filter);
+		Collection<DeviceInstallation> result = installationService.show(filter);
 		verify(jdoTemplate).find(queryString);
 		assertEquals(1, result.size());
 	}

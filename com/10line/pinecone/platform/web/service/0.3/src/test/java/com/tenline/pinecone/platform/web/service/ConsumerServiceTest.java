@@ -64,6 +64,7 @@ public class ConsumerServiceTest extends AbstractServiceTest {
 	public void testDelete() {
 		when(jdoTemplate.getObjectById(Consumer.class, consumer.getId())).thenReturn(consumer);
 		Response result = consumerService.delete(consumer.getId());
+		verify(jdoTemplate).getObjectById(Consumer.class, consumer.getId());
 		verify(jdoTemplate).deletePersistent(consumer);
 		assertEquals(200, result.getStatus());
 	}

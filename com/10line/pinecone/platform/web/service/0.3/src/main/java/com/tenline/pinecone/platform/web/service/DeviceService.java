@@ -55,14 +55,4 @@ public interface DeviceService extends AbstractService {
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<Device> show(@PathParam("filter") String filter);
 	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@User/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Device> showByUser(@PathParam("filter") String filter);
-
 }

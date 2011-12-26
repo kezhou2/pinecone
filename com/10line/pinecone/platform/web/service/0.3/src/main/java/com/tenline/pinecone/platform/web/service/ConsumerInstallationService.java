@@ -65,4 +65,14 @@ public interface ConsumerInstallationService extends AbstractService {
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<ConsumerInstallation> showByUser(@PathParam("filter") String filter);
 	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/@Consumer/{filter}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<ConsumerInstallation> showByConsumer(@PathParam("filter") String filter);
+	
 }

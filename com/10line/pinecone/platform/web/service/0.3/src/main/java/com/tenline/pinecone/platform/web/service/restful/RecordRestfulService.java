@@ -4,7 +4,6 @@
 package com.tenline.pinecone.platform.web.service.restful;
 
 import java.util.Collection;
-import java.util.Date;
 
 import javax.jdo.PersistenceManagerFactory;
 import javax.ws.rs.core.Response;
@@ -15,6 +14,8 @@ import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.web.service.RecordService;
@@ -46,8 +47,9 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 	@Override
 	public Record create(Record record) {
 		// TODO Auto-generated method stub
-		record.setTimestamp(new Date());
-		record.setVariable((Variable) getJdoTemplate().getObjectById(Variable.class, record.getVariable().getId()));
+		record.setDevice(getJdoTemplate().getObjectById(Device.class, record.getDevice().getId()));
+		record.setVariable(getJdoTemplate().getObjectById(Variable.class, record.getVariable().getId()));
+		record.setItem(getJdoTemplate().getObjectById(Item.class, record.getItem().getId()));
 		return getJdoTemplate().makePersistent(record);
 	}
 
@@ -55,8 +57,7 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 	public Record update(Record record) {
 		// TODO Auto-generated method stub
 		Record detachedRecord = (Record) getJdoTemplate().getObjectById(Record.class, record.getId());
-		detachedRecord.setTimestamp(new Date());
-		if (record.getValue() != null) detachedRecord.setValue(record.getValue());
+		if (record.getTimestamp() != null) detachedRecord.setTimestamp(record.getTimestamp());
 		return getJdoTemplate().makePersistent(detachedRecord);
 	}
 
@@ -68,11 +69,26 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 		if (!filter.equals("all")) queryString += " where " + filter;
 		return getJdoTemplate().find(queryString);
 	}
+	
+	@Override
+	public Collection<Record> showByDevice(String filter) {
+		// TODO Auto-generated method stub
+		return getJdoTemplate().getObjectById(Device.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getRecords();
+	}
 
 	@Override
 	public Collection<Record> showByVariable(String filter) {
 		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getRecords();
+		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getRecords();
+	}
+
+	@Override
+	public Collection<Record> showByItem(String filter) {
+		// TODO Auto-generated method stub
+		return getJdoTemplate().getObjectById(Item.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getRecords();
 	}
 
 }

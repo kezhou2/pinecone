@@ -70,7 +70,8 @@ public class ItemRestfulService extends JdoDaoSupport implements ItemService {
 	@Override
 	public Collection<Item> showByVariable(String filter) {
 		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getItems();
+		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getItems();
 	}
 
 }

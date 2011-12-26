@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.service.DeviceService;
 
 /**
@@ -38,17 +37,7 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 	@Override
 	public Device create(Device device) {
 		// TODO Auto-generated method stub
-		device.setUser((User) getJdoTemplate().getObjectById(User.class, device.getUser().getId()));
 		return getJdoTemplate().makePersistent(device);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public Collection<Device> show(String filter) {
-		// TODO Auto-generated method stub
-		String queryString = "select from " + Device.class.getName();
-		if (!filter.equals("all")) queryString += " where " + filter;
-		return getJdoTemplate().find(queryString);
 	}
 
 	@Override
@@ -68,11 +57,14 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 		if (device.getIcon() != null) detachedDevice.setIcon(device.getIcon());
 		return getJdoTemplate().makePersistent(detachedDevice);
 	}
-
+	
 	@Override
-	public Collection<Device> showByUser(String filter) {
+	@SuppressWarnings("unchecked")
+	public Collection<Device> show(String filter) {
 		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'"))).getDevices();
+		String queryString = "select from " + Device.class.getName();
+		if (!filter.equals("all")) queryString += " where " + filter;
+		return getJdoTemplate().find(queryString);
 	}
 
 }

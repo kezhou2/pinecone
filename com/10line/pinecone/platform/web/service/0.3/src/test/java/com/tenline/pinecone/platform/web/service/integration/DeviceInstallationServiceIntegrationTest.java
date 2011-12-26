@@ -12,80 +12,80 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.model.ConsumerInstallation;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.sdk.ConsumerAPI;
-import com.tenline.pinecone.platform.sdk.ConsumerInstallationAPI;
+import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.DeviceInstallation;
 import com.tenline.pinecone.platform.sdk.UserAPI;
+import com.tenline.pinecone.platform.sdk.DeviceAPI;
+import com.tenline.pinecone.platform.sdk.DeviceInstallationAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
  *
  */
-public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class DeviceInstallationServiceIntegrationTest extends AbstractServiceIntegrationTest {
 
-	private Consumer consumer;
+	private Device device;
 	
 	private User user;
 	
-	private ConsumerInstallation installation;
+	private DeviceInstallation installation;
 	
-	private ConsumerAPI consumerAPI;
+	private DeviceAPI deviceAPI;
 	
 	private UserAPI userAPI;
 	
-	private ConsumerInstallationAPI installationAPI;
+	private DeviceInstallationAPI installationAPI;
 	
 	@Before
 	public void testSetup() throws Exception {
+		device = new Device();
+		device.setName("LNB");
 		user = new User();
-		user.setName("bill");
-		consumer = new Consumer();
-		consumer.setDisplayName("App");
-		installation = new ConsumerInstallation();
+		user.setName("AA");
+		installation = new DeviceInstallation();
 		installation.setDefault(false);
+		deviceAPI = new DeviceAPI("localhost", "8888", "service");
 		userAPI = new UserAPI("localhost", "8888", "service");
-		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
-		installationAPI = new ConsumerInstallationAPI("localhost", "8888", "service");
-		APIResponse response = userAPI.create(user);
+		installationAPI = new DeviceInstallationAPI("localhost", "8888", "service");
+		APIResponse response = deviceAPI.create(device);
 		if (response.isDone()) {
-			user = (User) response.getMessage();
-			assertEquals("bill", user.getName());
+			device = (Device) response.getMessage();
+			assertEquals("LNB", device.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.create(consumer);
+		response = userAPI.create(user);
 		if (response.isDone()) {
-			consumer = (Consumer) response.getMessage();
-			assertEquals("App", consumer.getDisplayName());
+			user = (User) response.getMessage();
+			assertEquals("AA", user.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		installation.setUser(user);
-		installation.setConsumer(consumer);
+		installation.setDevice(device);
 	}
 	
 	@After
 	public void testShutdown() throws Exception {
-		APIResponse response = userAPI.delete(user.getId());
+		APIResponse response = deviceAPI.delete(device.getId());
+		if (response.isDone()) {
+			assertEquals("Device Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = userAPI.delete(user.getId());
 		if (response.isDone()) {
 			assertEquals("User Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.delete(consumer.getId());
-		if (response.isDone()) {
-			assertEquals("Consumer Deleted!", response.getMessage().toString());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
+		device = null;
 		user = null;
-		consumer = null;
 		installation = null;
+		deviceAPI = null;
 		userAPI = null;
-		consumerAPI = null;
 		installationAPI = null;
 	}
 	
@@ -94,45 +94,45 @@ public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceI
 	public void testCRUD() throws Exception {
 		APIResponse response = installationAPI.create(installation);
 		if (response.isDone()) {
-			installation = (ConsumerInstallation) response.getMessage();
+			installation = (DeviceInstallation) response.getMessage();
 			assertEquals(false, installation.isDefault());
-			assertEquals("bill", installation.getUser().getName());
-			assertEquals("App", installation.getConsumer().getDisplayName());
+			assertEquals("LNB", installation.getDevice().getName());
+			assertEquals("AA", installation.getUser().getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		installation.setDefault(true);
 		response = installationAPI.update(installation);
 		if (response.isDone()) {
-			installation = (ConsumerInstallation) response.getMessage();
+			installation = (DeviceInstallation) response.getMessage();
 			assertEquals(true, installation.isDefault());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = installationAPI.show("id=='"+installation.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(1, ((Collection<ConsumerInstallation>) response.getMessage()).size());
+			assertEquals(1, ((Collection<DeviceInstallation>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = installationAPI.delete(installation.getId());
 		if (response.isDone()) {
-			assertEquals("Consumer Installation Deleted!", response.getMessage().toString());
+			assertEquals("Device Installation Deleted!", response.getMessage().toString());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		response = installationAPI.showByDevice("id=='"+device.getId()+"'");
+		if (response.isDone()) {
+			assertEquals(0, ((Collection<DeviceInstallation>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = installationAPI.showByUser("id=='"+user.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<ConsumerInstallation>) response.getMessage()).size());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		response = installationAPI.showByConsumer("id=='"+consumer.getId()+"'");
-		if (response.isDone()) {
-			assertEquals(0, ((Collection<ConsumerInstallation>) response.getMessage()).size());
+			assertEquals(0, ((Collection<DeviceInstallation>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 	}
-
+	
 }

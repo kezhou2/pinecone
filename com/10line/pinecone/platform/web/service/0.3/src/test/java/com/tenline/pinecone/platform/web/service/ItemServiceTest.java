@@ -74,6 +74,7 @@ public class ItemServiceTest extends AbstractServiceTest {
 	public void testDelete() {
 		when(jdoTemplate.getObjectById(Item.class, item.getId())).thenReturn(item);
 		Response result = itemService.delete(item.getId());
+		verify(jdoTemplate).getObjectById(Item.class, item.getId());
 		verify(jdoTemplate).deletePersistent(item);
 		assertEquals(200, result.getStatus());
 	}

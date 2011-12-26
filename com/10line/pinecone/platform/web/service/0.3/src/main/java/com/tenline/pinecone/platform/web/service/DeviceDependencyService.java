@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.Record;
+import com.tenline.pinecone.platform.model.DeviceDependency;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/record")
-public interface RecordService extends AbstractService {
-
+@Path("/api/device/dependency")
+public interface DeviceDependencyService extends AbstractService {
+	
 	/**
 	 * 
-	 * @param record
+	 * @param deviceDependency
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Record create(Record record);
+	DeviceDependency create(DeviceDependency deviceDependency);
 	
 	/**
 	 * 
-	 * @param record
+	 * @param deviceDependency
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Record update(Record record);
+	DeviceDependency update(DeviceDependency deviceDependency);
 	
 	/**
 	 * 
@@ -53,7 +53,17 @@ public interface RecordService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> show(@PathParam("filter") String filter);
+	Collection<DeviceDependency> show(@PathParam("filter") String filter);
+
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/@Consumer/{filter}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<DeviceDependency> showByConsumer(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -63,26 +73,6 @@ public interface RecordService extends AbstractService {
 	@GET
 	@Path("/show/@Device/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByDevice(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Variable/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByVariable(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Item/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Record> showByItem(@PathParam("filter") String filter);
+	Collection<DeviceDependency> showByDevice(@PathParam("filter") String filter);
 	
 }

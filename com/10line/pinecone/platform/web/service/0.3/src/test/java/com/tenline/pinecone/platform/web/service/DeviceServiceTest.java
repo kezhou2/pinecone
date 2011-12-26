@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.service.restful.DeviceRestfulService;
 
 /**
@@ -27,8 +26,6 @@ import com.tenline.pinecone.platform.web.service.restful.DeviceRestfulService;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class DeviceServiceTest extends AbstractServiceTest {
-
-	private User user;
 
 	private Device device;
 	
@@ -43,9 +40,6 @@ public class DeviceServiceTest extends AbstractServiceTest {
 		device = new Device();
 		device.setId("asa");
 		device.setName("ACU");
-		user = new User();
-		user.setId("asa");
-		device.setUser(user);
 		devices = new ArrayList();
 		devices.add(device);
 	}
@@ -54,17 +48,14 @@ public class DeviceServiceTest extends AbstractServiceTest {
 	public void testShutdown() {	
 		deviceService = null;
 		devices.remove(device);
-		user = null;
 		device = null;
 		devices = null;
 	}
 
 	@Test
-	public void testCreate() { 
-		when(jdoTemplate.getObjectById(User.class, user.getId())).thenReturn(user);
+	public void testCreate() {
 		when(jdoTemplate.makePersistent(device)).thenReturn(device);
 		Device result = deviceService.create(device);
-		verify(jdoTemplate).getObjectById(User.class, user.getId()); 
 		verify(jdoTemplate).makePersistent(device);
 		assertEquals("ACU", result.getName());
 	}

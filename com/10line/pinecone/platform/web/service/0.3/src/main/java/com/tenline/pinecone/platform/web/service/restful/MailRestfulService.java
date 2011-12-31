@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.model.UserMessage;
-import com.tenline.pinecone.platform.web.service.UserMessageService;
+import com.tenline.pinecone.platform.model.Mail;
+import com.tenline.pinecone.platform.web.service.MailService;
 
 /**
  * @author Bill
@@ -24,13 +24,13 @@ import com.tenline.pinecone.platform.web.service.UserMessageService;
  */
 @Service
 @Transactional
-public class UserMessageRestfulService extends JdoDaoSupport implements UserMessageService {
+public class MailRestfulService extends JdoDaoSupport implements MailService {
 
 	/**
 	 * 
 	 */
 	@Autowired
-	public UserMessageRestfulService(PersistenceManagerFactory persistenceManagerFactory) {
+	public MailRestfulService(PersistenceManagerFactory persistenceManagerFactory) {
 		// TODO Auto-generated constructor stub
 		setPersistenceManagerFactory(persistenceManagerFactory);
 	}
@@ -38,49 +38,49 @@ public class UserMessageRestfulService extends JdoDaoSupport implements UserMess
 	@Override
 	public Response delete(String id) {
 		// TODO Auto-generated method stub
-		getJdoTemplate().deletePersistent(getJdoTemplate().getObjectById(UserMessage.class, id));
+		getJdoTemplate().deletePersistent(getJdoTemplate().getObjectById(Mail.class, id));
 		return Response.status(Status.OK).build();
 	}
 
 	@Override
-	public UserMessage create(UserMessage userMessage) {
+	public Mail create(Mail mail) {
 		// TODO Auto-generated method stub
-		userMessage.setReceiver(getJdoTemplate().getObjectById(User.class, userMessage.getReceiver().getId()));
-		userMessage.setSender(getJdoTemplate().getObjectById(User.class, userMessage.getSender().getId()));
-		return getJdoTemplate().makePersistent(userMessage);
+		mail.setReceiver(getJdoTemplate().getObjectById(User.class, mail.getReceiver().getId()));
+		mail.setSender(getJdoTemplate().getObjectById(User.class, mail.getSender().getId()));
+		return getJdoTemplate().makePersistent(mail);
 	}
 
 	@Override
-	public UserMessage update(UserMessage userMessage) {
+	public Mail update(Mail mail) {
 		// TODO Auto-generated method stub
-		UserMessage detachedMessage = getJdoTemplate().getObjectById(UserMessage.class, userMessage.getId());
-		if (userMessage.isRead() != null) detachedMessage.setRead(userMessage.isRead());
-		if (userMessage.getTitle() != null) detachedMessage.setTitle(userMessage.getTitle());
-		if (userMessage.getContent() != null) detachedMessage.setContent(userMessage.getContent());
-		return getJdoTemplate().makePersistent(detachedMessage);
+		Mail detachedMail = getJdoTemplate().getObjectById(Mail.class, mail.getId());
+		if (mail.isRead() != null) detachedMail.setRead(mail.isRead());
+		if (mail.getTitle() != null) detachedMail.setTitle(mail.getTitle());
+		if (mail.getContent() != null) detachedMail.setContent(mail.getContent());
+		return getJdoTemplate().makePersistent(detachedMail);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<UserMessage> show(String filter) {
+	public Collection<Mail> show(String filter) {
 		// TODO Auto-generated method stub
-		String queryString = "select from " + UserMessage.class.getName();
+		String queryString = "select from " + Mail.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
 		return getJdoTemplate().find(queryString);
 	}
 
 	@Override
-	public Collection<UserMessage> showBySender(String filter) {
+	public Collection<Mail> showBySender(String filter) {
 		// TODO Auto-generated method stub
 		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
-		.getSentMessages();
+		.getSentMails();
 	}
 
 	@Override
-	public Collection<UserMessage> showByReceiver(String filter) {
+	public Collection<Mail> showByReceiver(String filter) {
 		// TODO Auto-generated method stub
 		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
-		.getReceivedMessages();
+		.getReceivedMails();
 	}
 
 }

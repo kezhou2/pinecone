@@ -13,7 +13,9 @@ import org.junit.Before;
 
 import com.google.api.client.auth.oauth.OAuthCallbackUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
+import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.sdk.CategoryAPI;
 import com.tenline.pinecone.platform.sdk.ConsumerAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.oauth.AuthorizationAPI;
@@ -34,7 +36,11 @@ public abstract class AuthorizationServiceIntegrationTest extends AbstractServic
 	
 	private String verifier;
 	
+	private Category category;
+	
 	private Consumer consumer;
+	
+	private CategoryAPI categoryAPI;
 	
 	private ConsumerAPI consumerAPI;
 	
@@ -42,11 +48,22 @@ public abstract class AuthorizationServiceIntegrationTest extends AbstractServic
 	
 	@Before
 	public void testSetup() throws Exception {
+		category = new Category();
+		category.setType(Category.COM);
 		consumer = new Consumer();
 		consumer.setConnectURI("123");
-		consumer.setDisplayName("fishshow");
+		consumer.setName("fishshow");
+		categoryAPI = new CategoryAPI("localhost", "8888", "service");
 		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
-		APIResponse response = consumerAPI.create(consumer);
+		APIResponse response = categoryAPI.create(category);
+		if (response.isDone()) {
+			category = (Category) response.getMessage();
+			assertEquals(Category.COM, category.getType());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		consumer.setCategory(category);
+		response = consumerAPI.create(consumer);
 		if (response.isDone()) {
 			consumer = (Consumer) response.getMessage();
 			consumerKey = ((Consumer) response.getMessage()).getKey();
@@ -93,9 +110,9 @@ public abstract class AuthorizationServiceIntegrationTest extends AbstractServic
 	
 	@After
 	public void testShutdown() throws Exception {
-		APIResponse response = consumerAPI.delete(consumer.getId());
+		APIResponse response = categoryAPI.delete(category.getId());
 		if (response.isDone()) {
-			assertEquals("Consumer Deleted!", response.getMessage().toString());
+			assertEquals("Category Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -104,7 +121,9 @@ public abstract class AuthorizationServiceIntegrationTest extends AbstractServic
 		token = null;
 		tokenSecret = null;
 		verifier = null;
+		category = null;
 		consumer = null;
+		categoryAPI = null;
 		consumerAPI = null;
 		authorizationAPI = null;
 	}

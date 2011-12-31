@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.model.Category;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/consumer")
-public interface ConsumerService extends AbstractService {
+@Path("/api/category")
+public interface CategoryService extends AbstractService {
 
 	/**
 	 * 
-	 * @param consumer
+	 * @param category
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Consumer create(Consumer consumer);
+	Category create(Category category);
 	
 	/**
 	 * 
-	 * @param consumer
+	 * @param category
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Consumer update(Consumer consumer);
+	Category update(Category category);
 	
 	/**
 	 * 
@@ -53,16 +53,6 @@ public interface ConsumerService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Consumer> show(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Category/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Consumer> showByCategory(@PathParam("filter") String filter);
+	Collection<Category> show(@PathParam("filter") String filter);
 	
 }

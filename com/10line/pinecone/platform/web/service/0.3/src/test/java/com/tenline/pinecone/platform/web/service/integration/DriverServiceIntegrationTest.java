@@ -13,36 +13,37 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.Category;
-import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.model.Driver;
 import com.tenline.pinecone.platform.sdk.CategoryAPI;
-import com.tenline.pinecone.platform.sdk.ConsumerAPI;
+import com.tenline.pinecone.platform.sdk.DriverAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
  *
  */
-public class ConsumerServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class DriverServiceIntegrationTest extends AbstractServiceIntegrationTest {
 
 	private Category category;
 	
-	private Consumer consumer;
+	private Driver driver;
 	
 	private CategoryAPI categoryAPI;
 	
-	private ConsumerAPI consumerAPI;
+	private DriverAPI driverAPI;
 	
 	@Before
 	public void testSetup() throws Exception {
 		category = new Category();
 		category.setType(Category.COM);
-		consumer = new Consumer();
-		consumer.setConnectURI("123");
-		consumer.setName("fishshow");
-		consumer.setIcon("123".getBytes());
-		consumer.setCategory(category);
+		driver = new Driver();
+		driver.setName("fishshow");
+		driver.setIcon("123".getBytes());
+		driver.setAlias("fishshow");
+		driver.setVersion("0.1");
+		driver.setCategory(category);
 		categoryAPI = new CategoryAPI("localhost", "8888", "service");
-		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
+		driverAPI = new DriverAPI("localhost", "8888", "service");
 		APIResponse response = categoryAPI.create(category);
 		if (response.isDone()) {
 			category = (Category) response.getMessage();
@@ -50,7 +51,7 @@ public class ConsumerServiceIntegrationTest extends AbstractServiceIntegrationTe
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		consumer.setCategory(category);
+		driver.setCategory(category);
 	}
 	
 	@After
@@ -62,51 +63,54 @@ public class ConsumerServiceIntegrationTest extends AbstractServiceIntegrationTe
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		category = null;
-		consumer = null;
+		driver = null;
 		categoryAPI = null;
-		consumerAPI = null;
+		driverAPI = null;
 	}
 	
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		APIResponse response = consumerAPI.create(consumer);
+		APIResponse response = driverAPI.create(driver);
 		if (response.isDone()) {
-			consumer = (Consumer) response.getMessage();
-			assertEquals("123", consumer.getConnectURI());
-			assertEquals("fishshow", consumer.getName());
-			assertEquals("123", new String(consumer.getIcon()));
-			assertEquals(Category.COM, consumer.getCategory().getType());
+			driver = (Driver) response.getMessage();
+			assertEquals("fishshow", driver.getAlias());
+			assertEquals("fishshow", driver.getName());
+			assertEquals("123", new String(driver.getIcon()));
+			assertEquals("0.1", driver.getVersion());
+			assertEquals(Category.COM, driver.getCategory().getType());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		consumer.setConnectURI("234");
-		consumer.setName("fishshow2");
-		consumer.setIcon("234".getBytes());
-		response = consumerAPI.update(consumer);
+		driver.setAlias("fishshow2");
+		driver.setName("fishshow2");
+		driver.setIcon("234".getBytes());
+		driver.setVersion("0.2");
+		response = driverAPI.update(driver);
 		if (response.isDone()) {
-			consumer = (Consumer) response.getMessage();
-			assertEquals("234", consumer.getConnectURI());
-			assertEquals("fishshow2", consumer.getName());
-			assertEquals("234", new String(consumer.getIcon()));
+			driver = (Driver) response.getMessage();
+			assertEquals("fishshow2", driver.getAlias());
+			assertEquals("fishshow2", driver.getName());
+			assertEquals("234", new String(driver.getIcon()));
+			assertEquals("0.2", driver.getVersion());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.show("id=='"+consumer.getId()+"'");
+		response = driverAPI.show("id=='"+driver.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(1, ((Collection<Consumer>) response.getMessage()).size());
+			assertEquals(1, ((Collection<Driver>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.delete(consumer.getId());
+		response = driverAPI.delete(driver.getId());
 		if (response.isDone()) {
-			assertEquals("Consumer Deleted!", response.getMessage().toString());
+			assertEquals("Driver Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.showByCategory("id=='"+category.getId()+"'");
+		response = driverAPI.showByCategory("id=='"+category.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<Consumer>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Driver>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

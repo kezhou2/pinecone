@@ -17,6 +17,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.web.service.restful.ConsumerRestfulService;
 
@@ -29,6 +30,8 @@ public class ConsumerServiceTest extends AbstractServiceTest {
 
 	private Consumer consumer;
 	
+	private Category category;
+	
 	private List consumers;
 	
 	private ConsumerRestfulService consumerService;
@@ -37,9 +40,12 @@ public class ConsumerServiceTest extends AbstractServiceTest {
 	public void testSetup() {
 		consumerService = new ConsumerRestfulService(persistenceManagerFactory);
 		consumerService.setJdoTemplate(jdoTemplate);
+		category = new Category();
+		category.setId("bbb");
 		consumer = new Consumer();
 		consumer.setId("asa");
-		consumer.setDisplayName("test");		
+		consumer.setName("test");		
+		consumer.setCategory(category);
 		consumers = new ArrayList();
 		consumers.add(consumer);
 	}
@@ -49,15 +55,18 @@ public class ConsumerServiceTest extends AbstractServiceTest {
 		consumerService = null;
 		consumers.remove(consumer);
 		consumer = null;
+		category = null;
 		consumers = null;
 	}
 	
 	@Test
 	public void testCreate() {
+		when(jdoTemplate.getObjectById(Category.class, category.getId())).thenReturn(category);
 		when(jdoTemplate.makePersistent(consumer)).thenReturn(consumer);
 		Consumer result = consumerService.create(consumer);
+		verify(jdoTemplate).getObjectById(Category.class, category.getId());
 		verify(jdoTemplate).makePersistent(consumer);
-		assertEquals("test", result.getDisplayName());
+		assertEquals("test", result.getName());
 	}
 	
 	@Test
@@ -76,7 +85,7 @@ public class ConsumerServiceTest extends AbstractServiceTest {
 		Consumer result = consumerService.update(consumer);
 		verify(jdoTemplate).getObjectById(Consumer.class, consumer.getId());
 		verify(jdoTemplate).makePersistent(consumer);
-		assertEquals("test", result.getDisplayName());
+		assertEquals("test", result.getName());
 	}
 	
 	@Test

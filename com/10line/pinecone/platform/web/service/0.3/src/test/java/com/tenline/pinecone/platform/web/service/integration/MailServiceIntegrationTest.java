@@ -13,26 +13,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.model.UserRelation;
+import com.tenline.pinecone.platform.model.Mail;
 import com.tenline.pinecone.platform.sdk.UserAPI;
-import com.tenline.pinecone.platform.sdk.UserRelationAPI;
+import com.tenline.pinecone.platform.sdk.MailAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
  *
  */
-public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class MailServiceIntegrationTest extends AbstractServiceIntegrationTest {
 
 	private User sender;
 	
 	private User receiver;
 	
-	private UserRelation relation;
+	private Mail mail;
 	
 	private UserAPI userAPI;
 	
-	private UserRelationAPI relationAPI;
+	private MailAPI mailAPI;
 	
 	@Before
 	public void testSetup() throws Exception {
@@ -40,11 +40,12 @@ public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrati
 		sender.setName("bill");
 		receiver = new User();
 		receiver.setName("jack");
-		relation = new UserRelation();
-		relation.setDecided(false);
-		relation.setType(UserRelation.CLASSMATE);
+		mail = new Mail();
+		mail.setRead(false);
+		mail.setTitle("aa");
+		mail.setContent("bb");
 		userAPI = new UserAPI("localhost", "8888", "service");
-		relationAPI = new UserRelationAPI("localhost", "8888", "service");
+		mailAPI = new MailAPI("localhost", "8888", "service");
 		APIResponse response = userAPI.create(sender);
 		if (response.isDone()) {
 			sender = (User) response.getMessage();
@@ -59,8 +60,8 @@ public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrati
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		relation.setSender(sender);
-		relation.setReceiver(receiver);
+		mail.setSender(sender);
+		mail.setReceiver(receiver);
 	}
 	
 	@After
@@ -82,53 +83,58 @@ public class UserRelationServiceIntegrationTest extends AbstractServiceIntegrati
 		}
 		sender = null;
 		receiver = null;
-		relation = null;
+		mail = null;
 		userAPI = null;
-		relationAPI = null;
+		mailAPI = null;
 	}
 
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		APIResponse response = relationAPI.create(relation);
+		APIResponse response = mailAPI.create(mail);
 		if (response.isDone()) {
-			relation = (UserRelation) response.getMessage();
-			assertEquals("jack", relation.getReceiver().getName());
-			assertEquals("bill", relation.getSender().getName());
+			mail = (Mail) response.getMessage();
+			assertEquals(false, mail.isRead());
+			assertEquals("aa", mail.getTitle());
+			assertEquals("bb", mail.getContent());
+			assertEquals("jack", mail.getReceiver().getName());
+			assertEquals("bill", mail.getSender().getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		relation.setDecided(true);
-		relation.setType(UserRelation.COLLEAGUE);
-		response = relationAPI.update(relation);
+		mail.setRead(true);
+		mail.setTitle("cc");
+		mail.setContent("dd");
+		response = mailAPI.update(mail);
 		if (response.isDone()) {
-			relation = (UserRelation) response.getMessage();
-			assertEquals(true, relation.isDecided());
-			assertEquals(UserRelation.COLLEAGUE, relation.getType());
+			mail = (Mail) response.getMessage();
+			assertEquals(true, mail.isRead());
+			assertEquals("cc", mail.getTitle());
+			assertEquals("dd", mail.getContent());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = relationAPI.show("id=='"+relation.getId()+"'");
+		response = mailAPI.show("id=='"+mail.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(1, ((Collection<UserRelation>) response.getMessage()).size());
+			assertEquals(1, ((Collection<Mail>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = relationAPI.delete(relation.getId());
+		response = mailAPI.delete(mail.getId());
 		if (response.isDone()) {
-			assertEquals("User Relation Deleted!", response.getMessage().toString());
+			assertEquals("Mail Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = relationAPI.showByReceiver("id=='"+receiver.getId()+"'");
+		response = mailAPI.showByReceiver("id=='"+receiver.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<UserRelation>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Mail>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = relationAPI.showBySender("id=='"+sender.getId()+"'");
+		response = mailAPI.showBySender("id=='"+sender.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<UserRelation>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Mail>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

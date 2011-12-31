@@ -358,8 +358,8 @@ public class OAuthServlet extends HttpServlet {
     	    sb.append("<tokenAuthorizationRequest xmlns=\"http://org.jboss.com/resteasy/oauth\" ")
     	        .append("replyTo=\"").append(uri).append("\">");
     	    sb.append("<consumerId>").append(consumer.getKey()).append("</consumerId>");
-    	    if (consumer.getDisplayName() != null) {
-    	        sb.append("<consumerName>").append(consumer.getDisplayName()).append("</consumerName>");
+    	    if (consumer.getName() != null) {
+    	        sb.append("<consumerName>").append(consumer.getName()).append("</consumerName>");
     	    }
     	    if (requestToken.getScopes() != null) {
     	        sb.append("<scopes>").append(requestToken.getScopes()[0]).append("</scopes>");
@@ -384,7 +384,7 @@ public class OAuthServlet extends HttpServlet {
 	        }
 	        try {
 	            req.setAttribute("oauth_consumer_id", consumer.getKey());
-	            req.setAttribute("oauth_consumer_display", consumer.getDisplayName());
+	            req.setAttribute("oauth_consumer_display", consumer.getName());
 	            req.setAttribute("oauth_consumer_scopes", requestToken.getScopes());
 	            req.setAttribute("oauth_consumer_permissions", requestToken.getPermissions());
 	            req.setAttribute("oauth_request_token", requestToken.getToken());

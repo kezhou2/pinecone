@@ -12,79 +12,93 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.DeviceDependency;
+import com.tenline.pinecone.platform.model.Dependency;
+import com.tenline.pinecone.platform.model.Driver;
+import com.tenline.pinecone.platform.sdk.CategoryAPI;
 import com.tenline.pinecone.platform.sdk.ConsumerAPI;
-import com.tenline.pinecone.platform.sdk.DeviceAPI;
-import com.tenline.pinecone.platform.sdk.DeviceDependencyAPI;
+import com.tenline.pinecone.platform.sdk.DriverAPI;
+import com.tenline.pinecone.platform.sdk.DependencyAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
  *
  */
-public class DeviceDependencyServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class DependencyServiceIntegrationTest extends AbstractServiceIntegrationTest {
 
-	private Device device;
+	private Driver driver;
+	
+	private Category category;
 	
 	private Consumer consumer;
 	
-	private DeviceDependency dependency;
+	private Dependency dependency;
 	
-	private DeviceAPI deviceAPI;
+	private DriverAPI driverAPI;
+	
+	private CategoryAPI categoryAPI;
 	
 	private ConsumerAPI consumerAPI;
 	
-	private DeviceDependencyAPI dependencyAPI;
+	private DependencyAPI dependencyAPI;
 	
 	@Before
 	public void testSetup() throws Exception {
-		device = new Device();
-		device.setName("LNB");
+		category = new Category();
+		category.setType(Category.COM);
+		driver = new Driver();
+		driver.setName("LNB");
 		consumer = new Consumer();
-		consumer.setDisplayName("AA");
-		dependency = new DeviceDependency();
+		consumer.setName("AA");
+		dependency = new Dependency();
 		dependency.setOptional(false);
-		deviceAPI = new DeviceAPI("localhost", "8888", "service");
+		driverAPI = new DriverAPI("localhost", "8888", "service");
+		categoryAPI = new CategoryAPI("localhost", "8888", "service");
 		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
-		dependencyAPI = new DeviceDependencyAPI("localhost", "8888", "service");
-		APIResponse response = deviceAPI.create(device);
+		dependencyAPI = new DependencyAPI("localhost", "8888", "service");
+		APIResponse response = categoryAPI.create(category);
 		if (response.isDone()) {
-			device = (Device) response.getMessage();
-			assertEquals("LNB", device.getName());
+			category = (Category) response.getMessage();
+			assertEquals(Category.COM, category.getType());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
+		driver.setCategory(category);
+		response = driverAPI.create(driver);
+		if (response.isDone()) {
+			driver = (Driver) response.getMessage();
+			assertEquals("LNB", driver.getName());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		consumer.setCategory(category);
 		response = consumerAPI.create(consumer);
 		if (response.isDone()) {
 			consumer = (Consumer) response.getMessage();
-			assertEquals("AA", consumer.getDisplayName());
+			assertEquals("AA", consumer.getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		dependency.setConsumer(consumer);
-		dependency.setDevice(device);
+		dependency.setDriver(driver);
 	}
 	
 	@After
 	public void testShutdown() throws Exception {
-		APIResponse response = deviceAPI.delete(device.getId());
+		APIResponse response = categoryAPI.delete(category.getId());
 		if (response.isDone()) {
-			assertEquals("Device Deleted!", response.getMessage().toString());
+			assertEquals("Category Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.delete(consumer.getId());
-		if (response.isDone()) {
-			assertEquals("Consumer Deleted!", response.getMessage().toString());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		device = null;
+		category = null;
+		driver = null;
 		consumer = null;
 		dependency = null;
-		deviceAPI = null;
+		categoryAPI = null;
+		driverAPI = null;
 		consumerAPI = null;
 		dependencyAPI = null;
 	}
@@ -94,42 +108,42 @@ public class DeviceDependencyServiceIntegrationTest extends AbstractServiceInteg
 	public void testCRUD() throws Exception {
 		APIResponse response = dependencyAPI.create(dependency);
 		if (response.isDone()) {
-			dependency = (DeviceDependency) response.getMessage();
+			dependency = (Dependency) response.getMessage();
 			assertEquals(false, dependency.isOptional());
-			assertEquals("LNB", dependency.getDevice().getName());
-			assertEquals("AA", dependency.getConsumer().getDisplayName());
+			assertEquals("LNB", dependency.getDriver().getName());
+			assertEquals("AA", dependency.getConsumer().getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		dependency.setOptional(true);
 		response = dependencyAPI.update(dependency);
 		if (response.isDone()) {
-			dependency = (DeviceDependency) response.getMessage();
+			dependency = (Dependency) response.getMessage();
 			assertEquals(true, dependency.isOptional());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = dependencyAPI.show("id=='"+dependency.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(1, ((Collection<DeviceDependency>) response.getMessage()).size());
+			assertEquals(1, ((Collection<Dependency>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = dependencyAPI.delete(dependency.getId());
 		if (response.isDone()) {
-			assertEquals("Device Dependency Deleted!", response.getMessage().toString());
+			assertEquals("Dependency Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = dependencyAPI.showByDevice("id=='"+device.getId()+"'");
+		response = dependencyAPI.showByDriver("id=='"+driver.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<DeviceDependency>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Dependency>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = dependencyAPI.showByConsumer("id=='"+consumer.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<DeviceDependency>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Dependency>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

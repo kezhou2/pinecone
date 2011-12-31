@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.UserRelation;
+import com.tenline.pinecone.platform.model.Dependency;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/user/relation")
-public interface UserRelationService extends AbstractService {
-
+@Path("/api/dependency")
+public interface DependencyService extends AbstractService {
+	
 	/**
 	 * 
-	 * @param userRelation
+	 * @param dependency
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	UserRelation create(UserRelation userRelation);
+	Dependency create(Dependency dependency);
 	
 	/**
 	 * 
-	 * @param userRelation
+	 * @param dependency
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	UserRelation update(UserRelation userRelation);
+	Dependency update(Dependency dependency);
 	
 	/**
 	 * 
@@ -53,26 +53,26 @@ public interface UserRelationService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<UserRelation> show(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Sender/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<UserRelation> showBySender(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Receiver/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<UserRelation> showByReceiver(@PathParam("filter") String filter);
+	Collection<Dependency> show(@PathParam("filter") String filter);
 
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/@Consumer/{filter}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<Dependency> showByConsumer(@PathParam("filter") String filter);
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/@Driver/{filter}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<Dependency> showByDriver(@PathParam("filter") String filter);
+	
 }

@@ -13,26 +13,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.model.UserMessage;
+import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.sdk.UserAPI;
-import com.tenline.pinecone.platform.sdk.UserMessageAPI;
+import com.tenline.pinecone.platform.sdk.FriendAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
  *
  */
-public class UserMessageServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class FriendServiceIntegrationTest extends AbstractServiceIntegrationTest {
 
 	private User sender;
 	
 	private User receiver;
 	
-	private UserMessage message;
+	private Friend friend;
 	
 	private UserAPI userAPI;
 	
-	private UserMessageAPI messageAPI;
+	private FriendAPI friendAPI;
 	
 	@Before
 	public void testSetup() throws Exception {
@@ -40,12 +40,11 @@ public class UserMessageServiceIntegrationTest extends AbstractServiceIntegratio
 		sender.setName("bill");
 		receiver = new User();
 		receiver.setName("jack");
-		message = new UserMessage();
-		message.setRead(false);
-		message.setTitle("aa");
-		message.setContent("bb");
+		friend = new Friend();
+		friend.setDecided(false);
+		friend.setType(Friend.CLASSMATE);
 		userAPI = new UserAPI("localhost", "8888", "service");
-		messageAPI = new UserMessageAPI("localhost", "8888", "service");
+		friendAPI = new FriendAPI("localhost", "8888", "service");
 		APIResponse response = userAPI.create(sender);
 		if (response.isDone()) {
 			sender = (User) response.getMessage();
@@ -60,8 +59,8 @@ public class UserMessageServiceIntegrationTest extends AbstractServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		message.setSender(sender);
-		message.setReceiver(receiver);
+		friend.setSender(sender);
+		friend.setReceiver(receiver);
 	}
 	
 	@After
@@ -83,58 +82,53 @@ public class UserMessageServiceIntegrationTest extends AbstractServiceIntegratio
 		}
 		sender = null;
 		receiver = null;
-		message = null;
+		friend = null;
 		userAPI = null;
-		messageAPI = null;
+		friendAPI = null;
 	}
 
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		APIResponse response = messageAPI.create(message);
+		APIResponse response = friendAPI.create(friend);
 		if (response.isDone()) {
-			message = (UserMessage) response.getMessage();
-			assertEquals(false, message.isRead());
-			assertEquals("aa", message.getTitle());
-			assertEquals("bb", message.getContent());
-			assertEquals("jack", message.getReceiver().getName());
-			assertEquals("bill", message.getSender().getName());
+			friend = (Friend) response.getMessage();
+			assertEquals("jack", friend.getReceiver().getName());
+			assertEquals("bill", friend.getSender().getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		message.setRead(true);
-		message.setTitle("cc");
-		message.setContent("dd");
-		response = messageAPI.update(message);
+		friend.setDecided(true);
+		friend.setType(Friend.COLLEAGUE);
+		response = friendAPI.update(friend);
 		if (response.isDone()) {
-			message = (UserMessage) response.getMessage();
-			assertEquals(true, message.isRead());
-			assertEquals("cc", message.getTitle());
-			assertEquals("dd", message.getContent());
+			friend = (Friend) response.getMessage();
+			assertEquals(true, friend.isDecided());
+			assertEquals(Friend.COLLEAGUE, friend.getType());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = messageAPI.show("id=='"+message.getId()+"'");
+		response = friendAPI.show("id=='"+friend.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(1, ((Collection<UserMessage>) response.getMessage()).size());
+			assertEquals(1, ((Collection<Friend>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = messageAPI.delete(message.getId());
+		response = friendAPI.delete(friend.getId());
 		if (response.isDone()) {
-			assertEquals("User Message Deleted!", response.getMessage().toString());
+			assertEquals("Friend Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = messageAPI.showByReceiver("id=='"+receiver.getId()+"'");
+		response = friendAPI.showByReceiver("id=='"+receiver.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<UserMessage>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Friend>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = messageAPI.showBySender("id=='"+sender.getId()+"'");
+		response = friendAPI.showBySender("id=='"+sender.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<UserMessage>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Friend>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

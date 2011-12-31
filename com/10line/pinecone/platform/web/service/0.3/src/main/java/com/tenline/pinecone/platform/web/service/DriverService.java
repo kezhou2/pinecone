@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.DeviceInstallation;
+import com.tenline.pinecone.platform.model.Driver;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/device/installation")
-public interface DeviceInstallationService extends AbstractService {
+@Path("/api/driver")
+public interface DriverService extends AbstractService {
 
 	/**
 	 * 
-	 * @param deviceInstallation
+	 * @param driver
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	DeviceInstallation create(DeviceInstallation deviceInstallation);
+	Driver create(Driver driver);
 	
 	/**
 	 * 
-	 * @param deviceInstallation
+	 * @param driver
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	DeviceInstallation update(DeviceInstallation deviceInstallation);
+	Driver update(Driver driver);
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public interface DeviceInstallationService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<DeviceInstallation> show(@PathParam("filter") String filter);
+	Collection<Driver> show(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -61,18 +61,8 @@ public interface DeviceInstallationService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/@Device/{filter}")
+	@Path("/show/@Category/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<DeviceInstallation> showByDevice(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@User/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<DeviceInstallation> showByUser(@PathParam("filter") String filter);
+	Collection<Driver> showByCategory(@PathParam("filter") String filter);
 	
 }

@@ -12,11 +12,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.model.ConsumerInstallation;
+import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.sdk.CategoryAPI;
 import com.tenline.pinecone.platform.sdk.ConsumerAPI;
-import com.tenline.pinecone.platform.sdk.ConsumerInstallationAPI;
+import com.tenline.pinecone.platform.sdk.ApplicationAPI;
 import com.tenline.pinecone.platform.sdk.UserAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
@@ -24,31 +26,38 @@ import com.tenline.pinecone.platform.sdk.development.APIResponse;
  * @author Bill
  *
  */
-public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceIntegrationTest {
+public class ApplicationServiceIntegrationTest extends AbstractServiceIntegrationTest {
+	
+	private Category category;
 
 	private Consumer consumer;
 	
 	private User user;
 	
-	private ConsumerInstallation installation;
+	private Application application;
+	
+	private CategoryAPI categoryAPI;
 	
 	private ConsumerAPI consumerAPI;
 	
 	private UserAPI userAPI;
 	
-	private ConsumerInstallationAPI installationAPI;
+	private ApplicationAPI applicationAPI;
 	
 	@Before
 	public void testSetup() throws Exception {
 		user = new User();
 		user.setName("bill");
 		consumer = new Consumer();
-		consumer.setDisplayName("App");
-		installation = new ConsumerInstallation();
-		installation.setDefault(false);
+		consumer.setName("App");
+		category = new Category();
+		category.setType(Category.COM);
+		application = new Application();
+		application.setDefault(false);
 		userAPI = new UserAPI("localhost", "8888", "service");
+		categoryAPI = new CategoryAPI("localhost", "8888", "service");
 		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
-		installationAPI = new ConsumerInstallationAPI("localhost", "8888", "service");
+		applicationAPI = new ApplicationAPI("localhost", "8888", "service");
 		APIResponse response = userAPI.create(user);
 		if (response.isDone()) {
 			user = (User) response.getMessage();
@@ -56,15 +65,23 @@ public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceI
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.create(consumer);
+		response = categoryAPI.create(category);
 		if (response.isDone()) {
-			consumer = (Consumer) response.getMessage();
-			assertEquals("App", consumer.getDisplayName());
+			category = (Category) response.getMessage();
+			assertEquals(Category.COM, category.getType());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		installation.setUser(user);
-		installation.setConsumer(consumer);
+		consumer.setCategory(category);
+		response = consumerAPI.create(consumer);
+		if (response.isDone()) {
+			consumer = (Consumer) response.getMessage();
+			assertEquals("App", consumer.getName());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		application.setUser(user);
+		application.setConsumer(consumer);
 	}
 	
 	@After
@@ -75,61 +92,63 @@ public class ConsumerInstallationServiceIntegrationTest extends AbstractServiceI
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = consumerAPI.delete(consumer.getId());
+		response = categoryAPI.delete(category.getId());
 		if (response.isDone()) {
-			assertEquals("Consumer Deleted!", response.getMessage().toString());
+			assertEquals("Category Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		user = null;
+		category = null;
 		consumer = null;
-		installation = null;
+		application = null;
 		userAPI = null;
+		categoryAPI = null;
 		consumerAPI = null;
-		installationAPI = null;
+		applicationAPI = null;
 	}
 	
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testCRUD() throws Exception {
-		APIResponse response = installationAPI.create(installation);
+		APIResponse response = applicationAPI.create(application);
 		if (response.isDone()) {
-			installation = (ConsumerInstallation) response.getMessage();
-			assertEquals(false, installation.isDefault());
-			assertEquals("bill", installation.getUser().getName());
-			assertEquals("App", installation.getConsumer().getDisplayName());
+			application = (Application) response.getMessage();
+			assertEquals(false, application.isDefault());
+			assertEquals("bill", application.getUser().getName());
+			assertEquals("App", application.getConsumer().getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		installation.setDefault(true);
-		response = installationAPI.update(installation);
+		application.setDefault(true);
+		response = applicationAPI.update(application);
 		if (response.isDone()) {
-			installation = (ConsumerInstallation) response.getMessage();
-			assertEquals(true, installation.isDefault());
+			application = (Application) response.getMessage();
+			assertEquals(true, application.isDefault());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = installationAPI.show("id=='"+installation.getId()+"'");
+		response = applicationAPI.show("id=='"+application.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(1, ((Collection<ConsumerInstallation>) response.getMessage()).size());
+			assertEquals(1, ((Collection<Application>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = installationAPI.delete(installation.getId());
+		response = applicationAPI.delete(application.getId());
 		if (response.isDone()) {
-			assertEquals("Consumer Installation Deleted!", response.getMessage().toString());
+			assertEquals("Application Deleted!", response.getMessage().toString());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = installationAPI.showByUser("id=='"+user.getId()+"'");
+		response = applicationAPI.showByUser("id=='"+user.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<ConsumerInstallation>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Application>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = installationAPI.showByConsumer("id=='"+consumer.getId()+"'");
+		response = applicationAPI.showByConsumer("id=='"+consumer.getId()+"'");
 		if (response.isDone()) {
-			assertEquals(0, ((Collection<ConsumerInstallation>) response.getMessage()).size());
+			assertEquals(0, ((Collection<Application>) response.getMessage()).size());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

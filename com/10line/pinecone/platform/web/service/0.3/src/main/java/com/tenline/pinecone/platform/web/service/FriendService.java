@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.DeviceDependency;
+import com.tenline.pinecone.platform.model.Friend;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/device/dependency")
-public interface DeviceDependencyService extends AbstractService {
-	
+@Path("/api/friend")
+public interface FriendService extends AbstractService {
+
 	/**
 	 * 
-	 * @param deviceDependency
+	 * @param friend
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	DeviceDependency create(DeviceDependency deviceDependency);
+	Friend create(Friend friend);
 	
 	/**
 	 * 
-	 * @param deviceDependency
+	 * @param friend
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	DeviceDependency update(DeviceDependency deviceDependency);
+	Friend update(Friend friend);
 	
 	/**
 	 * 
@@ -53,26 +53,26 @@ public interface DeviceDependencyService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<DeviceDependency> show(@PathParam("filter") String filter);
+	Collection<Friend> show(@PathParam("filter") String filter);
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/@Sender/{filter}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<Friend> showBySender(@PathParam("filter") String filter);
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/@Receiver/{filter}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<Friend> showByReceiver(@PathParam("filter") String filter);
 
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Consumer/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<DeviceDependency> showByConsumer(@PathParam("filter") String filter);
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 */
-	@GET
-	@Path("/show/@Device/{filter}")
-	@Produces(MediaType.APPLICATION_JSON)
-	Collection<DeviceDependency> showByDevice(@PathParam("filter") String filter);
-	
 }

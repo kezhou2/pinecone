@@ -14,6 +14,7 @@ import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.web.service.ConsumerService;
 
@@ -44,16 +45,19 @@ public class ConsumerRestfulService extends JdoDaoSupport implements ConsumerSer
 	@Override
 	public Consumer create(Consumer consumer) {
 		// TODO Auto-generated method stub
+		consumer.setCategory(getJdoTemplate().getObjectById(Category.class, consumer.getCategory().getId()));
 		return getJdoTemplate().makePersistent(consumer);
 	}
 
 	@Override
 	public Consumer update(Consumer consumer) {
 		// TODO Auto-generated method stub
-		Consumer detachedConsumer = this.getJdoTemplate().getObjectById(Consumer.class, consumer.getId());
+		Consumer detachedConsumer = getJdoTemplate().getObjectById(Consumer.class, consumer.getId());
 		if (consumer.getConnectURI() != null) detachedConsumer.setConnectURI(consumer.getConnectURI());
-		if (consumer.getDisplayName() != null) detachedConsumer.setDisplayName(consumer.getDisplayName());
+		if (consumer.getAlias() != null) detachedConsumer.setAlias(consumer.getAlias());
 		if (consumer.getIcon() != null) detachedConsumer.setIcon(consumer.getIcon());
+		if (consumer.getName() != null) detachedConsumer.setName(consumer.getName());
+		if (consumer.getVersion() != null) detachedConsumer.setVersion(consumer.getVersion());
 		return getJdoTemplate().makePersistent(detachedConsumer);
 	}
 
@@ -64,6 +68,13 @@ public class ConsumerRestfulService extends JdoDaoSupport implements ConsumerSer
 		String queryString = "select from " + Consumer.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
 		return getJdoTemplate().find(queryString);
+	}
+
+	@Override
+	public Collection<Consumer> showByCategory(String filter) {
+		// TODO Auto-generated method stub
+		return getJdoTemplate().getObjectById(Category.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getConsumers();
 	}
 
 }

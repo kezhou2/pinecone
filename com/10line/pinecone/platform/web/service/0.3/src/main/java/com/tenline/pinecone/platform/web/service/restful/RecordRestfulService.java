@@ -14,10 +14,8 @@ import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Record;
-import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.web.service.RecordService;
 
 /**
@@ -47,8 +45,6 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 	@Override
 	public Record create(Record record) {
 		// TODO Auto-generated method stub
-		record.setDevice(getJdoTemplate().getObjectById(Device.class, record.getDevice().getId()));
-		record.setVariable(getJdoTemplate().getObjectById(Variable.class, record.getVariable().getId()));
 		record.setItem(getJdoTemplate().getObjectById(Item.class, record.getItem().getId()));
 		return getJdoTemplate().makePersistent(record);
 	}
@@ -68,20 +64,6 @@ public class RecordRestfulService extends JdoDaoSupport implements RecordService
 		String queryString = "select from " + Record.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
 		return getJdoTemplate().find(queryString);
-	}
-	
-	@Override
-	public Collection<Record> showByDevice(String filter) {
-		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(Device.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
-		.getRecords();
-	}
-
-	@Override
-	public Collection<Record> showByVariable(String filter) {
-		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(Variable.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
-		.getRecords();
 	}
 
 	@Override

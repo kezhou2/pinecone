@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Driver;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.service.DeviceService;
 
 /**
@@ -37,6 +39,8 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 	@Override
 	public Device create(Device device) {
 		// TODO Auto-generated method stub
+		device.setDriver(getJdoTemplate().getObjectById(Driver.class, device.getDriver().getId()));
+		device.setUser(getJdoTemplate().getObjectById(User.class, device.getUser().getId()));
 		return getJdoTemplate().makePersistent(device);
 	}
 
@@ -51,10 +55,8 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 	public Device update(Device device) {
 		// TODO Auto-generated method stub
 		Device detachedDevice = (Device) getJdoTemplate().getObjectById(Device.class, device.getId());
-		if (device.getName() != null) detachedDevice.setName(device.getName());
-		if (device.getSymbolicName() != null) detachedDevice.setSymbolicName(device.getSymbolicName());
-		if (device.getVersion() != null) detachedDevice.setVersion(device.getVersion());
-		if (device.getIcon() != null) detachedDevice.setIcon(device.getIcon());
+		if (device.isDefault() != null) detachedDevice.setDefault(device.isDefault());
+		if (device.getStatus() != null) detachedDevice.setStatus(device.getStatus());
 		return getJdoTemplate().makePersistent(detachedDevice);
 	}
 	
@@ -65,6 +67,20 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 		String queryString = "select from " + Device.class.getName();
 		if (!filter.equals("all")) queryString += " where " + filter;
 		return getJdoTemplate().find(queryString);
+	}
+
+	@Override
+	public Collection<Device> showByUser(String filter) {
+		// TODO Auto-generated method stub
+		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getDevices();
+	}
+
+	@Override
+	public Collection<Device> showByDriver(String filter) {
+		// TODO Auto-generated method stub
+		return getJdoTemplate().getObjectById(Driver.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		.getDevices();
 	}
 
 }

@@ -18,10 +18,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Record;
-import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.web.service.restful.RecordRestfulService;
 
 /**
@@ -32,10 +30,6 @@ import com.tenline.pinecone.platform.web.service.restful.RecordRestfulService;
 public class RecordServiceTest extends AbstractServiceTest {
 	
 	private Date date = new Date();
-	
-	private Device device;
-	
-	private Variable variable;
 	
 	private Item item;
 	
@@ -52,12 +46,6 @@ public class RecordServiceTest extends AbstractServiceTest {
 		record = new Record();
 		record.setId("asa");
 		record.setTimestamp(date);
-		device = new Device();
-		device.setId("aaa");
-		record.setDevice(device);
-		variable = new Variable();
-		variable.setId("asa");
-		record.setVariable(variable);
 		item = new Item();
 		item.setId("bbb");
 		record.setItem(item);
@@ -69,8 +57,6 @@ public class RecordServiceTest extends AbstractServiceTest {
 	public void testShutdown() {	
 		recordService = null;
 		records.remove(record);
-		device = null;
-		variable = null;
 		item = null;
 		record = null;
 		records = null;
@@ -78,13 +64,9 @@ public class RecordServiceTest extends AbstractServiceTest {
 
 	@Test
 	public void testCreate() {
-		when(jdoTemplate.getObjectById(Device.class, device.getId())).thenReturn(device);
-		when(jdoTemplate.getObjectById(Variable.class, variable.getId())).thenReturn(variable);
 		when(jdoTemplate.getObjectById(Item.class, item.getId())).thenReturn(item);
 		when(jdoTemplate.makePersistent(record)).thenReturn(record);
 		Record result = recordService.create(record);
-		verify(jdoTemplate).getObjectById(Device.class, device.getId());
-		verify(jdoTemplate).getObjectById(Variable.class, variable.getId());
 		verify(jdoTemplate).getObjectById(Item.class, item.getId());
 		verify(jdoTemplate).makePersistent(record);
 		assertEquals(date, result.getTimestamp());
@@ -111,7 +93,7 @@ public class RecordServiceTest extends AbstractServiceTest {
 	
 	@Test
 	public void testShow() {
-		String filter = "value=='1'";
+		String filter = "id=='asa'";
 		String queryString = "select from " + Record.class.getName() + " where " + filter;
 		when(jdoTemplate.find(queryString)).thenReturn(records);
 		Collection<Record> result = recordService.show(filter);

@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.ConsumerInstallation;
+import com.tenline.pinecone.platform.model.Application;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/consumer/installation")
-public interface ConsumerInstallationService extends AbstractService {
+@Path("/api/application")
+public interface ApplicationService extends AbstractService {
 
 	/**
 	 * 
-	 * @param consumerInstallation
+	 * @param application
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	ConsumerInstallation create(ConsumerInstallation consumerInstallation);
+	Application create(Application application);
 	
 	/**
 	 * 
-	 * @param consumerInstallation
+	 * @param application
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	ConsumerInstallation update(ConsumerInstallation consumerInstallation);
+	Application update(Application application);
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public interface ConsumerInstallationService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<ConsumerInstallation> show(@PathParam("filter") String filter);
+	Collection<Application> show(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -63,7 +63,7 @@ public interface ConsumerInstallationService extends AbstractService {
 	@GET
 	@Path("/show/@User/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<ConsumerInstallation> showByUser(@PathParam("filter") String filter);
+	Collection<Application> showByUser(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -73,6 +73,6 @@ public interface ConsumerInstallationService extends AbstractService {
 	@GET
 	@Path("/show/@Consumer/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<ConsumerInstallation> showByConsumer(@PathParam("filter") String filter);
+	Collection<Application> showByConsumer(@PathParam("filter") String filter);
 	
 }

@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.UserMessage;
+import com.tenline.pinecone.platform.model.Mail;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/user/message")
-public interface UserMessageService extends AbstractService {
+@Path("/api/mail")
+public interface MailService extends AbstractService {
 
 	/**
 	 * 
-	 * @param userMessage
+	 * @param mail
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	UserMessage create(UserMessage userMessage);
+	Mail create(Mail mail);
 	
 	/**
 	 * 
-	 * @param userMessage
+	 * @param mail
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	UserMessage update(UserMessage userMessage);
+	Mail update(Mail mail);
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public interface UserMessageService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<UserMessage> show(@PathParam("filter") String filter);
+	Collection<Mail> show(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -63,7 +63,7 @@ public interface UserMessageService extends AbstractService {
 	@GET
 	@Path("/show/@Sender/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<UserMessage> showBySender(@PathParam("filter") String filter);
+	Collection<Mail> showBySender(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -73,6 +73,6 @@ public interface UserMessageService extends AbstractService {
 	@GET
 	@Path("/show/@Receiver/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<UserMessage> showByReceiver(@PathParam("filter") String filter);
+	Collection<Mail> showByReceiver(@PathParam("filter") String filter);
 	
 }

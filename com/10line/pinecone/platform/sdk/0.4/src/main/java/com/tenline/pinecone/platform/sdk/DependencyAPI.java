@@ -21,7 +21,7 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
-import com.tenline.pinecone.platform.model.DeviceDependency;
+import com.tenline.pinecone.platform.model.Dependency;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
@@ -29,7 +29,7 @@ import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
  * @author Bill
  *
  */
-public class DeviceDependencyAPI extends JaxbAPI {
+public class DependencyAPI extends JaxbAPI {
 
 	/**
 	 * 
@@ -37,11 +37,11 @@ public class DeviceDependencyAPI extends JaxbAPI {
 	 * @param port
 	 * @param context
 	 */
-	public DeviceDependencyAPI(String host, String port, String context) {
+	public DependencyAPI(String host, String port, String context) {
 		super(host, port, context);
 		// TODO Auto-generated constructor stub
 		try {
-			jaxbContext = JAXBContext.newInstance(DeviceDependency.class);
+			jaxbContext = JAXBContext.newInstance(Dependency.class);
 			marshaller = jaxbContext.createMarshaller();
 			unmarshaller = jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
@@ -52,20 +52,20 @@ public class DeviceDependencyAPI extends JaxbAPI {
 	
 	/**
 	 * 
-	 * @param deviceDependency
+	 * @param dependency
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse create(DeviceDependency deviceDependency) throws Exception {
+	public APIResponse create(Dependency dependency) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/device/dependency/create").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/dependency/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(deviceDependency, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(dependency, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -76,7 +76,7 @@ public class DeviceDependencyAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Create Device Dependency Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Create Dependency Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -90,16 +90,16 @@ public class DeviceDependencyAPI extends JaxbAPI {
 	 */
 	public APIResponse delete(String id) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/device/dependency/delete/" + id).openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/dependency/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			response.setDone(true);
-			response.setMessage("Device Dependency Deleted!");
+			response.setMessage("Dependency Deleted!");
 		} else {
 			response.setDone(false);
-			response.setMessage("Delete Device Dependency Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Delete Dependency Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -107,20 +107,20 @@ public class DeviceDependencyAPI extends JaxbAPI {
 	
 	/**
 	 * 
-	 * @param deviceDependency
+	 * @param dependency
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse update(DeviceDependency deviceDependency) throws Exception {
+	public APIResponse update(Dependency dependency) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/device/dependency/update").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/dependency/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(deviceDependency, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(dependency, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -131,7 +131,7 @@ public class DeviceDependencyAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Update Device Dependency Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Update Dependency Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -145,15 +145,15 @@ public class DeviceDependencyAPI extends JaxbAPI {
 	 */
 	public APIResponse show(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/device/dependency/show/" + filter;
+		String requestUrl = url + "/api/dependency/show/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<DeviceDependency> message = new ArrayList<DeviceDependency>();
+			Collection<Dependency> message = new ArrayList<Dependency>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((DeviceDependency) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Dependency) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -161,7 +161,7 @@ public class DeviceDependencyAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Device Dependency Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Dependency Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -175,15 +175,15 @@ public class DeviceDependencyAPI extends JaxbAPI {
 	 */
 	public APIResponse showByConsumer(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/device/dependency/show/@Consumer/" + filter;
+		String requestUrl = url + "/api/dependency/show/@Consumer/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<DeviceDependency> message = new ArrayList<DeviceDependency>();
+			Collection<Dependency> message = new ArrayList<Dependency>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((DeviceDependency) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Dependency) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -191,7 +191,7 @@ public class DeviceDependencyAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Device Dependency By Consumer Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Dependency By Consumer Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -203,17 +203,17 @@ public class DeviceDependencyAPI extends JaxbAPI {
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByDevice(String filter) throws Exception {
+	public APIResponse showByDriver(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/device/dependency/show/@Device/" + filter;
+		String requestUrl = url + "/api/dependency/show/@Driver/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<DeviceDependency> message = new ArrayList<DeviceDependency>();
+			Collection<Dependency> message = new ArrayList<Dependency>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((DeviceDependency) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Dependency) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -221,7 +221,7 @@ public class DeviceDependencyAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Device Dependency By Device Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Dependency By Driver Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

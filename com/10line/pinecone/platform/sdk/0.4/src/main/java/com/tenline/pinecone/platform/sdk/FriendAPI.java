@@ -21,7 +21,7 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
-import com.tenline.pinecone.platform.model.DeviceInstallation;
+import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
@@ -29,18 +29,19 @@ import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
  * @author Bill
  *
  */
-public class DeviceInstallationAPI extends JaxbAPI {
+public class FriendAPI extends JaxbAPI {
 
 	/**
+	 * 
 	 * @param host
 	 * @param port
 	 * @param context
 	 */
-	public DeviceInstallationAPI(String host, String port, String context) {
+	public FriendAPI(String host, String port, String context) {
 		super(host, port, context);
 		// TODO Auto-generated constructor stub
 		try {
-			jaxbContext = JAXBContext.newInstance(DeviceInstallation.class);
+			jaxbContext = JAXBContext.newInstance(Friend.class);
 			marshaller = jaxbContext.createMarshaller();
 			unmarshaller = jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
@@ -51,20 +52,20 @@ public class DeviceInstallationAPI extends JaxbAPI {
 	
 	/**
 	 * 
-	 * @param deviceInstallation
+	 * @param friend
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse create(DeviceInstallation deviceInstallation) throws Exception {
+	public APIResponse create(Friend friend) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/device/installation/create").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/friend/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(deviceInstallation, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(friend, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -75,7 +76,7 @@ public class DeviceInstallationAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Create Device Installation Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Create Friend Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -89,16 +90,16 @@ public class DeviceInstallationAPI extends JaxbAPI {
 	 */
 	public APIResponse delete(String id) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/device/installation/delete/" + id).openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/friend/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			response.setDone(true);
-			response.setMessage("Device Installation Deleted!");
+			response.setMessage("Friend Deleted!");
 		} else {
 			response.setDone(false);
-			response.setMessage("Delete Device Installation Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Delete Friend Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -106,20 +107,20 @@ public class DeviceInstallationAPI extends JaxbAPI {
 	
 	/**
 	 * 
-	 * @param deviceInstallation
+	 * @param friend
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse update(DeviceInstallation deviceInstallation) throws Exception {
+	public APIResponse update(Friend friend) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/device/installation/update").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/friend/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(deviceInstallation, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(friend, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -130,7 +131,7 @@ public class DeviceInstallationAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Update Device Installation Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Update Friend Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -144,15 +145,15 @@ public class DeviceInstallationAPI extends JaxbAPI {
 	 */
 	public APIResponse show(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/device/installation/show/" + filter;
+		String requestUrl = url + "/api/friend/show/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<DeviceInstallation> message = new ArrayList<DeviceInstallation>();
+			Collection<Friend> message = new ArrayList<Friend>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((DeviceInstallation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Friend) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -160,7 +161,7 @@ public class DeviceInstallationAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Device Installation Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Friend Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -172,17 +173,17 @@ public class DeviceInstallationAPI extends JaxbAPI {
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByUser(String filter) throws Exception {
+	public APIResponse showBySender(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/device/installation/show/@User/" + filter;
+		String requestUrl = url + "/api/friend/show/@Sender/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<DeviceInstallation> message = new ArrayList<DeviceInstallation>();
+			Collection<Friend> message = new ArrayList<Friend>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((DeviceInstallation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Friend) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -190,7 +191,7 @@ public class DeviceInstallationAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Device Installation By User Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Friend By Sender Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -202,17 +203,17 @@ public class DeviceInstallationAPI extends JaxbAPI {
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByDevice(String filter) throws Exception {
+	public APIResponse showByReceiver(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/device/installation/show/@Device/" + filter;
+		String requestUrl = url + "/api/friend/show/@Receiver/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<DeviceInstallation> message = new ArrayList<DeviceInstallation>();
+			Collection<Friend> message = new ArrayList<Friend>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((DeviceInstallation) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Friend) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -220,7 +221,7 @@ public class DeviceInstallationAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Device Installation By Device Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Friend By Receiver Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

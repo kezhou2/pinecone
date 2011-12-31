@@ -21,7 +21,9 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
+import com.google.api.client.http.HttpMethod;
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.sdk.development.APIHelper;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
@@ -162,6 +164,73 @@ public class DeviceAPI extends JaxbAPI {
 		} else {
 			response.setDone(false);
 			response.setMessage("Show Device Error Code: Http (" + connection.getResponseCode() + ")");
+		}
+		connection.disconnect();
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param token
+	 * @param tokenSecret
+	 * @return
+	 * @throws Exception
+	 */
+	public APIResponse showByUser(String filter, String consumerKey, String consumerSecret, 
+			String token, String tokenSecret) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/device/show/@User/" + filter;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setRequestProperty("Authorization", APIHelper.getAuthorization(requestUrl, HttpMethod.GET.name(), 
+				consumerKey, consumerSecret, token, tokenSecret));
+		connection.setConnectTimeout(TIMEOUT);
+		connection.connect();
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
+			Collection<Device> message = new ArrayList<Device>();
+			for (int i=0; i<array.length(); i++) {
+				message.add((Device) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration()))));
+			}
+			response.setDone(true);
+			response.setMessage(message);
+			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Device By User Error Code: Http (" + connection.getResponseCode() + ")");
+		}
+		connection.disconnect();
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 * @throws Exception
+	 */
+	public APIResponse showByDriver(String filter) throws Exception {
+		APIResponse response = new APIResponse();
+		String requestUrl = url + "/api/device/show/@Driver/" + filter;
+		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
+		connection.setConnectTimeout(TIMEOUT);
+		connection.connect();
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
+			Collection<Device> message = new ArrayList<Device>();
+			for (int i=0; i<array.length(); i++) {
+				message.add((Device) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+						new MappedNamespaceConvention(new Configuration()))));
+			}
+			response.setDone(true);
+			response.setMessage(message);
+			connection.getInputStream().close();
+		} else {
+			response.setDone(false);
+			response.setMessage("Show Device By Driver Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

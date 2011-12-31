@@ -35,27 +35,27 @@ public class User extends Entity {
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-	private Collection<DeviceInstallation> deviceInstallations;
+	private Collection<Device> devices;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    private Collection<ConsumerInstallation> consumerInstallations;
+    private Collection<Application> applications;
     
     @Persistent(mappedBy = "sender", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    private Collection<UserRelation> sentRelations;
+    private Collection<Friend> sentFriends;
     
     @Persistent(mappedBy = "receiver", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    private Collection<UserRelation> receivedRelations;
+    private Collection<Friend> receivedFriends;
     
     @Persistent(mappedBy = "sender", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    private Collection<UserMessage> sentMessages;
+    private Collection<Mail> sentMails;
     
     @Persistent(mappedBy = "receiver", defaultFetchGroup = "true")
     @Element(dependent = "true")
-    private Collection<UserMessage> receivedMessages;
+    private Collection<Mail> receivedMails;
 
 	/**
 	 * 
@@ -121,93 +121,93 @@ public class User extends Entity {
 	}
 
 	/**
-	 * @param deviceInstallations the deviceInstallations to set
+	 * @param devices the devices to set
 	 */
 	@XmlTransient
-	public void setDeviceInstallations(Collection<DeviceInstallation> deviceInstallations) {
-		this.deviceInstallations = deviceInstallations;
+	public void setDevices(Collection<Device> devices) {
+		this.devices = devices;
 	}
 
 	/**
-	 * @return the deviceInstallations
+	 * @return the devices
 	 */
-	public Collection<DeviceInstallation> getDeviceInstallations() {
-		return deviceInstallations;
+	public Collection<Device> getDevices() {
+		return devices;
 	}
 
 	/**
-	 * @param consumerInstallations the consumerInstallations to set
-	 */
-	@XmlTransient
-	public void setConsumerInstallations(Collection<ConsumerInstallation> consumerInstallations) {
-		this.consumerInstallations = consumerInstallations;
-	}
-
-	/**
-	 * @return the consumerInstallations
-	 */
-	public Collection<ConsumerInstallation> getConsumerInstallations() {
-		return consumerInstallations;
-	}
-
-	/**
-	 * @param sentRelations the sentRelations to set
+	 * @param applications the applications to set
 	 */
 	@XmlTransient
-	public void setSentRelations(Collection<UserRelation> sentRelations) {
-		this.sentRelations = sentRelations;
+	public void setApplications(Collection<Application> applications) {
+		this.applications = applications;
 	}
 
 	/**
-	 * @return the sentRelations
+	 * @return the applications
 	 */
-	public Collection<UserRelation> getSentRelations() {
-		return sentRelations;
+	public Collection<Application> getApplications() {
+		return applications;
 	}
 
 	/**
-	 * @param receivedRelations the receivedRelations to set
-	 */
-	@XmlTransient
-	public void setReceivedRelations(Collection<UserRelation> receivedRelations) {
-		this.receivedRelations = receivedRelations;
-	}
-
-	/**
-	 * @return the receivedRelations
-	 */
-	public Collection<UserRelation> getReceivedRelations() {
-		return receivedRelations;
-	}
-
-	/**
-	 * @param sentMessages the sentMessages to set
+	 * @param sentFriends the sentFriends to set
 	 */
 	@XmlTransient
-	public void setSentMessages(Collection<UserMessage> sentMessages) {
-		this.sentMessages = sentMessages;
+	public void setSentFriends(Collection<Friend> sentFriends) {
+		this.sentFriends = sentFriends;
 	}
 
 	/**
-	 * @return the sentMessages
+	 * @return the sentFriends
 	 */
-	public Collection<UserMessage> getSentMessages() {
-		return sentMessages;
+	public Collection<Friend> getSentFriends() {
+		return sentFriends;
 	}
 
 	/**
-	 * @param receivedMessages the receivedMessages to set
+	 * @param receivedFriends the receivedFriends to set
 	 */
 	@XmlTransient
-	public void setReceivedMessages(Collection<UserMessage> receivedMessages) {
-		this.receivedMessages = receivedMessages;
+	public void setReceivedFriends(Collection<Friend> receivedFriends) {
+		this.receivedFriends = receivedFriends;
 	}
 
 	/**
-	 * @return the receivedMessages
+	 * @return the receivedFriends
 	 */
-	public Collection<UserMessage> getReceivedMessages() {
-		return receivedMessages;
+	public Collection<Friend> getReceivedFriends() {
+		return receivedFriends;
+	}
+
+	/**
+	 * @param sentMails the sentMails to set
+	 */
+	@XmlTransient
+	public void setSentMails(Collection<Mail> sentMails) {
+		this.sentMails = sentMails;
+	}
+
+	/**
+	 * @return the sentMails
+	 */
+	public Collection<Mail> getSentMails() {
+		return sentMails;
+	}
+
+	/**
+	 * @param receivedMails the receivedMails to set
+	 */
+	@XmlTransient
+	public void setReceivedMails(Collection<Mail> receivedMails) {
+		this.receivedMails = receivedMails;
+	}
+
+	/**
+	 * @return the receivedMails
+	 */
+	public Collection<Mail> getReceivedMails() {
+		return receivedMails;
 	}
 
 }

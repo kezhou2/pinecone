@@ -14,18 +14,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @SuppressWarnings("serial")
-@PersistenceCapable(identityType = IdentityType.APPLICATION, 
-		detachable = "true", table = "device_dependency")
-public class DeviceDependency extends Entity {
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+public class Dependency extends Entity {
 	
 	/**
-	 * Whether is optional to execute consumer or not
+	 * Whether is optional for executing consumer or not
 	 */
 	@Persistent
 	private Boolean isOptional = false;
 	
 	@Persistent(defaultFetchGroup = "true")
-	private Device device;
+	private Driver driver;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private Consumer consumer;
@@ -33,7 +32,7 @@ public class DeviceDependency extends Entity {
 	/**
 	 * 
 	 */
-	public DeviceDependency() {
+	public Dependency() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -52,17 +51,17 @@ public class DeviceDependency extends Entity {
 	}
 
 	/**
-	 * @param device the device to set
+	 * @param driver the driver to set
 	 */
-	public void setDevice(Device device) {
-		this.device = device;
+	public void setDriver(Driver driver) {
+		this.driver = driver;
 	}
 
 	/**
-	 * @return the device
+	 * @return the driver
 	 */
-	public Device getDevice() {
-		return device;
+	public Driver getDriver() {
+		return driver;
 	}
 
 	/**

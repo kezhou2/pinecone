@@ -43,10 +43,6 @@ public class Variable extends Entity {
     @Element(dependent = "true")
 	private Collection<Item> items;
 	
-	@Persistent(mappedBy = "variable", defaultFetchGroup = "true")
-    @Element(dependent = "true")
-	private Collection<Record> records;
-	
 	/**
 	 * 
 	 */
@@ -94,21 +90,6 @@ public class Variable extends Entity {
 	 */
 	public Device getDevice() {
 		return device;
-	}
-
-	/**
-	 * @param records the records to set
-	 */
-	@XmlTransient
-	public void setRecords(Collection<Record> records) {
-		this.records = records;
-	}
-
-	/**
-	 * @return the records
-	 */
-	public Collection<Record> getRecords() {
-		return records;
 	}
 
 	/**

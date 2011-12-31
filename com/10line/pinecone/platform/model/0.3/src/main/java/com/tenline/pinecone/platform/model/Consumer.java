@@ -29,7 +29,7 @@ public class Consumer extends Entity {
     private String secret;
 	
 	@Persistent
-    private String displayName;
+    private String name;
 	
 	@Persistent
     private String connectURI;
@@ -37,19 +37,28 @@ public class Consumer extends Entity {
 	@Persistent
 	private byte[] icon;
 	
+	@Persistent
+	private String alias;
+	
+	@Persistent
+	private String version;
+	
 	@NotPersistent
     private Set<String> scopes;
 	
 	@NotPersistent
     private String[] permissions;
 	
-	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
-    @Element(dependent = "true")
-    private Collection<ConsumerInstallation> consumerInstallations;
+	@Persistent(defaultFetchGroup = "true")
+	private Category category;
 	
 	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
     @Element(dependent = "true")
-	private Collection<DeviceDependency> deviceDependencies;
+    private Collection<Application> applications;
+	
+	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Dependency> dependencies;
 	
 	/**
 	 * 
@@ -61,7 +70,7 @@ public class Consumer extends Entity {
     public Consumer(String key, String secret, String displayName, String connectURI) {
         this.setKey(key);
         this.setSecret(secret);
-        this.setDisplayName(displayName);
+        this.setName(displayName);
         this.setConnectURI(connectURI);
     }
     
@@ -69,7 +78,7 @@ public class Consumer extends Entity {
                          String[] perms) {
         this.setKey(key);
         this.setSecret(secret);
-        this.setDisplayName(displayName);
+        this.setName(displayName);
         this.setConnectURI(connectURI);
         this.setPermissions(perms);
     }
@@ -100,20 +109,6 @@ public class Consumer extends Entity {
 	 */
 	public String getSecret() {
 		return secret;
-	}
-
-	/**
-	 * @param displayName the displayName to set
-	 */
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-
-	/**
-	 * @return the displayName
-	 */
-	public String getDisplayName() {
-		return displayName;
 	}
     
     /**
@@ -149,6 +144,48 @@ public class Consumer extends Entity {
 	}
 
 	/**
+	 * @param alias the alias to set
+	 */
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+	/**
+	 * @return the alias
+	 */
+	public String getAlias() {
+		return alias;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
      * Returns the OAuth Consumer's scopes. These are the scopes the consumer
      * will be able to access directly 
      */
@@ -179,33 +216,47 @@ public class Consumer extends Entity {
 	}
 
 	/**
-	 * @param consumerInstallations the consumerInstallations to set
+	 * @param category the category to set
+	 */
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	/**
+	 * @return the category
+	 */
+	public Category getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param applications the applications to set
 	 */
 	@XmlTransient
-	public void setConsumerInstallations(Collection<ConsumerInstallation> consumerInstallations) {
-		this.consumerInstallations = consumerInstallations;
+	public void setApplications(Collection<Application> applications) {
+		this.applications = applications;
 	}
 
 	/**
-	 * @return the consumerInstallations
+	 * @return the applications
 	 */
-	public Collection<ConsumerInstallation> getConsumerInstallations() {
-		return consumerInstallations;
+	public Collection<Application> getApplications() {
+		return applications;
 	}
 
 	/**
-	 * @param deviceDependencies the deviceDependencies to set
+	 * @param dependencies the dependencies to set
 	 */
 	@XmlTransient
-	public void setDeviceDependencies(Collection<DeviceDependency> deviceDependencies) {
-		this.deviceDependencies = deviceDependencies;
+	public void setDependencies(Collection<Dependency> dependencies) {
+		this.dependencies = dependencies;
 	}
 
 	/**
-	 * @return the deviceDependencies
+	 * @return the dependencies
 	 */
-	public Collection<DeviceDependency> getDeviceDependencies() {
-		return deviceDependencies;
+	public Collection<Dependency> getDependencies() {
+		return dependencies;
 	}
     
 }

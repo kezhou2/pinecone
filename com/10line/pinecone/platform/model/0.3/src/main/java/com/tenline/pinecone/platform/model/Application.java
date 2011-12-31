@@ -14,15 +14,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @SuppressWarnings("serial")
-@PersistenceCapable(identityType = IdentityType.APPLICATION, 
-		detachable = "true", table = "consumer_installation")
-public class ConsumerInstallation extends Entity {
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+public class Application extends Entity {
+	
+	/**
+	 * Application's Status
+	 */
+	public static final String CLOSED = "closed";
+	public static final String OPENED = "opened";
 	
 	/**
 	 * Whether is default to open or not
 	 */
 	@Persistent
 	private Boolean isDefault = false;
+	
+	@Persistent
+	private String status;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private Consumer consumer;
@@ -33,7 +41,7 @@ public class ConsumerInstallation extends Entity {
 	/**
 	 * 
 	 */
-	public ConsumerInstallation() {
+	public Application() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -49,6 +57,20 @@ public class ConsumerInstallation extends Entity {
 	 */
 	public Boolean isDefault() {
 		return isDefault;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
 	}
 
 	/**

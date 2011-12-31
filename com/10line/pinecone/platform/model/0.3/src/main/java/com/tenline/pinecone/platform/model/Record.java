@@ -23,12 +23,6 @@ public class Record extends Entity {
 	private Date timestamp;
 	
 	@Persistent(defaultFetchGroup = "true")
-	private Device device;
-	
-	@Persistent(defaultFetchGroup = "true")
-	private Variable variable;
-	
-	@Persistent(defaultFetchGroup = "true")
 	private Item item;
 	
 	/**
@@ -50,34 +44,6 @@ public class Record extends Entity {
 	 */
 	public Date getTimestamp() {
 		return timestamp;
-	}
-
-	/**
-	 * @param device the device to set
-	 */
-	public void setDevice(Device device) {
-		this.device = device;
-	}
-
-	/**
-	 * @return the device
-	 */
-	public Device getDevice() {
-		return device;
-	}
-
-	/**
-	 * @param variable the variable to set
-	 */
-	public void setVariable(Variable variable) {
-		this.variable = variable;
-	}
-
-	/**
-	 * @return the variable
-	 */
-	public Variable getVariable() {
-		return variable;
 	}
 
 	/**

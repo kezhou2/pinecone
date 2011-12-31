@@ -14,25 +14,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @SuppressWarnings("serial")
-@PersistenceCapable(identityType = IdentityType.APPLICATION, 
-		detachable = "true", table = "user_relation")
-public class UserRelation extends Entity {
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+public class Mail extends Entity {
 	
 	/**
-	 * User Relation's Type
-	 */
-	public static final String CLASSMATE = "classmate";
-	public static final String TEAMMATE = "teammate";
-	public static final String COLLEAGUE = "colleague";
-	
-	/**
-	 * Whether decision is made to agree or not
+	 * Whether is read or not
 	 */
 	@Persistent
-	private Boolean isDecided = false;
+	private Boolean isRead = false;
 	
 	@Persistent
-	private String type;
+	private String title;
+	
+	@Persistent
+	private String content;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private User sender;
@@ -43,36 +38,50 @@ public class UserRelation extends Entity {
 	/**
 	 * 
 	 */
-	public UserRelation() {
+	public Mail() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @param isDecided the isDecided to set
+	 * @param isRead the isRead to set
 	 */
-	public void setDecided(Boolean isDecided) {
-		this.isDecided = isDecided;
+	public void setRead(Boolean isRead) {
+		this.isRead = isRead;
 	}
 
 	/**
-	 * @return the isDecided
+	 * @return the isRead
 	 */
-	public Boolean isDecided() {
-		return isDecided;
+	public Boolean isRead() {
+		return isRead;
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param title the title to set
 	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**
-	 * @return the type
+	 * @return the title
 	 */
-	public String getType() {
-		return type;
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param content the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
 	}
 
 	/**

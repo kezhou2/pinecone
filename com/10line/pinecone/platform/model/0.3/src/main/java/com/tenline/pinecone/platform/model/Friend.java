@@ -14,21 +14,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @SuppressWarnings("serial")
-@PersistenceCapable(identityType = IdentityType.APPLICATION, 
-		detachable = "true", table = "user_message")
-public class UserMessage extends Entity {
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+public class Friend extends Entity {
 	
 	/**
-	 * Whether is read or not
+	 * Friend's Type
+	 */
+	public static final String CLASSMATE = "classmate";
+	public static final String TEAMMATE = "teammate";
+	public static final String COLLEAGUE = "colleague";
+	
+	/**
+	 * Whether decision is made to agree or not
 	 */
 	@Persistent
-	private Boolean isRead = false;
+	private Boolean isDecided = false;
 	
 	@Persistent
-	private String title;
-	
-	@Persistent
-	private String content;
+	private String type;
 	
 	@Persistent(defaultFetchGroup = "true")
 	private User sender;
@@ -39,50 +42,36 @@ public class UserMessage extends Entity {
 	/**
 	 * 
 	 */
-	public UserMessage() {
+	public Friend() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @param isRead the isRead to set
+	 * @param isDecided the isDecided to set
 	 */
-	public void setRead(Boolean isRead) {
-		this.isRead = isRead;
+	public void setDecided(Boolean isDecided) {
+		this.isDecided = isDecided;
 	}
 
 	/**
-	 * @return the isRead
+	 * @return the isDecided
 	 */
-	public Boolean isRead() {
-		return isRead;
+	public Boolean isDecided() {
+		return isDecided;
 	}
 
 	/**
-	 * @param title the title to set
+	 * @param type the type to set
 	 */
-	public void setTitle(String title) {
-		this.title = title;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	/**
-	 * @return the title
+	 * @return the type
 	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return content;
+	public String getType() {
+		return type;
 	}
 
 	/**

@@ -11,9 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.mapped.Configuration;
@@ -23,13 +20,12 @@ import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
 import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
-import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
 /**
  * @author Bill
  *
  */
-public class RecordAPI extends JaxbAPI {
+public class RecordAPI extends com.tenline.pinecone.platform.sdk.development.RecordAPI {
 
 	/**
 	 * 
@@ -40,14 +36,6 @@ public class RecordAPI extends JaxbAPI {
 	public RecordAPI(String host, String port, String context) {
 		super(host, port, context);
 		// TODO Auto-generated constructor stub
-		try {
-			jaxbContext = JAXBContext.newInstance(Record.class);
-			marshaller = jaxbContext.createMarshaller();
-			unmarshaller = jaxbContext.createUnmarshaller();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -162,36 +150,6 @@ public class RecordAPI extends JaxbAPI {
 		} else {
 			response.setDone(false);
 			response.setMessage("Show Record Error Code: Http (" + connection.getResponseCode() + ")");
-		}
-		connection.disconnect();
-		return response;
-	}
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public APIResponse showByItem(String filter) throws Exception {
-		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/record/show/@Item/" + filter;
-		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setConnectTimeout(TIMEOUT);
-		connection.connect();
-		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Record> message = new ArrayList<Record>();
-			for (int i=0; i<array.length(); i++) {
-				message.add((Record) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
-						new MappedNamespaceConvention(new Configuration()))));
-			}
-			response.setDone(true);
-			response.setMessage(message);
-			connection.getInputStream().close();
-		} else {
-			response.setDone(false);
-			response.setMessage("Show Record By Item Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

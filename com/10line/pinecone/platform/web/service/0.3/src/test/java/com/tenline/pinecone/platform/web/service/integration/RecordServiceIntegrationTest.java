@@ -204,7 +204,7 @@ public class RecordServiceIntegrationTest extends AuthorizationServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = recordAPI.showByItem("id=='"+item.getId()+"'");
+		response = recordAPI.showByItem("id=='"+item.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<Record>) response.getMessage()).size());
 		} else {

@@ -50,12 +50,17 @@
 	
 	<filter-mapping>
   		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/record/show/@Variable/*</url-pattern>
+  		<url-pattern>/api/record/show/@Item/*</url-pattern>
 	</filter-mapping>
 	
 	<filter-mapping>
   		<filter-name>OAuth Filter</filter-name>
-  		<url-pattern>/api/channel/*</url-pattern>
+  		<url-pattern>/api/channel/publish/*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+  		<filter-name>OAuth Filter</filter-name>
+  		<url-pattern>/api/channel/subscribe/*</url-pattern>
 	</filter-mapping>
 	
 	<!-- The OAuth Servlet handles token exchange -->

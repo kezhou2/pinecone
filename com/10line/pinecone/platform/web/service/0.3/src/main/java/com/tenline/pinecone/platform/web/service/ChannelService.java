@@ -27,6 +27,7 @@ public interface ChannelService {
 	@GET
 	@Path("/subscribe/{subject}")
 	public void subscribe(@PathParam("subject") String subject,
+						  @Context HttpServletRequest request,
 						  @Context HttpServletResponse response);
 	
 	/**
@@ -38,6 +39,7 @@ public interface ChannelService {
 	@POST
 	@Path("/publish/{subject}")
 	public Response publish(@PathParam("subject") String subject,
-							@Context HttpServletRequest request);
+							@Context HttpServletRequest request,
+							@Context HttpServletResponse response);
 	
 }

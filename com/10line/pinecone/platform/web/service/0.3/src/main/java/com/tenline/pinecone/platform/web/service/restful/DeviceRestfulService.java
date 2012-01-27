@@ -3,13 +3,20 @@
  */
 package com.tenline.pinecone.platform.web.service.restful;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import javax.jdo.PersistenceManagerFactory;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +25,8 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Driver;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.service.DeviceService;
+import com.tenline.pinecone.platform.web.service.oauth.OAuthProvider;
+import com.tenline.pinecone.platform.web.service.oauth.OAuthUtils;
 
 /**
  * @author Bill
@@ -25,8 +34,10 @@ import com.tenline.pinecone.platform.web.service.DeviceService;
  */
 @Service
 @Transactional
-public class DeviceRestfulService extends JdoDaoSupport implements DeviceService {
+public class DeviceRestfulService extends JdoDaoSupport implements DeviceService, ApplicationContextAware {
 
+	private OAuthProvider provider;
+	
 	/**
 	 * 
 	 */
@@ -70,8 +81,18 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 	}
 
 	@Override
-	public Collection<Device> showByUser(String filter) {
+	public Collection<Device> showByUser(String filter,
+			HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
+		try {
+			OAuthUtils.doFilter(request, response, provider);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
 		.getDevices();
 	}
@@ -81,6 +102,13 @@ public class DeviceRestfulService extends JdoDaoSupport implements DeviceService
 		// TODO Auto-generated method stub
 		return getJdoTemplate().getObjectById(Driver.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
 		.getDevices();
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext arg0)
+			throws BeansException {
+		// TODO Auto-generated method stub
+		provider = OAuthUtils.getOAuthProvider(arg0);
 	}
 
 }

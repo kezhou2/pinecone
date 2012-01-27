@@ -4,7 +4,7 @@
 package com.tenline.pinecone.platform.web.service.oauth;
 
 import java.net.HttpURLConnection;
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -13,11 +13,12 @@ import javax.cache.Cache;
 import javax.cache.Caching;
 import javax.cache.CacheConfiguration.Duration;
 import javax.cache.CacheConfiguration.ExpiryType;
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.Query;
-import javax.jdo.Transaction;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jdo.support.JdoDaoSupport;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.platform.model.Consumer;
 
@@ -25,10 +26,11 @@ import com.tenline.pinecone.platform.model.Consumer;
  * @author Bill
  *
  */
-public class OAuthPersistentProvider implements OAuthProvider {
+@Repository
+@Transactional
+public class OAuthPersistentProvider extends JdoDaoSupport implements OAuthProvider {
 
 	private String realm;
-	private PersistenceManagerFactory pmf;
 	private Cache<Object, Object> requestTokens;
 	private Cache<Object, Object> accessTokens;
     private final static int EXPIRATION_SECONDS = 3600; // 1 hour
@@ -36,19 +38,11 @@ public class OAuthPersistentProvider implements OAuthProvider {
 	/**
 	 * 
 	 */
-	public OAuthPersistentProvider() {
+    @Autowired
+	public OAuthPersistentProvider(PersistenceManagerFactory persistenceManagerFactory) {
 		// TODO Auto-generated constructor stub
-		this("default");
-	}
-	
-	/**
-	 * 
-	 * @param realm
-	 */
-	public OAuthPersistentProvider(String realm){
-		// TODO Auto-generated constructor stub
-		this.realm = realm;
-		pmf = JDOHelper.getPersistenceManagerFactory("transactions-optional");
+		realm = "default";
+		setPersistenceManagerFactory(persistenceManagerFactory);
 		requestTokens = Caching.getCacheManager().createCacheBuilder("requestTokens")
         .build();
 		accessTokens = Caching.getCacheManager().createCacheBuilder("accessTokens")
@@ -59,24 +53,11 @@ public class OAuthPersistentProvider implements OAuthProvider {
 	@Override
 	public Consumer registerConsumer(String consumerKey,
 			String displayName, String connectURI) throws OAuthException {
-		// TODO Auto-generated method stub
-		Consumer consumer;
-		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx = pm.currentTransaction();
-        try { 
-            tx.begin();
-            do{
-    			consumerKey = makeRandomString();
-    	    } while(findConsumer(consumerKey) != null);
-            consumer = pm.makePersistent(new Consumer(consumerKey, makeRandomString(), displayName, connectURI));
-            tx.commit();
-        } finally {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            pm.close();
-        }
-        return consumer;
+		// TODO Auto-generated method stub			
+		do{
+			consumerKey = makeRandomString();
+	    } while(findConsumer(consumerKey) != null);
+        return getJdoTemplate().makePersistent(new Consumer(consumerKey, makeRandomString(), displayName, connectURI));
 	}
 
 	@Override
@@ -89,20 +70,13 @@ public class OAuthPersistentProvider implements OAuthProvider {
 	
 	@SuppressWarnings("unchecked")
 	private Consumer findConsumer(String consumerKey) throws OAuthException {
+        String queryString = "select from " + Consumer.class.getName();
+        queryString += " where key == '" + consumerKey + "'";
+		Collection<Consumer> consumers = getJdoTemplate().find(queryString);
 		Consumer consumer = null;
-		PersistenceManager pm = pmf.getPersistenceManager();
-		Query query = pm.newQuery(Consumer.class);
-		query.setFilter("key == consumerKey");
-		query.declareParameters("String consumerKey");
-		try {
-			List<Consumer> results = (List<Consumer>) query.execute(consumerKey);
-	        if (!results.isEmpty()) {
-	            consumer = results.get(0);
-	        } 
-		} finally {
-			query.closeAll();
-			pm.close();
-		}
+		if (!consumers.isEmpty()) {
+            consumer = (Consumer) consumers.toArray()[0];
+        }
 		return consumer;
 	}
 

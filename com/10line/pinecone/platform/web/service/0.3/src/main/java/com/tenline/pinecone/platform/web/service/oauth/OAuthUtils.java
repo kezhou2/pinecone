@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import net.oauth.OAuthProblemException;
 import net.oauth.OAuth.Parameter;
 import net.oauth.OAuth.Problems;
 import org.jboss.resteasy.logging.Logger;
+import org.springframework.context.ApplicationContext;
 
 public class OAuthUtils {
 	
@@ -54,8 +56,15 @@ public class OAuthUtils {
 	 * Name of the OAuthProvider Servlet Context Attribute name.
 	 */
 	private static final String ATTR_OAUTH_PROVIDER = OAuthProvider.class.getName();
+	
+	/**
+	 * Name for the OAuthProvider class name
+	 */
+	private final static String PARAM_PROVIDER_CLASS = "oauth.provider.provider-class";
 
 	private final static Logger logger = Logger.getLogger(OAuthUtils.class);
+	
+	private static Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
 	/**
 	 * Encodes the given value for use in an OAuth parameter
@@ -84,6 +93,7 @@ public class OAuthUtils {
 			writer.append('=');
 			writer.append(encodeForOAuth(params[i+1]));
 		}
+		writer.flush();
 	}
 
 	/**
@@ -126,6 +136,7 @@ public class OAuthUtils {
 		    headerValue += (" realm=\"" + provider.getRealm() + "\"");
 		}
 		resp.setHeader(AUTHENTICATE_HEADER, headerValue);
+		resp.getWriter().flush();
 	}
 
 	/**
@@ -161,22 +172,38 @@ public class OAuthUtils {
 		if(provider != null)
 			return provider;
 		
-		String providerClassName = context.getInitParameter(OAuthServlet.PARAM_PROVIDER_CLASS);
+		String providerClassName = context.getInitParameter(PARAM_PROVIDER_CLASS);
 		if(providerClassName == null)
-			throw new ServletException(OAuthServlet.PARAM_PROVIDER_CLASS+" parameter required");
+			throw new ServletException(PARAM_PROVIDER_CLASS+" parameter required");
 		try {
 			logger.info("Loading OAuthProvider: "+ providerClassName);
 			Class<?> providerClass = Class.forName(providerClassName);
 			if(!OAuthProvider.class.isAssignableFrom(providerClass))
-				throw new ServletException(OAuthServlet.PARAM_PROVIDER_CLASS+" class "+providerClassName+" must be an instance of OAuthProvider");
+				throw new ServletException(PARAM_PROVIDER_CLASS+" class "+providerClassName+" must be an instance of OAuthProvider");
 			provider = new OAuthProviderChecker((OAuthProvider) providerClass.newInstance());
 			context.setAttribute(ATTR_OAUTH_PROVIDER, provider);
 			return provider;
 		} catch (ClassNotFoundException e) {
-			throw new ServletException(OAuthServlet.PARAM_PROVIDER_CLASS+" class "+providerClassName+" not found");
+			throw new ServletException(PARAM_PROVIDER_CLASS+" class "+providerClassName+" not found");
 		} catch (Exception e) {
-			throw new ServletException(OAuthServlet.PARAM_PROVIDER_CLASS+" class "+providerClassName+" could not be instanciated", e);
+			throw new ServletException(PARAM_PROVIDER_CLASS+" class "+providerClassName+" could not be instanciated", e);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param applicationContext
+	 * @return
+	 */
+	public static OAuthProvider getOAuthProvider(ApplicationContext applicationContext) {
+		OAuthProvider provider = (OAuthProvider) properties.get(ATTR_OAUTH_PROVIDER);
+		if(provider != null)
+			return provider;
+		
+		Object bean = applicationContext.getBean("OAuthPersistentProvider");
+		provider = new OAuthProviderChecker((OAuthProvider) bean);
+		properties.put(ATTR_OAUTH_PROVIDER, provider);
+		return provider;
 	}
 
 	/**
@@ -190,6 +217,21 @@ public class OAuthUtils {
 		
 		validator = new OAuthValidator(provider);
 		context.setAttribute(ATTR_OAUTH_VALIDATOR, validator);
+		return validator;
+	}
+	
+	/**
+	 * 
+	 * @param provider
+	 * @return
+	 */
+	public static OAuthValidator getValidator(OAuthProvider provider) {
+		OAuthValidator validator = (OAuthValidator) properties.get(ATTR_OAUTH_VALIDATOR);
+		if(validator != null)
+			return validator;
+		
+		validator = new OAuthValidator(provider);
+		properties.put(ATTR_OAUTH_VALIDATOR, validator);
 		return validator;
 	}
 	
@@ -248,4 +290,45 @@ public class OAuthUtils {
         }
         return false; 
     }
+	
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	public static void doFilter(HttpServletRequest request, HttpServletResponse response,
+			OAuthProvider provider)throws IOException, ServletException {
+        try{
+        	OAuthValidator validator = OAuthUtils.getValidator(provider);
+        	OAuthMessage message = OAuthUtils.readMessage(request);
+            message.requireParameters(OAuth.OAUTH_CONSUMER_KEY,
+                    OAuth.OAUTH_SIGNATURE_METHOD,
+                    OAuth.OAUTH_SIGNATURE,
+                    OAuth.OAUTH_TIMESTAMP,
+                    OAuth.OAUTH_NONCE);
+
+            String consumerKey = message.getParameter(OAuth.OAUTH_CONSUMER_KEY);
+            com.tenline.pinecone.platform.model.Consumer consumer = provider.getConsumer(consumerKey);
+        
+            OAuthToken accessToken = null;
+            String accessTokenString = message.getParameter(OAuth.OAUTH_TOKEN);
+            
+            if (accessTokenString != null) { 
+                accessToken = provider.getAccessToken(consumer.getKey(), accessTokenString);
+                OAuthUtils.validateRequestWithAccessToken(
+                        request, message, accessToken, validator, consumer);
+            } else {
+                OAuthUtils.validateRequestWithoutAccessToken(
+                        request, message, validator, consumer);
+            }           
+        } catch (OAuthException x) {
+            OAuthUtils.makeErrorResponse(response, x.getMessage(), x.getHttpCode(), provider);
+        } catch (OAuthProblemException x) {
+            OAuthUtils.makeErrorResponse(response, x.getProblem(), OAuthUtils.getHttpCode(x), provider);
+        } catch (Exception x) {
+            OAuthUtils.makeErrorResponse(response, x.getMessage(), HttpURLConnection.HTTP_INTERNAL_ERROR, provider);
+        }
+	}
 }

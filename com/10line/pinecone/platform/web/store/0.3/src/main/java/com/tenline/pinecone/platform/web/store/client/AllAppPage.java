@@ -51,6 +51,7 @@ public class AllAppPage extends ContentPanel {
 	private Button categoryButton;
 	private Menu categoryMenu;
 
+	@SuppressWarnings("unused")
 	public AllAppPage() {
 		setHeaderVisible(false);
 		setLayout(new BorderLayout());

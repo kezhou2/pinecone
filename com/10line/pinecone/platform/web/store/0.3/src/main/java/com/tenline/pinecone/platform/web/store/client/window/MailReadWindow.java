@@ -30,6 +30,7 @@ public class MailReadWindow extends Window {
 	
 	private UserInfo receiver;
 	private MailWindow parent;
+	@SuppressWarnings("unused")
 	private MailInfo mailInfo;
 	
 	public MailReadWindow(MailWindow parent){

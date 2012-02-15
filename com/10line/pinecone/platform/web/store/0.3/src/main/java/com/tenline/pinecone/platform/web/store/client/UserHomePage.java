@@ -102,6 +102,7 @@ public class UserHomePage extends ContentPanel implements PageRefreshInterface {
 		count = 0;
 	}
 
+	@SuppressWarnings("unused")
 	public UserHomePage() {
 		init();
 

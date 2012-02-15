@@ -43,6 +43,7 @@ public class RegisterWindow extends Window {
 		userNameTextfield = new TextField<String>();
 		userNameTextfield.setAllowBlank(false);
 		userNameTextfield.addListener(Events.Change, new Listener<FieldEvent>() {
+			@SuppressWarnings("rawtypes")
 			public void handleEvent(FieldEvent e) {
 				final Field f = e.getField();
 				user.setName(e.getField().getValue().toString());
@@ -72,6 +73,7 @@ public class RegisterWindow extends Window {
 		mailTextfield.setFieldLabel("邮箱");
 		mailTextfield.setAllowBlank(false);
 		mailTextfield.addListener(Events.Change, new Listener<FieldEvent>() {
+			@SuppressWarnings("rawtypes")
 			public void handleEvent(FieldEvent e) {
 				final Field f = e.getField();
 				user.setEmail(e.getField().getValue().toString());

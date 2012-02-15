@@ -1,12 +1,6 @@
 package com.tenline.pinecone.platform.web.store.shared;
 
-import java.util.Collection;
-
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Friend;
-import com.tenline.pinecone.platform.model.Mail;
 import com.tenline.pinecone.platform.model.User;
 
 public class UserInfo extends BaseModelData {

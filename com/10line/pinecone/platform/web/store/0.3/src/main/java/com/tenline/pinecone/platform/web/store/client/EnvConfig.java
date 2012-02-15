@@ -18,6 +18,7 @@ public class EnvConfig {
 	
 	private static PineconeServiceAsync pineconeService = null;
 	
+	@SuppressWarnings("unused")
 	private static List<ConsumerInfo> myApps = null;
 	
 	private static IconsConfig ICONS = null;

@@ -2,14 +2,12 @@ package com.tenline.pinecone.platform.web.store.shared;
 
 import java.util.Collection;
 
-import javax.jdo.annotations.Element;
-import javax.jdo.annotations.Persistent;
-
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.Driver;
 
+@SuppressWarnings("serial")
 public class CategoryInfo extends BaseModelData {
 
 	private Category category;

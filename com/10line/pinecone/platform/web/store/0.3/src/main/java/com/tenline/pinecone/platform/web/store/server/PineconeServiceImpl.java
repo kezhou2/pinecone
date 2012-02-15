@@ -45,7 +45,9 @@ public class PineconeServiceImpl extends RemoteServiceServlet implements
 	private static final String HOST = "pinecone.cloudfoundry.com";
 	private static final String PORT = "80";
 	
+	@SuppressWarnings("unused")
 	private static final String APP_STORE_CONSUMER_ID = "3";
+	@SuppressWarnings("unused")
 	private static final String APP_STORE_CATEGORY_ID = "2";
 	private static final String APP_STORE_CONSUMER_KEY = "ed9be7a8-6162-48c7-af7d-279ebaff3d1a";
 	private static final String APP_STORE_CONSUMER_SECRET = "4069574f-4134-41ce-85f3-48fddadd0fea";

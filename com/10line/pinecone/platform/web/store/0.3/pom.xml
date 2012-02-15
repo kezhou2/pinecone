@@ -21,6 +21,14 @@
 		</repository>
 	</repositories>
 	
+	<pluginRepositories>
+    	<pluginRepository>
+      		<id>spring-milestone</id>
+      		<name>Spring Maven MILESTONE Repository</name>
+      		<url>http://maven.springframework.org/milestone</url>
+    	</pluginRepository>
+  	</pluginRepositories>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Convenience property to set the GWT version -->
@@ -119,7 +127,15 @@
 					<webappDirectory>${webappDirectory}</webappDirectory>
 				</configuration>
 			</plugin>
-
+			<plugin>
+        		<groupId>org.cloudfoundry</groupId>
+        		<artifactId>cf-maven-plugin</artifactId>
+        		<version>1.0.0.M1</version>
+        		<configuration>           	
+          			<target>http://api.cloudfoundry.com</target>
+          			<appname>pinecone-store</appname>           
+        		</configuration>           
+      		</plugin>
 		</plugins>
 	</build>
 

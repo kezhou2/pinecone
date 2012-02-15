@@ -24,6 +24,7 @@ public class MailListPanel extends ContentPanel {
 	public static String READ = "已读";
 	public static String UNREAD = "未读";
 	
+	@SuppressWarnings("rawtypes")
 	public MailListPanel() {
 		setHeaderVisible(false);
 		setLayout(new FitLayout());

@@ -1,12 +1,11 @@
 package com.tenline.pinecone.platform.web.store.shared;
 
-import javax.jdo.annotations.Persistent;
-
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.Dependency;
 import com.tenline.pinecone.platform.model.Driver;
 
+@SuppressWarnings("serial")
 public class DependencyInfo extends BaseModelData {
 	
 	private Dependency dependency;

@@ -1,7 +1,5 @@
 package com.tenline.pinecone.platform.web.store.shared;
 
-import javax.jdo.annotations.Persistent;
-
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.Consumer;

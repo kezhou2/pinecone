@@ -40,6 +40,7 @@ public class ConsumerServiceIntegrationTest extends AbstractServiceIntegrationTe
 		consumer.setConnectURI("123");
 		consumer.setName("fishshow");
 		consumer.setIcon("123".getBytes());
+		consumer.setNut(10);
 		consumer.setCategory(category);
 		categoryAPI = new CategoryAPI("localhost", "8888", "service");
 		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
@@ -76,6 +77,7 @@ public class ConsumerServiceIntegrationTest extends AbstractServiceIntegrationTe
 			assertEquals("123", consumer.getConnectURI());
 			assertEquals("fishshow", consumer.getName());
 			assertEquals("123", new String(consumer.getIcon()));
+			assertEquals(Integer.valueOf(10), consumer.getNut());
 			assertEquals(Category.COM, consumer.getCategory().getType());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
@@ -83,12 +85,14 @@ public class ConsumerServiceIntegrationTest extends AbstractServiceIntegrationTe
 		consumer.setConnectURI("234");
 		consumer.setName("fishshow2");
 		consumer.setIcon("234".getBytes());
+		consumer.setNut(20);
 		response = consumerAPI.update(consumer);
 		if (response.isDone()) {
 			consumer = (Consumer) response.getMessage();
 			assertEquals("234", consumer.getConnectURI());
 			assertEquals("fishshow2", consumer.getName());
 			assertEquals("234", new String(consumer.getIcon()));
+			assertEquals(Integer.valueOf(20), consumer.getNut());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

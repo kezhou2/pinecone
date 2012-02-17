@@ -58,6 +58,7 @@ public class ConsumerRestfulService extends JdoDaoSupport implements ConsumerSer
 		if (consumer.getIcon() != null) detachedConsumer.setIcon(consumer.getIcon());
 		if (consumer.getName() != null) detachedConsumer.setName(consumer.getName());
 		if (consumer.getVersion() != null) detachedConsumer.setVersion(consumer.getVersion());
+		if (consumer.getNut() != null) detachedConsumer.setNut(consumer.getNut());
 		return getJdoTemplate().makePersistent(detachedConsumer);
 	}
 

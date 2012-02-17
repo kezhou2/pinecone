@@ -260,7 +260,7 @@
             <configuration>           	
                 <target>http://api.cloudfoundry.com</target>
                 <services>mysql-pinecone</services>
-                <appname>pinecone</appname>           
+                <appname>pinecone-service</appname>           
             </configuration>           
         </plugin>   
 	</plugins>

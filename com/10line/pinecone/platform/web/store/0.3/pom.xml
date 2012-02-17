@@ -133,7 +133,7 @@
         		<version>1.0.0.M1</version>
         		<configuration>           	
           			<target>http://api.cloudfoundry.com</target>
-          			<appname>pinecone-store</appname>           
+          			<appname>pinecone</appname>           
         		</configuration>           
       		</plugin>
 		</plugins>

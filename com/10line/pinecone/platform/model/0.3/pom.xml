@@ -7,12 +7,18 @@
   <packaging>bundle</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <datanucleus.version>3.0.1</datanucleus.version>
   </properties>
   <repositories>
   	<repository>
     	<id>maven.2</id>
         <name>Maven 2 Repository</name>
         <url>http://repo2.maven.org/maven2/</url>
+    </repository>
+    <repository>
+    	<id>datanucleus</id>
+      	<name>datanucleus repo</name>
+      	<url>http://www.datanucleus.org/downloads/maven2</url>
     </repository>
     <repository>
     	<id>jboss</id>
@@ -38,24 +44,41 @@
   	</resources>
   	<plugins>
 		<plugin>
-			<groupId>org.datanucleus</groupId>
+	    	<groupId>org.datanucleus</groupId>
 			<artifactId>maven-datanucleus-plugin</artifactId>
-			<version>1.1.4</version>
+			<version>${datanucleus.version}</version>
 			<configuration>
-				<mappingIncludes>**/model/*.class</mappingIncludes>
-				<verbose>true</verbose>
-				<enhancerName>ASM</enhancerName>
-				<api>JDO</api>
+		  		<mappingIncludes>**/model/*.class</mappingIncludes>
+		  		<verbose>true</verbose>
+		  		<enhancerName>ASM</enhancerName>
+		  		<api>JDO</api>
 			</configuration>
 			<executions>
-				<execution>
-					<phase>compile</phase>
+		  		<execution>
+		    		<phase>compile</phase>
 					<goals>
-						<goal>enhance</goal>
+			  			<goal>enhance</goal>
 					</goals>
-				</execution>
+		  		</execution>
 			</executions>
-		</plugin>
+			<dependencies>
+		  		<dependency>
+	  	    		<groupId>org.datanucleus</groupId>
+	  				<artifactId>datanucleus-core</artifactId>
+	  				<version>${datanucleus.version}</version>
+		  		</dependency>
+		  		<dependency>
+					<groupId>org.datanucleus</groupId>
+					<artifactId>datanucleus-api-jdo</artifactId>
+					<version>${datanucleus.version}</version>
+				</dependency>
+		  		<dependency>
+	  	    		<groupId>org.datanucleus</groupId>
+	  				<artifactId>datanucleus-rdbms</artifactId>
+	  				<version>${datanucleus.version}</version>
+		  		</dependency>
+			</dependencies>
+	  	</plugin>
   		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
@@ -91,12 +114,12 @@
         </plugin>
   	</plugins>
   	<extensions>
-	  <extension>
-	   <groupId>org.apache.maven.wagon</groupId>
-	   <artifactId>wagon-webdav</artifactId>
-	   <version>1.0-beta-2</version>
-	  </extension>
-	 </extensions>
+		<extension>
+	   		<groupId>org.apache.maven.wagon</groupId>
+	   		<artifactId>wagon-webdav</artifactId>
+	   		<version>1.0-beta-2</version>
+	  	</extension>
+	</extensions>
   </build>
   <distributionManagement>
   	<repository>

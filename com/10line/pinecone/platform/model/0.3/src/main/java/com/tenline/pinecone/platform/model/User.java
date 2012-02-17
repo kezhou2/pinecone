@@ -33,6 +33,13 @@ public class User extends Entity {
     @Persistent
     private byte[] avatar;
     
+    @Persistent
+	private Integer nut = Integer.valueOf(0); // Virtual Coin
+    
+    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Transaction> transactions;
+    
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
 	private Collection<Device> devices;
@@ -118,6 +125,35 @@ public class User extends Entity {
 	 */
 	public byte[] getAvatar() {
 		return avatar;
+	}
+
+	/**
+	 * @param nut the nut to set
+	 */
+	public void setNut(Integer nut) {
+		this.nut = nut;
+	}
+
+	/**
+	 * @return the nut
+	 */
+	public Integer getNut() {
+		return nut;
+	}
+
+	/**
+	 * @param transactions the transactions to set
+	 */
+	@XmlTransient
+	public void setTransactions(Collection<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
+	/**
+	 * @return the transactions
+	 */
+	public Collection<Transaction> getTransactions() {
+		return transactions;
 	}
 
 	/**

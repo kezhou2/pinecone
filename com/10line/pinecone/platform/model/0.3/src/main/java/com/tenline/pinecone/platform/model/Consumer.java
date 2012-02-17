@@ -43,6 +43,9 @@ public class Consumer extends Entity {
 	@Persistent
 	private String version;
 	
+	@Persistent
+	private Integer nut = Integer.valueOf(0); // Virtual Coin
+	
 	@NotPersistent
     private Set<String> scopes;
 	
@@ -51,6 +54,10 @@ public class Consumer extends Entity {
 	
 	@Persistent(defaultFetchGroup = "true")
 	private Category category;
+	
+	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Transaction> transactions;
 	
 	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
     @Element(dependent = "true")
@@ -186,6 +193,20 @@ public class Consumer extends Entity {
 	}
 
 	/**
+	 * @param nut the nut to set
+	 */
+	public void setNut(Integer nut) {
+		this.nut = nut;
+	}
+
+	/**
+	 * @return the nut
+	 */
+	public Integer getNut() {
+		return nut;
+	}
+
+	/**
      * Returns the OAuth Consumer's scopes. These are the scopes the consumer
      * will be able to access directly 
      */
@@ -227,6 +248,21 @@ public class Consumer extends Entity {
 	 */
 	public Category getCategory() {
 		return category;
+	}
+
+	/**
+	 * @param transactions the transactions to set
+	 */
+	@XmlTransient
+	public void setTransactions(Collection<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
+	/**
+	 * @return the transactions
+	 */
+	public Collection<Transaction> getTransactions() {
+		return transactions;
 	}
 
 	/**

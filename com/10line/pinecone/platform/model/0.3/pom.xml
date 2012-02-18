@@ -7,125 +7,108 @@
   <packaging>bundle</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
     <datanucleus.version>3.0.1</datanucleus.version>
   </properties>
   <repositories>
-  	<repository>
-    	<id>maven.2</id>
-        <name>Maven 2 Repository</name>
-        <url>http://repo2.maven.org/maven2/</url>
-    </repository>
     <repository>
-    	<id>datanucleus</id>
-      	<name>datanucleus repo</name>
-      	<url>http://www.datanucleus.org/downloads/maven2</url>
+      <id>datanucleus</id>
+      <name>datanucleus repo</name>
+      <url>http://www.datanucleus.org/downloads/maven2</url>
     </repository>
-    <repository>
-    	<id>jboss</id>
-        <name>jboss repo</name>
-        <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-	</repository>
   </repositories>
   <dependencies>     
   	<dependency>
-    	<groupId>javax.jdo</groupId>
-        <artifactId>jdo2-api</artifactId>
-        <version>2.3-eb</version>
+      <groupId>javax.jdo</groupId>
+      <artifactId>jdo2-api</artifactId>
+      <version>2.3-eb</version>
     </dependency>
   </dependencies>
   <build>
   	<resources>
-  		<resource>
-  			<directory>src/main/java</directory>
-  		</resource>
-  		<resource>
-  			<directory>src/main/resources</directory>
-  		</resource>
+  	  <resource>
+  	  	<directory>src/main/java</directory>
+  	  </resource>
+  	  <resource>
+  	    <directory>src/main/resources</directory>
+  	  </resource>
   	</resources>
   	<plugins>
-		<plugin>
-	    	<groupId>org.datanucleus</groupId>
-			<artifactId>maven-datanucleus-plugin</artifactId>
+	  <plugin>
+	    <groupId>org.datanucleus</groupId>
+		<artifactId>maven-datanucleus-plugin</artifactId>
+		<version>${datanucleus.version}</version>
+		<configuration>
+		  <mappingIncludes>**/model/*.class</mappingIncludes>
+		  <verbose>true</verbose>
+		  <enhancerName>ASM</enhancerName>
+		  <api>JDO</api>
+		</configuration>
+		<executions>
+		  <execution>
+		    <phase>compile</phase>
+			<goals>
+			  <goal>enhance</goal>
+			</goals>
+		  </execution>
+		</executions>
+		<dependencies>
+		  <dependency>
+	  	    <groupId>org.datanucleus</groupId>
+	  		<artifactId>datanucleus-core</artifactId>
+	  		<version>${datanucleus.version}</version>
+		  </dependency>
+		  <dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-api-jdo</artifactId>
 			<version>${datanucleus.version}</version>
-			<configuration>
-		  		<mappingIncludes>**/model/*.class</mappingIncludes>
-		  		<verbose>true</verbose>
-		  		<enhancerName>ASM</enhancerName>
-		  		<api>JDO</api>
-			</configuration>
-			<executions>
-		  		<execution>
-		    		<phase>compile</phase>
-					<goals>
-			  			<goal>enhance</goal>
-					</goals>
-		  		</execution>
-			</executions>
-			<dependencies>
-		  		<dependency>
-	  	    		<groupId>org.datanucleus</groupId>
-	  				<artifactId>datanucleus-core</artifactId>
-	  				<version>${datanucleus.version}</version>
-		  		</dependency>
-		  		<dependency>
-					<groupId>org.datanucleus</groupId>
-					<artifactId>datanucleus-api-jdo</artifactId>
-					<version>${datanucleus.version}</version>
-				</dependency>
-		  		<dependency>
-	  	    		<groupId>org.datanucleus</groupId>
-	  				<artifactId>datanucleus-rdbms</artifactId>
-	  				<version>${datanucleus.version}</version>
-		  		</dependency>
-			</dependencies>
-	  	</plugin>
-  		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>2.0</version>
-			<configuration>
-				<source>1.6</source>
-				<target>1.6</target>
-			</configuration>
-		</plugin>
-		<plugin>
-	  		<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-source-plugin</artifactId>
-  			<version>2.1.2</version>
-  			<executions>
-    	  		<execution>
-      	    		<id>attach-sources</id>
-      				<goals>
-        	  			<goal>jar</goal>
-      				</goals>
-    	  		</execution>
-  			</executions>
-	  	</plugin>
-		<plugin>  
-        	<groupId>org.apache.felix</groupId>
-        	<artifactId>maven-bundle-plugin</artifactId>
-        	<version>2.3.4</version>
-        	<extensions>true</extensions>
-        	<configuration>        	
-        		<instructions>
-        			<Bundle-Name>Pinecone Model</Bundle-Name>
-        		</instructions>
-        	</configuration> 
-        </plugin>
+		  </dependency>
+		  <dependency>
+	  	    <groupId>org.datanucleus</groupId>
+	  		<artifactId>datanucleus-rdbms</artifactId>
+	  		<version>${datanucleus.version}</version>
+		  </dependency>
+		</dependencies>
+	  </plugin>
+	  <plugin>
+	  	<groupId>org.apache.maven.plugins</groupId>
+  		<artifactId>maven-source-plugin</artifactId>
+  		<version>2.1.2</version>
+  		<executions>
+    	  <execution>
+      	    <phase>package</phase>
+      		<goals>
+        	  <goal>jar</goal>
+      		</goals>
+    	  </execution>
+  		</executions>
+	  </plugin>
+	  <plugin>  
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.4</version>
+        <extensions>true</extensions>
+        <configuration>        	
+          <instructions>
+            <Bundle-Name>Pinecone Model</Bundle-Name>
+          </instructions>
+        </configuration> 
+      </plugin>
   	</plugins>
   	<extensions>
-		<extension>
-	   		<groupId>org.apache.maven.wagon</groupId>
-	   		<artifactId>wagon-webdav</artifactId>
-	   		<version>1.0-beta-2</version>
-	  	</extension>
+	  <extension>
+	   	<groupId>org.apache.maven.wagon</groupId>
+	   	<artifactId>wagon-webdav</artifactId>
+	   	<version>1.0-beta-2</version>
+	  </extension>
 	</extensions>
   </build>
   <distributionManagement>
   	<repository>
-    	<id>googlecode.pinecone.repo</id>
-        <name>Pinecone Repository</name>
-        <url>https://pinecone.googlecode.com/svn/repository</url>
+      <id>googlecode.pinecone.repo</id>
+      <name>Pinecone Repository</name>
+      <url>https://pinecone.googlecode.com/svn/repository</url>
     </repository>
   </distributionManagement>
 </project>

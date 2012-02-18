@@ -4,6 +4,6 @@
   <inherits name='com.tenline.game.simulation.moneytree.MoneyTree'/>
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/MoneyTree/greet" class="com.tenline.game.simulation.moneytree.server.GreetingServiceImpl" />
+  <servlet path="/MoneyTree/Service" class="com.tenline.game.simulation.moneytree.server.MoneyTreeServiceImpl" />
 
 </module>

@@ -22,8 +22,8 @@ public class Transaction extends Entity {
 	/**
 	 * Transaction's Type
 	 */
-	public static final String INCOME = "income";
-	public static final String PAYOUT = "payout";
+	public static final String INCOME = "income"; // User get from consumer
+	public static final String PAYOUT = "payout"; // User pay to consumer
 	
 	@Persistent
 	private String type;

@@ -39,6 +39,7 @@ public class Category extends Entity {
 	 */
 	public static final String DOMAIN_PET = "pet";
 	public static final String DOMAIN_SECURITY = "security";
+	public static final String DOMAIN_GAME = "game";
 	
 	/**
 	 * Category's SubDomain
@@ -46,6 +47,7 @@ public class Category extends Entity {
 	public static final String SUB_DOMAIN_LEISURE = "leisure";
 	public static final String SUB_DOMAIN_AQUARIUM = "aquarium";
 	public static final String SUB_DOMAIN_CAMERA = "camera";
+	public static final String SUB_DOMAIN_SIMULATION = "simulation";
 	
 	@Persistent
 	private String domain;

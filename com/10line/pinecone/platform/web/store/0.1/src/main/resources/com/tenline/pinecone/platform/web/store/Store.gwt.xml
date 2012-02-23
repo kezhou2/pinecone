@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='Store'>
+<module rename-to='store'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
-  <inherits name='com.google.gwt.json.JSON' />
-	<inherits name='com.extjs.gxt.ui.GXT' />
+  <inherits name='com.extjs.gxt.ui.GXT' />
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->
   <!-- any one of the following lines.                            -->
-  <!--<inherits name='com.google.gwt.user.theme.standard.Standard'/>
-  --><!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
   <inherits name='com.extjs.gxt.themes.Themes'/>
 
   <!-- Other module inherits                                      -->
-  <inherits name='com.tenline.pinecone.platform.Model' />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.tenline.pinecone.platform.web.store.client.Store'/>
@@ -22,6 +20,6 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
-  <stylesheet src="../resources/css/gxt-all.css" />
+  <stylesheet src="../css/gxt-all.css" />
 
 </module>

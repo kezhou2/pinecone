@@ -16,4 +16,7 @@ public interface Images extends ImageBundle {
 	@Resource("logo.png")
 	AbstractImagePrototype logo();
 	
+	@Resource("home.png")
+	AbstractImagePrototype home();
+	
 }

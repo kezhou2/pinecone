@@ -35,7 +35,7 @@ public class HomePage extends LayoutContainer {
 	    setLayout(new BorderLayout());
 	    
 	    ToolBar toolBar = new ToolBar();
-	    toolBar.add(new ToggleButton(messages.home()));
+	    toolBar.add(new ToggleButton(messages.home(), images.home()));
 	    toolBar.add(new SeparatorToolItem());  
 	    
 	    ContentPanel navigation = new ContentPanel(); 
@@ -48,7 +48,7 @@ public class HomePage extends LayoutContainer {
 	    panel.setHeaderVisible(false);
 	    panel.setBorders(false);
 	    panel.add(images.logo().createImage());
-	    panel.add(new Label("Pinecone"));
+	    panel.add(new Label(messages.logoText()));
 	    navigation.add(panel);
 	  
 	    Portal portal = new Portal(3);   

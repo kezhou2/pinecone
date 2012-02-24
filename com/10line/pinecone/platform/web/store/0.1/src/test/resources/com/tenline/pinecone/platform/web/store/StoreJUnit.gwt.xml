@@ -4,6 +4,5 @@
   <inherits name='com.tenline.pinecone.platform.web.store.Store'/>
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/Store/greet" class="com.tenline.pinecone.platform.web.store.server.GreetingServiceImpl" />
 
 </module>

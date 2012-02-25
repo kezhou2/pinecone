@@ -5,7 +5,7 @@
   <groupId>com.10line.pinecone.platform.web</groupId>
   <artifactId>store</artifactId>
   <packaging>war</packaging>
-  <version>0.1</version>
+  <version>0.2</version>
   <repositories>
 	<repository>
 	  <id>pinecone</id>
@@ -69,7 +69,7 @@
 	  <plugin>
 		<groupId>org.codehaus.mojo</groupId>
 		<artifactId>gwt-maven-plugin</artifactId>
-		<version>2.1.0-1</version>
+		<version>${gwtVersion}</version>
 		<executions>
 		  <execution>
 			<goals>

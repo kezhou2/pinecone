@@ -3,7 +3,6 @@ package com.tenline.pinecone.platform.web.store.client;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.tenline.pinecone.platform.web.store.client.resource.IconsConfig;
 import com.tenline.pinecone.platform.web.store.shared.ConsumerInfo;
 import com.tenline.pinecone.platform.web.store.shared.UserInfo;
 

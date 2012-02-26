@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.10line.pinecone.platform</groupId>
+  <artifactId>pay</artifactId>
+  <version>0.1</version>
+  <packaging>bundle</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <resteasy.version>2.2.0.GA</resteasy.version>
+  </properties>
+  <repositories>
+  	<repository>
+    	<id>maven.2</id>
+        <name>Maven 2 Repository</name>
+        <url>http://repo2.maven.org/maven2/</url>
+    </repository>
+  	<repository>
+    	<id>jboss</id>
+        <name>jboss repo</name>
+        <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+	</repository>
+	<repository>
+    	<id>pinecone</id>
+        <name>pinecone repo</name>
+        <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+  </repositories>
+  <dependencies>
+  	<!-- Pinecone Model -->
+  	<dependency>
+  		<groupId>com.10line.pinecone.platform</groupId>
+  		<artifactId>sdk</artifactId>
+  		<version>0.4</version>
+  	</dependency>
+    <!-- JAX-RS RESTEasy -->
+	<dependency>
+    	<groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jaxrs</artifactId>
+        <version>${resteasy.version}</version>
+	</dependency>
+  </dependencies>
+  <build>
+  	<plugins>
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>2.0</version>
+		<configuration>
+		  <source>1.6</source>
+		  <target>1.6</target>
+		</configuration>
+	  </plugin>
+	  <plugin>  
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.4</version>
+        <extensions>true</extensions>
+        <configuration>        	
+        	<instructions>
+        		<Bundle-Name>Pinecone Java SDK</Bundle-Name>
+        	</instructions>
+        </configuration> 
+      </plugin>
+  	</plugins>
+  	<extensions>
+	  <extension>
+	   <groupId>org.apache.maven.wagon</groupId>
+	   <artifactId>wagon-webdav</artifactId>
+	   <version>1.0-beta-2</version>
+	  </extension>
+	</extensions>
+  </build>
+  <distributionManagement>
+  	<repository>
+    	<id>googlecode.pinecone.repo</id>
+        <name>Pinecone Repository</name>
+        <url>https://pinecone.googlecode.com/svn/repository</url>
+    </repository>
+  </distributionManagement>
+</project>

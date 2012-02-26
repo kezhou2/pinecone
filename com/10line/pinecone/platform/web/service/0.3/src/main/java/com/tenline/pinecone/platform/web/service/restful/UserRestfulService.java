@@ -58,6 +58,7 @@ public class UserRestfulService extends JdoDaoSupport implements UserService {
 		if (user.getPassword() != null) detachedUser.setPassword(user.getPassword());
 		if (user.getAvatar() != null) detachedUser.setAvatar(user.getAvatar());
 		if (user.getNut() != null) detachedUser.setNut(user.getNut());
+		if (user.getPhone() != null) detachedUser.setPhone(user.getPhone());
 		return getJdoTemplate().makePersistent(detachedUser);
 	}
 

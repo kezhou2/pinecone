@@ -33,6 +33,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		user.setAvatar("http://avatar/1".getBytes());
 		user.setEmail("billmse@gmail.com");
 		user.setPassword("19821027");
+		user.setPhone("13699135986");
 		user.setNut(20);
 		userAPI = new UserAPI("localhost", "8888", "service");
 	}
@@ -53,6 +54,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			assertEquals("http://avatar/1", new String(user.getAvatar()));
 			assertEquals("19821027", user.getPassword());
 			assertEquals("billmse@gmail.com", user.getEmail());
+			assertEquals("13699135986", user.getPhone());
 			assertEquals(Integer.valueOf(20), user.getNut());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
@@ -61,6 +63,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 		user.setAvatar("http://avatar/2".getBytes());
 		user.setEmail("jack@gmail.com");
 		user.setPassword("666666");
+		user.setPhone("13699135988");
 		user.setNut(30);
 		response = userAPI.update(user);
 		if (response.isDone()) {
@@ -69,6 +72,7 @@ public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest {
 			assertEquals("http://avatar/2", new String(user.getAvatar()));
 			assertEquals("666666", user.getPassword());
 			assertEquals("jack@gmail.com", user.getEmail());
+			assertEquals("13699135988", user.getPhone());
 			assertEquals(Integer.valueOf(30), user.getNut());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());

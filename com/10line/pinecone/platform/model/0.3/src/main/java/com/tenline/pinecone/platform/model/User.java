@@ -31,6 +31,9 @@ public class User extends Entity {
     private String password;
     
     @Persistent
+    private String phone;
+    
+    @Persistent
     private byte[] avatar;
     
     @Persistent
@@ -39,6 +42,10 @@ public class User extends Entity {
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
 	private Collection<Transaction> transactions;
+    
+    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Account> accounts;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
@@ -114,6 +121,20 @@ public class User extends Entity {
 	}
 
 	/**
+	 * @param phone the phone to set
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	/**
+	 * @return the phone
+	 */
+	public String getPhone() {
+		return phone;
+	}
+
+	/**
 	 * @param avatar the avatar to set
 	 */
 	public void setAvatar(byte[] avatar) {
@@ -154,6 +175,21 @@ public class User extends Entity {
 	 */
 	public Collection<Transaction> getTransactions() {
 		return transactions;
+	}
+
+	/**
+	 * @param accounts the accounts to set
+	 */
+	@XmlTransient
+	public void setAccounts(Collection<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+	/**
+	 * @return the accounts
+	 */
+	public Collection<Account> getAccounts() {
+		return accounts;
 	}
 
 	/**

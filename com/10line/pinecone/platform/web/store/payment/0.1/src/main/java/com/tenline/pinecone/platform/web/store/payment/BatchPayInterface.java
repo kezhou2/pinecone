@@ -1,4 +1,4 @@
-package com.tenline.pinecone.platform.pay;
+package com.tenline.pinecone.platform.web.store.payment;
 
 /**
  * @author wangyq

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.pay.model;
+package com.tenline.pinecone.platform.web.store.payment.model;
 
 /**
  * pay info class

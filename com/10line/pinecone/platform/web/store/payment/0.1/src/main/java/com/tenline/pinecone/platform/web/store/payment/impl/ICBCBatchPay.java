@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.pay.impl;
+package com.tenline.pinecone.platform.web.store.payment.impl;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,9 +12,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import com.tenline.pinecone.platform.pay.BatchPayInterface;
-import com.tenline.pinecone.platform.pay.model.PayInfo;
-import com.tenline.pinecone.platform.pay.util.PineconeAccount;
+import com.tenline.pinecone.platform.web.store.payment.BatchPayInterface;
+import com.tenline.pinecone.platform.web.store.payment.model.PayInfo;
+import com.tenline.pinecone.platform.web.store.payment.util.PineconeAccount;
 
 /**
  * create icbc batch file to transfer
@@ -62,9 +62,9 @@ public class ICBCBatchPay implements BatchPayInterface {
 				txt.createNewFile();
 			}
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-			writer.write("#×Ü¼ÆÐÅÏ¢£¡");
-			writer.write("#×¢Òâ£º±¾ÎÄ¼þÖÐµÄ½ð¶î¾ùÒÔ·ÖÎªµ¥Î»£¡");
-			writer.write("#±ÒÖÖ|ÈÕÆÚ|×Ü¼Æ±êÖ¾|×Ü½ð¶î|×Ü±ÊÊý|");
+			writer.write("#ï¿½Ü¼ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½");
+			writer.write("#×¢ï¿½â£ºï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ÐµÄ½ï¿½ï¿½ï¿½ï¿½Ô·ï¿½Îªï¿½ï¿½Î»ï¿½ï¿½");
+			writer.write("#ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½|ï¿½Ü¼Æ±ï¿½Ö¾|ï¿½Ü½ï¿½ï¿½|ï¿½Ü±ï¿½ï¿½ï¿½|");
 			long summary = 0;
 			for (PayInfo payino : payInfoList) {
 				summary += payino.getPayNumber();
@@ -74,7 +74,7 @@ public class ICBCBatchPay implements BatchPayInterface {
 			writer.flush();
 			for (int i = 0; i < payInfoList.size(); i++) {
 				PayInfo payino = payInfoList.get(i);
-				// #±ÒÖÖ|ÈÕÆÚ|Ë³ÐòºÅ|¸¶¿îÕÊºÅ|¸¶¿îÕËºÅÀàÐÍ|ÊÕ¿îÕÊºÅ|ÊÕ¿îÕÊºÅÃû³Æ|½ð¶î|ÓÃÍ¾|±¸×¢ÐÅÏ¢|ÊÇ·ñÔÊÐíÊÕ¿îÈË²é¿´¸¶¿îÈËÐÅÏ¢|ÊÖ»úºÅÂë|
+				// #ï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½|Ë³ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½Êºï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½Õ¿ï¿½ï¿½Êºï¿½|ï¿½Õ¿ï¿½ï¿½Êºï¿½ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½|ï¿½ï¿½Í¾|ï¿½ï¿½×¢ï¿½ï¿½Ï¢|ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¿ï¿½ï¿½Ë²é¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢|ï¿½Ö»ï¿½ï¿½ï¿½ï¿½|
 				writer.write("RMB|" + day + "|" + (i + 1) + "|"
 						+ PineconeAccount.Account_ICBC + "|"
 						+ PineconeAccount.Account_ICBC_Type + "|"

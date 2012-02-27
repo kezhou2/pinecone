@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.pay.util;
+package com.tenline.pinecone.platform.web.store.payment.util;
 
 /**
  * @author WongYQ
@@ -15,7 +15,7 @@ public class PineconeAccount {
 	/**
 	 * account type
 	 */
-	public static String Account_ICBC_Type = "ÁéÍ¨¿¨";
+	public static String Account_ICBC_Type = "ï¿½ï¿½Í¨ï¿½ï¿½";
 
 	/**
 	 * alipay account

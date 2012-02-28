@@ -14,9 +14,8 @@ import org.springframework.orm.jdo.support.JdoDaoSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.Transaction;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.service.TransactionService;
 
 /**
@@ -46,8 +45,7 @@ public class TransactionRestfulService extends JdoDaoSupport implements Transact
 	@Override
 	public Transaction create(Transaction transaction) {
 		// TODO Auto-generated method stub
-		transaction.setUser(getJdoTemplate().getObjectById(User.class, transaction.getUser().getId()));
-		transaction.setConsumer(getJdoTemplate().getObjectById(Consumer.class, transaction.getConsumer().getId()));
+		transaction.setApplication(getJdoTemplate().getObjectById(Application.class, transaction.getApplication().getId()));
 		return getJdoTemplate().makePersistent(transaction);
 	}
 
@@ -71,16 +69,9 @@ public class TransactionRestfulService extends JdoDaoSupport implements Transact
 	}
 
 	@Override
-	public Collection<Transaction> showByUser(String filter) {
+	public Collection<Transaction> showByApplication(String filter) {
 		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(User.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
-		.getTransactions();
-	}
-
-	@Override
-	public Collection<Transaction> showByConsumer(String filter) {
-		// TODO Auto-generated method stub
-		return getJdoTemplate().getObjectById(Consumer.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
+		return getJdoTemplate().getObjectById(Application.class, filter.substring(filter.indexOf("'") + 1, filter.lastIndexOf("'")))
 		.getTransactions();
 	}
 

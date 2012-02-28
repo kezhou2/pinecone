@@ -14,36 +14,36 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.tenline.pinecone.platform.model.Transaction;
+import com.tenline.pinecone.platform.model.Exchange;
 
 /**
  * @author Bill
  *
  */
-@Path("/api/transaction")
-public interface TransactionService extends AbstractService {
+@Path("/api/exchange")
+public interface ExchangeService extends AbstractService {
 
 	/**
 	 * 
-	 * @param transaction
+	 * @param exchange
 	 * @return
 	 */
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Transaction create(Transaction transaction);
+	Exchange create(Exchange exchange);
 	
 	/**
 	 * 
-	 * @param transaction
+	 * @param exchange
 	 * @return
 	 */
 	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	Transaction update(Transaction transaction);
+	Exchange update(Exchange exchange);
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public interface TransactionService extends AbstractService {
 	@GET
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Transaction> show(@PathParam("filter") String filter);
+	Collection<Exchange> show(@PathParam("filter") String filter);
 	
 	/**
 	 * 
@@ -61,8 +61,8 @@ public interface TransactionService extends AbstractService {
 	 * @return
 	 */
 	@GET
-	@Path("/show/@Application/{filter}")
+	@Path("/show/@Account/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Collection<Transaction> showByApplication(@PathParam("filter") String filter);
+	Collection<Exchange> showByAccount(@PathParam("filter") String filter);
 	
 }

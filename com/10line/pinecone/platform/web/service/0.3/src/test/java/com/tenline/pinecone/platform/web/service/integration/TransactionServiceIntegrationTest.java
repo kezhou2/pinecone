@@ -13,10 +13,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Transaction;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.sdk.ApplicationAPI;
 import com.tenline.pinecone.platform.sdk.CategoryAPI;
 import com.tenline.pinecone.platform.sdk.TransactionAPI;
 import com.tenline.pinecone.platform.sdk.ConsumerAPI;
@@ -35,9 +37,13 @@ public class TransactionServiceIntegrationTest extends AbstractServiceIntegratio
 	
 	private Consumer consumer;
 	
+	private Application application;
+	
 	private Transaction transaction;
 	
 	private UserAPI userAPI;
+	
+	private ApplicationAPI applicationAPI;
 	
 	private CategoryAPI categoryAPI;
 	
@@ -55,11 +61,14 @@ public class TransactionServiceIntegrationTest extends AbstractServiceIntegratio
 		category.setType(Category.COM);
 		consumer = new Consumer();
 		consumer.setName("App");
+		application = new Application();
+		application.setDefault(false);
 		transaction = new Transaction();
 		transaction.setType(Transaction.INCOME);
 		transaction.setTimestamp(timestamp);
 		transaction.setNut(20);
 		userAPI = new UserAPI("localhost", "8888", "service");
+		applicationAPI = new ApplicationAPI("localhost", "8888", "service");
 		categoryAPI = new CategoryAPI("localhost", "8888", "service");
 		consumerAPI = new ConsumerAPI("localhost", "8888", "service");
 		transactionAPI = new TransactionAPI("localhost", "8888", "service");
@@ -85,8 +94,16 @@ public class TransactionServiceIntegrationTest extends AbstractServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		transaction.setConsumer(consumer);
-		transaction.setUser(user);
+		application.setConsumer(consumer);
+		application.setUser(user);
+		response = applicationAPI.create(application);
+		if (response.isDone()) {
+			application = (Application) response.getMessage();
+			assertEquals(false, application.isDefault());
+		} else {
+			logger.log(Level.SEVERE, response.getMessage().toString());
+		}
+		transaction.setApplication(application);
 	}
 	
 	@After
@@ -104,10 +121,12 @@ public class TransactionServiceIntegrationTest extends AbstractServiceIntegratio
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		user = null;
+		application = null;
 		category = null;
 		consumer = null;
 		transaction = null;
 		userAPI = null;
+		applicationAPI = null;
 		categoryAPI = null;
 		consumerAPI = null;
 		transactionAPI = null;
@@ -122,8 +141,8 @@ public class TransactionServiceIntegrationTest extends AbstractServiceIntegratio
 			assertEquals(Transaction.INCOME, transaction.getType());
 			assertEquals(timestamp, transaction.getTimestamp());
 			assertEquals(Integer.valueOf(20), transaction.getNut());
-			assertEquals("251417324", transaction.getUser().getName());
-			assertEquals("App", transaction.getConsumer().getName());
+			assertEquals("251417324", transaction.getApplication().getUser().getName());
+			assertEquals("App", transaction.getApplication().getConsumer().getName());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
@@ -152,13 +171,7 @@ public class TransactionServiceIntegrationTest extends AbstractServiceIntegratio
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = transactionAPI.showByUser("id=='"+user.getId()+"'");
-		if (response.isDone()) {
-			assertEquals(0, ((Collection<Transaction>) response.getMessage()).size());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-		response = transactionAPI.showByConsumer("id=='"+consumer.getId()+"'");
+		response = transactionAPI.showByApplication("id=='"+application.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(0, ((Collection<Transaction>) response.getMessage()).size());
 		} else {

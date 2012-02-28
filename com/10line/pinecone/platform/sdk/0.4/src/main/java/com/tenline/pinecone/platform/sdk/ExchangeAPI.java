@@ -21,7 +21,7 @@ import org.codehaus.jettison.mapped.MappedNamespaceConvention;
 import org.codehaus.jettison.mapped.MappedXMLStreamReader;
 import org.codehaus.jettison.mapped.MappedXMLStreamWriter;
 
-import com.tenline.pinecone.platform.model.Transaction;
+import com.tenline.pinecone.platform.model.Exchange;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
 
@@ -29,19 +29,18 @@ import com.tenline.pinecone.platform.sdk.development.JaxbAPI;
  * @author Bill
  *
  */
-public class TransactionAPI extends JaxbAPI {
+public class ExchangeAPI extends JaxbAPI {
 
 	/**
-	 * 
 	 * @param host
 	 * @param port
 	 * @param context
 	 */
-	public TransactionAPI(String host, String port, String context) {
+	public ExchangeAPI(String host, String port, String context) {
 		super(host, port, context);
 		// TODO Auto-generated constructor stub
 		try {
-			jaxbContext = JAXBContext.newInstance(Transaction.class);
+			jaxbContext = JAXBContext.newInstance(Exchange.class);
 			marshaller = jaxbContext.createMarshaller();
 			unmarshaller = jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
@@ -52,20 +51,20 @@ public class TransactionAPI extends JaxbAPI {
 	
 	/**
 	 * 
-	 * @param transaction
+	 * @param exchange
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse create(Transaction transaction) throws Exception {
+	public APIResponse create(Exchange exchange) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/transaction/create").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/exchange/create").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(transaction, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(exchange, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -76,7 +75,7 @@ public class TransactionAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Create Transaction Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Create Exchange Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -90,16 +89,16 @@ public class TransactionAPI extends JaxbAPI {
 	 */
 	public APIResponse delete(String id) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/transaction/delete/" + id).openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/exchange/delete/" + id).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			response.setDone(true);
-			response.setMessage("Transaction Deleted!");
+			response.setMessage("Exchange Deleted!");
 		} else {
 			response.setDone(false);
-			response.setMessage("Delete Transaction Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Delete Exchange Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -107,20 +106,20 @@ public class TransactionAPI extends JaxbAPI {
 	
 	/**
 	 * 
-	 * @param transaction
+	 * @param exchange
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse update(Transaction transaction) throws Exception {
+	public APIResponse update(Exchange exchange) throws Exception {
 		APIResponse response = new APIResponse();
-		connection = (HttpURLConnection) new URL(url + "/api/transaction/update").openConnection();
+		connection = (HttpURLConnection) new URL(url + "/api/exchange/update").openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
 		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		marshaller.marshal(transaction, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
+		marshaller.marshal(exchange, new MappedXMLStreamWriter(new MappedNamespaceConvention(new Configuration()), 
 				new OutputStreamWriter(connection.getOutputStream(), "utf-8")));
 		connection.getOutputStream().flush();
         connection.getOutputStream().close();
@@ -131,7 +130,7 @@ public class TransactionAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Update Transaction Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Update Exchange Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -145,15 +144,15 @@ public class TransactionAPI extends JaxbAPI {
 	 */
 	public APIResponse show(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/transaction/show/" + filter;
+		String requestUrl = url + "/api/exchange/show/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Transaction> message = new ArrayList<Transaction>();
+			Collection<Exchange> message = new ArrayList<Exchange>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Transaction) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Exchange) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -161,7 +160,7 @@ public class TransactionAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Transaction Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Exchange Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;
@@ -173,17 +172,17 @@ public class TransactionAPI extends JaxbAPI {
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse showByApplication(String filter) throws Exception {
+	public APIResponse showByAccount(String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/api/transaction/show/@Application/" + filter;
+		String requestUrl = url + "/api/exchange/show/@Account/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			JSONArray array = new JSONArray(new String(new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8")).readLine()));
-			Collection<Transaction> message = new ArrayList<Transaction>();
+			Collection<Exchange> message = new ArrayList<Exchange>();
 			for (int i=0; i<array.length(); i++) {
-				message.add((Transaction) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
+				message.add((Exchange) unmarshaller.unmarshal(new MappedXMLStreamReader(array.getJSONObject(i), 
 						new MappedNamespaceConvention(new Configuration()))));
 			}
 			response.setDone(true);
@@ -191,7 +190,7 @@ public class TransactionAPI extends JaxbAPI {
 			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
-			response.setMessage("Show Transaction By Application Error Code: Http (" + connection.getResponseCode() + ")");
+			response.setMessage("Show Exchange By Account Error Code: Http (" + connection.getResponseCode() + ")");
 		}
 		connection.disconnect();
 		return response;

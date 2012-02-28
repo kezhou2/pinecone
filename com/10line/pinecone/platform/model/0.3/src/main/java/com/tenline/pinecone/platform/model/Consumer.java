@@ -57,10 +57,6 @@ public class Consumer extends Entity {
 	
 	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
     @Element(dependent = "true")
-	private Collection<Transaction> transactions;
-	
-	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
-    @Element(dependent = "true")
     private Collection<Application> applications;
 	
 	@Persistent(mappedBy = "consumer", defaultFetchGroup = "true")
@@ -248,21 +244,6 @@ public class Consumer extends Entity {
 	 */
 	public Category getCategory() {
 		return category;
-	}
-
-	/**
-	 * @param transactions the transactions to set
-	 */
-	@XmlTransient
-	public void setTransactions(Collection<Transaction> transactions) {
-		this.transactions = transactions;
-	}
-
-	/**
-	 * @return the transactions
-	 */
-	public Collection<Transaction> getTransactions() {
-		return transactions;
 	}
 
 	/**

@@ -3,10 +3,14 @@
  */
 package com.tenline.pinecone.platform.model;
 
+import java.util.Collection;
+
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Bill
@@ -25,6 +29,10 @@ public class Account extends Entity {
 	
 	@Persistent(defaultFetchGroup = "true")
 	private Bank bank;
+	
+	@Persistent(mappedBy = "account", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Exchange> exchanges;
 	
 	/**
 	 * 
@@ -73,6 +81,21 @@ public class Account extends Entity {
 	 */
 	public Bank getBank() {
 		return bank;
+	}
+
+	/**
+	 * @param exchanges the exchanges to set
+	 */
+	@XmlTransient
+	public void setExchanges(Collection<Exchange> exchanges) {
+		this.exchanges = exchanges;
+	}
+
+	/**
+	 * @return the exchanges
+	 */
+	public Collection<Exchange> getExchanges() {
+		return exchanges;
 	}
 
 }

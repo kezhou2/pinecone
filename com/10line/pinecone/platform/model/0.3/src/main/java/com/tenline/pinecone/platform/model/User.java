@@ -41,10 +41,6 @@ public class User extends Entity {
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
     @Element(dependent = "true")
-	private Collection<Transaction> transactions;
-    
-    @Persistent(mappedBy = "user", defaultFetchGroup = "true")
-    @Element(dependent = "true")
 	private Collection<Account> accounts;
     
     @Persistent(mappedBy = "user", defaultFetchGroup = "true")
@@ -160,21 +156,6 @@ public class User extends Entity {
 	 */
 	public Integer getNut() {
 		return nut;
-	}
-
-	/**
-	 * @param transactions the transactions to set
-	 */
-	@XmlTransient
-	public void setTransactions(Collection<Transaction> transactions) {
-		this.transactions = transactions;
-	}
-
-	/**
-	 * @return the transactions
-	 */
-	public Collection<Transaction> getTransactions() {
-		return transactions;
 	}
 
 	/**

@@ -3,10 +3,14 @@
  */
 package com.tenline.pinecone.platform.model;
 
+import java.util.Collection;
+
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Bill
@@ -37,6 +41,10 @@ public class Application extends Entity {
 	
 	@Persistent(defaultFetchGroup = "true")
 	private User user;
+	
+	@Persistent(mappedBy = "application", defaultFetchGroup = "true")
+    @Element(dependent = "true")
+	private Collection<Transaction> transactions;
 
 	/**
 	 * 
@@ -99,6 +107,21 @@ public class Application extends Entity {
 	 */
 	public User getUser() {
 		return user;
+	}
+
+	/**
+	 * @param transactions the transactions to set
+	 */
+	@XmlTransient
+	public void setTransactions(Collection<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
+	/**
+	 * @return the transactions
+	 */
+	public Collection<Transaction> getTransactions() {
+		return transactions;
 	}
 
 }

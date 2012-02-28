@@ -17,13 +17,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
-public class Transaction extends Entity {
+public class Exchange extends Entity {
 
 	/**
-	 * Transaction's Type
+	 * Exchange's Type
 	 */
-	public static final String INCOME = "income"; // User get from consumer
-	public static final String PAYOUT = "payout"; // User pay to consumer
+	public static final String INCOME = "income"; // User get from bank
+	public static final String PAYOUT = "payout"; // User pay to bank
 	
 	@Persistent
 	private String type;
@@ -35,12 +35,12 @@ public class Transaction extends Entity {
 	private Integer nut = Integer.valueOf(0); // Virtual Coin
 	
 	@Persistent(defaultFetchGroup = "true")
-	private Application application;
+	private Account account;
 	
 	/**
 	 * 
 	 */
-	public Transaction() {
+	public Exchange() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -87,17 +87,17 @@ public class Transaction extends Entity {
 	}
 
 	/**
-	 * @param application the application to set
+	 * @param account the account to set
 	 */
-	public void setApplication(Application application) {
-		this.application = application;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	/**
-	 * @return the application
+	 * @return the account
 	 */
-	public Application getApplication() {
-		return application;
+	public Account getAccount() {
+		return account;
 	}
 
 }

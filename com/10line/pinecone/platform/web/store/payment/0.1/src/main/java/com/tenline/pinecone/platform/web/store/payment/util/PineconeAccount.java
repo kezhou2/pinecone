@@ -15,7 +15,7 @@ public class PineconeAccount {
 	/**
 	 * account type
 	 */
-	public static String Account_ICBC_Type = "ï¿½ï¿½Í¨ï¿½ï¿½";
+	public static String Account_ICBC_Type = "ÁéÍ¨¿¨";
 
 	/**
 	 * alipay account

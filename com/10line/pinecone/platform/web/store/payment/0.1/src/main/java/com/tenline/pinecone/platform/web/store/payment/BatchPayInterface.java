@@ -7,7 +7,7 @@ package com.tenline.pinecone.platform.web.store.payment;
 public interface BatchPayInterface{
 
 	/**
-	 * @return
+	 * @return file path
 	 */
-	public boolean createBatchFile();
+	public String createBatchFile();
 }

@@ -41,14 +41,15 @@ public class AlipayBatchPay implements BatchPayInterface {
 	 * @return
 	 */
 	@Override
-	public boolean createBatchFile() {
-		boolean result = false;
+	public String createBatchFile() {
+		String result="";
 		try {
+			String cfgFilePath = System.getProperty("catalina.home");
 			Date today = Calendar.getInstance().getTime();
 			SimpleDateFormat sd = new SimpleDateFormat("yyyyMMdd");
 			String day = sd.format(today);
-			String path = "../downfiles/moneytree/" + day + "/";
-			String fileName = path + "/AlipayBatch.txt";
+			String path = cfgFilePath+"/webapps/paycenter/downfiles/moneytree/" + day + "/";
+			String fileName = path + "AlipayBatch.txt";
 			File f = new File(path);
 			if (!f.exists()) {
 				f.mkdirs();
@@ -56,6 +57,7 @@ public class AlipayBatchPay implements BatchPayInterface {
 			File txt = new File(fileName);
 			if (!txt.exists()) {
 				txt.createNewFile();
+				System.out.println("create new file ok");
 			}
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 			for (PayInfo payino :payInfoList) {
@@ -64,10 +66,10 @@ public class AlipayBatchPay implements BatchPayInterface {
 			}
 			writer.flush();
 			writer.close();
-			return true;
+			result = fileName ;
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = false;
+			result = null;
 		}
 		return result;
 	}

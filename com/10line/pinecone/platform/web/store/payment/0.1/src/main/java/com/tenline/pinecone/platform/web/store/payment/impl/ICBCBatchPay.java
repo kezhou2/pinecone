@@ -26,7 +26,8 @@ public class ICBCBatchPay implements BatchPayInterface {
 	/**
 	 * logger
 	 */
-	protected static Logger logger = Logger.getLogger(ICBCBatchPay.class.toString());
+	protected static Logger logger = Logger.getLogger(ICBCBatchPay.class
+			.toString());
 	/**
 	 * icbc paybatch info
 	 */
@@ -41,17 +42,18 @@ public class ICBCBatchPay implements BatchPayInterface {
 
 	/**
 	 * create icbc batch file txt
-	 * 
+	 * 该方法仅适用于 中国工商银行个人网上银行客户端 版本1.9
 	 * @return
 	 */
 	@Override
-	public boolean createBatchFile() {
-		boolean result = false;
+	public String createBatchFile() {
+		String result;
 		try {
+			String cfgFilePath = System.getProperty("catalina.home");
 			Date today = Calendar.getInstance().getTime();
 			SimpleDateFormat sd = new SimpleDateFormat("yyyyMMdd");
 			String day = sd.format(today);
-			String path = "../downfiles/moneytree/" + day + "/";
+			String path = cfgFilePath+"/webapps/paycenter/downfiles/moneytree/" + day + "/";
 			String fileName = path + "/ICBCBatch.txt";
 			File f = new File(path);
 			if (!f.exists()) {
@@ -62,9 +64,9 @@ public class ICBCBatchPay implements BatchPayInterface {
 				txt.createNewFile();
 			}
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-			writer.write("#�ܼ���Ϣ��");
-			writer.write("#ע�⣺���ļ��еĽ����Է�Ϊ��λ��");
-			writer.write("#����|����|�ܼƱ�־|�ܽ��|�ܱ���|");
+			writer.write("#总计信息");
+			writer.write("#注意：本文件中的金额均以分为单位!");
+			writer.write("#币种|日期|总计标志|总金额|总笔数|");
 			long summary = 0;
 			for (PayInfo payino : payInfoList) {
 				summary += payino.getPayNumber();
@@ -74,7 +76,7 @@ public class ICBCBatchPay implements BatchPayInterface {
 			writer.flush();
 			for (int i = 0; i < payInfoList.size(); i++) {
 				PayInfo payino = payInfoList.get(i);
-				// #����|����|˳���|�����ʺ�|�����˺�����|�տ��ʺ�|�տ��ʺ����|���|��;|��ע��Ϣ|�Ƿ������տ��˲鿴��������Ϣ|�ֻ����|
+				// #币种|日期|顺序号|付款帐号|付款账号类型|收款帐号|收款帐号名称|金额|用途|备注信息|是否允许收款人查看付款人信息|手机号码
 				writer.write("RMB|" + day + "|" + (i + 1) + "|"
 						+ PineconeAccount.Account_ICBC + "|"
 						+ PineconeAccount.Account_ICBC_Type + "|"
@@ -86,10 +88,10 @@ public class ICBCBatchPay implements BatchPayInterface {
 			}
 			writer.flush();
 			writer.close();
-			return true;
+			result = fileName;
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = false;
+			result = null;
 		}
 		return result;
 	}

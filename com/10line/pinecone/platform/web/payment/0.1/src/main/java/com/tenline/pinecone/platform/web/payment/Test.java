@@ -1,4 +1,4 @@
-package com.tenline.pinecone.platform.web.store.payment;
+package com.tenline.pinecone.platform.web.payment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

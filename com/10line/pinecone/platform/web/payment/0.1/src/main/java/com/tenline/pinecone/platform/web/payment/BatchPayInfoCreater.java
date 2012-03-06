@@ -1,4 +1,4 @@
-package com.tenline.pinecone.platform.web.store.payment;
+package com.tenline.pinecone.platform.web.payment;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +12,9 @@ import com.tenline.pinecone.platform.sdk.AccountAPI;
 import com.tenline.pinecone.platform.sdk.ExchangeAPI;
 import com.tenline.pinecone.platform.sdk.TransactionAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
-import com.tenline.pinecone.platform.web.store.payment.impl.AlipayBatchPay;
-import com.tenline.pinecone.platform.web.store.payment.impl.ICBCBatchPay;
-import com.tenline.pinecone.platform.web.store.payment.model.PayInfo;
+import com.tenline.pinecone.platform.web.payment.impl.AlipayBatchPay;
+import com.tenline.pinecone.platform.web.payment.impl.ICBCBatchPay;
+import com.tenline.pinecone.platform.web.payment.model.PayInfo;
 
 /**
  * @author wangyq

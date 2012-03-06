@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.web.store.payment.impl;
+package com.tenline.pinecone.platform.web.payment.impl;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,8 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import com.tenline.pinecone.platform.web.store.payment.BatchPayInterface;
-import com.tenline.pinecone.platform.web.store.payment.model.PayInfo;
+import com.tenline.pinecone.platform.web.payment.BatchPayInterface;
+import com.tenline.pinecone.platform.web.payment.model.PayInfo;
 
 /**
  * create alibaba batch file to transfer 

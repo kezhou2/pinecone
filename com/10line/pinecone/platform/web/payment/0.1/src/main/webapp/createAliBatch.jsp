@@ -1,5 +1,5 @@
 <%@page
-	import="com.tenline.pinecone.platform.web.store.payment.BatchPayInfoCreater"%>
+	import="com.tenline.pinecone.platform.web.payment.BatchPayInfoCreater"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page language="java" import="java.text.SimpleDateFormat;"%>
 

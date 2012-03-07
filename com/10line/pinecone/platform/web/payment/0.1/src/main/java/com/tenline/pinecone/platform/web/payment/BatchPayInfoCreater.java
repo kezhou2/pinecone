@@ -52,28 +52,37 @@ public class BatchPayInfoCreater {
 	public static ArrayList<PayInfo> queryBatchPayInfo(Date from, Date to) {
 		ArrayList<PayInfo> payInfoList = new ArrayList<PayInfo>();
 		try {
-			System.out.println("timestamp >= " + from);
-//			System.out.println("type=='" + Exchange.PAYOUT
-//					+ "' && timestamp >= " + from + " && timestamp <= " + to);
-			APIResponse rst = exchangeAPI.show("timestamp >= " + from);
+			// System.out.println("type=='" + Exchange.PAYOUT
+			// + "' && TO_DAYS(timestamp) - TO_DAYS('"+from+"') > 0");
+			// System.out.println("type=='" + Exchange.PAYOUT
+			// + "' && timestamp >= " + from + " && timestamp <= " + to);
+			// APIResponse rst = exchangeAPI.show("type=='" + Exchange.PAYOUT
+			// + "' && TO_DAYS(timestamp) - TO_DAYS('"+from+"') > 0");
+			APIResponse rst = exchangeAPI.show("type=='" + Exchange.PAYOUT
+					+ "'");
 			if (rst.isDone()) {
 				Collection<Exchange> exchangeList = (Collection<Exchange>) rst
 						.getMessage();
 				System.out.println(exchangeList.size());
 				for (Exchange exchange : exchangeList) {
-					Integer nut = exchange.getNut();
-					Account account = exchange.getAccount();
-					// need to update, consider more than 1 account;
-					PayInfo info = new PayInfo();
-					// User user = account.getUser();
-					// info.setUserID(user.getId());
-					// info.setUserName(user.getName());
-					info.setPayNumber(nut);
-					info.setUserAccountID(account.getNumber());
-					// info.setUserAccountBankName(account.getBank().getName());
-					// info.setUserPhone(user.getPhone());
-					info.setPayInfo("MoneyTree");
-					payInfoList.add(info);
+					boolean after = exchange.getTimestamp().after(from);
+					boolean before = exchange.getTimestamp().before(to);
+					System.out.println(after + ":" + before);
+					if (after && before) {
+						Integer nut = exchange.getNut();
+						Account account = exchange.getAccount();
+						// need to update, consider more than 1 account;
+						PayInfo info = new PayInfo();
+						// User user = account.getUser();
+						// info.setUserID(user.getId());
+						// info.setUserName(user.getName());
+						info.setPayNumber(nut);
+						info.setUserAccountID(account.getNumber());
+						// info.setUserAccountBankName(account.getBank().getName());
+						// info.setUserPhone(user.getPhone());
+						info.setPayInfo("MoneyTree");
+						payInfoList.add(info);
+					}
 				}
 			} else {
 				logger.log(Level.SEVERE, rst.getMessage().toString());

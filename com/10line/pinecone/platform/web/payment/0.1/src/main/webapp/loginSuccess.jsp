@@ -13,13 +13,13 @@
 			width="95%">
 			<tr bgColor=#eeeeee>
 				<td align=left width="35%">From：</td>
-				<td><input class="Wdate" name ="from" type="text" onClick="WdatePicker()" align="right">
+				<td><input class="Wdate" name ="from" type="text" onClick="WdatePicker()">
 				</td>
 
 			</tr>
 			<tr bgColor=#eeeeee>
 				<td align=left width="35%">To：</td>
-				<td><input class="Wdate" name ="to" type="text" onClick="WdatePicker()" align="right">
+				<td><input class="Wdate" name ="to" type="text" onClick="WdatePicker()" >
 				</td>
 			</tr>
 		</table>

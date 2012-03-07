@@ -11,9 +11,9 @@
 <body>
 	<%
 		String id = (String) (session.getAttribute("user"));
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = sdf.parse((String)(request.getParameter("from")));
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 		Date date2 = sdf2.parse((String)(request.getParameter("to")));
 		if (id.equals("wangyq")) {
 			String rst = BatchPayInfoCreater.createAliBatch(date1,date2);

@@ -1,5 +1,6 @@
 <%@page
 	import="com.tenline.pinecone.platform.web.payment.BatchPayInfoCreater"%>
+<%@page import="com.tenline.pinecone.platform.web.payment.model.PayInfo"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page language="java" import="java.text.SimpleDateFormat;"%>
 
@@ -12,19 +13,24 @@
 	<%
 		String id = (String) (session.getAttribute("user"));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date1 = sdf.parse((String)(request.getParameter("from")));
+		Date from = sdf.parse((String) (request.getParameter("from")));
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-		Date date2 = sdf2.parse((String)(request.getParameter("to")));
+		Date to = sdf2.parse((String) (request.getParameter("to")));
 		if (id.equals("wangyq")) {
-			String rst = BatchPayInfoCreater.createAliBatch(date1,date2);
-			if (rst != null) {
-				Date today = Calendar.getInstance().getTime();
-				SimpleDateFormat sd = new SimpleDateFormat("yyyyMMdd");
-				String day = sd.format(today);
-				String path = "./downfiles/moneytree/" + day + "/";
-				String fileName = path + "AlipayBatch.txt";
-				response.sendRedirect(fileName);
-			}
+			ArrayList<PayInfo> infoList = BatchPayInfoCreater
+					.queryBatchPayInfo(from, to);
+			out.println("UserAccountID\t\tPayNumber");
+	%>
+	<br>
+	<br>
+	<%
+		for (PayInfo info : infoList) {
+				out.println(info.getUserAccountID() + "\t\t"
+						+ info.getPayNumber());
+	%>
+	<br>
+	<%
+		}
 		} else {
 		}
 	%>

@@ -8,9 +8,7 @@ import java.util.logging.Logger;
 
 import com.tenline.pinecone.platform.model.Account;
 import com.tenline.pinecone.platform.model.Exchange;
-import com.tenline.pinecone.platform.sdk.AccountAPI;
 import com.tenline.pinecone.platform.sdk.ExchangeAPI;
-import com.tenline.pinecone.platform.sdk.TransactionAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.web.payment.impl.AlipayBatchPay;
 import com.tenline.pinecone.platform.web.payment.impl.ICBCBatchPay;
@@ -27,18 +25,6 @@ public class BatchPayInfoCreater {
 	protected static Logger logger = Logger.getLogger(BatchPayInfoCreater.class
 			.toString());
 	/**
-	 * transactionAPI
-	 */
-	private static TransactionAPI transactionAPI = new TransactionAPI(
-			"pinecone-service.cloudfoundry.com", "80", null);
-
-	/**
-	 * accountAPI
-	 */
-	private static AccountAPI accountAPI = new AccountAPI(
-			"pinecone-service.cloudfoundry.com", "80", null);
-
-	/**
 	 * exchangeAPI
 	 */
 	private static ExchangeAPI exchangeAPI = new ExchangeAPI(
@@ -49,6 +35,7 @@ public class BatchPayInfoCreater {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static ArrayList<PayInfo> queryBatchPayInfo(Date from, Date to) {
 		ArrayList<PayInfo> payInfoList = new ArrayList<PayInfo>();
 		try {

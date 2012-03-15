@@ -8,7 +8,7 @@
 </head>
 
 <body>
-	<form name="frm" action="createAliBatch.jsp" method="post" align=center style="width: 683px; ">
+	<form name="frm" action="createAliBatchNew.jsp" method="post" align=center style="width: 683px; ">
 		<table align=center bgColor=#999999 cellPadding=3 cellSpacing=1
 			width="95%">
 			<tr bgColor=#eeeeee>

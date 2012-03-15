@@ -1,5 +1,5 @@
-<%@page import="com.tenline.pinecone.platform.web.payment.*"%>
-<%@page import="com.tenline.pinecone.platform.web.payment.impl.*"%>
+<%@page
+	import="com.tenline.pinecone.platform.web.payment.BatchPayInfoCreater"%>
 <%@page import="com.tenline.pinecone.platform.web.payment.model.PayInfo"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page language="java" import="java.text.SimpleDateFormat;"%>
@@ -17,12 +17,21 @@
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 		Date to = sdf2.parse((String) (request.getParameter("to")));
 		if (id.equals("wangyq")) {
-			AliBaBaBatchPayment pay = (AliBaBaBatchPayment)(BatchPaymentFactory.create(AliBaBaBatchPayment.class));
-			String rst = pay.createBatchFile(from,to);
+			ArrayList<PayInfo> infoList = BatchPayInfoCreater
+					.queryBatchPayInfo(from, to);
 			out.println("UserAccountID\t\tPayNumber");
-			out.println(rst);
+	%>
+	<br>
+	<br>
+	<%
+		for (PayInfo info : infoList) {
+				out.println(info.getUserAccountID() + "\t\t"
+						+ info.getPayNumber());
+	%>
+	<br>
+	<%
+		}
 		} else {
-			out.println("no result");
 		}
 	%>
 </body>

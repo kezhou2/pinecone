@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <!-- Inherit our applications main module.                      -->
+  <inherits name='com.tenline.game.simulation.moneytree.moneytree'/>
+
+  <!-- Specify the path to any remote services.                   -->
+  <servlet path="/moneytree/greet" class="com.tenline.game.simulation.moneytree.server.GreetingServiceImpl" />
+
+</module>

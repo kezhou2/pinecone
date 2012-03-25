@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                         "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+ <listener>
+  <listener-class>com.tenline.game.simulation.moneytree.server.ApiInitListener</listener-class>
+ </listener>
+ <!-- Servlets -->
+ <servlet>
+  <servlet-name>dataservice</servlet-name>
+  <servlet-class>com.tenline.game.simulation.moneytree.server.DataServiceImpl</servlet-class>
+ </servlet>
+ <servlet>
+	<servlet-name>HomeServlet</servlet-name>
+	<servlet-class>com.tenline.game.simulation.moneytree.server.HomeServlet</servlet-class>
+</servlet>
+ <servlet>
+  <servlet-name>redirectServlet</servlet-name>
+  <servlet-class>com.tenline.game.simulation.moneytree.server.RedirectServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>finishDealServlet</servlet-name>
+  <servlet-class>com.tenline.game.simulation.moneytree.server.FinishDealServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>dataservice</servlet-name>
+  <url-pattern>/goldtree/dataservice</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+	<servlet-name>HomeServlet</servlet-name>
+	<url-pattern>/home</url-pattern>
+</servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>redirectServlet</servlet-name>
+  <url-pattern>/redirect</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>finishDealServlet</servlet-name>
+  <url-pattern>/goldtree/finishdeal</url-pattern>
+ </servlet-mapping>
+ <!-- Default page to serve -->
+ <welcome-file-list>
+  <welcome-file>GoldTree.html</welcome-file>
+ </welcome-file-list>
+ <login-config>
+  <auth-method>BASIC</auth-method>
+ </login-config>
+</web-app>

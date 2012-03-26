@@ -19,6 +19,6 @@ Object token = request.getParameter("token");
 Object redUrl = request.getParameter("redirect_url");
  %>
 <p>确认交易成功</p>
-<a href="http://127.0.0.1:8888/GoldTree.html?gwt.codesvr=127.0.0.1:9997">回到首页</a>
+<a href="http://127.0.0.1:8888/moneytree.html?gwt.codesvr=127.0.0.1:9997">回到首页</a>
 </body>
 </html>

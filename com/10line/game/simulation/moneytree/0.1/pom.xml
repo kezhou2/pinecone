@@ -60,13 +60,11 @@
 			<groupId>com.extjs</groupId>
 			<artifactId>gxt</artifactId>
 			<version>2.2.0</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.renren.api.client</groupId>
 			<artifactId>api-client-sdk</artifactId>
 			<version>2.0</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -151,8 +149,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>

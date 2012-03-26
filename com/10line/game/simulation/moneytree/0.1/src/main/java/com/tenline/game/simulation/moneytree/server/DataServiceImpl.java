@@ -129,7 +129,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@SuppressWarnings({ "unchecked", "unused" })
-	@Override
 	public Date getPlantDate(Application app) {
 		TransactionAPI tapi = new TransactionAPI(PlatformConfig.HOST,
 				PlatformConfig.PORT, null);
@@ -154,7 +153,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public boolean plantGoldTree(Application app) {
 		app.getUser().setNut(1); // TODO
 
@@ -185,7 +183,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
+
 	public int harvest(Application app) {
 		TransactionAPI tapi = new TransactionAPI(PlatformConfig.HOST,
 				PlatformConfig.PORT, null);
@@ -235,7 +233,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@SuppressWarnings({ "unchecked", "unused" })
-	@Override
 	public String getGoldTreeStatus(Application app) {
 		TransactionAPI tapi = new TransactionAPI(PlatformConfig.HOST,
 				PlatformConfig.PORT, null);
@@ -273,7 +270,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public ExUser getUser(String userId) {
 		/**
 		 * TODO 从人人网API获取用户信息
@@ -310,7 +306,7 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
+
 	public Application initUser(String userId) {
 		System.out.println("initUser()");
 		/**
@@ -390,7 +386,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		return null;
 	}
 
-	@Override
 	public void buy(String _key) {
 		System.out.println("step 1");
 
@@ -411,7 +406,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		// System.err.println(new String(b, "utf-8"));
 	}
 
-	@Override
 	public String getRenrenOrderToken(String renrenSessionKey,
 			String renrenUserId, int renrenDouNum, long orderId) {
 		RenrenApiClient apiClient = RenrenApiClient.getInstance();
@@ -438,7 +432,6 @@ public class DataServiceImpl extends RemoteServiceServlet implements
 		return token;
 	}
 
-	@Override
 	public boolean submitRenrenOrder(String renrenSessionKey, String token,
 			int renrenDouNum, long orderId) {
 

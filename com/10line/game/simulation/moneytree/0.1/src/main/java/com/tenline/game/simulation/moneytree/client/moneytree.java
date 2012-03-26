@@ -24,19 +24,19 @@ public class moneytree implements EntryPoint {
 		System.out.println("!!!!!xn_sig_user:"+sig_user);
 		EnvConfig.setRenrenUserId(sig_user);
 //		String sig_session_key = Window.Location.getParameter("xn_sig_session_key");
-		String sig_session_key = "2.2c951f4a77c0c153ccb3da5b39ca5e6a.3600.1332608400-251760162";
+		String sig_session_key = "2.d73d83172f6141e38994758bf18a6437.3600.1332774000-251760162";
 		System.out.println("!!!!!xn_sig_session_key:"+sig_session_key);
 		EnvConfig.setSessionKey(sig_session_key);
 //		MessageBox.info("", "sig_user:"+sig_user+"\nsig_session_key:"+sig_session_key, null);
 //		RootPanel.get().add(new TestViewport());
 		
 		EnvConfig.getRPCService().initUser(userId, new AsyncCallback<Application>(){
-			@Override
+			
 			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
 				MessageBox.info("错误", "无法调用后台服务，初始化应用失败", null);
 			}
 
-			@Override
 			public void onSuccess(Application result) {
 				if(result != null){
 					EnvConfig.setSelfApp(result);

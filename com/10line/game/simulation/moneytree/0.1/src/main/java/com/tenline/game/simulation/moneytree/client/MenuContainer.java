@@ -37,12 +37,11 @@ public class MenuContainer extends LayoutContainer {
 				EnvConfig.getRPCService().getRenrenOrderToken(EnvConfig.getSessionKey(), EnvConfig.getRenrenUserId(), 
 						PlatformConfig.DOU_PER_SEED,orderId, new AsyncCallback<String>(){
 
-							@Override
 							public void onFailure(Throwable caught) {
+								caught.printStackTrace();
 								MessageBox.info("错误", "调用后台服务生成订单失败", null);
 							}
 
-							@Override
 							public void onSuccess(String result) {
 								if(result != null){
 									OrderWindow w = new OrderWindow(orderId,result);

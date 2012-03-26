@@ -79,12 +79,10 @@ public class MainContainer extends LayoutContainer{
 	public void refresh(){
 		service.getPlantDate(EnvConfig.getSelfApp(), new AsyncCallback<Date>(){
 
-			@Override
 			public void onFailure(Throwable caught) {
 				MessageBox.info("错误", "调用后台服务获取数据失败", null);
 			}
 
-			@Override
 			public void onSuccess(Date result) {
 				System.out.println(result);
 				

@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.10line.pinecone.platform.monitor</groupId>
+  <artifactId>desktop</artifactId>
+  <version>0.1.0</version>
+  <packaging>bundle</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
+  <repositories>
+  	<repository>
+      <id>pinecone</id>
+      <name>pinecone repo</name>
+      <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+  </repositories>
+  <dependencies>
+  	<!-- Pinecone Monitor -->
+    <dependency>
+   	  <groupId>com.10line.pinecone.platform</groupId>
+      <artifactId>monitor</artifactId>
+      <version>0.2.0</version>
+    </dependency>
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.5</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>  
+    	<!-- Separates the unit tests from the integration tests. -->
+    	<groupId>org.apache.maven.plugins</groupId>
+    	<artifactId>maven-surefire-plugin</artifactId>
+    	<version>2.8.1</version>
+    	<configuration>
+       		<!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
+       		<skip>true</skip>
+       		<!-- Show 100% of the lines from the stack trace (doesn't work) -->
+      		<trimStackTrace>false</trimStackTrace>
+   		</configuration>
+    	<executions>
+       		<execution>
+          		<id>unit-tests</id>
+          		<phase>test</phase>
+          		<goals>
+            		<goal>test</goal>
+          		</goals>
+          		<configuration>
+                	<!-- Never skip running the tests when the test phase is invoked -->
+                	<skip>false</skip>
+             		<includes>
+                		<!-- Include unit tests within integration-test phase. -->
+               			<include>**/*Test.java</include>
+           			</includes>
+             		<excludes>
+               			<!-- Exclude integration tests within (unit) test phase. -->
+                		<exclude>**/*IntegrationTest.java</exclude>
+            		</excludes>
+          		</configuration>
+       		</execution>
+       		<execution>
+          		<id>integration-tests</id>
+          		<phase>integration-test</phase>
+          		<goals>
+             		<goal>test</goal>
+          		</goals>
+          		<configuration>
+            		<!-- Never skip running the tests when the integration-test phase is invoked -->
+             		<skip>false</skip>
+             		<includes>
+               			<!-- Include integration tests within integration-test phase. -->
+               			<include>**/*IntegrationTest.java</include>
+             		</includes>
+          		</configuration>
+       		</execution>
+      	</executions>
+  	  </plugin>
+      <plugin> 
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.4</version>
+        <extensions>true</extensions>
+        <configuration>
+        	<instructions>
+        		<Bundle-Name>monitor ${pom.artifactId} bundle</Bundle-Name>
+        		<Bundle-Activator>com.tenline.pinecone.platform.monitor.desktop.Activator</Bundle-Activator>
+        	</instructions>
+        </configuration> 
+      </plugin> 
+    </plugins>
+  </build>
+</project>

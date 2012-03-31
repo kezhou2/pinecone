@@ -11,7 +11,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.obr.RepositoryAdmin;
 import org.osgi.service.obr.Resolver;
-import org.osgi.service.obr.Resource;
 
 import com.tenline.pinecone.platform.model.Device;
 
@@ -71,6 +70,32 @@ public class BundleHelper {
 	
 	/**
 	 * 
+	 * @param device
+	 * @return
+	 */
+	public static Bundle getBundle(Device device) {
+		String symbolicName = device.getDriver().getCategory().getType() +"."+ 
+			device.getDriver().getCategory().getName() +"."+ 
+			device.getDriver().getCategory().getDomain() +"."+ 
+			device.getDriver().getCategory().getSubdomain() +"."+
+			device.getDriver().getAlias();
+		String version = device.getDriver().getVersion();
+		for (int i = 0; i < bundleContext.getBundles().length; i++) {
+			Bundle bundle = bundleContext.getBundles()[i];
+			if (bundle.getSymbolicName().equals(symbolicName) &&
+				bundle.getVersion().toString().equals(version)) {
+				return bundle;
+			}
+		}
+		Resolver resolver = repositoryAdmin.resolver();
+		String filter = "(&(symbolicname="+symbolicName+")(version="+version+"))";
+		resolver.add(repositoryAdmin.discoverResources(filter)[0]);
+		resolver.deploy(true);
+		return getBundle(device);
+	}
+	
+	/**
+	 * 
 	 * @param symbolicName
 	 * @param version
 	 * @return
@@ -88,24 +113,6 @@ public class BundleHelper {
 		resolver.add(repositoryAdmin.discoverResources(filter)[0]);
 		resolver.deploy(true);
 		return getBundle(symbolicName, version);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public static Device[] getRemoteBundles() {
-		Resource[] resources = repositoryAdmin.discoverResources(null);
-		Device[] devices = new Device[resources.length];
-		for (int i = 0; i < resources.length; i++) {
-			Resource resource = resources[i];
-			Device device = new Device();
-			device.setName(resource.getPresentationName());
-			device.setSymbolicName(resource.getSymbolicName());
-			device.setVersion(resource.getVersion().toString());
-			devices[i] = device;
-		}
-		return devices;
 	}
 
 }

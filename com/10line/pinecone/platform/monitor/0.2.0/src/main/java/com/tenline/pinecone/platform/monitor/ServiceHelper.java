@@ -7,6 +7,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import com.tenline.pinecone.platform.model.Device;
+
 /**
  * @author Bill
  *
@@ -42,6 +44,33 @@ public class ServiceHelper {
 			instance = new ServiceHelper(context);
 		}
 		return instance;
+	}
+	
+	/**
+	 * 
+	 * @param cls
+	 * @param device
+	 * @return
+	 */
+	public static Object waitForService(Class<?> cls, Device device) {
+		int secondsToWait = 10;
+		int secondsPassed = 0;
+		Object object = null;
+		String symbolicName = device.getDriver().getCategory().getType() +"."+ 
+			device.getDriver().getCategory().getName() +"."+ 
+			device.getDriver().getCategory().getDomain() +"."+ 
+			device.getDriver().getCategory().getSubdomain() +"."+
+			device.getDriver().getAlias();
+		String version = device.getDriver().getVersion();
+		while (secondsPassed < secondsToWait && (object = getService(cls, symbolicName, version)) == null) {
+			try {
+				Thread.sleep(++secondsPassed * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return object;
 	}
 	
 	/**

@@ -9,8 +9,8 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.sdk.APIListener;
-import com.tenline.pinecone.platform.sdk.ChannelAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.ChannelAPI;
 
 /**
  * @author Bill
@@ -62,20 +62,7 @@ public class Subscriber {
 	 * 
 	 */
 	public Subscriber() {
-		channel = new ChannelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				scheduler.addToWriteQueue((Device) message);
-				logger.info("Add to write queue");
-			}
-
-			@Override
-			public void onError(String error) {
-				logger.error(error);
-			}
-
-		});
+		channel = new ChannelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 	}
 
 	/**
@@ -89,7 +76,15 @@ public class Subscriber {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					channel.subscribe(device.getId() + "-application");
+					APIResponse response = channel.subscribe(device.getId() + "-application",
+							IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
+							OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+					if (response.isDone()) {
+						scheduler.addToWriteQueue((Device) response.getMessage());
+						logger.info("Add to write queue");
+					} else {
+						logger.error(response.getMessage());
+					}
 				} catch (Exception e) {
 					logger.error(e.getMessage());
 				}

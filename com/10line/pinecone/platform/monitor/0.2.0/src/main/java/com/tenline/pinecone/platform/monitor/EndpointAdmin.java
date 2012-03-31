@@ -15,10 +15,10 @@ import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.monitor.httpcomponents.HttpClientEndpoint;
 import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
-import com.tenline.pinecone.platform.sdk.APIListener;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.ItemAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
  * @author Bill
@@ -52,77 +52,9 @@ public class EndpointAdmin {
 	 */
 	public EndpointAdmin() {
 		// TODO Auto-generated constructor stub
-		deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub		
-				Object[] devices = ((Collection<?>) message).toArray();
-				for (Object object : devices) {
-					device = (Device) object;
-					device.setVariables(new ArrayList<Variable>());
-					try {
-						variableAPI.showByDevice("id=='"+device.getId()+"'");
-						initializeEndpoint();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						logger.error(e.getMessage());
-					}
-				}		
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
-
-		});
-		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				Object[] variables = ((Collection<?>) message).toArray();
-				for (Object object : variables) {
-					variable = (Variable) object;
-					variable.setItems(new ArrayList<Item>());
-					device.getVariables().add(variable);
-					try {
-						itemAPI.showByVariable("id=='"+variable.getId()+"'");
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
-			
-		});
-		itemAPI = new ItemAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				Object[] items = ((Collection<?>) message).toArray();
-				for (Object item : items) {
-					variable.getItems().add((Item) item);
-				}
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
-			
-		});
-		
+		deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
+		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
+		itemAPI = new ItemAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 	}
 	
 	/**
@@ -132,7 +64,14 @@ public class EndpointAdmin {
 	public void initialize(User user) {
 		try {
 			endpoints = new ArrayList<IEndpoint>();
-			deviceAPI.showByUser("id=='"+ user.getId() + "'");
+			APIResponse response = deviceAPI.showByUser("id=='"+ user.getId() + "'",
+					IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
+					OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+			if (response.isDone()) {
+				fetchDevice(response);
+			} else {
+				logger.error(response.getMessage());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -155,7 +94,12 @@ public class EndpointAdmin {
 	 */
 	public void initializeEndpoint(Device device) {
 		try {
-			deviceAPI.show("id=='"+device.getId()+"'");
+			APIResponse response = deviceAPI.show("id=='"+device.getId()+"'");
+			if (response.isDone()) {
+				fetchDevice(response);
+			} else {
+				logger.error(response.getMessage());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -166,7 +110,7 @@ public class EndpointAdmin {
 	 * Initialize Endpoint
 	 */
 	private void initializeEndpoint() {
-		Bundle bundle = BundleHelper.getBundle(device.getSymbolicName(), device.getVersion());
+		Bundle bundle = BundleHelper.getBundle(device);
 		String type = bundle.getHeaders().get("Type").toString();
 		IEndpoint endpoint = null;
 		if (type.equals("Serial")) {
@@ -176,6 +120,69 @@ public class EndpointAdmin {
 		}	
 		endpoint.initialize(device);
 		endpoints.add(endpoint);
+	}
+	
+	/**
+	 * 
+	 * @param response
+	 */
+	private void fetchDevice(APIResponse response) {
+		Object[] devices = ((Collection<?>) response.getMessage()).toArray();
+		for (Object object : devices) {
+			device = (Device) object;
+			device.setVariables(new ArrayList<Variable>());
+			try {
+				response = variableAPI.showByDevice("id=='"+device.getId()+"'",
+						IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
+						OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+				if (response.isDone()) {
+					fetchVariable(response);
+				} else {
+					logger.error(response.getMessage());
+				}
+				initializeEndpoint();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage());
+			}
+		}		
+	}
+	
+	/**
+	 * 
+	 * @param response
+	 */
+	private void fetchVariable(APIResponse response) {
+		Object[] variables = ((Collection<?>) response.getMessage()).toArray();
+		for (Object object : variables) {
+			variable = (Variable) object;
+			variable.setItems(new ArrayList<Item>());
+			device.getVariables().add(variable);
+			try {
+				response = itemAPI.showByVariable("id=='"+variable.getId()+"'",
+						IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
+						OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+				if (response.isDone()) {
+					fetchItem(response);
+				} else {
+					logger.error(response.getMessage());
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param response
+	 */
+	private void fetchItem(APIResponse response) {
+		Object[] items = ((Collection<?>) response.getMessage()).toArray();
+		for (Object item : items) {
+			variable.getItems().add((Item) item);
+		}
 	}
 
 }

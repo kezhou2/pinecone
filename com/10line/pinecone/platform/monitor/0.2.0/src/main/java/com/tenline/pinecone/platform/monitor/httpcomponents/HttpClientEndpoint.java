@@ -50,7 +50,7 @@ public class HttpClientEndpoint implements IEndpoint {
 	public void initialize(Device device) {
 		// TODO Auto-generated method stub
 		requester = (AbstractProtocolRequester) ServiceHelper.waitForService
-				(AbstractProtocolRequester.class, device.getSymbolicName(), device.getVersion());
+				(AbstractProtocolRequester.class, device);
 		subscriber = new Subscriber();
 		subscriber.setDevice(device);
 		subscriber.setScheduler(requester);

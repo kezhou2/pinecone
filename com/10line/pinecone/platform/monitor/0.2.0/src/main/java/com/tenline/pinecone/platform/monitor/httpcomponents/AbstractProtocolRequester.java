@@ -61,8 +61,7 @@ public abstract class AbstractProtocolRequester extends AbstractScheduler {
 			client = new DefaultHttpAsyncClient();
 			client.start();
 			((AbstractProtocolBuilder) ServiceHelper.waitForService
-					(AbstractProtocolBuilder.class, device.getSymbolicName(), device.getVersion()))
-					.initializeReadQueue(getReadQueue());
+				(AbstractProtocolBuilder.class, device)).initializeReadQueue(getReadQueue());
 			responser = (AbstractProtocolResponser) ServiceHelper.waitForService
 				(AbstractProtocolResponser.class, bundle.getSymbolicName(), bundle.getVersion().toString());
 			responser.start(this, device);

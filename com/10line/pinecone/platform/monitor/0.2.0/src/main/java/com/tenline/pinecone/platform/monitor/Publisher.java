@@ -3,6 +3,7 @@
  */
 package com.tenline.pinecone.platform.monitor;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,9 +14,9 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.sdk.APIListener;
-import com.tenline.pinecone.platform.sdk.ChannelAPI;
 import com.tenline.pinecone.platform.sdk.RecordAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
+import com.tenline.pinecone.platform.sdk.development.ChannelAPI;
 
 /**
  * @author Bill
@@ -78,34 +79,8 @@ public class Publisher {
 	 */
 	public Publisher() {
 		readQueue = new LinkedList<Device>();
-		channel = new ChannelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				logger.info(message);
-			}
-
-			@Override
-			public void onError(String error) {
-				logger.error(error);
-			}
-
-		});
-		recordAPI = new RecordAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-			@Override
-			public void onMessage(Object message) {
-				// TODO Auto-generated method stub
-				logger.info("Create Record: " + ((Record) message).getId());
-			}
-
-			@Override
-			public void onError(String error) {
-				// TODO Auto-generated method stub
-				logger.error(error);
-			}
-			
-		});
+		channel = new ChannelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
+		recordAPI = new RecordAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 	}
 	
 	/**
@@ -147,17 +122,26 @@ public class Publisher {
 			int index = variable.getType().indexOf("image");
 			if (index >= 0) {
 				String subject = variable.getId() + "-device";
-				channel.publish(subject, variable.getType().substring(index), 
-								item.getValue());
+				APIResponse response = channel.publish(subject, variable.getType().substring(index), 
+								item.getValue(), IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
+								OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+				if (response.isDone()) logger.info(response.getMessage());
+				else logger.error(response.getMessage());
 				item.setValue(subject.getBytes());
 			} else {
 				Record record = new Record();
-				record.setValue(new String(item.getValue()));
-				record.setVariable(variable);
-				recordAPI.create(record);
+				record.setTimestamp(new Date());
+				record.setItem(item);
+				APIResponse response = recordAPI.create(record);
+				if (response.isDone()) logger.info(response.getMessage());
+				else logger.error(response.getMessage());
 			}
 		}
-		channel.publish(device.getId() + "-device", "application/json", content);
+		APIResponse response = channel.publish(device.getId() + "-device", "application/json", content,
+				IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
+				OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+		if (response.isDone()) logger.info(response.getMessage());
+		else logger.error(response.getMessage());
 	}
 	
 	/**

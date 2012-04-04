@@ -66,7 +66,7 @@ public class EndpointAdmin {
 			endpoints = new ArrayList<IEndpoint>();
 			APIResponse response = deviceAPI.showByUser("id=='"+ user.getId() + "'",
 					IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-					OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+					APIHelper.getToken(), APIHelper.getTokenSecret());
 			if (response.isDone()) {
 				fetchDevice(response);
 			} else {
@@ -134,7 +134,7 @@ public class EndpointAdmin {
 			try {
 				response = variableAPI.showByDevice("id=='"+device.getId()+"'",
 						IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-						OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+						APIHelper.getToken(), APIHelper.getTokenSecret());
 				if (response.isDone()) {
 					fetchVariable(response);
 				} else {
@@ -161,7 +161,7 @@ public class EndpointAdmin {
 			try {
 				response = itemAPI.showByVariable("id=='"+variable.getId()+"'",
 						IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-						OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+						APIHelper.getToken(), APIHelper.getTokenSecret());
 				if (response.isDone()) {
 					fetchItem(response);
 				} else {

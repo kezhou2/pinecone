@@ -78,7 +78,7 @@ public class Subscriber {
 				try {
 					APIResponse response = channel.subscribe(device.getId() + "-application",
 							IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-							OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+							APIHelper.getToken(), APIHelper.getTokenSecret());
 					if (response.isDone()) {
 						scheduler.addToWriteQueue((Device) response.getMessage());
 						logger.info("Add to write queue");

@@ -124,7 +124,7 @@ public class Publisher {
 				String subject = variable.getId() + "-device";
 				APIResponse response = channel.publish(subject, variable.getType().substring(index), 
 								item.getValue(), IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-								OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+								APIHelper.getToken(), APIHelper.getTokenSecret());
 				if (response.isDone()) logger.info(response.getMessage());
 				else logger.error(response.getMessage());
 				item.setValue(subject.getBytes());
@@ -139,7 +139,7 @@ public class Publisher {
 		}
 		APIResponse response = channel.publish(device.getId() + "-device", "application/json", content,
 				IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-				OAuthHelper.getToken(), OAuthHelper.getTokenSecret());
+				APIHelper.getToken(), APIHelper.getTokenSecret());
 		if (response.isDone()) logger.info(response.getMessage());
 		else logger.error(response.getMessage());
 	}

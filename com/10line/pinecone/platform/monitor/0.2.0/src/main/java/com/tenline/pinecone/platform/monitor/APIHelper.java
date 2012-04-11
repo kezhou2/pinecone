@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
 import com.google.api.client.auth.oauth.OAuthCallbackUrl;
 import com.google.api.client.auth.oauth.OAuthCredentialsResponse;
@@ -149,26 +150,30 @@ public class APIHelper {
 			if (categories.size() == 1) metaData.getDriver().setCategory((Category) categories.toArray()[0]);
 			else if (categories.size() == 0) {
 				response = categoryAPI.create(category);
-				if (response.isDone()) 
-					metaData.getDriver().setCategory((Category) ((Collection<Category>) response.getMessage()).toArray()[0]);
+				if (response.isDone()) metaData.getDriver().setCategory((Category) response.getMessage());
 				else logger.error(response.getMessage());
 			}
 		} else logger.error(response.getMessage());
 		Driver driver = metaData.getDriver();
-		response = driverAPI.show("alias=='"+driver.getAlias()+"'&&version=='"+driver.getVersion()+"'");
+		response = driverAPI.show("alias=='"+driver.getAlias()+"'");
 		if (response.isDone()) {
 			Collection<Driver> drivers = (Collection<Driver>) response.getMessage();
-			if (drivers.size() == 1) metaData.setDriver((Driver) drivers.toArray()[0]);
-			else if (drivers.size() == 0) {
+			if (drivers.size() == 1) {
+				driver = (Driver) drivers.toArray()[0];
+				if (Version.parseVersion(version).compareTo(Version.parseVersion(driver.getVersion())) > 0) {
+					driver.setVersion(version);
+					response = driverAPI.update(driver);
+					metaData.setDriver((Driver) response.getMessage());
+				} else metaData.setDriver(driver);
+			} else if (drivers.size() == 0) {
 				response = driverAPI.create(driver);
-				if (response.isDone())
-					metaData.setDriver((Driver) ((Collection<Driver>) response.getMessage()).toArray()[0]);
+				if (response.isDone()) metaData.setDriver((Driver) response.getMessage());
 				else logger.error(response.getMessage());
 			}
 		} else logger.error(response.getMessage());
 		metaData.setUser(user);
 		response = deviceAPI.create(metaData);
-		if (response.isDone()) return (Device) ((Collection<Device>) response.getMessage()).toArray()[0];
+		if (response.isDone()) return (Device) response.getMessage();
 		else return null;
 	}
 

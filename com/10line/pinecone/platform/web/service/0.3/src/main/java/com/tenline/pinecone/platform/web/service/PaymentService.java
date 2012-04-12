@@ -4,6 +4,7 @@
 package com.tenline.pinecone.platform.web.service;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -54,6 +55,16 @@ public interface PaymentService extends AbstractService {
 	@Path("/show/{filter}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Collection<Exchange> show(@PathParam("filter") String filter);
+
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	@GET
+	@Path("/show/{filter}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Collection<Exchange> show(@PathParam("filter") Date from, Date to);
 
 	/**
 	 * 

@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.10line.pinecone.platform.monitor</groupId>
+  <artifactId>mina</artifactId>
+  <version>0.1.0</version>
+  <packaging>bundle</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
+  <repositories>
+  	<repository>
+      <id>pinecone</id>
+      <name>pinecone repo</name>
+      <url>http://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+  </repositories>
+  <dependencies>
+    <!-- Apache MINA -->
+    <dependency>
+      <groupId>org.apache.mina</groupId>
+      <artifactId>mina-transport-serial</artifactId>
+      <version>2.0.1</version>
+    </dependency>
+    <!-- RXTX Library -->
+    <dependency>
+      <groupId>org.rxtx</groupId>
+      <artifactId>rxtx</artifactId>
+      <version>2.1.7</version>
+	</dependency>
+  	<!-- Pinecone Monitor -->
+    <dependency>
+      <groupId>com.10line.pinecone.platform</groupId>
+      <artifactId>monitor</artifactId>
+      <version>0.2.0</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin> 
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.4</version>
+        <extensions>true</extensions>
+        <configuration>
+        	<instructions>
+        		<Bundle-Name>monitor ${pom.artifactId} bundle</Bundle-Name>
+        	</instructions>
+        </configuration> 
+      </plugin> 
+    </plugins>
+  </build>
+</project>

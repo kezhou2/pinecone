@@ -7,14 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.osgi.framework.Bundle;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.httpcomponents.HttpClientEndpoint;
-import com.tenline.pinecone.platform.monitor.mina.MinaSerialEndpoint;
 import com.tenline.pinecone.platform.sdk.DeviceAPI;
 import com.tenline.pinecone.platform.sdk.ItemAPI;
 import com.tenline.pinecone.platform.sdk.VariableAPI;
@@ -24,7 +21,7 @@ import com.tenline.pinecone.platform.sdk.development.APIResponse;
  * @author Bill
  *
  */
-public class EndpointAdmin {
+public abstract class AbstractEndpointAdmin {
 
 	/**
 	 * Web Service API
@@ -50,7 +47,7 @@ public class EndpointAdmin {
 	/**
 	 * 
 	 */
-	public EndpointAdmin() {
+	public AbstractEndpointAdmin() {
 		// TODO Auto-generated constructor stub
 		deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
@@ -109,18 +106,23 @@ public class EndpointAdmin {
 	/**
 	 * Initialize Endpoint
 	 */
-	private void initializeEndpoint() {
-		Bundle bundle = BundleHelper.getBundle(device);
-		String type = bundle.getHeaders().get("Type").toString();
-		IEndpoint endpoint = null;
-		if (type.equals("Serial")) {
-			endpoint = new MinaSerialEndpoint();
-		} else if (type.equals("HttpClient")) {
-			endpoint= new HttpClientEndpoint();
-		}	
-		endpoint.initialize(device);
-		endpoints.add(endpoint);
-	}
+//	private void initializeEndpoint() {
+//		Bundle bundle = BundleHelper.getBundle(device);
+//		String type = bundle.getHeaders().get("Type").toString();
+//		IEndpoint endpoint = null;
+//		if (type.equals("Serial")) {
+//			endpoint = new MinaSerialEndpoint();
+//		} else if (type.equals("HttpClient")) {
+//			endpoint= new HttpClientEndpoint();
+//		}	
+//		endpoint.initialize(device);
+//		endpoints.add(endpoint);
+//	}
+	
+	/**
+	 * Initialize Endpoint
+	 */
+	protected abstract void initializeEndpoint();
 	
 	/**
 	 * 

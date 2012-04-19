@@ -5,8 +5,6 @@ package com.tenline.pinecone.platform.monitor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
@@ -16,9 +14,7 @@ import org.osgi.service.obr.RepositoryAdmin;
 import org.osgi.service.obr.Resolver;
 import org.osgi.service.obr.Resource;
 
-import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Driver;
 
 /**
  * @author Bill
@@ -140,27 +136,8 @@ public class BundleHelper {
 	 * 
 	 * @return
 	 */
-    public static ArrayList<Device> getRemoteBundles() {
-            Hashtable<String, Resource> result = filterBundle(repositoryAdmin.discoverResources(null));
-            ArrayList<Device> devices = new ArrayList<Device>();
-            for (Enumeration<String> keys = result.keys();keys.hasMoreElements();) {
-            	String symbolicName = keys.nextElement();
-            	String[] temp = symbolicName.split(".");
-                Category category = new Category();
-                category.setType(temp[0]);
-                category.setName(temp[1]);
-                category.setDomain(temp[2]);
-                category.setSubdomain(temp[3]);
-                Driver driver = new Driver();
-                driver.setAlias(temp[4]);
-                driver.setName(result.get(symbolicName).getPresentationName());
-                driver.setVersion(result.get(symbolicName).getVersion().toString());
-                driver.setCategory(category);
-                Device device = new Device();  
-                device.setDriver(driver);
-                devices.add(device);
-            }
-            return devices;
+    public static Hashtable<String, Resource> getRemoteBundles() {
+    	return filterBundle(repositoryAdmin.discoverResources(null));
     }
     
     /**

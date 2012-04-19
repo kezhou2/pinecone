@@ -105,24 +105,10 @@ public abstract class AbstractEndpointAdmin {
 	
 	/**
 	 * Initialize Endpoint
+	 * @param endpoints
+	 * @param device
 	 */
-//	private void initializeEndpoint() {
-//		Bundle bundle = BundleHelper.getBundle(device);
-//		String type = bundle.getHeaders().get("Type").toString();
-//		IEndpoint endpoint = null;
-//		if (type.equals("Serial")) {
-//			endpoint = new MinaSerialEndpoint();
-//		} else if (type.equals("HttpClient")) {
-//			endpoint= new HttpClientEndpoint();
-//		}	
-//		endpoint.initialize(device);
-//		endpoints.add(endpoint);
-//	}
-	
-	/**
-	 * Initialize Endpoint
-	 */
-	protected abstract void initializeEndpoint();
+	protected abstract void initializeEndpoint(ArrayList<IEndpoint> endpoints, Device device);
 	
 	/**
 	 * 
@@ -142,7 +128,7 @@ public abstract class AbstractEndpointAdmin {
 				} else {
 					logger.error(response.getMessage());
 				}
-				initializeEndpoint();
+				initializeEndpoint(endpoints, device);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				logger.error(e.getMessage());

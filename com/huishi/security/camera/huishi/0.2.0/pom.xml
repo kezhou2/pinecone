@@ -24,11 +24,11 @@
 	</repository>
   </repositories>
   <dependencies>
-  	<!-- Pinecone Monitor -->
+  	<!-- Pinecone Monitor Http Components -->
   	<dependency>
-  	  <groupId>com.10line.pinecone.platform</groupId>
-  	  <artifactId>monitor</artifactId>
-  	  <version>0.2.0</version>
+  	  <groupId>com.10line.pinecone.platform.monitor</groupId>
+  	  <artifactId>httpcomponents</artifactId>
+  	  <version>0.1.0</version>
   	</dependency>
   </dependencies>
   <build>

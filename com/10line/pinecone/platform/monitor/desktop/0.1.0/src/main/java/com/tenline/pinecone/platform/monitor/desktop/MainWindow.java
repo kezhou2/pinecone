@@ -7,7 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,22 +20,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.Logger;
-import org.osgi.framework.Bundle;
+import org.osgi.service.obr.Resource;
 
-import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.monitor.AbstractProtocolBuilder;
+import com.tenline.pinecone.platform.monitor.APIHelper;
 import com.tenline.pinecone.platform.monitor.BundleHelper;
-import com.tenline.pinecone.platform.monitor.EndpointAdmin;
-import com.tenline.pinecone.platform.monitor.IConstants;
-import com.tenline.pinecone.platform.monitor.ServiceHelper;
-import com.tenline.pinecone.platform.sdk.APIListener;
-import com.tenline.pinecone.platform.sdk.DeviceAPI;
-import com.tenline.pinecone.platform.sdk.ItemAPI;
-import com.tenline.pinecone.platform.sdk.UserAPI;
-import com.tenline.pinecone.platform.sdk.VariableAPI;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -50,21 +40,6 @@ public class MainWindow extends JFrame {
 	private EndpointAdmin endpointAdmin;
 
 	/**
-	 * Web Service API
-	 */
-	private User user;
-	private UserAPI userAPI;
-
-	private Device device;
-	private DeviceAPI deviceAPI;
-
-	private Variable variable;
-	private VariableAPI variableAPI;
-
-	private Item item;
-	private ItemAPI itemAPI;
-
-	/**
 	 * UI Controls
 	 */
 	private JButton showDevicesButton;
@@ -74,76 +49,6 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow() {
 		endpointAdmin = new EndpointAdmin();
-		userAPI = new UserAPI(IConstants.WEB_SERVICE_HOST,
-				IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-					@Override
-					public void onMessage(Object message) {
-						// TODO Auto-generated method stub
-						user = (User) ((Collection<?>) message).toArray()[0];
-						showDevicesButton.setEnabled(true);
-						endpointAdmin.initialize(user);
-					}
-
-					@Override
-					public void onError(String error) {
-						// TODO Auto-generated method stub
-						showDevicesButton.setEnabled(false);
-						logger.error(error);
-					}
-
-				});
-		deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST,
-				IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-					@Override
-					public void onMessage(Object message) {
-						// TODO Auto-generated method stub
-						device = (Device) message;
-						logger.info("Device: " + device.getId());
-					}
-
-					@Override
-					public void onError(String error) {
-						// TODO Auto-generated method stub
-						logger.error(error);
-					}
-
-				});
-		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST,
-				IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-					@Override
-					public void onMessage(Object message) {
-						// TODO Auto-generated method stub
-						variable = (Variable) message;
-						logger.info("Variable: " + variable.getId());
-					}
-
-					@Override
-					public void onError(String error) {
-						// TODO Auto-generated method stub
-						logger.error(error);
-					}
-
-				});
-		itemAPI = new ItemAPI(IConstants.WEB_SERVICE_HOST,
-				IConstants.WEB_SERVICE_PORT, new APIListener() {
-
-					@Override
-					public void onMessage(Object message) {
-						// TODO Auto-generated method stub
-						item = (Item) message;
-						logger.info("Item: " + item.getId());
-					}
-
-					@Override
-					public void onError(String error) {
-						// TODO Auto-generated method stub
-						logger.error(error);
-					}
-
-				});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 395, 427);
 		initializeMainPanel();
@@ -178,7 +83,13 @@ public class MainWindow extends JFrame {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					userAPI.show("snsId=='" + textField.getText() + "'");
+					User user = APIHelper.login("", "");
+					if (user != null) {
+						showDevicesButton.setEnabled(true);
+						endpointAdmin.initialize(user);
+					} else {
+						showDevicesButton.setEnabled(false);
+					}
 				} catch (Exception ex) {
 					// TODO Auto-generated catch block
 					logger.error(ex.getMessage());
@@ -222,10 +133,11 @@ public class MainWindow extends JFrame {
 			panel.setLayout(null);
 			getContentPane().add(panel, BorderLayout.CENTER);
 			comboBox = new JComboBox();
-			Device[] items = BundleHelper.getRemoteBundles();
-			for (Device item : items) {
-				comboBox.addItem(item.getName() + " (" + item.getSymbolicName()
-						+ "-" + item.getVersion() + ")");
+			Hashtable<String, Resource> items = BundleHelper.getRemoteBundles();
+			for (Enumeration<String> keys = items.keys(); keys.hasMoreElements();) {
+				String key = keys.nextElement();
+				comboBox.addItem(items.get(key).getPresentationName() + " (" + items.get(key).getSymbolicName()
+						+ "-" + items.get(key).getVersion().toString() + ")");
 			}
 			comboBox.setBounds(26, 71, 398, 32);
 			panel.add(comboBox);
@@ -249,37 +161,8 @@ public class MainWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						String temp = comboBox.getSelectedItem().toString();
-						String[] identifier = temp.substring(
-								temp.indexOf("(") + 1, temp.length() - 1)
-								.split("-");
-						Bundle bundle = BundleHelper.getBundle(identifier[0],
-								identifier[1]);
-						Device metaData = ((AbstractProtocolBuilder) ServiceHelper.waitForService
-								(AbstractProtocolBuilder.class, bundle.getSymbolicName(), 
-								bundle.getVersion().toString())).getMetaData();
-						device = new Device();
-						device.setName(metaData.getName());
-						device.setSymbolicName(metaData.getSymbolicName());
-						device.setVersion(metaData.getVersion());
-						device.setUser(user);
-						deviceAPI.create(device);
-						for (Variable vMetaData : metaData.getVariables()) {
-							variable = new Variable();
-							variable.setName(vMetaData.getName());
-							variable.setType(vMetaData.getType());
-							variable.setDevice(device);
-							variableAPI.create(variable);
-							if (vMetaData.getItems() != null) {
-								for (Item iMetaData : vMetaData.getItems()) {
-									item = new Item();
-									item.setText(iMetaData.getText());
-									item.setValue(iMetaData.getValue());
-									item.setVariable(variable);
-									itemAPI.create(item);
-								}
-							}
-						}
-						endpointAdmin.initializeEndpoint(device);
+						String[] identifier = temp.substring(temp.indexOf("(") + 1, temp.length() - 1).split("-");
+						endpointAdmin.initializeEndpoint(APIHelper.createDevice(identifier[0], identifier[1]));
 					} catch (Exception ex) {
 						// TODO Auto-generated catch block
 						logger.error(ex.getMessage());

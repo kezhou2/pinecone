@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import com.tenline.pinecone.platform.monitor.APIHelper;
 import com.tenline.pinecone.platform.monitor.BundleHelper;
 import com.tenline.pinecone.platform.monitor.ServiceHelper;
 
@@ -38,6 +39,7 @@ public class Activator implements BundleActivator {
 		// TODO Auto-generated method stub
 		BundleHelper.getInstance(bundleContext);
 		ServiceHelper.getInstance(bundleContext);
+		APIHelper.getInstance();
 		window = new MainWindow();
 		window.setVisible(true);
 		logger.info("Start Bundle");

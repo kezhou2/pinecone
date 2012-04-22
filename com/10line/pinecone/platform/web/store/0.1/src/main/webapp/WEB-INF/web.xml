@@ -4,6 +4,17 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
+    
+  <!-- Store Remote Service -->
+  <servlet>
+  	<servlet-name>UserService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.UserServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>UserService</servlet-name>
+  	<url-pattern>/store/user/service</url-pattern>
+  </servlet-mapping>  
   
   <!-- Default page to serve -->
   <welcome-file-list>

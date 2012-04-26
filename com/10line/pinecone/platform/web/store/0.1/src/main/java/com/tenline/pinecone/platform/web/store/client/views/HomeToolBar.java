@@ -34,17 +34,17 @@ public class HomeToolBar extends ToolBar {
 			@Override
 			public void componentSelected(ButtonEvent event) {
 				// TODO Auto-generated method stub
-				
+				new LoginWindow().show();
 			}
 			
 		});
 		Button registerUserButton = new Button(((Messages) Registry.get(Messages.class.getName())).register());
-		loginUserButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+		registerUserButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 			@Override
 			public void componentSelected(ButtonEvent event) {
 				// TODO Auto-generated method stub
-				
+				new RegisterWindow().show();
 			}
 			
 		});

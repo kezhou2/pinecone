@@ -14,6 +14,8 @@ import com.tenline.pinecone.platform.web.store.client.StoreEvents;
  *
  */
 public class StoreView extends View {
+	
+	private MainViewport viewport;
 
 	/**
 	 * @param controller
@@ -27,7 +29,27 @@ public class StoreView extends View {
 	protected void handleEvent(AppEvent event) {
 		// TODO Auto-generated method stub
 		if (event.getType().equals(StoreEvents.INIT_VIEW)) {
-			RootPanel.get().add(new MainViewport());
+			initView();
+		} else if (event.getType().equals(StoreEvents.LOGIN_USER)) {
+			loginUser(event);
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private void initView() {
+		viewport = new MainViewport();
+		RootPanel.get().add(viewport);
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void loginUser(AppEvent event) {
+		if (event.getData() != null) {
+			
 		}
 	}
 

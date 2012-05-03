@@ -12,5 +12,7 @@ import com.extjs.gxt.ui.client.event.EventType;
 public interface StoreEvents {
 	
 	static final EventType INIT_VIEW = new EventType();
+	static final EventType LOGIN_USER = new EventType();
+	static final EventType REGISTER_USER = new EventType();
 
 }

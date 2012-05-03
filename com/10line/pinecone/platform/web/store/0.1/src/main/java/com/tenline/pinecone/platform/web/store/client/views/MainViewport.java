@@ -7,10 +7,11 @@ import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
+import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.Viewport;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.AdapterField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
@@ -19,6 +20,7 @@ import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
+import com.tenline.pinecone.platform.web.store.client.StoreEvents;
 
 /**
  * @author Bill
@@ -76,7 +78,7 @@ public class MainViewport extends Viewport {
 		private UserForm() {
 			setHeaderVisible(false);
 			
-			TextField<String> accountField = new TextField<String>();
+			final TextField<String> accountField = new TextField<String>();
 			accountField.setAllowBlank(false);
 			accountField.setEmptyText(((Messages) Registry.get(Messages.class.getName())).accountEmptyText());
 			accountField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).account());
@@ -84,7 +86,7 @@ public class MainViewport extends Viewport {
 			accountField.getMessages().setBlankText(((Messages) Registry.get(Messages.class.getName())).accountBlankWarning());
 			accountField.getMessages().setRegexText(((Messages) Registry.get(Messages.class.getName())).accountRegexWarning());
 			
-			TextField<String> passwordField = new TextField<String>();
+			final TextField<String> passwordField = new TextField<String>();
 			passwordField.setPassword(true);
 			passwordField.setAllowBlank(false);		
 			passwordField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).password());
@@ -96,7 +98,10 @@ public class MainViewport extends Viewport {
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
-					// Fire Event
+					AppEvent appEvent = new AppEvent(StoreEvents.LOGIN_USER);
+					appEvent.setData("email", accountField.getValue());
+					appEvent.setData("password", passwordField.getValue());
+					Dispatcher.get().dispatch(appEvent);
 				}
 				
 			});
@@ -113,8 +118,8 @@ public class MainViewport extends Viewport {
 			
 			add(accountField);
 			add(passwordField);
-			add(new AdapterField(loginButton));
-			add(new AdapterField(registerButton));
+			add(loginButton);
+			add(registerButton);
 		}
 		
 	}

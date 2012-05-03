@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.web.store.client.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.tenline.pinecone.platform.model.User;
 
 /**
  * @author Bill
@@ -20,6 +21,6 @@ public interface UserService extends RemoteService {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean login(String email, String password) throws Exception;
+	public User login(String email, String password) throws Exception;
 
 }

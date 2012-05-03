@@ -28,13 +28,17 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 
 	@Override
-	public boolean login(String email, String password) throws Exception {
+	public User login(String email, String password) throws Exception {
 		// TODO Auto-generated method stub
 		String filter = "email=='"+email+"'&&password=='"+password+"'";
 		APIResponse response = userAPI.show(filter);
-		if (response.isDone() && ((Collection<User>) response.getMessage()).size() == 1) 
-			return true;
-		else return false;
+		if (response.isDone()) {
+			Collection<User> users = (Collection<User>) response.getMessage();
+			if (users.size() == 1) {
+				return (User) users.toArray()[0];
+			}
+		}
+		return null;
 	}
 
 }

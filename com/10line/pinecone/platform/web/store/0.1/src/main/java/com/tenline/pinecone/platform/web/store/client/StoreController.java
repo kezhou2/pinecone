@@ -27,6 +27,7 @@ public class StoreController extends Controller {
 		// TODO Auto-generated constructor stub
 		registerEventTypes(StoreEvents.INIT_VIEW);
 		registerEventTypes(StoreEvents.LOGIN_USER);
+		registerEventTypes(StoreEvents.REGISTER_USER);
 	}
 
 	@Override
@@ -36,6 +37,8 @@ public class StoreController extends Controller {
 			initView(event);
 		} else if (event.getType().equals(StoreEvents.LOGIN_USER)) {
 			loginUser(event);
+		} else if (event.getType().equals(StoreEvents.REGISTER_USER)) {
+			registerUser(event);
 		}
 	}
 	
@@ -69,6 +72,29 @@ public class StoreController extends Controller {
 			}
 			
 		});     
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void registerUser(final AppEvent event) {
+		UserServiceAsync userService = Registry.get(UserService.class.getName());
+		userService.register((User) event.getData(), new AsyncCallback<User>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(User result) {
+				// TODO Auto-generated method stub
+				forwardToView(view, event.getType(), result);
+			}
+			
+		});
 	}
 
 }

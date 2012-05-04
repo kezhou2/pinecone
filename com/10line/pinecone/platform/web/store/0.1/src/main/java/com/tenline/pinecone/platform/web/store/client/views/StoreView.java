@@ -32,6 +32,8 @@ public class StoreView extends View {
 			initView();
 		} else if (event.getType().equals(StoreEvents.LOGIN_USER)) {
 			loginUser(event);
+		} else if (event.getType().equals(StoreEvents.REGISTER_USER)) {
+			registerUser(event);
 		}
 	}
 	
@@ -48,6 +50,16 @@ public class StoreView extends View {
 	 * @param event
 	 */
 	private void loginUser(AppEvent event) {
+		if (event.getData() != null) {
+			
+		}
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void registerUser(AppEvent event) {
 		if (event.getData() != null) {
 			
 		}

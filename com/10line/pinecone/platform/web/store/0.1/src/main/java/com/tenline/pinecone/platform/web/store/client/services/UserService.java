@@ -22,5 +22,13 @@ public interface UserService extends RemoteService {
 	 * @throws Exception
 	 */
 	public User login(String email, String password) throws Exception;
+	
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public User register(User user) throws Exception;
 
 }

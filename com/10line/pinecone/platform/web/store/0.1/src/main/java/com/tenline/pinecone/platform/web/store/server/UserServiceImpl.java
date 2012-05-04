@@ -41,4 +41,15 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		return null;
 	}
 
+	@Override
+	public User register(User user) throws Exception {
+		// TODO Auto-generated method stub
+		APIResponse response = userAPI.create(user);
+		if (response.isDone()) {
+			return (User) response.getMessage();	
+		} else {
+			return null;
+		}
+	}
+
 }

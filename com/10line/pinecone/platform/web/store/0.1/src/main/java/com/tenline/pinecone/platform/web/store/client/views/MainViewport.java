@@ -18,6 +18,7 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.StoreEvents;
@@ -92,34 +93,81 @@ public class MainViewport extends Viewport {
 			passwordField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).password());
 			passwordField.getMessages().setBlankText(((Messages) Registry.get(Messages.class.getName())).passwordBlankWarning());	
 			
-			Button loginButton = new Button(((Messages) Registry.get(Messages.class.getName())).login());
+			final TextField<String> confirmationField = new TextField<String>();
+			confirmationField.setPassword(true);
+			confirmationField.setAllowBlank(false);
+			confirmationField.setVisible(false);
+			confirmationField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).confirmation());
+			confirmationField.getMessages().setBlankText(((Messages) Registry.get(Messages.class.getName())).confirmationBlankWarning());
+			
+			final Button loginButton = new Button(((Messages) Registry.get(Messages.class.getName())).login());
+			final Button registerButton = new Button(((Messages) Registry.get(Messages.class.getName())).register());
+			final Button submitButton = new Button(((Messages) Registry.get(Messages.class.getName())).submit());
+			final Button cancelButton = new Button(((Messages) Registry.get(Messages.class.getName())).cancel());
 			loginButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
-					AppEvent appEvent = new AppEvent(StoreEvents.LOGIN_USER);
-					appEvent.setData("email", accountField.getValue());
-					appEvent.setData("password", passwordField.getValue());
-					Dispatcher.get().dispatch(appEvent);
+					if (UserForm.this.isValid()) {
+						AppEvent appEvent = new AppEvent(StoreEvents.LOGIN_USER);
+						appEvent.setData("email", accountField.getValue());
+						appEvent.setData("password", passwordField.getValue());
+						Dispatcher.get().dispatch(appEvent);
+					}
 				}
 				
 			});
-			Button registerButton = new Button(((Messages) Registry.get(Messages.class.getName())).register());
+			submitButton.setVisible(false);
+			submitButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
+				@Override
+				public void componentSelected(ButtonEvent event) {
+					// TODO Auto-generated method stub
+					if (UserForm.this.isValid()) {
+						User user = new User();
+						user.setEmail(accountField.getValue());
+						user.setPassword(passwordField.getValue());
+						Dispatcher.get().dispatch(StoreEvents.REGISTER_USER, user);
+					}
+				}
+				
+			});
+			cancelButton.setVisible(false);
+			cancelButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
+				@Override
+				public void componentSelected(ButtonEvent event) {
+					// TODO Auto-generated method stub
+					confirmationField.setVisible(false);
+					submitButton.setVisible(false);
+					cancelButton.setVisible(false);
+					loginButton.setVisible(true);
+					registerButton.setVisible(true);
+				}
+				
+			});
 			registerButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
-					// Fire Event
+					confirmationField.setVisible(true);
+					submitButton.setVisible(true);
+					cancelButton.setVisible(true);
+					loginButton.setVisible(false);
+					registerButton.setVisible(false);
 				}
 				
 			});
 			
 			add(accountField);
 			add(passwordField);
+			add(confirmationField);
 			add(loginButton);
 			add(registerButton);
+			add(submitButton);
+			add(cancelButton);
 		}
 		
 	}

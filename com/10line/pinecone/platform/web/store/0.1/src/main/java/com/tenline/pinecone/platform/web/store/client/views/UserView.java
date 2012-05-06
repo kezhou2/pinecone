@@ -29,6 +29,8 @@ public class UserView extends View {
 			
 		} else if (event.getType().equals(UserEvents.REGISTER)) {
 			
+		} else if (event.getType().equals(UserEvents.CHECK_EMAIL)) {
+			
 		}
 	}
 

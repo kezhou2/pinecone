@@ -30,6 +30,7 @@ public class UserController extends Controller {
 		// TODO Auto-generated constructor stub
 		registerEventTypes(UserEvents.LOGIN);
 		registerEventTypes(UserEvents.REGISTER);
+		registerEventTypes(UserEvents.CHECK_EMAIL);
 	}
 
 	@Override
@@ -40,6 +41,8 @@ public class UserController extends Controller {
 				login(event);
 			} else if (event.getType().equals(UserEvents.REGISTER)) {
 				register(event);
+			} else if (event.getType().equals(UserEvents.CHECK_EMAIL)) {
+				checkEmail(event);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -57,6 +60,31 @@ public class UserController extends Controller {
 		String password = event.getData("password").toString();
 		UserServiceAsync userService = Registry.get(UserService.class.getName());
 		userService.show("email=='"+email+"'&&password=='"+password+"'", new AsyncCallback<Collection<User>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(Collection<User> result) {
+				// TODO Auto-generated method stub
+				forwardToView(view, event.getType(), result);
+			}
+			
+		});
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	private void checkEmail(final AppEvent event) throws Exception {
+		String email = event.getData("email").toString();
+		UserServiceAsync userService = Registry.get(UserService.class.getName());
+		userService.show("email=='"+email+"'", new AsyncCallback<Collection<User>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

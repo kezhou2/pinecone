@@ -16,5 +16,6 @@ public interface UserEvents {
 	 */
 	static final EventType LOGIN = new EventType();
 	static final EventType REGISTER = new EventType();
+	static final EventType CHECK_EMAIL = new EventType();
 
 }

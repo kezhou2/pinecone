@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.web.store.client.views;
+package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
@@ -18,21 +18,20 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
-import com.tenline.pinecone.platform.web.store.client.StoreEvents;
+import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
 
 /**
  * @author Bill
  *
  */
-public class MainViewport extends Viewport {
+public class HomeViewport extends Viewport {
 
 	/**
 	 * 
 	 */
-	public MainViewport() {
+	public HomeViewport() {
 		// TODO Auto-generated constructor stub
 		setLayout(new BorderLayout());
 		add(new HomePage(), new BorderLayoutData(LayoutRegion.CENTER));
@@ -110,7 +109,7 @@ public class MainViewport extends Viewport {
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
 					if (UserForm.this.isValid()) {
-						AppEvent appEvent = new AppEvent(StoreEvents.LOGIN_USER);
+						AppEvent appEvent = new AppEvent(UserEvents.LOGIN);
 						appEvent.setData("email", accountField.getValue());
 						appEvent.setData("password", passwordField.getValue());
 						Dispatcher.get().dispatch(appEvent);
@@ -125,10 +124,10 @@ public class MainViewport extends Viewport {
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
 					if (UserForm.this.isValid()) {
-						User user = new User();
-						user.setEmail(accountField.getValue());
-						user.setPassword(passwordField.getValue());
-						Dispatcher.get().dispatch(StoreEvents.REGISTER_USER, user);
+						AppEvent appEvent = new AppEvent(UserEvents.REGISTER);
+						appEvent.setData("email", accountField.getValue());
+						appEvent.setData("password", passwordField.getValue());
+						Dispatcher.get().dispatch(appEvent);
 					}
 				}
 				

@@ -14,7 +14,7 @@ import com.tenline.pinecone.platform.web.store.client.services.UserService;
  * @author Bill
  *
  */
-@SuppressWarnings({ "serial", "unchecked" })
+@SuppressWarnings("serial")
 public class UserServiceImpl extends AbstractService implements UserService {
 	
 	private UserAPI userAPI;
@@ -28,28 +28,36 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 
 	@Override
-	public User login(String email, String password) throws Exception {
+	public boolean delete(String id) throws Exception {
 		// TODO Auto-generated method stub
-		String filter = "email=='"+email+"'&&password=='"+password+"'";
-		APIResponse response = userAPI.show(filter);
-		if (response.isDone()) {
-			Collection<User> users = (Collection<User>) response.getMessage();
-			if (users.size() == 1) {
-				return (User) users.toArray()[0];
-			}
-		}
-		return null;
+		APIResponse response = userAPI.delete(id);
+		if (response.isDone()) return true;
+		else return false;
 	}
 
 	@Override
-	public User register(User user) throws Exception {
+	public User create(User user) throws Exception {
 		// TODO Auto-generated method stub
 		APIResponse response = userAPI.create(user);
-		if (response.isDone()) {
-			return (User) response.getMessage();	
-		} else {
-			return null;
-		}
+		if (response.isDone()) return (User) response.getMessage();
+		else return null;
+	}
+
+	@Override
+	public User update(User user) throws Exception {
+		// TODO Auto-generated method stub
+		APIResponse response = userAPI.update(user);
+		if (response.isDone()) return (User) response.getMessage();
+		else return null;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Collection<User> show(String filter) throws Exception {
+		// TODO Auto-generated method stub
+		APIResponse response = userAPI.show(filter);
+		if (response.isDone()) return (Collection<User>) response.getMessage();
+		else return null;
 	}
 
 }

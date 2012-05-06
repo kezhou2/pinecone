@@ -1,63 +1,62 @@
 /**
  * 
  */
-package com.tenline.pinecone.platform.web.store.client;
+package com.tenline.pinecone.platform.web.store.client.controllers;
+
+import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
 import com.tenline.pinecone.platform.web.store.client.services.UserService;
 import com.tenline.pinecone.platform.web.store.client.services.UserServiceAsync;
-import com.tenline.pinecone.platform.web.store.client.views.StoreView;
+import com.tenline.pinecone.platform.web.store.client.views.UserView;
 
 /**
  * @author Bill
  *
  */
-public class StoreController extends Controller {
-	
-	private StoreView view;
+public class UserController extends Controller {
 
+	private UserView view = new UserView(this);
+	
 	/**
 	 * 
 	 */
-	public StoreController() {
+	public UserController() {
 		// TODO Auto-generated constructor stub
-		registerEventTypes(StoreEvents.INIT_VIEW);
-		registerEventTypes(StoreEvents.LOGIN_USER);
-		registerEventTypes(StoreEvents.REGISTER_USER);
+		registerEventTypes(UserEvents.LOGIN);
+		registerEventTypes(UserEvents.REGISTER);
 	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
 		// TODO Auto-generated method stub
-		if (event.getType().equals(StoreEvents.INIT_VIEW)) {
-			initView(event);
-		} else if (event.getType().equals(StoreEvents.LOGIN_USER)) {
-			loginUser(event);
-		} else if (event.getType().equals(StoreEvents.REGISTER_USER)) {
-			registerUser(event);
+		try {
+			if (event.getType().equals(UserEvents.LOGIN)) {
+				login(event);
+			} else if (event.getType().equals(UserEvents.REGISTER)) {
+				register(event);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
 	/**
 	 * 
 	 * @param event
+	 * @throws Exception
 	 */
-	private void initView(AppEvent event) {
-		view = new StoreView(this);
-		forwardToView(view, event);
-	}
-	
-	/**
-	 * 
-	 * @param event
-	 */
-	private void loginUser(final AppEvent event) {
+	private void login(final AppEvent event) throws Exception {
+		String email = event.getData("email").toString();
+		String password = event.getData("password").toString();
 		UserServiceAsync userService = Registry.get(UserService.class.getName());
-		userService.login(event.getData("email").toString(), event.getData("password").toString(), new AsyncCallback<User>() {
+		userService.show("email=='"+email+"'&&password=='"+password+"'", new AsyncCallback<Collection<User>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -66,21 +65,25 @@ public class StoreController extends Controller {
 			}
 
 			@Override
-			public void onSuccess(User result) {
+			public void onSuccess(Collection<User> result) {
 				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
-		});     
+		});
 	}
 	
 	/**
 	 * 
 	 * @param event
+	 * @throws Exception
 	 */
-	private void registerUser(final AppEvent event) {
+	private void register(final AppEvent event) throws Exception {
+		User user = new User();
+		user.setEmail(event.getData("email").toString());
+		user.setPassword(event.getData("password").toString());
 		UserServiceAsync userService = Registry.get(UserService.class.getName());
-		userService.register((User) event.getData(), new AsyncCallback<User>() {
+		userService.create(user, new AsyncCallback<User>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

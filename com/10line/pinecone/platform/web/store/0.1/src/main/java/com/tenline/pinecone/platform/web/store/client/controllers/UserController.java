@@ -29,8 +29,10 @@ public class UserController extends Controller {
 	public UserController() {
 		// TODO Auto-generated constructor stub
 		registerEventTypes(UserEvents.LOGIN);
+		registerEventTypes(UserEvents.LOGOUT);
 		registerEventTypes(UserEvents.REGISTER);
 		registerEventTypes(UserEvents.CHECK_EMAIL);
+		registerEventTypes(UserEvents.SETTING);
 	}
 
 	@Override
@@ -39,10 +41,14 @@ public class UserController extends Controller {
 		try {
 			if (event.getType().equals(UserEvents.LOGIN)) {
 				login(event);
+			} else if (event.getType().equals(UserEvents.LOGOUT)) {
+				logout(event);
 			} else if (event.getType().equals(UserEvents.REGISTER)) {
 				register(event);
 			} else if (event.getType().equals(UserEvents.CHECK_EMAIL)) {
 				checkEmail(event);
+			} else if (event.getType().equals(UserEvents.SETTING)) {
+				setting(event);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -70,10 +76,21 @@ public class UserController extends Controller {
 			@Override
 			public void onSuccess(Collection<User> result) {
 				// TODO Auto-generated method stub
+				if (result.size() == 1) Registry.register(User.class.getName(), result.toArray()[0]);
 				forwardToView(view, event.getType(), result);
 			}
 			
 		});
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	private void logout(AppEvent event) throws Exception {
+		forwardToView(view, event.getType(), Registry.get(User.class.getName()));
+		Registry.unregister(User.class.getName());
 	}
 	
 	/**
@@ -122,6 +139,40 @@ public class UserController extends Controller {
 			@Override
 			public void onSuccess(User result) {
 				// TODO Auto-generated method stub
+				forwardToView(view, event.getType(), result);
+			}
+			
+		});
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	private void setting(final AppEvent event) throws Exception {
+		byte[] avatar = event.getData("avatar");
+		String name = event.getData("name");
+		String password = event.getData("password");
+		String phone = event.getData("phone");
+		User user = Registry.get(User.class.getName());
+		if (avatar != null) user.setAvatar(avatar);
+		if (name != null) user.setName(name);
+		if (password != null) user.setPassword(password);
+		if (phone != null) user.setPhone(phone);
+		UserServiceAsync userService = Registry.get(UserService.class.getName());
+		userService.update(user, new AsyncCallback<User>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(User result) {
+				// TODO Auto-generated method stub
+				Registry.register(User.class.getName(), result);
 				forwardToView(view, event.getType(), result);
 			}
 			

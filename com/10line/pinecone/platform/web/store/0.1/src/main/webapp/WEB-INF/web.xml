@@ -7,6 +7,26 @@
     
   <!-- Store Remote Service -->
   <servlet>
+  	<servlet-name>ApplicationService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.ApplicationServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>ApplicationService</servlet-name>
+  	<url-pattern>/store/application/service</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
+  	<servlet-name>ConsumerService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.ConsumerServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>ConsumerService</servlet-name>
+  	<url-pattern>/store/consumer/service</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
   	<servlet-name>UserService</servlet-name>
   	<servlet-class>com.tenline.pinecone.platform.web.store.server.UserServiceImpl</servlet-class>
   </servlet>

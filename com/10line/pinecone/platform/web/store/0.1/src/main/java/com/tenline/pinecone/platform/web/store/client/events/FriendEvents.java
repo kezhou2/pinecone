@@ -19,7 +19,6 @@ public interface FriendEvents {
 	static final EventType CHECK = new EventType();
 	static final EventType ADD = new EventType();
 	static final EventType DELETE = new EventType();
-	static final EventType AGREE = new EventType();
-	static final EventType DISAGREE = new EventType();
+	static final EventType SETTING = new EventType();
 
 }

@@ -21,6 +21,7 @@ import com.tenline.pinecone.platform.web.store.client.views.ConsumerView;
 public class ConsumerController extends Controller {
 
 	private ConsumerView view = new ConsumerView(this);
+	private ConsumerServiceAsync service = Registry.get(ConsumerService.class.getName());
 	
 	/**
 	 * 
@@ -53,8 +54,7 @@ public class ConsumerController extends Controller {
 		consumer.setCategory((Category) event.getData("category"));
 		consumer.setConnectURI((String) event.getData("uri"));
 		consumer.setName((String) event.getData("name"));
-		ConsumerServiceAsync consumerService = Registry.get(ConsumerService.class.getName());
-		consumerService.create(consumer, new AsyncCallback<Consumer>() {
+		service.create(consumer, new AsyncCallback<Consumer>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

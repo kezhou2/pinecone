@@ -10,6 +10,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.tenline.pinecone.platform.web.store.client.controllers.ApplicationController;
 import com.tenline.pinecone.platform.web.store.client.controllers.ConsumerController;
+import com.tenline.pinecone.platform.web.store.client.controllers.FriendController;
+import com.tenline.pinecone.platform.web.store.client.controllers.MailController;
 import com.tenline.pinecone.platform.web.store.client.controllers.UserController;
 import com.tenline.pinecone.platform.web.store.client.services.ApplicationService;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
@@ -38,6 +40,8 @@ public class Store implements EntryPoint {
 		Dispatcher dispatcher = Dispatcher.get();
 		dispatcher.addController(new ApplicationController());
 		dispatcher.addController(new ConsumerController());
+		dispatcher.addController(new FriendController());
+		dispatcher.addController(new MailController());
 		dispatcher.addController(new UserController());
 		RootPanel.get().add(new HomeViewport());
 	}

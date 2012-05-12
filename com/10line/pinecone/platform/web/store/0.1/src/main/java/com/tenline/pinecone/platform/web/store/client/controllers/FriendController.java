@@ -23,6 +23,7 @@ import com.tenline.pinecone.platform.web.store.client.views.FriendView;
 public class FriendController extends Controller {
 	
 	private FriendView view = new FriendView(this);
+	private FriendServiceAsync service = Registry.get(FriendService.class.getName());
 
 	/**
 	 * 
@@ -34,8 +35,7 @@ public class FriendController extends Controller {
 		registerEventTypes(FriendEvents.CHECK);
 		registerEventTypes(FriendEvents.ADD);
 		registerEventTypes(FriendEvents.DELETE);
-		registerEventTypes(FriendEvents.AGREE);
-		registerEventTypes(FriendEvents.DISAGREE);
+		registerEventTypes(FriendEvents.SETTING);
 	}
 
 	@Override
@@ -52,11 +52,9 @@ public class FriendController extends Controller {
 				add(event);
 			} else if (event.getType().equals(FriendEvents.DELETE)) {
 				delete(event);
-			} else if (event.getType().equals(FriendEvents.AGREE)) {
-				agree(event);
-			} else if (event.getType().equals(FriendEvents.DISAGREE)) {
-				disagree(event);
-			}
+			} else if (event.getType().equals(FriendEvents.SETTING)) {
+				setting(event);
+			} 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,9 +67,8 @@ public class FriendController extends Controller {
 	 * @throws Exception
 	 */
 	private void getByUser(final AppEvent event) throws Exception {
-		final String filter = "isDecided==true&&";
-		final FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		friendService.show(filter + "receiver.id=='"+event.getData("id").toString()+"'", new AsyncCallback<Collection<Friend>>() {
+		service.show("isDecided==true&&receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+				new AsyncCallback<Collection<Friend>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -83,7 +80,8 @@ public class FriendController extends Controller {
 			public void onSuccess(Collection<Friend> result) {
 				// TODO Auto-generated method stub
 				final Collection<Friend> temp = result;
-				friendService.show(filter + "sender.id=='"+event.getData("id").toString()+"'", new AsyncCallback<Collection<Friend>>() {
+				service.show("isDecided==true&&sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+						new AsyncCallback<Collection<Friend>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -110,9 +108,8 @@ public class FriendController extends Controller {
 	 * @throws Exception
 	 */
 	private void getRequests(final AppEvent event) throws Exception {
-		String filter = "isDecided==false&&receiver.id=='"+event.getData("id").toString()+"'";
-		FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		friendService.show(filter, new AsyncCallback<Collection<Friend>>() {
+		String filter = "isDecided==false&&receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'";
+		service.show(filter, new AsyncCallback<Collection<Friend>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -135,9 +132,8 @@ public class FriendController extends Controller {
 	 * @throws Exception
 	 */
 	private void check(final AppEvent event) throws Exception {
-		String filter = "sender.id=='"+event.getData("id").toString()+"'";
-		FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		friendService.show(filter, new AsyncCallback<Collection<Friend>>() {
+		String filter = "sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'";
+		service.show(filter, new AsyncCallback<Collection<Friend>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -162,10 +158,9 @@ public class FriendController extends Controller {
 	private void add(final AppEvent event) throws Exception {
 		Friend friend = new Friend();
 		friend.setReceiver((User) event.getData("receiver"));
-		friend.setSender((User) event.getData("sender"));
+		friend.setSender((User) Registry.get(User.class.getName()));
 		friend.setType((String) event.getData("type"));
-		FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		friendService.create(friend, new AsyncCallback<Friend>() {
+		service.create(friend, new AsyncCallback<Friend>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -189,8 +184,7 @@ public class FriendController extends Controller {
 	 */
 	private void delete(final AppEvent event) throws Exception {
 		String filter = "id=='"+event.getData("id").toString()+"'";
-		FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		friendService.delete(filter, new AsyncCallback<Boolean>() {
+		service.delete(filter, new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -212,11 +206,13 @@ public class FriendController extends Controller {
 	 * @param event
 	 * @throws Exception
 	 */
-	private void agree(final AppEvent event) throws Exception {
+	private void setting(final AppEvent event) throws Exception {
+		Boolean isDecided = event.getData("isDecided");
+		String type = event.getData("type");
 		Friend friend = event.getData("friend");
-		friend.setDecided(true);
-		FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		friendService.update(friend, new AsyncCallback<Friend>() {
+		if (isDecided != null) friend.setDecided(isDecided);
+		if (type != null) friend.setType(type);
+		service.update(friend, new AsyncCallback<Friend>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -233,28 +229,4 @@ public class FriendController extends Controller {
 		});
 	}
 	
-	/**
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
-	private void disagree(final AppEvent event) throws Exception {
-		FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		friendService.delete("id=='"+event.getData("id").toString()+"'", new AsyncCallback<Boolean>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Boolean result) {
-				// TODO Auto-generated method stub
-				forwardToView(view, event.getType(), result);
-			}
-			
-		});
-	}
-
 }

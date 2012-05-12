@@ -22,6 +22,7 @@ import com.tenline.pinecone.platform.web.store.client.views.UserView;
 public class UserController extends Controller {
 
 	private UserView view = new UserView(this);
+	private UserServiceAsync service = Registry.get(UserService.class.getName());
 	
 	/**
 	 * 
@@ -64,8 +65,7 @@ public class UserController extends Controller {
 	private void login(final AppEvent event) throws Exception {
 		String email = event.getData("email").toString();
 		String password = event.getData("password").toString();
-		UserServiceAsync userService = Registry.get(UserService.class.getName());
-		userService.show("email=='"+email+"'&&password=='"+password+"'", new AsyncCallback<Collection<User>>() {
+		service.show("email=='"+email+"'&&password=='"+password+"'", new AsyncCallback<Collection<User>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -100,8 +100,7 @@ public class UserController extends Controller {
 	 */
 	private void checkEmail(final AppEvent event) throws Exception {
 		String email = event.getData("email").toString();
-		UserServiceAsync userService = Registry.get(UserService.class.getName());
-		userService.show("email=='"+email+"'", new AsyncCallback<Collection<User>>() {
+		service.show("email=='"+email+"'", new AsyncCallback<Collection<User>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -127,8 +126,7 @@ public class UserController extends Controller {
 		User user = new User();
 		user.setEmail(event.getData("email").toString());
 		user.setPassword(event.getData("password").toString());
-		UserServiceAsync userService = Registry.get(UserService.class.getName());
-		userService.create(user, new AsyncCallback<User>() {
+		service.create(user, new AsyncCallback<User>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -160,8 +158,7 @@ public class UserController extends Controller {
 		if (name != null) user.setName(name);
 		if (password != null) user.setPassword(password);
 		if (phone != null) user.setPhone(phone);
-		UserServiceAsync userService = Registry.get(UserService.class.getName());
-		userService.update(user, new AsyncCallback<User>() {
+		service.update(user, new AsyncCallback<User>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

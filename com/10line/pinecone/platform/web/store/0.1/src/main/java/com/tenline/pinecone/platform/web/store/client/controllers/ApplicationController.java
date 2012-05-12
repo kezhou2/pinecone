@@ -24,6 +24,7 @@ import com.tenline.pinecone.platform.web.store.client.views.ApplicationView;
 public class ApplicationController extends Controller {
 
 	private ApplicationView view = new ApplicationView(this);
+	private ApplicationServiceAsync service = Registry.get(ApplicationService.class.getName());
 	
 	/**
 	 * 
@@ -62,8 +63,7 @@ public class ApplicationController extends Controller {
 	 */
 	private void getByUser(final AppEvent event) throws Exception {
 		String filter = "id=='"+((User) Registry.get(User.class.getName())).getId()+"'";
-		ApplicationServiceAsync applicationService = Registry.get(ApplicationService.class.getName());
-		applicationService.showByUser(filter, new AsyncCallback<Collection<Application>>() {
+		service.showByUser(filter, new AsyncCallback<Collection<Application>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -91,8 +91,7 @@ public class ApplicationController extends Controller {
 		application.setDefault(false);
 		application.setStatus(Application.CLOSED);
 		application.setUser((User) Registry.get(User.class.getName()));
-		ApplicationServiceAsync applicationService = Registry.get(ApplicationService.class.getName());
-		applicationService.create(application, new AsyncCallback<Application>() {
+		service.create(application, new AsyncCallback<Application>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -116,8 +115,7 @@ public class ApplicationController extends Controller {
 	 */
 	private void uninstall(final AppEvent event) throws Exception {
 		String filter = "id=='"+event.getData("id").toString()+"'";
-		ApplicationServiceAsync applicationService = Registry.get(ApplicationService.class.getName());
-		applicationService.delete(filter, new AsyncCallback<Boolean>() {
+		service.delete(filter, new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -145,8 +143,7 @@ public class ApplicationController extends Controller {
 		Application application = event.getData("application");
 		if (isDefault != null) application.setDefault(isDefault);
 		if (status != null) application.setStatus(status);
-		ApplicationServiceAsync applicationService = Registry.get(ApplicationService.class.getName());
-		applicationService.update(application, new AsyncCallback<Application>() {
+		service.update(application, new AsyncCallback<Application>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

@@ -27,6 +27,26 @@
   </servlet-mapping>  
   
   <servlet>
+  	<servlet-name>FriendService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.FriendServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>FriendService</servlet-name>
+  	<url-pattern>/store/friend/service</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>MailService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.MailServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>MailService</servlet-name>
+  	<url-pattern>/store/mail/service</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
   	<servlet-name>UserService</servlet-name>
   	<servlet-class>com.tenline.pinecone.platform.web.store.server.UserServiceImpl</servlet-class>
   </servlet>

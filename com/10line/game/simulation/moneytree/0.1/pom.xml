@@ -82,9 +82,9 @@
 		  </execution>
 		</executions>
 		<configuration>
-		  <runTarget>Store.html</runTarget>
+		  <runTarget>MoneyTree.html</runTarget>
 		  <hostedWebapp>${webappDirectory}</hostedWebapp>
-		  <i18nMessagesBundle>com.tenline.pinecone.platform.web.store.client.Messages</i18nMessagesBundle>
+		  <i18nMessagesBundle>com.tenline.game.simulation.moneytree.client.Messages</i18nMessagesBundle>
 		</configuration>
 	  </plugin>
 	  <plugin>
@@ -109,7 +109,7 @@
         <version>1.0.0.M1</version>
         <configuration>                 
           <target>http://api.cloudfoundry.com</target>
-          <appname>pinecone</appname>           
+          <appname>moneytree</appname>           
         </configuration>           
       </plugin>   
 	</plugins>

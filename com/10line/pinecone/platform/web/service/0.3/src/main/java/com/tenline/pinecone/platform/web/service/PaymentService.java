@@ -3,13 +3,11 @@
  */
 package com.tenline.pinecone.platform.web.service;
 
-import java.text.ParseException;
-
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Context;
 
 /**
  * @author wangyq
@@ -22,13 +20,12 @@ public interface PaymentService {
 	 * 
 	 * @param from
 	 * @param to
-	 * @return
-	 * @throws ParseException
+	 * @param response
+	 * @throws Exception
 	 */
 	@GET
 	@Path("/generate/batch/{from}/@From/{to}/@To")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String generateBatch(@PathParam("from") String from, 
-			@PathParam("to") String to) throws ParseException;
+	public void generateBatch(@PathParam("from") String from, @PathParam("to") String to, 
+			@Context HttpServletResponse response) throws Exception;
 
 }

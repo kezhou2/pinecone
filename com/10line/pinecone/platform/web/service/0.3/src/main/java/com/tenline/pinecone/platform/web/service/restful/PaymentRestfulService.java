@@ -3,9 +3,10 @@
  */
 package com.tenline.pinecone.platform.web.service.restful;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class PaymentRestfulService implements PaymentService {
 	}
 
 	@Override
-	public String generateBatch(String from, String to) throws ParseException {
+	public void generateBatch(String from, String to, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		StringBuilder result = new StringBuilder();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -44,8 +45,8 @@ public class PaymentRestfulService implements PaymentService {
 				result.append(exchange.getAccount().getNumber() + "\t\t" + exchange.getNut() + "\n");
 			}
 		}
-		if (result.toString() == null) return "No Exchange";
-		else return result.toString();
+		response.getWriter().write(result.toString());
+		response.getWriter().flush();
 	}
 
 }

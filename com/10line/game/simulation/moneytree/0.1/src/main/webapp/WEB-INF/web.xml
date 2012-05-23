@@ -6,6 +6,25 @@
 <web-app>
 
   <!-- Servlets -->
+  <servlet>
+  	<servlet-name>TransactionService</servlet-name>
+  	<servlet-class>com.tenline.game.simulation.moneytree.server.TransactionServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>TransactionService</servlet-name>
+  	<url-pattern>/moneytree/transaction/service</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
+  	<servlet-name>UserService</servlet-name>
+  	<servlet-class>com.tenline.game.simulation.moneytree.server.UserServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>UserService</servlet-name>
+  	<url-pattern>/moneytree/user/service</url-pattern>
+  </servlet-mapping>  
 
   <!-- Default page to serve -->
   <welcome-file-list>

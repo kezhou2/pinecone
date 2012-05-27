@@ -7,6 +7,46 @@
 
   <!-- Servlets -->
   <servlet>
+  	<servlet-name>ApplicationService</servlet-name>
+  	<servlet-class>com.tenline.game.simulation.moneytree.server.ApplicationServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>ApplicationService</servlet-name>
+  	<url-pattern>/moneytree/application/service</url-pattern>
+  </servlet-mapping> 
+  
+  <servlet>
+  	<servlet-name>ConsumerService</servlet-name>
+  	<servlet-class>com.tenline.game.simulation.moneytree.server.ConsumerServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>ConsumerService</servlet-name>
+  	<url-pattern>/moneytree/consumer/service</url-pattern>
+  </servlet-mapping> 
+  
+  <servlet>
+  	<servlet-name>ExchangeService</servlet-name>
+  	<servlet-class>com.tenline.game.simulation.moneytree.server.ExchangeServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>ExchangeService</servlet-name>
+  	<url-pattern>/moneytree/exchange/service</url-pattern>
+  </servlet-mapping> 
+  
+  <servlet>
+  	<servlet-name>RenRenService</servlet-name>
+  	<servlet-class>com.tenline.game.simulation.moneytree.server.RenRenServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>RenRenService</servlet-name>
+  	<url-pattern>/moneytree/renren/service</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
   	<servlet-name>TransactionService</servlet-name>
   	<servlet-class>com.tenline.game.simulation.moneytree.server.TransactionServiceImpl</servlet-class>
   </servlet>

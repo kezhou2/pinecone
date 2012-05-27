@@ -15,5 +15,6 @@ public interface UserEvents {
 	 * 
 	 */
 	static final EventType GET = new EventType();
+	static final EventType REGISTER = new EventType();
 	
 }

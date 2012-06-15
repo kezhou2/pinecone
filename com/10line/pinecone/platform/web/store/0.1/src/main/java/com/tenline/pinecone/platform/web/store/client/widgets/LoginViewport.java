@@ -26,15 +26,15 @@ import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
  * @author Bill
  *
  */
-public class HomeViewport extends Viewport {
+public class LoginViewport extends Viewport {
 
 	/**
 	 * 
 	 */
-	public HomeViewport() {
+	public LoginViewport() {
 		// TODO Auto-generated constructor stub
 		setLayout(new BorderLayout());
-		add(new HomePage(), new BorderLayoutData(LayoutRegion.CENTER));
+		add(new Body(), new BorderLayoutData(LayoutRegion.CENTER));
 		add(new Footer(), new BorderLayoutData(LayoutRegion.SOUTH, 50));
 	}
 	
@@ -43,9 +43,9 @@ public class HomeViewport extends Viewport {
 	 * @author Bill
 	 *
 	 */
-	private class HomePage extends ContentPanel {
+	private class Body extends ContentPanel {
 		
-		private HomePage() {
+		private Body() {
 			setIcon(((Images) Registry.get(Images.class.getName())).logo());
 			setLayout(new BorderLayout());
 			add(new VideoDemo(), new BorderLayoutData(LayoutRegion.CENTER));
@@ -77,6 +77,7 @@ public class HomeViewport extends Viewport {
 		
 		private UserForm() {
 			setHeaderVisible(false);
+			setLabelSeparator("");
 			
 			final TextField<String> accountField = new TextField<String>();
 			accountField.setAllowBlank(false);

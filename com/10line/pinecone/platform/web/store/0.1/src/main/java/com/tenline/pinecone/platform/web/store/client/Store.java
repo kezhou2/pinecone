@@ -20,6 +20,7 @@ import com.tenline.pinecone.platform.web.store.client.services.FriendService;
 import com.tenline.pinecone.platform.web.store.client.services.MailService;
 import com.tenline.pinecone.platform.web.store.client.services.UserService;
 import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.RegisterViewport;
 
 /**
  * 
@@ -39,6 +40,7 @@ public class Store implements EntryPoint {
 		Registry.register(MailService.class.getName(), GWT.create(MailService.class));
 		Registry.register(UserService.class.getName(), GWT.create(UserService.class));
 		Registry.register(LoginViewport.class.getName(), GWT.create(LoginViewport.class));
+		Registry.register(RegisterViewport.class.getName(), GWT.create(RegisterViewport.class));
 		Dispatcher dispatcher = Dispatcher.get();
 		dispatcher.addController(new ApplicationController());
 		dispatcher.addController(new ConsumerController());

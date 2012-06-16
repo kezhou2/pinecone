@@ -9,15 +9,12 @@ import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
-import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
-import com.extjs.gxt.ui.client.widget.layout.FitData;
-import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
@@ -26,22 +23,17 @@ import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
  * @author Bill
  *
  */
-public class LoginViewport extends AbstractViewport {
+public class RegisterViewport extends AbstractViewport {
 
 	/**
 	 * 
 	 */
-	public LoginViewport() {
+	public RegisterViewport() {
 		super();
 		// TODO Auto-generated constructor stub
-		LayoutContainer videoDemoContainer = new LayoutContainer(new FitLayout());
-		videoDemoContainer.add(new VideoDemo(), new FitData(20));
-		body.add(videoDemoContainer, new BorderLayoutData(LayoutRegion.CENTER));
-		LayoutContainer loginContainer = new LayoutContainer(new FitLayout());
-		LayoutContainer userFormContainer = new LayoutContainer(new CenterLayout());
-		userFormContainer.add(new UserForm());
-		loginContainer.add(userFormContainer, new FitData(20));
-		body.add(loginContainer, new BorderLayoutData(LayoutRegion.EAST, 350));
+		LayoutContainer registerFormContainer = new LayoutContainer(new CenterLayout());
+		registerFormContainer.add(new RegisterForm());
+		body.add(registerFormContainer, new BorderLayoutData(LayoutRegion.CENTER));
 	}
 	
 	/**
@@ -49,23 +41,9 @@ public class LoginViewport extends AbstractViewport {
 	 * @author Bill
 	 *
 	 */
-	private class VideoDemo extends ContentPanel {
+	private class RegisterForm extends FormPanel {
 		
-		private VideoDemo() {
-			setHeaderVisible(false);
-			setUrl("http://player.youku.com/player.php/sid/XMzMzNjU3Mzgw/v.swf");
-		}
-		
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class UserForm extends FormPanel {
-		
-		private UserForm() {
+		private RegisterForm() {
 			setHeaderVisible(false);
 			setLabelSeparator("");
 			
@@ -83,15 +61,21 @@ public class LoginViewport extends AbstractViewport {
 			passwordField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).password());
 			passwordField.getMessages().setBlankText(((Messages) Registry.get(Messages.class.getName())).passwordBlankWarning());	
 			
-			final Button loginButton = new Button(((Messages) Registry.get(Messages.class.getName())).login());
-			final Button registerButton = new Button(((Messages) Registry.get(Messages.class.getName())).register());
-			loginButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			final TextField<String> confirmationField = new TextField<String>();
+			confirmationField.setPassword(true);
+			confirmationField.setAllowBlank(false);
+			confirmationField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).confirmation());
+			confirmationField.getMessages().setBlankText(((Messages) Registry.get(Messages.class.getName())).confirmationBlankWarning());
+			
+			final Button submitButton = new Button(((Messages) Registry.get(Messages.class.getName())).submit());
+			final Button cancelButton = new Button(((Messages) Registry.get(Messages.class.getName())).cancel());
+			submitButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
-					if (UserForm.this.isValid()) {
-						AppEvent appEvent = new AppEvent(UserEvents.LOGIN);
+					if (RegisterForm.this.isValid()) {
+						AppEvent appEvent = new AppEvent(UserEvents.REGISTER);
 						appEvent.setData("email", accountField.getValue());
 						appEvent.setData("password", passwordField.getValue());
 						Dispatcher.get().dispatch(appEvent);
@@ -99,20 +83,21 @@ public class LoginViewport extends AbstractViewport {
 				}
 				
 			});
-			registerButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			cancelButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
-					Dispatcher.get().dispatch(new AppEvent(WidgetEvents.UPDATE_REGISTER_TO_PANEL));
+					Dispatcher.get().dispatch(new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL));
 				}
 				
 			});
 			
 			add(accountField);
 			add(passwordField);
-			addButton(loginButton);
-			addButton(registerButton);
+			add(confirmationField);
+			addButton(submitButton);
+			addButton(cancelButton);
 		}
 		
 	}

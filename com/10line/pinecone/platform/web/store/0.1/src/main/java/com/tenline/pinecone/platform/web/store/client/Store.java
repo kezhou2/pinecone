@@ -4,10 +4,12 @@
 package com.tenline.pinecone.platform.web.store.client;
 
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.tenline.pinecone.platform.web.store.client.controllers.ApplicationController;
+import com.tenline.pinecone.platform.web.store.client.controllers.CategoryController;
 import com.tenline.pinecone.platform.web.store.client.controllers.ConsumerController;
 import com.tenline.pinecone.platform.web.store.client.controllers.FriendController;
 import com.tenline.pinecone.platform.web.store.client.controllers.MailController;
@@ -19,6 +21,8 @@ import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
 import com.tenline.pinecone.platform.web.store.client.services.FriendService;
 import com.tenline.pinecone.platform.web.store.client.services.MailService;
 import com.tenline.pinecone.platform.web.store.client.services.UserService;
+import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.RegisterViewport;
 
@@ -31,7 +35,7 @@ public class Store implements EntryPoint {
 	
 	@Override
 	public void onModuleLoad() {
-		// TODO Auto-generated method stub
+		//register RPC services
 		Registry.register(Images.class.getName(), GWT.create(Images.class));
 		Registry.register(Messages.class.getName(), GWT.create(Messages.class));
 		Registry.register(ApplicationService.class.getName(), GWT.create(ApplicationService.class));
@@ -39,16 +43,28 @@ public class Store implements EntryPoint {
 		Registry.register(FriendService.class.getName(), GWT.create(FriendService.class));
 		Registry.register(MailService.class.getName(), GWT.create(MailService.class));
 		Registry.register(UserService.class.getName(), GWT.create(UserService.class));
-		Registry.register(LoginViewport.class.getName(), GWT.create(LoginViewport.class));
-		Registry.register(RegisterViewport.class.getName(), GWT.create(RegisterViewport.class));
+		//register widgets
+		Registry.register(LoginViewport.class.getName(), new LoginViewport());
+		Registry.register(RegisterViewport.class.getName(), new RegisterViewport());
+		Registry.register(HomeViewport.class.getName(), new HomeViewport());
+		Registry.register(FriendViewport.class.getName(), new FriendViewport());
+		//set controller
 		Dispatcher dispatcher = Dispatcher.get();
+		dispatcher.addController(new WidgetController());
 		dispatcher.addController(new ApplicationController());
+		dispatcher.addController(new CategoryController());
 		dispatcher.addController(new ConsumerController());
 		dispatcher.addController(new FriendController());
 		dispatcher.addController(new MailController());
 		dispatcher.addController(new UserController());
-		dispatcher.addController(new WidgetController());
-		dispatcher.dispatch(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
+//		RootPanel.get().add(new LoginViewport());
+//		RootPanel.get().add(new RegistryViewport());
+		
+		
+		
+		//initialize login page
+		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
+		appEvent.setHistoryEvent(true);
+		dispatcher.dispatch(appEvent);
 	}
-	
 }

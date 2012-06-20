@@ -7452,3 +7452,36 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .x-window-dlg .ext-mb-error {
     background-image:url(../images/default/window/icon-error.gif);
 }
+
+/** extra: add by liugy */
+.btn-green {
+	color: #fff !important;
+	text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+	border:1px solid #749217 !important;
+	background-color: #6AB620 !important;
+}
+.btn-green:hover, .btn-green:focus, .btn-green:active {
+	-moz-box-shadow:0 0 5px rgba(116, 146, 23, 0.9);
+	-webkit-box-shadow: 0 0 5px rgba(116, 146, 23, 0.9);
+	box-shadow: 0 0 5px rgba(116, 146, 23, 0.9);
+	border:1px solid #749217 !important;
+}
+
+.LoginViewMessage{
+	font-size: 21px;
+	font-weight: bold;
+	line-height: 28px;
+	margin-bottom: 18px;
+	color: #4D5762;
+	position: relative;
+	word-spacing: -0.1em;
+}
+
+.LoginViewLabel .x-form-item-label{
+	font-size: 40px;
+	font-weight: bold;
+	line-height: 18px;
+	margin-bottom: 10px;
+	color: #4D5762;
+	position: relative;
+	word-spacing: -0.1em;

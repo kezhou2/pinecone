@@ -28,7 +28,6 @@ public class UserController extends Controller {
 	 * 
 	 */
 	public UserController() {
-		// TODO Auto-generated constructor stub
 		registerEventTypes(UserEvents.LOGIN);
 		registerEventTypes(UserEvents.LOGOUT);
 		registerEventTypes(UserEvents.REGISTER);
@@ -38,7 +37,6 @@ public class UserController extends Controller {
 
 	@Override
 	public void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
 		try {
 			if (event.getType().equals(UserEvents.LOGIN)) {
 				login(event);
@@ -52,7 +50,6 @@ public class UserController extends Controller {
 				setting(event);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -69,15 +66,15 @@ public class UserController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Collection<User> result) {
-				// TODO Auto-generated method stub
-				if (result.size() == 1) Registry.register(User.class.getName(), result.toArray()[0]);
-				forwardToView(view, event.getType(), result);
+				if (result.size() == 1) {
+					Registry.register(User.class.getName(), result.toArray()[0]);
+					forwardToView(view, event.getType(), result);
+				}
 			}
 			
 		});
@@ -104,13 +101,11 @@ public class UserController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Collection<User> result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -130,13 +125,11 @@ public class UserController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(User result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -162,13 +155,11 @@ public class UserController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(User result) {
-				// TODO Auto-generated method stub
 				Registry.register(User.class.getName(), result);
 				forwardToView(view, event.getType(), result);
 			}

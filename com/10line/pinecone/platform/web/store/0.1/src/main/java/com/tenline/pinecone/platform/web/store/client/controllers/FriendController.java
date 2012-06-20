@@ -29,7 +29,6 @@ public class FriendController extends Controller {
 	 * 
 	 */
 	public FriendController() {
-		// TODO Auto-generated constructor stub
 		registerEventTypes(FriendEvents.GET_BY_USER);
 		registerEventTypes(FriendEvents.GET_REQUESTS);
 		registerEventTypes(FriendEvents.CHECK);
@@ -40,7 +39,6 @@ public class FriendController extends Controller {
 
 	@Override
 	public void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
 		try {
 			if (event.getType().equals(FriendEvents.GET_BY_USER)) {
 				getByUser(event);
@@ -56,7 +54,6 @@ public class FriendController extends Controller {
 				setting(event);
 			} 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -72,26 +69,22 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Collection<Friend> result) {
-				// TODO Auto-generated method stub
 				final Collection<Friend> temp = result;
 				service.show("isDecided==true&&sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
 						new AsyncCallback<Collection<Friend>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
 						caught.printStackTrace();
 					}
 
 					@Override
 					public void onSuccess(Collection<Friend> result) {
-						// TODO Auto-generated method stub
 						result.addAll(temp);
 						forwardToView(view, event.getType(), result);
 					}
@@ -113,13 +106,11 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Collection<Friend> result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -137,13 +128,11 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Collection<Friend> result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -164,13 +153,11 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Friend result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -188,13 +175,11 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Boolean result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -216,13 +201,11 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Friend result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			

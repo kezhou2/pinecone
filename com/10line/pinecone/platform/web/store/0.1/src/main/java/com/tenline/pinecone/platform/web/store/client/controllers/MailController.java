@@ -29,7 +29,7 @@ public class MailController extends Controller {
 	 * 
 	 */
 	public MailController() {
-		// TODO Auto-generated constructor stub
+		
 		registerEventTypes(MailEvents.GET_UNREAD);
 		registerEventTypes(MailEvents.SEND);
 		registerEventTypes(MailEvents.SETTING);
@@ -37,7 +37,7 @@ public class MailController extends Controller {
 
 	@Override
 	public void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
+		
 		try {
 			if (event.getType().equals(MailEvents.GET_UNREAD)) {
 				getUnread(event);
@@ -47,7 +47,6 @@ public class MailController extends Controller {
 				setting(event);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -63,13 +62,11 @@ public class MailController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Collection<Mail> result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -91,13 +88,13 @@ public class MailController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+				
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Mail result) {
-				// TODO Auto-generated method stub
+				
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -121,13 +118,13 @@ public class MailController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+				
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Mail result) {
-				// TODO Auto-generated method stub
+				
 				forwardToView(view, event.getType(), result);
 			}
 			

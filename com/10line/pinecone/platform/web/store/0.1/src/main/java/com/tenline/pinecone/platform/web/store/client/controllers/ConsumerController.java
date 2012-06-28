@@ -35,6 +35,8 @@ public class ConsumerController extends Controller {
 		registerEventTypes(ConsumerEvents.SETTING);
 		//add by lue at 2012年6月22日16:56:40
 		registerEventTypes(ConsumerEvents.GET_ALL);
+		//add by lue at 2012年6月28日19:54:12
+		registerEventTypes(ConsumerEvents.GET_BY_NAME);
 	}
 
 	@Override
@@ -52,11 +54,37 @@ public class ConsumerController extends Controller {
 			//add by lue at 2012年6月22日16:56:40
 			else if(event.getType().equals(ConsumerEvents.GET_ALL)) {
 				getAll(event);
+			} else if(event.getType().equals(ConsumerEvents.GET_BY_NAME)) {
+				getByName(event);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * @author lue
+	 * @param event
+	 */
+	private void getByName(AppEvent event) {
+		service.show(""+event.getData("name"), new AsyncCallback<Collection<Consumer>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+				try {
+					throw caught;
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onSuccess(Collection<Consumer> result) {
+				forwardToView(view, ConsumerEvents.GET_ALL, result);
+			}
+		});
+	}
+
 	/**
 	 * 获取所有Consumer
 	 * @author lue

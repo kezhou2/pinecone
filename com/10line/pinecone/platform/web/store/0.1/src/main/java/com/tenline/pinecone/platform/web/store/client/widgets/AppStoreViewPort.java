@@ -2,14 +2,20 @@ package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.core.XTemplate;
+import com.extjs.gxt.ui.client.data.BaseListLoader;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.BeanModelFactory;
 import com.extjs.gxt.ui.client.data.BeanModelLookup;
+import com.extjs.gxt.ui.client.data.BeanModelReader;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.ListLoader;
+import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
@@ -30,6 +36,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
 import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnData;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
@@ -42,12 +49,16 @@ import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout.HBoxLayoutAlign;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayoutData;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
 import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
+import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
+import com.tenline.pinecone.platform.web.store.client.services.ConsumerServiceAsync;
 /**
  * 应用商店页面
  * @author lue
@@ -98,7 +109,7 @@ public class AppStoreViewPort extends AbstractViewport {
 		layout.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);  
 		header.setLayout(layout);
 
-
+		//返回“个人主页”按钮
 		Button buttonHomePage = new Button();
 		buttonHomePage.setText(((Messages) Registry.get(Messages.class.getName())).homePage());
 		buttonHomePage.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -111,28 +122,50 @@ public class AppStoreViewPort extends AbstractViewport {
 			}
 		});
 		header.add(buttonHomePage);
+
+		//按类别过滤
 		HBoxLayoutData flex = new HBoxLayoutData(new Margins(0, 5, 0, 0));  
 		flex.setFlex(1);  
 		header.add(new Text(), flex);  
 		Label label = new Label(((Messages) Registry.get(Messages.class.getName())).label_category());
 		header.add(label, new HBoxLayoutData(new Margins(0, 5, 0, 0)));
 		SimpleComboBox<String> consumerCombo = new SimpleComboBox<String>();
-		consumerCombo.add(Arrays.asList("Life","Traffic","Tndustry"));
+		consumerCombo.add(Arrays.asList("ALL",Category.DOMAIN_GAME,Category.DOMAIN_PET,Category.DOMAIN_SECURITY));
+		consumerCombo.setTriggerAction(TriggerAction.ALL);
+		consumerCombo.setEditable(false);
+		consumerCombo.setForceSelection(true);
 		consumerCombo.addSelectionChangedListener(new SelectionChangedListener<SimpleComboValue<String>>() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
-				AppEvent event = new AppEvent(ConsumerEvents.GET_BY_CATEGORY);
-				event.setData("id", se.getSelectedItem().getValue());
+				AppEvent event;
+				if("all".equalsIgnoreCase(se.getSelectedItem().getValue())) {
+					event = new AppEvent(ConsumerEvents.GET_ALL);
+				} else {
+					event = new AppEvent(ConsumerEvents.GET_BY_CATEGORY);
+					event.setData("id", se.getSelectedItem().getValue());
+				}
+
 				Dispatcher.get().dispatch(event);
 			}
 		});
 		header.add(consumerCombo, new HBoxLayoutData(new Margins(0, 25, 0, 0)));
 
-		TextField<String> txtfldSearch = new TextField<String>();
+		//搜索
+		final TextField<String> txtfldSearch = new TextField<String>();
 		header.add(txtfldSearch,new HBoxLayoutData(new Margins(0, 5, 0, 0)));
 		txtfldSearch.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).text_search());
 		Button button = new Button(((Messages) Registry.get(Messages.class.getName())).button_search());
+		button.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				String name = txtfldSearch.getValue();
+				AppEvent event = new AppEvent(ConsumerEvents.GET_BY_NAME);
+				event.setData("name",name);
+				Dispatcher.get().dispatch(event);
+			}
+		});
 		header.add(button,new HBoxLayoutData(new Margins(0, 5, 0, 0)));
 		return header;
 	}
@@ -230,7 +263,22 @@ public class AppStoreViewPort extends AbstractViewport {
 		ContentPanel eastPanel = new ContentPanel();
 		eastPanel.setHeading(((Messages) Registry.get(Messages.class.getName())).ranking());
 		eastPanel.setLayout(new FillLayout());
+
+		RpcProxy<Collection<Consumer>> proxy = new RpcProxy<Collection<Consumer>>() {
+			@Override
+			protected void load(Object loadConfig, AsyncCallback<Collection<Consumer>> callback) {
+				ConsumerServiceAsync service = Registry.get(ConsumerService.class.getName());
+				service.show("all", callback);
+			}
+		};
+		ListLoader<ListLoadResult<BeanModel>> loader = new BaseListLoader<ListLoadResult<BeanModel>>(
+				proxy, new BeanModelReader());
+		ListStore<BeanModel> store = new ListStore<BeanModel>(loader);
+		loader.load();
+
 		ListView<BeanModel> listView = new ListView<BeanModel>(new ListStore<BeanModel>());
+		listView.setStore(store);
+		listView.setDisplayProperty("name");
 		eastPanel.add(listView);
 		listView.setHeight("245");
 		return eastPanel;

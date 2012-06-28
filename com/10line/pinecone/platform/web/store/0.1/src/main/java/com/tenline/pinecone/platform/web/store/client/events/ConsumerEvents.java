@@ -18,5 +18,10 @@ public interface ConsumerEvents {
 	static final EventType REGISTER = new EventType();
 	static final EventType UNREGISTER = new EventType();
 	static final EventType SETTING = new EventType();
+	/**
+	 * 获取所有Consumer
+	 * @author lue
+	 */
+	static final EventType GET_ALL = new EventType();
 
 }

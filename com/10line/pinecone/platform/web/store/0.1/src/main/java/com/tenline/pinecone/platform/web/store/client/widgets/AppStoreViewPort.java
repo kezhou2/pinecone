@@ -75,6 +75,10 @@ public class AppStoreViewPort extends AbstractViewport {
 		}
 
 	}
+	/**
+	 * 创建应用列表
+	 * @return
+	 */
 	private ContentPanel createCenter() {
 		ContentPanel centerPanel = new ContentPanel();
 		centerPanel.setHeaderVisible(false);
@@ -187,7 +191,7 @@ public class AppStoreViewPort extends AbstractViewport {
 					@Override
 					public void componentSelected(ButtonEvent ce) {
 						AppEvent event = new AppEvent(ApplicationEvents.INSTALL);
-						event.setData(model.get("consumer"));
+						event.setData("consumer",model.get("consumer"));
 						Dispatcher.get().dispatch(event);
 						final Listener<MessageBoxEvent> listener = new Listener<MessageBoxEvent>() {
 							public void handleEvent(MessageBoxEvent ce) {
@@ -218,6 +222,10 @@ public class AppStoreViewPort extends AbstractViewport {
 		Dispatcher.get().dispatch(appEvent);
 		return grid;
 	}
+	/**
+	 * 创建排行榜
+	 * @return
+	 */
 	private ContentPanel createEast() {
 		ContentPanel eastPanel = new ContentPanel();
 		eastPanel.setHeading(((Messages) Registry.get(Messages.class.getName())).ranking());

@@ -66,11 +66,11 @@ public class Store implements EntryPoint {
 		
 		
 		
-//		//initialize login page
-//		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
-//		appEvent.setHistoryEvent(true);
-//		dispatcher.dispatch(appEvent);
-		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
+		//initialize login page
+		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
+		appEvent.setHistoryEvent(true);
 		dispatcher.dispatch(appEvent);
+//		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
+//		dispatcher.dispatch(appEvent);
 	}
 }

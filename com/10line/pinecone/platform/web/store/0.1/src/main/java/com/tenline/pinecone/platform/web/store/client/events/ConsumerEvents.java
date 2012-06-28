@@ -23,5 +23,10 @@ public interface ConsumerEvents {
 	 * @author lue
 	 */
 	static final EventType GET_ALL = new EventType();
+	/**
+	 * 获取指定名称的应用
+	 * @author lue
+	 */
+	static final EventType GET_BY_NAME = new EventType();
 
 }

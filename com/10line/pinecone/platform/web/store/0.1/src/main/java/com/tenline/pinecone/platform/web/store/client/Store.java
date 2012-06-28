@@ -15,12 +15,14 @@ import com.tenline.pinecone.platform.web.store.client.controllers.FriendControll
 import com.tenline.pinecone.platform.web.store.client.controllers.MailController;
 import com.tenline.pinecone.platform.web.store.client.controllers.UserController;
 import com.tenline.pinecone.platform.web.store.client.controllers.WidgetController;
+import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.services.ApplicationService;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
 import com.tenline.pinecone.platform.web.store.client.services.FriendService;
 import com.tenline.pinecone.platform.web.store.client.services.MailService;
 import com.tenline.pinecone.platform.web.store.client.services.UserService;
+import com.tenline.pinecone.platform.web.store.client.widgets.AppStoreViewPort;
 import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
@@ -48,6 +50,8 @@ public class Store implements EntryPoint {
 		Registry.register(RegisterViewport.class.getName(), new RegisterViewport());
 		Registry.register(HomeViewport.class.getName(), new HomeViewport());
 		Registry.register(FriendViewport.class.getName(), new FriendViewport());
+		//add by lue at 2012Äê6ÔÂ22ÈÕ17:43:47
+		Registry.register(AppStoreViewPort.class.getName(), new AppStoreViewPort());
 		//set controller
 		Dispatcher dispatcher = Dispatcher.get();
 		dispatcher.addController(new WidgetController());
@@ -62,9 +66,11 @@ public class Store implements EntryPoint {
 		
 		
 		
-		//initialize login page
-		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
-		appEvent.setHistoryEvent(true);
+//		//initialize login page
+//		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
+//		appEvent.setHistoryEvent(true);
+//		dispatcher.dispatch(appEvent);
+		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
 		dispatcher.dispatch(appEvent);
 	}
 }

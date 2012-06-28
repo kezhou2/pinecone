@@ -29,16 +29,16 @@ public class ConsumerController extends Controller {
 	 * 
 	 */
 	public ConsumerController() {
-		// TODO Auto-generated constructor stub
 		registerEventTypes(ConsumerEvents.GET_BY_CATEGORY);
 		registerEventTypes(ConsumerEvents.REGISTER);
 		registerEventTypes(ConsumerEvents.UNREGISTER);
 		registerEventTypes(ConsumerEvents.SETTING);
+		//add by lue at 2012年6月22日16:56:40
+		registerEventTypes(ConsumerEvents.GET_ALL);
 	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
 		try {
 			if (event.getType().equals(ConsumerEvents.GET_BY_CATEGORY)) {
 				getByCategory(event);
@@ -48,13 +48,40 @@ public class ConsumerController extends Controller {
 				unregister(event);
 			} else if (event.getType().equals(ConsumerEvents.SETTING)) {
 				setting(event);
+			} 
+			//add by lue at 2012年6月22日16:56:40
+			else if(event.getType().equals(ConsumerEvents.GET_ALL)) {
+				getAll(event);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * 获取所有Consumer
+	 * @author lue
+	 * @param event
+	 */
+	private void getAll(AppEvent event) throws Exception{
+		service.show("all", new AsyncCallback<Collection<Consumer>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+				try {
+					throw caught;
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onSuccess(Collection<Consumer> result) {
+				forwardToView(view, ConsumerEvents.GET_ALL, result);
+			}
+		});
+	}
+
 	/**
 	 * 
 	 * @param event
@@ -65,13 +92,16 @@ public class ConsumerController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
+				try {
+					throw caught;
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
 			}
 
 			@Override
 			public void onSuccess(Collection<Consumer> result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -92,13 +122,11 @@ public class ConsumerController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Consumer result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -115,13 +143,11 @@ public class ConsumerController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Boolean result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -143,13 +169,11 @@ public class ConsumerController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Consumer result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			

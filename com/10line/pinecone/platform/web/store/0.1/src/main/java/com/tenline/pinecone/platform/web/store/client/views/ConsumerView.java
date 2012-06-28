@@ -40,18 +40,18 @@ public class ConsumerView extends View {
 	@Override
 	protected void handleEvent(AppEvent event) {
 		//add by lue at 2012Äê6ÔÂ22ÈÕ17:06:52
-		if(event.getType().equals(ConsumerEvents.GET_ALL)) {
-			RootPanel.get().clear();
+		if(event.getType().equals(ConsumerEvents.GET_ALL)
+				||event.getType().equals(ConsumerEvents.GET_BY_CATEGORY)
+				||event.getType().equals(ConsumerEvents.GET_ALL)) {
 			updateAppStoreGrid(event);
-		} else if(event.getType().equals(ConsumerEvents.GET_BY_CATEGORY)) {
-			updateAppStoreGrid(event);
-		} else if(event.getType().equals(ConsumerEvents.REGISTER)) {
+		}else if(event.getType().equals(ConsumerEvents.REGISTER)) {
 			System.out.println(event.getData().getClass());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void updateAppStoreGrid(AppEvent event) {
+		RootPanel.get().clear();
 		AppStoreViewPort appStoreViewPort = Registry.get(AppStoreViewPort.class.getName());
 		RootPanel.get().add(appStoreViewPort);
 		List<BeanModel> data = new ArrayList<BeanModel>();

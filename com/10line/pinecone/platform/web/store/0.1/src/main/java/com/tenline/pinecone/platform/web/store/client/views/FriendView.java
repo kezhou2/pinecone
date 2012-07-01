@@ -34,10 +34,10 @@ public class FriendView extends View {
 		// TODO Auto-generated method stub
 		try {
 			if (event.getType().equals(FriendEvents.GET_BY_SENDER)) {
-				updateFriendToGrid(event, "receiver");
+				updateFriendToList(event, "receiver");
 				Dispatcher.get().dispatch(FriendEvents.GET_BY_RECEIVER, Registry.get(Store.CURRENT_USER));
 			} else if (event.getType().equals(FriendEvents.GET_BY_RECEIVER)) {
-				updateFriendToGrid(event, "sender");
+				updateFriendToList(event, "sender");
 			} else if (event.getType().equals(FriendEvents.GET_INVITATIONS)) {
 				
 			}
@@ -53,7 +53,7 @@ public class FriendView extends View {
 	 * @param property
 	 * @throws Exception
 	 */
-	private void updateFriendToGrid(AppEvent event, String property) throws Exception {
+	private void updateFriendToList(AppEvent event, String property) throws Exception {
 		HomeViewport viewport = Registry.get(HomeViewport.class.getName());
 		List<BeanModel> friends = event.getData();
 		for (BeanModel friend : friends) {

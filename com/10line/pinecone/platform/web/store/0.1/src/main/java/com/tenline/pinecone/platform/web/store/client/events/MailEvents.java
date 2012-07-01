@@ -14,6 +14,7 @@ public interface MailEvents {
 	/**
 	 * 
 	 */
+	static final EventType GET_UNREAD_COUNT = new EventType();
 	static final EventType GET_UNREAD = new EventType();
 	static final EventType SEND = new EventType();
 	static final EventType SETTING = new EventType();

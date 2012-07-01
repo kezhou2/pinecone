@@ -30,7 +30,6 @@ public abstract class AbstractViewport extends Viewport {
 	 * 
 	 */
 	public AbstractViewport() {
-		// TODO Auto-generated constructor stub
 		setLayout(new BorderLayout());
 		add(header, new BorderLayoutData(LayoutRegion.NORTH, 50));
 		add(body, new BorderLayoutData(LayoutRegion.CENTER));

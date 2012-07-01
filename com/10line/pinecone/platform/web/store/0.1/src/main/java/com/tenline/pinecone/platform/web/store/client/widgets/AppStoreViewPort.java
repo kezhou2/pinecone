@@ -60,13 +60,13 @@ import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerServiceAsync;
 /**
- * Ó¦ÓÃÉÌµêÒ³Ãæ
+ * Ó¦ï¿½ï¿½ï¿½Ìµï¿½Ò³ï¿½ï¿½
  * @author lue
  *
  */
-public class AppStoreViewPort extends AbstractViewport {
+public class AppStoreViewport extends AbstractViewport {
 	ListStore<BeanModel> store;
-	public AppStoreViewPort() {
+	public AppStoreViewport() {
 		super();
 		body.add(new MainPanel(),new BorderLayoutData(LayoutRegion.CENTER));
 	}
@@ -87,7 +87,7 @@ public class AppStoreViewPort extends AbstractViewport {
 
 	}
 	/**
-	 * ´´½¨Ó¦ÓÃÁÐ±í
+	 * ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ð±ï¿½
 	 * @return
 	 */
 	private ContentPanel createCenter() {
@@ -109,7 +109,7 @@ public class AppStoreViewPort extends AbstractViewport {
 		layout.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);  
 		header.setLayout(layout);
 
-		//·µ»Ø¡°¸öÈËÖ÷Ò³¡±°´Å¥
+		//ï¿½ï¿½ï¿½Ø¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½Å¥
 		Button buttonHomePage = new Button();
 		buttonHomePage.setText(((Messages) Registry.get(Messages.class.getName())).homePage());
 		buttonHomePage.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -123,7 +123,7 @@ public class AppStoreViewPort extends AbstractViewport {
 		});
 		header.add(buttonHomePage);
 
-		//°´Àà±ð¹ýÂË
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		HBoxLayoutData flex = new HBoxLayoutData(new Margins(0, 5, 0, 0));  
 		flex.setFlex(1);  
 		header.add(new Text(), flex);  
@@ -151,7 +151,7 @@ public class AppStoreViewPort extends AbstractViewport {
 		});
 		header.add(consumerCombo, new HBoxLayoutData(new Margins(0, 25, 0, 0)));
 
-		//ËÑË÷
+		//ï¿½ï¿½ï¿½ï¿½
 		final TextField<String> txtfldSearch = new TextField<String>();
 		header.add(txtfldSearch,new HBoxLayoutData(new Margins(0, 5, 0, 0)));
 		txtfldSearch.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).text_search());
@@ -172,7 +172,7 @@ public class AppStoreViewPort extends AbstractViewport {
 	private Grid<BeanModel> initGrid() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();  
 
-		//µÚÒ»ÁÐ£ºÕ¹¿ª£¬¡°+¡±°´Å¥
+		//ï¿½ï¿½Ò»ï¿½Ð£ï¿½Õ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½+ï¿½ï¿½ï¿½ï¿½Å¥
 		XTemplate xTemplate = XTemplate
 				.create("<p><b>Product by:</b> {name}</p><br><p><b>Summary:</b> {detail}</p>");
 
@@ -180,7 +180,7 @@ public class AppStoreViewPort extends AbstractViewport {
 		rowExpander.setTemplate(xTemplate);
 		configs.add(rowExpander);  
 
-		//µÚ¶þÁÐ£ºÓ¦ÓÃÍ¼±ê£¬Image
+		//ï¿½Ú¶ï¿½ï¿½Ð£ï¿½Ó¦ï¿½ï¿½Í¼ï¿½ê£¬Image
 		ColumnConfig column = new ColumnConfig();  
 		column.setId("icon");  
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).app_Icon());  
@@ -198,21 +198,21 @@ public class AppStoreViewPort extends AbstractViewport {
 		column.setRenderer(iconRenderer);
 		configs.add(column);  
 
-		//µÚÈýÁÐ£ºÓ¦ÓÃÃû³Æ
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½
 		column = new ColumnConfig();  
 		column.setId("name");  
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).app_Name());  
 		column.setWidth(400);  
 		configs.add(column);  
 
-		//µÚËÄÁÐ£ºÓ¦ÓÃ°æ±¾ºÅ
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ó¦ï¿½Ã°æ±¾ï¿½ï¿½
 		column = new ColumnConfig();  
 		column.setId("version");  
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).app_version());  
 		column.setWidth(100);  
 		configs.add(column);  
 
-		//µÚÎåÁÐ£º°²×°Ó¦ÓÃ£¬¡°°²×°¡±°´Å¥
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½×°Ó¦ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½Å¥
 		column = new ColumnConfig("install", ((Messages) Registry.get(Messages.class.getName())).app_install(), 150);  
 		GridCellRenderer<BeanModel> buttonRenderer = new GridCellRenderer<BeanModel>() {
 
@@ -250,13 +250,13 @@ public class AppStoreViewPort extends AbstractViewport {
 		Grid<BeanModel> grid = new Grid<BeanModel>(store, cm);
 		grid.setBorders(true);
 		grid.addPlugin(rowExpander);
-		//»ñÈ¡Ó¦ÓÃÁÐ±íÄÚÈÝ
+		//ï¿½ï¿½È¡Ó¦ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½
 		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
 		Dispatcher.get().dispatch(appEvent);
 		return grid;
 	}
 	/**
-	 * ´´½¨ÅÅÐÐ°ñ
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð°ï¿½
 	 * @return
 	 */
 	private ContentPanel createEast() {

@@ -1,20 +1,29 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BeanModel;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
+import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.Text;
-import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Images;
+import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 public class FriendInfoPanel extends ContentPanel {
 	
@@ -25,19 +34,24 @@ public class FriendInfoPanel extends ContentPanel {
 		this.model = model;
 		
 		setHeaderVisible(false);
-		setSize("300", "64");
+		setSize("225", "54");
 		setLayout(new BorderLayout());
+		setBodyBorder(false);
+		setBorders(false);
+		setBodyStyle("background-color: transparent");
 		
 		LayoutContainer layoutContainer = new LayoutContainer();
 		layoutContainer.setLayout(new FitLayout());
-		Image image = new Image((String) null);
-		layoutContainer.add(image, new FitData(0, 8, 0, 8));
+		Image image = ((Images)Registry.get(Images.class.getName())).user().createImage();
+		layoutContainer.add(image, new FitData(0, 2, 0, 2));
+		layoutContainer.setBorders(false);
 		
-		add(layoutContainer, new BorderLayoutData(LayoutRegion.WEST, 80.0f));
-		layoutContainer.setBorders(true);
+		add(layoutContainer, new BorderLayoutData(LayoutRegion.WEST, 54.0f));
+		layoutContainer.setBorders(false);
 		
 		LayoutContainer layoutContainer_1 = new LayoutContainer();
 		layoutContainer_1.setLayout(new FillLayout(Orientation.VERTICAL));
+		layoutContainer_1.setBorders(false);
 		
 		LayoutContainer layoutContainer_2 = new LayoutContainer();
 		layoutContainer_2.setLayout(new FitLayout());
@@ -45,7 +59,7 @@ public class FriendInfoPanel extends ContentPanel {
 		txtFriendName = new Text("friend name");
 		layoutContainer_2.add(txtFriendName);
 		layoutContainer_1.add(layoutContainer_2);
-		layoutContainer_2.setBorders(true);
+		layoutContainer_2.setBorders(false);
 		
 		LayoutContainer layoutContainer_3 = new LayoutContainer();
 		layoutContainer_3.setLayout(new HBoxLayout());
@@ -53,21 +67,27 @@ public class FriendInfoPanel extends ContentPanel {
 		Button btnInformation = new Button("information");
 		layoutContainer_3.add(btnInformation);
 		layoutContainer_1.add(layoutContainer_3);
-		layoutContainer_3.setBorders(true);
-		
-		LayoutContainer layoutContainer_4 = new LayoutContainer();
-		layoutContainer_4.setLayout(new HBoxLayout());
-		
+		layoutContainer_3.setBorders(false);
+		btnInformation.setStyleName("btn-blue");
+		btnInformation.addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent event) {
+				
+			}
+		});
+
 		Button btnSendMessage = new Button("Send message");
-		layoutContainer_4.add(btnSendMessage);
+		layoutContainer_3.add(btnSendMessage);
+		btnSendMessage.setStyleName("btn-blue");
+		btnSendMessage.addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent event) {
+				AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_SEND_MAIL_TO_PANEL);
+				appEvent.setData("friend", FriendInfoPanel.this.model.get("friend"));
+				Dispatcher.get().dispatch(appEvent);
+			}
+		});
 		
-		Button btnDelete = new Button("Delete");
-		layoutContainer_4.add(btnDelete);
-		
-		layoutContainer_1.add(layoutContainer_4);
-		layoutContainer_4.setBorders(true);
 		add(layoutContainer_1, new BorderLayoutData(LayoutRegion.CENTER));
-		layoutContainer_1.setBorders(true);
+		layoutContainer_1.setBorders(false);
 		
 		init();
 	}

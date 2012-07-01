@@ -6,23 +6,11 @@ package com.tenline.pinecone.platform.web.store.client.controllers;
 import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
-import com.extjs.gxt.ui.client.data.BaseListLoadResult;
-import com.extjs.gxt.ui.client.data.BaseListLoader;
-import com.extjs.gxt.ui.client.data.BaseLoader;
-import com.extjs.gxt.ui.client.data.BeanModel;
-import com.extjs.gxt.ui.client.data.BeanModelFactory;
-import com.extjs.gxt.ui.client.data.BeanModelReader;
-import com.extjs.gxt.ui.client.data.ListLoadResult;
-import com.extjs.gxt.ui.client.data.ListLoader;
-import com.extjs.gxt.ui.client.data.LoadEvent;
-import com.extjs.gxt.ui.client.data.Loader;
-import com.extjs.gxt.ui.client.data.RpcProxy;
-import com.extjs.gxt.ui.client.event.LoadListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tenline.pinecone.platform.model.Mail;
-import com.tenline.pinecone.platform.web.store.client.Store;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.events.MailEvents;
 import com.tenline.pinecone.platform.web.store.client.services.MailService;
 import com.tenline.pinecone.platform.web.store.client.services.MailServiceAsync;
@@ -37,78 +25,30 @@ public class MailController extends Controller {
 	private MailView view = new MailView(this);
 	private MailServiceAsync service = Registry.get(MailService.class.getName());
 	
-	private BeanModelReader reader = Registry.get(BeanModelReader.class.getName());
-	private BeanModelFactory factory = Registry.get(Store.MAIL_MODEL_FACTORY);
-	
 	/**
 	 * 
 	 */
 	public MailController() {
-		// TODO Auto-generated constructor stub
+		registerEventTypes(MailEvents.GET_UNREAD_COUNT);
 		registerEventTypes(MailEvents.GET_UNREAD);
 		registerEventTypes(MailEvents.SEND);
 		registerEventTypes(MailEvents.SETTING);
 	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class CreateProxy extends RpcProxy<Mail> {
-
-		@Override
-		protected void load(Object loadConfig, AsyncCallback<Mail> callback) {
-			// TODO Auto-generated method stub
-			service.create((Mail) loadConfig, callback);
-		}
-		
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class UpdateProxy extends RpcProxy<Mail> {
-
-		@Override
-		protected void load(Object loadConfig, AsyncCallback<Mail> callback) {
-			// TODO Auto-generated method stub
-			service.update((Mail) loadConfig, callback);
-		}
-		
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class ShowProxy extends RpcProxy<Collection<Mail>> {
-
-		@Override
-		protected void load(Object loadConfig, AsyncCallback<Collection<Mail>> callback) {
-			// TODO Auto-generated method stub
-			service.show((String) loadConfig, callback);
-		}
-		
-	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
+		
 		try {
-			BeanModel model = event.getData();
-			if (event.getType().equals(MailEvents.GET_UNREAD)) {
-				show(event, "isRead==false&&receiver.id=='" + model.get("id") +"'");
+			if (event.getType().equals(MailEvents.GET_UNREAD_COUNT)) {
+				getUnread(event);
+			} else if (event.getType().equals(MailEvents.GET_UNREAD)) {
+				getUnread(event);
 			} else if (event.getType().equals(MailEvents.SEND)) {
-				create(event, model);
+				send(event);
 			} else if (event.getType().equals(MailEvents.SETTING)) {
-				update(event, model);
+				setting(event);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -116,59 +56,81 @@ public class MailController extends Controller {
 	/**
 	 * 
 	 * @param event
-	 * @param model
 	 * @throws Exception
 	 */
-	private void create(final AppEvent event, BeanModel model) throws Exception {
-		Loader<Mail> loader = new BaseLoader<Mail>(new CreateProxy());
-		loader.addLoadListener(new LoadListener() {
-			
+	private void getUnread(final AppEvent event) throws Exception {
+		String filter = "isRead==false&&receiver.id=='"+((User) Registry.get(User.class.getName())).getId()+"'";
+		service.show(filter, new AsyncCallback<Collection<Mail>>() {
+
 			@Override
-			public void loaderLoad(LoadEvent loadEvent) {
-				forwardToView(view, event.getType(), factory.createModel(loadEvent.getData()));
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(Collection<Mail> result) {
+				forwardToView(view, event.getType(), result);
 			}
 			
 		});
-		loader.load(model.getBean());
 	}
 	
 	/**
 	 * 
 	 * @param event
-	 * @param model
 	 * @throws Exception
 	 */
-	private void update(final AppEvent event, BeanModel model) throws Exception {
-		Loader<Mail> loader = new BaseLoader<Mail>(new UpdateProxy());
-		loader.addLoadListener(new LoadListener() {
-			
+	private void send(final AppEvent event) throws Exception {
+		Mail mail = new Mail();
+		mail.setContent((String) event.getData("content"));
+		mail.setReceiver((User) event.getData("receiver"));
+		mail.setSender((User) Registry.get(User.class.getName()));
+		mail.setTitle((String) event.getData("title"));
+		service.create(mail, new AsyncCallback<Mail>() {
+
 			@Override
-			public void loaderLoad(LoadEvent loadEvent) {
-				forwardToView(view, event.getType(), factory.createModel(loadEvent.getData()));
+			public void onFailure(Throwable caught) {
+				
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(Mail result) {
+				
+				forwardToView(view, event.getType(), result);
 			}
 			
 		});
-		loader.load(model.getBean());
 	}
 	
 	/**
 	 * 
 	 * @param event
-	 * @param loadConfig
 	 * @throws Exception
 	 */
-	private void show(final AppEvent event, Object loadConfig) throws Exception {
-		ListLoader<ListLoadResult<BeanModel>> loader = new BaseListLoader<ListLoadResult<BeanModel>>(new ShowProxy(), reader);
-		loader.addLoadListener(new LoadListener() {
-			
+	private void setting(final AppEvent event) throws Exception {
+		String content = event.getData("content");
+		String title = event.getData("title");
+		Boolean isRead = event.getData("isRead");
+		Mail mail = event.getData("mail");
+		if (content != null) mail.setContent(content);
+		if (isRead != null) mail.setRead(isRead);
+		if (title != null) mail.setTitle(title);
+		service.update(mail, new AsyncCallback<Mail>() {
+
 			@Override
-			public void loaderLoad(LoadEvent loadEvent) {
-				BaseListLoadResult<BeanModel> result = loadEvent.getData();
-				forwardToView(view, event.getType(), result.getData());
+			public void onFailure(Throwable caught) {
+				
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(Mail result) {
+				
+				forwardToView(view, event.getType(), result);
 			}
 			
 		});
-		loader.load(loadConfig);
 	}
-	
+
 }

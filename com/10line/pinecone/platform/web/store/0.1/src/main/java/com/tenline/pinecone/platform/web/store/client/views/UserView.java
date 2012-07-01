@@ -3,18 +3,19 @@
  */
 package com.tenline.pinecone.platform.web.store.client.views;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
-import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.mvc.View;
-import com.google.gwt.core.client.GWT;
-import com.tenline.pinecone.platform.web.store.client.Store;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.tenline.pinecone.platform.model.Friend;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
+import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 
 /**
@@ -28,26 +29,23 @@ public class UserView extends View {
 	 */
 	public UserView(Controller controller) {
 		super(controller);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
 		try {
 			if (event.getType().equals(UserEvents.LOGIN)) {
 				login(event);
-			} else if (event.getType().equals(UserEvents.LOGOUT)) {
-				logout();
-			} else if (event.getType().equals(UserEvents.REGISTER)) {
-				register();
+			}else if (event.getType().equals(UserEvents.LOGOUT)) {
+				logout(event);
+			}else if (event.getType().equals(UserEvents.REGISTER)) {
+				register(event);
 			} else if (event.getType().equals(UserEvents.CHECK_EMAIL)) {
 				
-			} else if (event.getType().equals(UserEvents.SETTING)) {
-				setting(event);
+			} else if (event.getType().equals(UserEvents.GET_ALL_USER)) {
+				getAllUser(event);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -58,40 +56,29 @@ public class UserView extends View {
 	 * @throws Exception
 	 */
 	private void login(AppEvent event) throws Exception {
-		List<BeanModel> models = event.getData();
-		if (models.size() == 1) {
-			Registry.register(Store.CURRENT_USER, models.get(0));
-			Registry.register(HomeViewport.class.getName(), GWT.create(HomeViewport.class));
-			Dispatcher.get().dispatch(WidgetEvents.UPDATE_HOME_TO_PANEL);	
-		} else {
-			Dispatcher.get().dispatch(WidgetEvents.SHOW_LOGIN_ERROR_DIALOG);
-		}
+		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_USERHOME_TO_PANEL);
+		Dispatcher.get().dispatch(appEvent);
 	}
 	
-	/**
-	 * 
-	 * @throws Exception
-	 */
-	private void logout() throws Exception {
-		Registry.unregister(Store.CURRENT_USER);
-		Dispatcher.get().dispatch(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
-	}
-	
-	/**
-	 * 
-	 * @throws Exception
-	 */
-	private void register() throws Exception {
-		Dispatcher.get().dispatch(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
-	}
+	private void logout(AppEvent event) throws Exception {
+		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
+		Dispatcher.get().dispatch(appEvent);
+	}                                                   
 	
 	/**
 	 * 
 	 * @param event
 	 * @throws Exception
 	 */
-	private void setting(AppEvent event) throws Exception {
-		Registry.register(Store.CURRENT_USER, event.getData());
+	private void register(AppEvent event) throws Exception {
+		Dispatcher.get().dispatch(new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL));
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void getAllUser(AppEvent event) throws Exception{
+		Collection<User> users = (Collection<User>)event.getData();
+		FriendViewport friendView = (FriendViewport)Registry.get(FriendViewport.class.getName());
+		friendView.loadAllUser(users);
 	}
 
 }

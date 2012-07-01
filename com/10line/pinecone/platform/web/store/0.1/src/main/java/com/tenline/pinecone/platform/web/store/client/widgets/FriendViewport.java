@@ -12,19 +12,20 @@ import com.extjs.gxt.ui.client.data.BeanModelLookup;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.store.GroupingStore;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.store.Store;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.Info;
+import com.extjs.gxt.ui.client.widget.Dialog;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.TabPanel.TabPosition;
 import com.extjs.gxt.ui.client.widget.Text;
-import com.extjs.gxt.ui.client.widget.Viewport;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.StoreFilterField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -38,27 +39,55 @@ import com.extjs.gxt.ui.client.widget.grid.GroupColumnData;
 import com.extjs.gxt.ui.client.widget.grid.GroupingView;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
-import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
+import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Image;
 import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.web.store.client.Images;
-import com.tenline.pinecone.platform.web.store.client.services.FriendService;
-import com.tenline.pinecone.platform.web.store.client.services.FriendServiceAsync;
+import com.tenline.pinecone.platform.web.store.client.events.FriendEvents;
+import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
+import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 public class FriendViewport extends AbstractViewport {
 	
+	private MainPanel mainPanel;
 	
 	public FriendViewport(){
-		MainPanel mainPanel = new MainPanel();
+		mainPanel = new MainPanel();
 		body.add(mainPanel,  new BorderLayoutData(LayoutRegion.CENTER));
-		
 	}
-
 	
+	public void loadInfo(){
+		//load friends
+		AppEvent event = new AppEvent(FriendEvents.GET_BY_USER);
+		Dispatcher.get().dispatch(event);
+		
+		//load invitations
+		AppEvent event1 = new AppEvent(FriendEvents.GET_REQUESTS);
+		Dispatcher.get().dispatch(event1);
+		
+		//load users
+		AppEvent event2 = new AppEvent(UserEvents.GET_ALL_USER);
+		Dispatcher.get().dispatch(event2);
+	}
+	
+	public void loadFriends(Collection<Friend> friends) {
+//		for(Friend f:friends){
+//			System.out.println("@@@Type"+f.getType());
+//			System.out.println("@@@receiver Name:"+f.getReceiver().getName());
+//			System.out.println("@@@receiver Email:"+f.getReceiver().getEmail());
+//			System.out.println("@@@receiver Password:"+f.getReceiver().getPassword());
+//		}
+		mainPanel.loadFriends(friends);
+	}
+	
+	public void loadFriendInvite(Collection<Friend> invitations){
+		mainPanel.loadFriendInvite(invitations);
+	}
+	
+	public void loadAllUser(Collection<User> users){
+		mainPanel.loadAllUser(users);
+	}
 	
 	private class MainPanel extends ContentPanel{
 		
@@ -68,33 +97,19 @@ public class FriendViewport extends AbstractViewport {
 		
 		private BeanModelFactory friendFactory = BeanModelLookup.get().getFactory(Friend.class);
 		private BeanModelFactory userFactory = BeanModelLookup.get().getFactory(User.class);
-		private FriendServiceAsync friendService = Registry.get(FriendService.class.getName());
-		
-		private User curUser = null;
 		
 		private List<String> types = new ArrayList<String>();
 		
 		public MainPanel(){
+			this.setHeaderVisible(false);
 			setLayout(new BorderLayout());
-			
-			LayoutContainer layoutContainer = new LayoutContainer();
-			layoutContainer.setBorders(true);
-			layoutContainer.setLayout(new BorderLayout());
-			
-			LayoutContainer layoutContainer_4 = new LayoutContainer();
-			layoutContainer_4.setLayout(new FitLayout());
-			
-			Image image = ((Images) Registry.get(Images.class.getName())).logo().createImage();
-			layoutContainer_4.add(image, new FitData(20, 8, 20, 8));
-			layoutContainer.add(layoutContainer_4, new BorderLayoutData(LayoutRegion.WEST));
-			add(layoutContainer, new BorderLayoutData(LayoutRegion.NORTH, 100.0f));
 
 			TabPanel tabPanel = new TabPanel();
 			tabPanel.setTabPosition(TabPosition.BOTTOM);
 
-			/*
-			 * 显示我的好友
-			 */
+			/***********************************************
+			 * show all friends
+			 ***********************************************/
 			TabItem myFriendTabitem = new TabItem("My Friends");
 			myFriendTabitem.setLayout(new FitLayout());
 
@@ -115,7 +130,9 @@ public class FriendViewport extends AbstractViewport {
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
 						User user = (User)model.get("friend");
+						System.out.println("FriendViewport name:"+user.getName());
 						return user.getName();
+//						return "dd";
 					}
 				};
 				nameCC.setRenderer(nameCellRender);
@@ -128,7 +145,10 @@ public class FriendViewport extends AbstractViewport {
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
 						User user = (User)model.get("friend");
+						System.out.println(model.get("friend"));
+						System.out.println("FriendViewport email:"+user.getEmail());
 						return user.getEmail();
+//						return "sd";
 					}
 				};
 				mailCC.setRenderer(mailCellRender);
@@ -140,7 +160,9 @@ public class FriendViewport extends AbstractViewport {
 					public Object render(BeanModel model, String property,
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
+						System.out.println("FriendViewport isDecided:"+model.get("isDecided"));
 						return model.get("isDecided");
+//						return "sd";
 					}
 				};
 				statusCC.setRenderer(statuslCellRender);
@@ -160,13 +182,22 @@ public class FriendViewport extends AbstractViewport {
 
 							@Override
 							public void handleEvent(ButtonEvent be) {
-								btn.setEnabled(false);
-								friendStore.remove(lModel);
-								friendStore.commitChanges();
-								btn.setEnabled(true);
+								MessageBox.confirm("Question", "Are you sure?", new Listener<MessageBoxEvent>(){
+									@Override
+									public void handleEvent(MessageBoxEvent be) {
+										Button btn =be.getButtonClicked();
+										if(Dialog.YES.equalsIgnoreCase(btn.getItemId())){
+											AppEvent event = new AppEvent(FriendEvents.DELETE);
+											event.setData("id", lModel.get("id"));
+											Dispatcher.get().dispatch(event);
+										}
+									}
+								});
+								
 							}
 
 						});
+						
 						return btn;
 					}
 				};
@@ -191,9 +222,23 @@ public class FriendViewport extends AbstractViewport {
 			}
 
 			ToolBar toolBar = new ToolBar();
+			Button btnGotoHome = new Button("Go to Home");
+			btnGotoHome.addListener(Events.Select,new Listener<ButtonEvent>() {
 
-			Text text1 = new Text("condition:");
+				@Override
+				public void handleEvent(ButtonEvent be) {
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_USERHOME_TO_PANEL);
+					Dispatcher.get().dispatch(appEvent);
+				}
+
+			});
+			toolBar.add(btnGotoHome);
+	
+			FillToolItem fillToolItem = new FillToolItem();
+			toolBar.add(fillToolItem);
+			Text text1 = new Text("Condition:");
 			toolBar.add(text1);
+
 			myFriendContentpanel.setTopComponent(toolBar);
 			myFriendTabitem.add(myFriendContentpanel);
 			tabPanel.add(myFriendTabitem);
@@ -217,9 +262,9 @@ public class FriendViewport extends AbstractViewport {
 			filter.setEmptyText("Friend's name");
 			toolBar.add(filter);
 
-			/*
-			 * 搜索好友
-			 */
+			/*********************************************************
+			 * search friends
+			 *********************************************************/
 			TabItem searchTabitem = new TabItem("Search friends");
 			searchTabitem.setLayout(new FitLayout());
 
@@ -272,39 +317,17 @@ public class FriendViewport extends AbstractViewport {
 
 						btn.addListener(Events.Select, new Listener<ButtonEvent>() {
 							@Override
-							public void handleEvent(ButtonEvent be) {					
-								btn.setEnabled(false);
+							public void handleEvent(ButtonEvent be) {
 								FriendTypeWindow w = new FriendTypeWindow(new CallbackInter(){
 									@Override
 									public void error() {}
 
 									@Override
 									public void success(String type) {
-										System.out.println("call friend type win.");
-
-										Friend f = new Friend();
-										f.setDecided(false);
-										f.setReceiver((User)(lModel.get("user")));
-										f.setSender(curUser);
-										friendService.create(f, new AsyncCallback<Friend>(){
-
-											@Override
-											public void onFailure(Throwable arg0) {
-												arg0.printStackTrace();
-												Info.display("Error",arg0.getMessage());
-												btn.setEnabled(true);
-											}
-
-											@Override
-											public void onSuccess(Friend arg0) {
-//												AppEvent appEvent = new AppEvent(FriendViewEvents.LOAD_USER);
-//												appEvent.setData("curUser", curUser);
-//												Dispatcher.get().dispatch(appEvent);
-												btn.setEnabled(true);
-											}
-											
-										});
-										
+										AppEvent appEvent = new AppEvent(FriendEvents.ADD);
+										appEvent.setData("receiver", (User)(lModel.get("user")));
+										appEvent.setData("type", type);
+										Dispatcher.get().dispatch(appEvent);
 									}
 
 									@Override
@@ -327,7 +350,20 @@ public class FriendViewport extends AbstractViewport {
 			}
 
 			ToolBar toolBar_1 = new ToolBar();
+			Button btnGotoHome_1 = new Button("Go to Home");
+			btnGotoHome_1.addListener(Events.Select,new Listener<ButtonEvent>() {
 
+				@Override
+				public void handleEvent(ButtonEvent be) {
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_USERHOME_TO_PANEL);
+					Dispatcher.get().dispatch(appEvent);
+				}
+
+			});
+			toolBar_1.add(btnGotoHome_1);
+			
+			FillToolItem fillToolItem_1 = new FillToolItem();
+			toolBar_1.add(fillToolItem_1);
 			Text text = new Text("Condition:");
 			toolBar_1.add(text);
 
@@ -335,11 +371,19 @@ public class FriendViewport extends AbstractViewport {
 				@Override
 				protected boolean doSelect(Store<BeanModel> store, BeanModel parent,
 						BeanModel record, String property, String filter) {
-					if(((String)record.get("name")).contains(filter)) {
-						return true;
-					} else {
-						return false;
+					
+					System.out.println("Search filter:"+store.getModels().size());
+//					System.out.println("&&&&*****user Name:"+record.get("name"));
+//					System.out.println("&&&&*****user email:"+record.get("email"));
+//					System.out.println("&&&&*****user password:"+record.get("password"));
+//					return false;
+					if(record.get("name") != null){
+						if((record.get("name").toString()).contains(filter)) {
+							return true;
+						}
 					}
+					
+					return false;
 				}
 
 			};
@@ -350,14 +394,16 @@ public class FriendViewport extends AbstractViewport {
 			searchContentpanel.setTopComponent(toolBar_1);
 			searchTabitem.add(searchContentpanel);
 			tabPanel.add(searchTabitem);
-			
+			/**************************************************
+			 * show friend invitation
+			 **************************************************/
 			TabItem applyTabitem = new TabItem("Inviting message");
 			applyTabitem.setLayout(new FitLayout());
 			
-			ContentPanel cntntpnlNewContentpanel = new ContentPanel();
-			cntntpnlNewContentpanel.setHeaderVisible(false);
-			cntntpnlNewContentpanel.setHeading("New ContentPanel");
-			cntntpnlNewContentpanel.setLayout(new FitLayout());
+			ContentPanel invitationContentpanel = new ContentPanel();
+			invitationContentpanel.setHeaderVisible(false);
+			invitationContentpanel.setHeading("New ContentPanel");
+			invitationContentpanel.setLayout(new FitLayout());
 			List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 			
 			{
@@ -400,31 +446,16 @@ public class FriendViewport extends AbstractViewport {
 
 						btn.addListener(Events.Select,new Listener<ButtonEvent>() {
 
-									@Override
-									public void handleEvent(ButtonEvent be) {
-										btn.setEnabled(false);
-										Friend f = (Friend)lModel.get("friend");
-										f.setDecided(true);
-										friendService.update(f, new AsyncCallback<Friend>(){
+							@Override
+							public void handleEvent(ButtonEvent be) {
+								Friend f = (Friend)lModel.get("friend");
 
-											@Override
-											public void onFailure(Throwable arg0) {
-												arg0.printStackTrace();
-												Info.display("Error",arg0.getMessage());
-												btn.setEnabled(true);
-											}
-
-											@Override
-											public void onSuccess(Friend arg0) {
-//												AppEvent appEvent = new AppEvent(FriendViewEvents.INIT_FRIEND_VIEW);
-//												appEvent.setData("curUser", curUser);
-//												Dispatcher.get().dispatch(appEvent);
-//												btn.setEnabled(true);
-											}
-										});
-									}
-
-								});
+								AppEvent appEvent = new AppEvent(FriendEvents.SETTING);
+								appEvent.setData("isDecided", true);
+								appEvent.setData("friend", f);
+								Dispatcher.get().dispatch(appEvent);
+							}
+						});
 						return btn;
 					}
 				};
@@ -443,30 +474,15 @@ public class FriendViewport extends AbstractViewport {
 
 						btn.addListener(Events.Select,new Listener<ButtonEvent>() {
 
-									@Override
-									public void handleEvent(ButtonEvent be) {
-										btn.setEnabled(false);
-										Friend f = (Friend)lModel.get("friend");
-										friendService.delete(f.getId(), new AsyncCallback<Boolean>(){
-
-											@Override
-											public void onFailure(Throwable arg0) {
-												arg0.printStackTrace();
-												Info.display("Error",arg0.getMessage());
-												btn.setEnabled(true);
-											}
-
-											@Override
-											public void onSuccess(Boolean arg0) {
-//												AppEvent appEvent = new AppEvent(FriendViewEvents.LOAD_INVITATION);
-//												appEvent.setData("curUser", curUser);
-//												Dispatcher.get().dispatch(appEvent);
-//												btn.setEnabled(true);
-											}
-										});
-									}
-
-								});
+							@Override
+							public void handleEvent(ButtonEvent be) {
+								Friend f = (Friend)lModel.get("friend");
+								AppEvent appEvent = new AppEvent(FriendEvents.DELETE);
+								appEvent.setData("id", f.getId());
+								Dispatcher.get().dispatch(appEvent);
+							}
+						});
+						
 						return btn;
 					}
 				};
@@ -475,41 +491,73 @@ public class FriendViewport extends AbstractViewport {
 				ColumnModel cm = new ColumnModel(configs);
 				Grid<BeanModel> grid = new Grid<BeanModel>(requestStore, cm);
 				grid.setAutoExpandColumn("info");
-//				grid.setHideHeaders(true);
-				cntntpnlNewContentpanel.add(grid);
-				applyTabitem.add(cntntpnlNewContentpanel);
+				invitationContentpanel.add(grid);
+				
+				ToolBar toolBar_2 = new ToolBar();
+				Button btnGotoHome_2 = new Button("Go to Home");
+				btnGotoHome_2.addListener(Events.Select,new Listener<ButtonEvent>() {
+
+					@Override
+					public void handleEvent(ButtonEvent be) {
+						AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_USERHOME_TO_PANEL);
+						Dispatcher.get().dispatch(appEvent);
+					}
+
+				});
+				toolBar_2.add(btnGotoHome_2);
+				
+				FillToolItem fillToolItem_2 = new FillToolItem();
+				toolBar_2.add(fillToolItem_2);
+				
+				invitationContentpanel.setTopComponent(toolBar_2);
+				
+				applyTabitem.add(invitationContentpanel);
 				tabPanel.add(applyTabitem);
 				
-				LayoutContainer layoutContainer_2 = new LayoutContainer();
-				layoutContainer_2.setLayout(new FitLayout());
-				
-				layoutContainer_2.add(tabPanel);
-				add(layoutContainer_2, new BorderLayoutData(LayoutRegion.CENTER));
-				layoutContainer_2.setBorders(false);
 			}
-		}
-		
-		public void loadInfo(User user){
-			curUser = user;
+			LayoutContainer layoutContainer_2 = new LayoutContainer();
+			layoutContainer_2.setLayout(new FitLayout());
+				
+			layoutContainer_2.add(tabPanel);
+			add(layoutContainer_2, new BorderLayoutData(LayoutRegion.CENTER));
+			layoutContainer_2.setBorders(false);
 
 		}
 		
 		public void loadFriends(Collection<Friend> friends) {
-			friendStore.removeAll();
-			
-			//load user's friends
-			friendStore.removeAll();
-			for(Friend f:friends){
-				BeanModel bm = friendFactory.createModel(f);
-				if(f.getReceiver().getId().equals(curUser.getId())){
-					bm.set("friend", f.getSender());
-				}else{
-					bm.set("friend", f.getReceiver());
+			if(Registry.get(User.class.getName()) != null){
+				User user = (User)Registry.get(User.class.getName());
+				//load user's friends
+				friendStore.removeAll();
+				for(Friend f:friends){
+//					System.out.println("@@@Type"+f.getType());
+//					System.out.println("@@@receiver Name:"+f.getReceiver().getName());
+//					System.out.println("@@@receiver Email:"+f.getReceiver().getEmail());
+//					System.out.println("@@@receiver Password:"+f.getReceiver().getPassword());
+					BeanModel bm = friendFactory.createModel(f);
+//					System.out.println("&&&&&&Type:"+bm.get("type"));
+					if(f.getReceiver().getId().equals(user.getId())){
+						bm.set("friend", f.getSender());
+//						BeanModel b = userFactory.createModel(f.getSender());
+//						bm.set("friendBM", b);
+					}else{
+						bm.set("friend", f.getReceiver());
+//						BeanModel b = userFactory.createModel(f.getSender());
+//						bm.set("friendBM", b);
+					}
+					
+//					System.out.println("@@@Type"+f.getType());
+//					System.out.println("@@@receiver Name:"+f.getReceiver().getName());
+//					System.out.println("@@@receiver Email:"+f.getReceiver().getEmail());
+//					System.out.println("@@@receiver Password:"+f.getReceiver().getPassword());
+//					System.out.println("*****receiver Name:"+((User)bm.get("friend")).getName());
+//					System.out.println("*****receiver email:"+((User)bm.get("friend")).getEmail());
+//					System.out.println("*****receiver password:"+((User)bm.get("friend")).getPassword());
+					friendStore.add(bm);
 				}
-				friendStore.add(bm);
+				
+				friendStore.commitChanges();
 			}
-			
-			friendStore.commitChanges();
 		}
 		
 		public void loadFriendInvite(Collection<Friend> friends){

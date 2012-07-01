@@ -1,19 +1,14 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
-import java.util.Collection;
-
-import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.event.IconButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.button.ToolButton;
 import com.extjs.gxt.ui.client.widget.custom.Portlet;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
-import com.tenline.pinecone.platform.web.store.client.services.ConsumerServiceAsync;
+import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
+import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 public class ConsumerPortlet extends Portlet {
 
@@ -25,34 +20,17 @@ public class ConsumerPortlet extends Portlet {
 
 		this.application = application;
 		
-		ConsumerServiceAsync service = Registry.get(ConsumerService.class.getName());
-		service.show("id=='"+application.getConsumer().getId()+"'", new AsyncCallback<Collection<Consumer>>(){
-
-			@Override
-			public void onFailure(Throwable arg0) {
-				Info.display("Error", arg0.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Collection<Consumer> arg0) {
-				if(arg0.size() == 0){
-					Info.display("Error", "Failure in load cunsumer by application");
-				}
-				for(Consumer con:arg0){
-					ConsumerPortlet.this.setHeading(con.getName());
-					ConsumerPortlet.this.setUrl(con.getConnectURI());
-					break;
-				}
-			}
-			
-		});
+		this.setHeading(application.getConsumer().getName());
+		this.setUrl(application.getConsumer().getConnectURI());
 		
 		toolButtonMax = new ToolButton("x-tool-maximize",
 				new SelectionListener<IconButtonEvent>() {
 
 			@Override
 			public void componentSelected(IconButtonEvent ce) {
-				
+				AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_MAX_PORTLET_TO_PANEL);
+				appEvent.setData("application", ConsumerPortlet.this.application);
+				Dispatcher.get().dispatch(appEvent);
 			}
 		});
 		this.getHeader().addTool(toolButtonMax);
@@ -60,13 +38,14 @@ public class ConsumerPortlet extends Portlet {
 		toolButtonClose.addSelectionListener(new SelectionListener<IconButtonEvent>() {
 			@Override
 			public void componentSelected(IconButtonEvent ce) {
-				
-				
-				
-				toolButtonClose.setEnabled(false);
+				AppEvent appEvent = new AppEvent(ApplicationEvents.SETTING);
+				appEvent.setData("application", ConsumerPortlet.this.application);
+				appEvent.setData("status", Application.CLOSED);
+				appEvent.setData("default", false);
+				Dispatcher.get().dispatch(appEvent);
 			}
 
-				});
+		});
 		this.getHeader().addTool(toolButtonClose);
 	}
 }

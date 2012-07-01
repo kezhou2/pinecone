@@ -6,6 +6,15 @@ package com.tenline.pinecone.platform.web.store.client.controllers;
 import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.data.BaseListLoadResult;
+import com.extjs.gxt.ui.client.data.BaseListLoader;
+import com.extjs.gxt.ui.client.data.BeanModel;
+import com.extjs.gxt.ui.client.data.BeanModelReader;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.ListLoader;
+import com.extjs.gxt.ui.client.data.LoadEvent;
+import com.extjs.gxt.ui.client.data.RpcProxy;
+import com.extjs.gxt.ui.client.event.LoadListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,7 +32,9 @@ public class CategoryController extends Controller {
 	
 	private CategoryView view = new CategoryView(this);
 	private CategoryServiceAsync service = Registry.get(CategoryService.class.getName());
-
+	
+	private BeanModelReader reader = Registry.get(BeanModelReader.class.getName());
+	
 	/**
 	 * 
 	 */
@@ -31,13 +42,28 @@ public class CategoryController extends Controller {
 		// TODO Auto-generated constructor stub
 		registerEventTypes(CategoryEvents.GET_ALL);
 	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class ShowProxy extends RpcProxy<Collection<Category>> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<Collection<Category>> callback) {
+			// TODO Auto-generated method stub
+			service.show((String) loadConfig, callback);
+		}
+		
+	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
 		// TODO Auto-generated method stub
 		try {
 			if (event.getType().equals(CategoryEvents.GET_ALL)) {
-				getAll(event);
+				show(event, "all");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -48,24 +74,21 @@ public class CategoryController extends Controller {
 	/**
 	 * 
 	 * @param event
+	 * @param loadConfig
 	 * @throws Exception
 	 */
-	private void getAll(final AppEvent event) throws Exception {
-		service.show("all", new AsyncCallback<Collection<Category>>() {
-
+	private void show(final AppEvent event, Object loadConfig) throws Exception {
+		ListLoader<ListLoadResult<BeanModel>> loader = new BaseListLoader<ListLoadResult<BeanModel>>(new ShowProxy(), reader);
+		loader.addLoadListener(new LoadListener() {
+			
 			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Collection<Category> result) {
-				// TODO Auto-generated method stub
-				forwardToView(view, event.getType(), result);
+			public void loaderLoad(LoadEvent loadEvent) {
+				BaseListLoadResult<BeanModel> result = loadEvent.getData();
+				forwardToView(view, event.getType(), result.getData());
 			}
 			
 		});
+		loader.load(loadConfig);
 	}
 
 }

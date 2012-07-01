@@ -6,12 +6,23 @@ package com.tenline.pinecone.platform.web.store.client.controllers;
 import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.data.BaseListLoadResult;
+import com.extjs.gxt.ui.client.data.BaseListLoader;
+import com.extjs.gxt.ui.client.data.BaseLoader;
+import com.extjs.gxt.ui.client.data.BeanModel;
+import com.extjs.gxt.ui.client.data.BeanModelFactory;
+import com.extjs.gxt.ui.client.data.BeanModelReader;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.ListLoader;
+import com.extjs.gxt.ui.client.data.LoadEvent;
+import com.extjs.gxt.ui.client.data.Loader;
+import com.extjs.gxt.ui.client.data.RpcProxy;
+import com.extjs.gxt.ui.client.event.LoadListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Store;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
 import com.tenline.pinecone.platform.web.store.client.services.ApplicationService;
 import com.tenline.pinecone.platform.web.store.client.services.ApplicationServiceAsync;
@@ -26,30 +37,94 @@ public class ApplicationController extends Controller {
 	private ApplicationView view = new ApplicationView(this);
 	private ApplicationServiceAsync service = Registry.get(ApplicationService.class.getName());
 	
+	private BeanModelReader reader = Registry.get(BeanModelReader.class.getName());
+	private BeanModelFactory factory = Registry.get(Store.APPLICATION_MODEL_FACTORY);
+	
 	/**
 	 * 
 	 */
 	public ApplicationController() {
 		// TODO Auto-generated constructor stub
-		registerEventTypes(ApplicationEvents.GET_BY_USER);
 		registerEventTypes(ApplicationEvents.INSTALL);
 		registerEventTypes(ApplicationEvents.UNINSTALL);
 		registerEventTypes(ApplicationEvents.SETTING);
+		registerEventTypes(ApplicationEvents.GET_BY_OWNER);
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class CreateProxy extends RpcProxy<Application> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<Application> callback) {
+			// TODO Auto-generated method stub
+			service.create((Application) loadConfig, callback);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class DeleteProxy extends RpcProxy<Boolean> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<Boolean> callback) {
+			// TODO Auto-generated method stub
+			service.delete((String) loadConfig, callback);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class UpdateProxy extends RpcProxy<Application> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<Application> callback) {
+			// TODO Auto-generated method stub
+			service.update((Application) loadConfig, callback);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class ShowByUserProxy extends RpcProxy<Collection<Application>> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<Collection<Application>> callback) {
+			// TODO Auto-generated method stub
+			service.showByUser((String) loadConfig, callback);
+		}
+		
 	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
 		// TODO Auto-generated method stub
 		try {
-			if (event.getType().equals(ApplicationEvents.GET_BY_USER)) {
-				getByUser(event);
-			} else if (event.getType().equals(ApplicationEvents.INSTALL)) {
-				install(event);
+			BeanModel model = event.getData();
+			if (event.getType().equals(ApplicationEvents.INSTALL)) {
+				create(event, model);
 			} else if (event.getType().equals(ApplicationEvents.UNINSTALL)) {
-				uninstall(event);
+				delete(event, model);
 			} else if (event.getType().equals(ApplicationEvents.SETTING)) {
-				setting(event);
-			}
+				update(event, model);
+			} else if (event.getType().equals(ApplicationEvents.GET_BY_OWNER)) {
+				showByUser(event, model);
+			} 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,105 +134,78 @@ public class ApplicationController extends Controller {
 	/**
 	 * 
 	 * @param event
+	 * @param model
 	 * @throws Exception
 	 */
-	private void getByUser(final AppEvent event) throws Exception {
-		String filter = "id=='"+((User) Registry.get(User.class.getName())).getId()+"'";
-		service.showByUser(filter, new AsyncCallback<Collection<Application>>() {
-
+	private void create(final AppEvent event, BeanModel model) throws Exception {
+		Loader<Application> loader = new BaseLoader<Application>(new CreateProxy());
+		loader.addLoadListener(new LoadListener() {
+			
 			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Collection<Application> result) {
-				// TODO Auto-generated method stub
-				forwardToView(view, event.getType(), result);
+			public void loaderLoad(LoadEvent loadEvent) {
+				forwardToView(view, event.getType(), factory.createModel(loadEvent.getData()));
 			}
 			
 		});
+		loader.load(model.getBean());
 	}
 	
 	/**
 	 * 
 	 * @param event
+	 * @param model
 	 * @throws Exception
 	 */
-	private void install(final AppEvent event) throws Exception {
-		Application application = new Application();
-		application.setConsumer((Consumer) event.getData("consumer"));
-		application.setDefault(false);
-		application.setStatus(Application.CLOSED);
-		application.setUser((User) Registry.get(User.class.getName()));
-		service.create(application, new AsyncCallback<Application>() {
-
+	private void delete(final AppEvent event, BeanModel model) throws Exception {
+		Loader<Boolean> loader = new BaseLoader<Boolean>(new DeleteProxy());
+		loader.addLoadListener(new LoadListener() {
+			
 			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Application result) {
-				// TODO Auto-generated method stub
-				forwardToView(view, event.getType(), result);
+			public void loaderLoad(LoadEvent loadEvent) {
+				forwardToView(view, event.getType(), loadEvent.getData());
 			}
 			
 		});
+		loader.load("id=='" + model.get("id") + "'");
 	}
 	
 	/**
 	 * 
 	 * @param event
+	 * @param model
 	 * @throws Exception
 	 */
-	private void uninstall(final AppEvent event) throws Exception {
-		String filter = "id=='"+event.getData("id").toString()+"'";
-		service.delete(filter, new AsyncCallback<Boolean>() {
-
+	private void update(final AppEvent event, BeanModel model) throws Exception {
+		Loader<Application> loader = new BaseLoader<Application>(new UpdateProxy());
+		loader.addLoadListener(new LoadListener() {
+			
 			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Boolean result) {
-				// TODO Auto-generated method stub
-				forwardToView(view, event.getType(), result);
+			public void loaderLoad(LoadEvent loadEvent) {
+				forwardToView(view, event.getType(), factory.createModel(loadEvent.getData()));
 			}
 			
 		});
+		loader.load(model.getBean());
 	}
 	
 	/**
 	 * 
 	 * @param event
+	 * @param model
 	 * @throws Exception
 	 */
-	private void setting(final AppEvent event) throws Exception {
-		Boolean isDefault = event.getData("default");
-		String status = event.getData("status");
-		Application application = event.getData("application");
-		if (isDefault != null) application.setDefault(isDefault);
-		if (status != null) application.setStatus(status);
-		service.update(application, new AsyncCallback<Application>() {
-
+	private void showByUser(final AppEvent event, BeanModel model) throws Exception {
+		ListLoader<ListLoadResult<BeanModel>> loader = new BaseListLoader<ListLoadResult<BeanModel>>(new ShowByUserProxy(), reader);
+		loader.addLoadListener(new LoadListener() {
+			
 			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Application result) {
-				// TODO Auto-generated method stub
-				forwardToView(view, event.getType(), result);
+			public void loaderLoad(LoadEvent loadEvent) {
+				BaseListLoadResult<BeanModel> result = loadEvent.getData();
+				forwardToView(view, event.getType(), result.getData());
 			}
 			
 		});
+		loader.load("id=='" + model.get("id") + "'");
 	}
 
 }

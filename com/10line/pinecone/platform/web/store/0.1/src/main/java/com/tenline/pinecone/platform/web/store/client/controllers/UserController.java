@@ -6,10 +6,23 @@ package com.tenline.pinecone.platform.web.store.client.controllers;
 import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.data.BaseListLoadResult;
+import com.extjs.gxt.ui.client.data.BaseListLoader;
+import com.extjs.gxt.ui.client.data.BaseLoader;
+import com.extjs.gxt.ui.client.data.BeanModel;
+import com.extjs.gxt.ui.client.data.BeanModelFactory;
+import com.extjs.gxt.ui.client.data.BeanModelReader;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.ListLoader;
+import com.extjs.gxt.ui.client.data.LoadEvent;
+import com.extjs.gxt.ui.client.data.Loader;
+import com.extjs.gxt.ui.client.data.RpcProxy;
+import com.extjs.gxt.ui.client.event.LoadListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Store;
 import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
 import com.tenline.pinecone.platform.web.store.client.services.UserService;
 import com.tenline.pinecone.platform.web.store.client.services.UserServiceAsync;
@@ -24,32 +37,84 @@ public class UserController extends Controller {
 	private UserView view = new UserView(this);
 	private UserServiceAsync service = Registry.get(UserService.class.getName());
 	
+	private BeanModelReader reader = Registry.get(BeanModelReader.class.getName());
+	private BeanModelFactory factory = Registry.get(Store.USER_MODEL_FACTORY);
+	
 	/**
 	 * 
 	 */
 	public UserController() {
+		// TODO Auto-generated constructor stub
+		registerEventTypes(UserEvents.REGISTER);
+		registerEventTypes(UserEvents.SETTING);
+		registerEventTypes(UserEvents.CHECK_EMAIL);
 		registerEventTypes(UserEvents.LOGIN);
 		registerEventTypes(UserEvents.LOGOUT);
-		registerEventTypes(UserEvents.REGISTER);
-		registerEventTypes(UserEvents.CHECK_EMAIL);
-		registerEventTypes(UserEvents.SETTING);
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class CreateProxy extends RpcProxy<User> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<User> callback) {
+			// TODO Auto-generated method stub
+			service.create((User) loadConfig, callback);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class UpdateProxy extends RpcProxy<User> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<User> callback) {
+			// TODO Auto-generated method stub
+			service.update((User) loadConfig, callback);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class ShowProxy extends RpcProxy<Collection<User>> {
+
+		@Override
+		protected void load(Object loadConfig, AsyncCallback<Collection<User>> callback) {
+			// TODO Auto-generated method stub
+			service.show((String) loadConfig, callback);
+		}
+		
 	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
+		// TODO Auto-generated method stub
 		try {
-			if (event.getType().equals(UserEvents.LOGIN)) {
-				login(event);
-			} else if (event.getType().equals(UserEvents.LOGOUT)) {
-				logout(event);
-			} else if (event.getType().equals(UserEvents.REGISTER)) {
-				register(event);
-			} else if (event.getType().equals(UserEvents.CHECK_EMAIL)) {
-				checkEmail(event);
+			BeanModel model = event.getData();
+			if (event.getType().equals(UserEvents.REGISTER)) {
+				create(event, model);
 			} else if (event.getType().equals(UserEvents.SETTING)) {
-				setting(event);
-			}
+				update(event, model);
+			} else if (event.getType().equals(UserEvents.CHECK_EMAIL)) {
+				show(event, "email=='" + model.get("email") + "'");
+			} else if (event.getType().equals(UserEvents.LOGIN)) {
+				show(event, "email=='" + model.get("email") + "'&&password=='" + model.get("password") + "'");
+			} else if (event.getType().equals(UserEvents.LOGOUT)) {
+				forwardToView(view, event);
+			} 
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -57,114 +122,59 @@ public class UserController extends Controller {
 	/**
 	 * 
 	 * @param event
+	 * @param model
 	 * @throws Exception
 	 */
-	private void login(final AppEvent event) throws Exception {
-		String email = event.getData("email").toString();
-		String password = event.getData("password").toString();
-		service.show("email=='"+email+"'&&password=='"+password+"'", new AsyncCallback<Collection<User>>() {
-
+	private void create(final AppEvent event, BeanModel model) throws Exception {
+		Loader<User> loader = new BaseLoader<User>(new CreateProxy());
+		loader.addLoadListener(new LoadListener() {
+			
 			@Override
-			public void onFailure(Throwable caught) {
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Collection<User> result) {
-				if (result.size() == 1) {
-					Registry.register(User.class.getName(), result.toArray()[0]);
-					forwardToView(view, event.getType(), result);
-				}
+			public void loaderLoad(LoadEvent loadEvent) {
+				forwardToView(view, event.getType(), factory.createModel(loadEvent.getData()));
 			}
 			
 		});
+		loader.load(model.getBean());
 	}
 	
 	/**
 	 * 
 	 * @param event
+	 * @param model
 	 * @throws Exception
 	 */
-	private void logout(AppEvent event) throws Exception {
-		forwardToView(view, event.getType(), Registry.get(User.class.getName()));
-		Registry.unregister(User.class.getName());
+	private void update(final AppEvent event, BeanModel model) throws Exception {
+		Loader<User> loader = new BaseLoader<User>(new UpdateProxy());
+		loader.addLoadListener(new LoadListener() {
+			
+			@Override
+			public void loaderLoad(LoadEvent loadEvent) {
+				forwardToView(view, event.getType(), factory.createModel(loadEvent.getData()));
+			}
+			
+		});
+		loader.load(model.getBean());
 	}
 	
 	/**
 	 * 
 	 * @param event
+	 * @param loadConfig
 	 * @throws Exception
 	 */
-	private void checkEmail(final AppEvent event) throws Exception {
-		String email = event.getData("email").toString();
-		service.show("email=='"+email+"'", new AsyncCallback<Collection<User>>() {
-
+	private void show(final AppEvent event, Object loadConfig) throws Exception {
+		ListLoader<ListLoadResult<BeanModel>> loader = new BaseListLoader<ListLoadResult<BeanModel>>(new ShowProxy(), reader);
+		loader.addLoadListener(new LoadListener() {
+			
 			@Override
-			public void onFailure(Throwable caught) {
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(Collection<User> result) {
-				forwardToView(view, event.getType(), result);
+			public void loaderLoad(LoadEvent loadEvent) {
+				BaseListLoadResult<BeanModel> result = loadEvent.getData();
+				forwardToView(view, event.getType(), result.getData());
 			}
 			
 		});
+		loader.load(loadConfig);
 	}
 	
-	/**
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
-	private void register(final AppEvent event) throws Exception {
-		User user = new User();
-		user.setEmail(event.getData("email").toString());
-		user.setPassword(event.getData("password").toString());
-		service.create(user, new AsyncCallback<User>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(User result) {
-				forwardToView(view, event.getType(), result);
-			}
-			
-		});
-	}
-	
-	/**
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
-	private void setting(final AppEvent event) throws Exception {
-		byte[] avatar = event.getData("avatar");
-		String name = event.getData("name");
-		String password = event.getData("password");
-		String phone = event.getData("phone");
-		User user = Registry.get(User.class.getName());
-		if (avatar != null) user.setAvatar(avatar);
-		if (name != null) user.setName(name);
-		if (password != null) user.setPassword(password);
-		if (phone != null) user.setPhone(phone);
-		service.update(user, new AsyncCallback<User>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				caught.printStackTrace();
-			}
-
-			@Override
-			public void onSuccess(User result) {
-				Registry.register(User.class.getName(), result);
-				forwardToView(view, event.getType(), result);
-			}
-			
-		});
-	}
-
 }

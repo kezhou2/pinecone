@@ -20,25 +20,28 @@ public class WidgetController extends Controller {
 	 * 
 	 */
 	public WidgetController() {
+		// TODO Auto-generated constructor stub
 		registerEventTypes(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
 		registerEventTypes(WidgetEvents.UPDATE_REGISTER_TO_PANEL);
-		registerEventTypes(WidgetEvents.UPDATE_USERHOME_TO_PANEL);
-		registerEventTypes(WidgetEvents.UPDATE_FRIENDS_MANAGE_TO_PANEL);
+		registerEventTypes(WidgetEvents.UPDATE_HOME_TO_PANEL);
+		registerEventTypes(WidgetEvents.SHOW_LOGIN_ERROR_DIALOG);
 	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
+		// TODO Auto-generated method stub
 		try{
 			if (event.getType().equals(WidgetEvents.UPDATE_LOGIN_TO_PANEL)) {
 				forwardToView(view, event);
 			} else if (event.getType().equals(WidgetEvents.UPDATE_REGISTER_TO_PANEL)) {
 				forwardToView(view, event);
-			} else if (event.getType().equals(WidgetEvents.UPDATE_USERHOME_TO_PANEL)) {
+			} else if (event.getType().equals(WidgetEvents.UPDATE_HOME_TO_PANEL)) {
 				forwardToView(view, event);
-			} else if (event.getType().equals(WidgetEvents.UPDATE_FRIENDS_MANAGE_TO_PANEL)) {
+			} else if (event.getType().equals(WidgetEvents.SHOW_LOGIN_ERROR_DIALOG)) {
 				forwardToView(view, event);
 			}
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

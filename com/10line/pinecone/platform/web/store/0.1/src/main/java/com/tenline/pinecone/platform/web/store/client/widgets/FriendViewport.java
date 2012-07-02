@@ -48,6 +48,8 @@ import com.tenline.pinecone.platform.web.store.client.events.FriendEvents;
 import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
+import com.tenline.pinecone.platform.web.store.client.Messages;
+
 public class FriendViewport extends AbstractViewport {
 	
 	private MainPanel mainPanel;
@@ -110,7 +112,7 @@ public class FriendViewport extends AbstractViewport {
 			/***********************************************
 			 * show all friends
 			 ***********************************************/
-			TabItem myFriendTabitem = new TabItem("My Friends");
+			TabItem myFriendTabitem = new TabItem(((Messages) Registry.get(Messages.class.getName())).FriendViewport_tabitem_myfriend());
 			myFriendTabitem.setLayout(new FitLayout());
 
 			ContentPanel myFriendContentpanel = new ContentPanel();
@@ -122,7 +124,7 @@ public class FriendViewport extends AbstractViewport {
 			{
 				List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
-				ColumnConfig nameCC = new ColumnConfig("name", "Name", 150);
+				ColumnConfig nameCC = new ColumnConfig("name", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_name(), 150);
 				configs.add(nameCC);
 				GridCellRenderer<BeanModel> nameCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
@@ -130,14 +132,12 @@ public class FriendViewport extends AbstractViewport {
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
 						User user = (User)model.get("friend");
-						System.out.println("FriendViewport name:"+user.getName());
 						return user.getName();
-//						return "dd";
 					}
 				};
 				nameCC.setRenderer(nameCellRender);
 
-				ColumnConfig mailCC = new ColumnConfig("email", "Email", 150);
+				ColumnConfig mailCC = new ColumnConfig("email", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_email(), 150);
 				configs.add(mailCC);
 				GridCellRenderer<BeanModel> mailCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
@@ -145,44 +145,40 @@ public class FriendViewport extends AbstractViewport {
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
 						User user = (User)model.get("friend");
-						System.out.println(model.get("friend"));
-						System.out.println("FriendViewport email:"+user.getEmail());
 						return user.getEmail();
-//						return "sd";
 					}
 				};
 				mailCC.setRenderer(mailCellRender);
 
-				ColumnConfig statusCC = new ColumnConfig("isAccept", "isAccept", 150);
+				ColumnConfig statusCC = new ColumnConfig("isAccept", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_isAccept(), 150);
 				configs.add(statusCC);
 				GridCellRenderer<BeanModel> statuslCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
 					public Object render(BeanModel model, String property,
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
-						System.out.println("FriendViewport isDecided:"+model.get("isDecided"));
 						return model.get("isDecided");
-//						return "sd";
 					}
 				};
 				statusCC.setRenderer(statuslCellRender);
 
-				ColumnConfig deleteCC = new ColumnConfig("delete", "Delete?", 150);
+				ColumnConfig deleteCC = new ColumnConfig("delete", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_isDelete(), 150);
 				configs.add(deleteCC);
 				GridCellRenderer<BeanModel> delCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
 					public Object render(BeanModel model, String property,
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
-						final Button btn = new Button("delete");
-						btn.setToolTip("Delete the friend");
+						final Button btn = new Button(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_Delete());
+						btn.setToolTip(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_tooltip_Delete());
 						final BeanModel lModel = model;
 
 						btn.addListener(Events.Select,new Listener<ButtonEvent>() {
 
 							@Override
 							public void handleEvent(ButtonEvent be) {
-								MessageBox.confirm("Question", "Are you sure?", new Listener<MessageBoxEvent>(){
+								MessageBox.confirm(((Messages) Registry.get(Messages.class.getName())).FriendViewport_messagebox_title(),
+										((Messages) Registry.get(Messages.class.getName())).FriendViewport_messagebox_info(), new Listener<MessageBoxEvent>(){
 									@Override
 									public void handleEvent(MessageBoxEvent be) {
 										Button btn =be.getButtonClicked();
@@ -222,7 +218,7 @@ public class FriendViewport extends AbstractViewport {
 			}
 
 			ToolBar toolBar = new ToolBar();
-			Button btnGotoHome = new Button("Go to Home");
+			Button btnGotoHome = new Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_title());
 			btnGotoHome.addListener(Events.Select,new Listener<ButtonEvent>() {
 
 				@Override
@@ -236,7 +232,7 @@ public class FriendViewport extends AbstractViewport {
 	
 			FillToolItem fillToolItem = new FillToolItem();
 			toolBar.add(fillToolItem);
-			Text text1 = new Text("Condition:");
+			Text text1 = new Text(((Messages) Registry.get(Messages.class.getName())).FriendViewport_label_condition());
 			toolBar.add(text1);
 
 			myFriendContentpanel.setTopComponent(toolBar);
@@ -259,13 +255,13 @@ public class FriendViewport extends AbstractViewport {
 
 			};
 			filter.bind(friendStore);
-			filter.setEmptyText("Friend's name");
+			filter.setEmptyText(((Messages) Registry.get(Messages.class.getName())).FriendViewport_emptytext());
 			toolBar.add(filter);
 
 			/*********************************************************
 			 * search friends
 			 *********************************************************/
-			TabItem searchTabitem = new TabItem("Search friends");
+			TabItem searchTabitem = new TabItem(((Messages) Registry.get(Messages.class.getName())).FriendViewport_tabitem_searchfriend());
 			searchTabitem.setLayout(new FitLayout());
 
 			ContentPanel searchContentpanel = new ContentPanel();
@@ -276,7 +272,7 @@ public class FriendViewport extends AbstractViewport {
 			{
 				List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
-				ColumnConfig nameCC = new ColumnConfig("name", "Name", 150);
+				ColumnConfig nameCC = new ColumnConfig("name", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_name(), 150);
 				configs.add(nameCC);
 				GridCellRenderer<BeanModel> nameCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
@@ -288,7 +284,7 @@ public class FriendViewport extends AbstractViewport {
 				};
 				nameCC.setRenderer(nameCellRender);
 
-				ColumnConfig mailCC = new ColumnConfig("email", "Email", 150);
+				ColumnConfig mailCC = new ColumnConfig("email", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_name(), 150);
 				configs.add(mailCC);
 				GridCellRenderer<BeanModel> mailCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
@@ -300,10 +296,10 @@ public class FriendViewport extends AbstractViewport {
 				};
 				mailCC.setRenderer(mailCellRender);
 
-				ColumnConfig configCC = new ColumnConfig("group", "group", 150);
+				ColumnConfig configCC = new ColumnConfig("group", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_group(), 150);
 				configs.add(configCC);
 
-				ColumnConfig addCC = new ColumnConfig("add", "add", 150);
+				ColumnConfig addCC = new ColumnConfig("add", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_add(), 150);
 				configs.add(addCC);
 				GridCellRenderer<BeanModel> addCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
@@ -311,8 +307,8 @@ public class FriendViewport extends AbstractViewport {
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
 						final Button btn = new Button();
-						btn.setText("Add friend");
-						btn.setToolTip("Add friend");
+						btn.setText(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_addFriend());
+						btn.setToolTip(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_tooltip_addFriend());
 						final BeanModel lModel = model;
 
 						btn.addListener(Events.Select, new Listener<ButtonEvent>() {
@@ -350,7 +346,7 @@ public class FriendViewport extends AbstractViewport {
 			}
 
 			ToolBar toolBar_1 = new ToolBar();
-			Button btnGotoHome_1 = new Button("Go to Home");
+			Button btnGotoHome_1 = new Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_title());
 			btnGotoHome_1.addListener(Events.Select,new Listener<ButtonEvent>() {
 
 				@Override
@@ -364,7 +360,7 @@ public class FriendViewport extends AbstractViewport {
 			
 			FillToolItem fillToolItem_1 = new FillToolItem();
 			toolBar_1.add(fillToolItem_1);
-			Text text = new Text("Condition:");
+			Text text = new Text(((Messages) Registry.get(Messages.class.getName())).FriendViewport_label_condition());
 			toolBar_1.add(text);
 
 			StoreFilterField<BeanModel> nameFilter = new StoreFilterField<BeanModel>() {
@@ -372,11 +368,6 @@ public class FriendViewport extends AbstractViewport {
 				protected boolean doSelect(Store<BeanModel> store, BeanModel parent,
 						BeanModel record, String property, String filter) {
 					
-					System.out.println("Search filter:"+store.getModels().size());
-//					System.out.println("&&&&*****user Name:"+record.get("name"));
-//					System.out.println("&&&&*****user email:"+record.get("email"));
-//					System.out.println("&&&&*****user password:"+record.get("password"));
-//					return false;
 					if(record.get("name") != null){
 						if((record.get("name").toString()).contains(filter)) {
 							return true;
@@ -389,7 +380,7 @@ public class FriendViewport extends AbstractViewport {
 			};
 			nameFilter.bind(userStore);
 			toolBar_1.add(nameFilter);
-			nameFilter.setEmptyText("Friend name");
+			nameFilter.setEmptyText(((Messages) Registry.get(Messages.class.getName())).FriendViewport_emptytext());
 
 			searchContentpanel.setTopComponent(toolBar_1);
 			searchTabitem.add(searchContentpanel);
@@ -397,7 +388,7 @@ public class FriendViewport extends AbstractViewport {
 			/**************************************************
 			 * show friend invitation
 			 **************************************************/
-			TabItem applyTabitem = new TabItem("Inviting message");
+			TabItem applyTabitem = new TabItem(((Messages) Registry.get(Messages.class.getName())).FriendViewport_tabitem_inviteMsg());
 			applyTabitem.setLayout(new FitLayout());
 			
 			ContentPanel invitationContentpanel = new ContentPanel();
@@ -407,7 +398,7 @@ public class FriendViewport extends AbstractViewport {
 			List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 			
 			{
-				ColumnConfig columnConfig = new ColumnConfig("invitor", "Invitor", 100);
+				ColumnConfig columnConfig = new ColumnConfig("invitor", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_invitor(), 100);
 				configs.add(columnConfig);
 				GridCellRenderer<BeanModel> nameCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
@@ -420,7 +411,7 @@ public class FriendViewport extends AbstractViewport {
 				};
 				columnConfig.setRenderer(nameCellRender);
 				
-				ColumnConfig columnConfig_1 = new ColumnConfig("info", "info", 150);
+				ColumnConfig columnConfig_1 = new ColumnConfig("info", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_column_information(), 150);
 				configs.add(columnConfig_1);
 				GridCellRenderer<BeanModel> infoCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
@@ -440,8 +431,8 @@ public class FriendViewport extends AbstractViewport {
 					public Object render(BeanModel model, String property,
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
-						final Button btn = new Button("Accept");
-						btn.setToolTip("Accept to be friend");
+						final Button btn = new Button(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_accept());
+						btn.setToolTip(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_tooltip_accept());
 						final BeanModel lModel = model;
 
 						btn.addListener(Events.Select,new Listener<ButtonEvent>() {
@@ -461,15 +452,15 @@ public class FriendViewport extends AbstractViewport {
 				};
 				columnConfig_2.setRenderer(yesCellRender);
 				
-				ColumnConfig columnConfig_3 = new ColumnConfig("no", "Rejection", 50);
+				ColumnConfig columnConfig_3 = new ColumnConfig("no", ((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_reject(), 50);
 				configs.add(columnConfig_3);
 				GridCellRenderer<BeanModel> noCellRender = new GridCellRenderer<BeanModel>() {
 					@Override
 					public Object render(BeanModel model, String property,
 							ColumnData config, int rowIndex, int colIndex,
 							ListStore<BeanModel> store, Grid<BeanModel> grid) {
-						final Button btn = new Button("Reject");
-						btn.setToolTip("Reject friend invitation!");
+						final Button btn = new Button(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_reject());
+						btn.setToolTip(((Messages) Registry.get(Messages.class.getName())).FriendViewport_button_tooltip_reject());
 						final BeanModel lModel = model;
 
 						btn.addListener(Events.Select,new Listener<ButtonEvent>() {
@@ -494,7 +485,7 @@ public class FriendViewport extends AbstractViewport {
 				invitationContentpanel.add(grid);
 				
 				ToolBar toolBar_2 = new ToolBar();
-				Button btnGotoHome_2 = new Button("Go to Home");
+				Button btnGotoHome_2 = new Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_title());
 				btnGotoHome_2.addListener(Events.Select,new Listener<ButtonEvent>() {
 
 					@Override
@@ -530,29 +521,13 @@ public class FriendViewport extends AbstractViewport {
 				//load user's friends
 				friendStore.removeAll();
 				for(Friend f:friends){
-//					System.out.println("@@@Type"+f.getType());
-//					System.out.println("@@@receiver Name:"+f.getReceiver().getName());
-//					System.out.println("@@@receiver Email:"+f.getReceiver().getEmail());
-//					System.out.println("@@@receiver Password:"+f.getReceiver().getPassword());
 					BeanModel bm = friendFactory.createModel(f);
-//					System.out.println("&&&&&&Type:"+bm.get("type"));
 					if(f.getReceiver().getId().equals(user.getId())){
 						bm.set("friend", f.getSender());
-//						BeanModel b = userFactory.createModel(f.getSender());
-//						bm.set("friendBM", b);
 					}else{
 						bm.set("friend", f.getReceiver());
-//						BeanModel b = userFactory.createModel(f.getSender());
-//						bm.set("friendBM", b);
 					}
 					
-//					System.out.println("@@@Type"+f.getType());
-//					System.out.println("@@@receiver Name:"+f.getReceiver().getName());
-//					System.out.println("@@@receiver Email:"+f.getReceiver().getEmail());
-//					System.out.println("@@@receiver Password:"+f.getReceiver().getPassword());
-//					System.out.println("*****receiver Name:"+((User)bm.get("friend")).getName());
-//					System.out.println("*****receiver email:"+((User)bm.get("friend")).getEmail());
-//					System.out.println("*****receiver password:"+((User)bm.get("friend")).getPassword());
 					friendStore.add(bm);
 				}
 				

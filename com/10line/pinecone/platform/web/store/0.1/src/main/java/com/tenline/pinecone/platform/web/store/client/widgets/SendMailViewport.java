@@ -11,7 +11,6 @@ import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
-import com.extjs.gxt.ui.client.widget.form.PropertyEditor;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
@@ -20,8 +19,8 @@ import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
-import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 
 public class SendMailViewport extends AbstractViewport {
 	
@@ -48,7 +47,7 @@ public class SendMailViewport extends AbstractViewport {
 		public MainPanel(){
 		
 			setSize("500", "400");
-			setHeading("Mail");
+			setHeading(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_title());
 			setLayout(new FitLayout());
 			
 			LayoutContainer mailContainer = new LayoutContainer();
@@ -63,16 +62,16 @@ public class SendMailViewport extends AbstractViewport {
 			FormData fd_txtfldNewTextfield = new FormData("80%");
 			fd_txtfldNewTextfield.setMargins(new Margins(0, 0, 0, 0));
 			mailContainer.add(receiverTextfield, fd_txtfldNewTextfield);
-			receiverTextfield.setFieldLabel("Receiver");
+			receiverTextfield.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_label_receiver());
 			
 			titleTextfield = new TextField<String>();
 			mailContainer.add(titleTextfield, new FormData("80%"));
-			titleTextfield.setFieldLabel("Title");
+			titleTextfield.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_label_title());
 			
 			contentHtmleditor = new HtmlEditor();
 			mailContainer.add(contentHtmleditor, new FormData("100% 65%"));
 			contentHtmleditor.setSize("", "");
-			contentHtmleditor.setFieldLabel("Content");
+			contentHtmleditor.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_label_content());
 			add(mailContainer, new FitData(5));
 			mailContainer.setSize("", "");
 			
@@ -81,40 +80,15 @@ public class SendMailViewport extends AbstractViewport {
 			FillToolItem fillToolItem = new FillToolItem();
 			toolBar.add(fillToolItem);
 			
-			final Button sendButton = new Button("Send");
+			final Button sendButton = new Button(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_button_send());
 			sendButton.addListener(Events.Select, new Listener<ButtonEvent>() {
 				public void handleEvent(ButtonEvent e) {
-	//				sendButton.setEnabled(false);
-	//				
-	//				MailInfo mi = new MailInfo();
-	//				mi.setIsRead(false);
-	//				mi.setContent(contentHtmleditor.getValue());
-	//				mi.setTitle(titleTextfield.getValue());
-	//				EnvConfig.getPineconeService().
-	//					sendMail(sender, receiverTextfield.getValue(), mi, new AsyncCallback<Boolean>(){
-	//
-	//						@Override
-	//						public void onFailure(Throwable caught) {
-	//							MessageBox.info("错误", "调用后台服务发送邮件失败", null);
-	//							sendButton.setEnabled(true);
-	//						}
-	//
-	//						@Override
-	//						public void onSuccess(Boolean result) {
-	//							sendButton.setEnabled(true);
-	//							if(parent != null){
-	//								parent.loadMails();
-	//							}
-	//							SendMailWindow.this.hide();
-	//						}
-	//					
-	//				});
 				}
 			});
 			toolBar.add(sendButton);
 			sendButton.setWidth("50");
 			
-			final Button cancelButton = new Button("Cancel");
+			final Button cancelButton = new Button(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_button_cancel());
 			cancelButton.addListener(Events.Select, new Listener<ButtonEvent>() {
 				public void handleEvent(ButtonEvent e) {
 					SendMailViewport.this.hide();

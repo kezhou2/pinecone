@@ -59,7 +59,7 @@ public class LoginViewport extends AbstractViewport {
 			fl_layoutContainer_1.setLabelAlign(LabelAlign.RIGHT);
 			layoutContainer_1.setLayout(fl_layoutContainer_1);
 			
-			Text txtLoginToContinue = new Text(((Messages) Registry.get(Messages.class.getName())).loginToContinue());
+			Text txtLoginToContinue = new Text(((Messages) Registry.get(Messages.class.getName())).LoginViewport_loginToContinue());
 			FormData fd_txtLoginToContinue = new FormData("100%");
 			fd_txtLoginToContinue.setMargins(new Margins(50, 0, 0, 40));
 			layoutContainer_1.add(txtLoginToContinue, fd_txtLoginToContinue);
@@ -77,7 +77,7 @@ public class LoginViewport extends AbstractViewport {
 			FormData fd_txtfldName = new FormData("80%");
 			fd_txtfldName.setMargins(new Margins(20, 10, 10, 10));
 			layoutContainer_1.add(nameText, fd_txtfldName);
-			nameText.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).account());
+			nameText.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).LoginViewport_account());
 			nameText.setAllowBlank(false);
 			//style
 			nameText.setLabelStyle("font-size: 18px;font-weight: bold;line-height: 18px;margin-bottom: 10px;color: #4D5762;	position: relative;	word-spacing: -0.1em;");
@@ -88,7 +88,7 @@ public class LoginViewport extends AbstractViewport {
 			FormData fd_txtfldPassword = new FormData("80%");
 			fd_txtfldPassword.setMargins(new Margins(20, 10, 10, 10));
 			layoutContainer_1.add(pwdText, fd_txtfldPassword);
-			pwdText.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).password());
+			pwdText.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).LoginViewport_password());
 			BorderLayoutData bld_layoutContainer_1 = new BorderLayoutData(LayoutRegion.EAST, 400.0f);
 			bld_layoutContainer_1.setMargins(new Margins(0, 0, 0, 0));
 			pwdText.setAllowBlank(false);
@@ -101,7 +101,7 @@ public class LoginViewport extends AbstractViewport {
 			hbl_layoutContainer_3.setPack(BoxLayoutPack.END);
 			layoutContainer_3.setLayout(hbl_layoutContainer_3);
 			
-			Button loginButton = new Button(((Messages) Registry.get(Messages.class.getName())).login());
+			Button loginButton = new Button(((Messages) Registry.get(Messages.class.getName())).LoginViewport_login());
 			layoutContainer_3.add(loginButton, new HBoxLayoutData(0, 10, 0, 0));
 			loginButton.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
@@ -115,7 +115,7 @@ public class LoginViewport extends AbstractViewport {
 			loginButton.setStyleName("btn-green");
 			loginButton.setSize("60px", "30px");
 			
-			Button regButton = new Button(((Messages) Registry.get(Messages.class.getName())).register());
+			Button regButton = new Button(((Messages) Registry.get(Messages.class.getName())).LoginViewport_logout());
 			layoutContainer_3.add(regButton, new HBoxLayoutData(0, 0, 0, 10));
 			FormData fd_layoutContainer_3 = new FormData("100%");
 			fd_layoutContainer_3.setMargins(new Margins(0, 90, 0, 50));

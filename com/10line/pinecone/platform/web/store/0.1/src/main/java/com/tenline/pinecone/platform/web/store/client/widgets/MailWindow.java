@@ -1,5 +1,6 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
@@ -19,6 +20,7 @@ import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.tenline.pinecone.platform.model.Mail;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.MailEvents;
 
 public class MailWindow extends Window {
@@ -36,7 +38,7 @@ public class MailWindow extends Window {
 	
 	public void init() {
 		setSize("500", "400");
-		setHeading("邮件");
+		setHeading(((Messages) Registry.get(Messages.class.getName())).MailWindow_title());
 		setLayout(new FitLayout());
 		
 		LayoutContainer mailContainer = new LayoutContainer();
@@ -51,16 +53,16 @@ public class MailWindow extends Window {
 		FormData fd_txtfldNewTextfield = new FormData("80%");
 		fd_txtfldNewTextfield.setMargins(new Margins(0, 0, 0, 0));
 		mailContainer.add(senderTextfield, fd_txtfldNewTextfield);
-		senderTextfield.setFieldLabel("收件人");
+		senderTextfield.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).MailWindow_label_sender());
 		
 		titleTextfield = new TextField<String>();
 		mailContainer.add(titleTextfield, new FormData("80%"));
-		titleTextfield.setFieldLabel("邮件标题");
+		titleTextfield.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).MailWindow_label_title());
 		
 		contentHtmleditor = new HtmlEditor();
 		mailContainer.add(contentHtmleditor, new FormData("100% 65%"));
 		contentHtmleditor.setSize("", "");
-		contentHtmleditor.setFieldLabel("内容");
+		contentHtmleditor.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).MailWindow_label_content());
 		add(mailContainer, new FitData(5));
 		mailContainer.setSize("", "");
 		
@@ -70,7 +72,7 @@ public class MailWindow extends Window {
 		toolBar.add(fillToolItem);
 		
 		
-		final Button backButton = new Button("返回");
+		final Button backButton = new Button(((Messages) Registry.get(Messages.class.getName())).MailWindow_button_back());
 		backButton.addListener(Events.Select, new Listener<ButtonEvent>() {
 			public void handleEvent(ButtonEvent e) {
 				MailWindow.this.hide();

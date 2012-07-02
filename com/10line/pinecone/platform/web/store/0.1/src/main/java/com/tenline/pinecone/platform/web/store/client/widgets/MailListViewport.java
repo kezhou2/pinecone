@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.BeanModelFactory;
@@ -31,6 +32,7 @@ import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.tenline.pinecone.platform.model.Mail;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.MailEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
@@ -71,7 +73,7 @@ public class MailListViewport extends AbstractViewport{
 			TabPanel tabPanel = new TabPanel();
 			
 			//inbox
-			TabItem tbtmInbox = new TabItem("Inbox");
+			TabItem tbtmInbox = new TabItem(((Messages) Registry.get(Messages.class.getName())).MailListViewport_tabitem_inbox());
 			tbtmInbox.setLayout(new FitLayout());
 			tabPanel.add(tbtmInbox);
 			add(tabPanel);
@@ -88,7 +90,7 @@ public class MailListViewport extends AbstractViewport{
 					}
 		
 				};
-				ColumnConfig columnConfig = new ColumnConfig("isRead", "状态", 60);
+				ColumnConfig columnConfig = new ColumnConfig("isRead", ((Messages) Registry.get(Messages.class.getName())).MailListViewport_column_status(), 60);
 				configs.add(columnConfig);
 				columnConfig.setRenderer(statusRender);
 				
@@ -102,7 +104,7 @@ public class MailListViewport extends AbstractViewport{
 					}
 		
 				};
-				ColumnConfig clmncnfgNewColumn = new ColumnConfig("sender", "发件人", 80);
+				ColumnConfig clmncnfgNewColumn = new ColumnConfig("sender", ((Messages) Registry.get(Messages.class.getName())).MailListViewport_column_sender(), 80);
 				configs.add(clmncnfgNewColumn);
 				clmncnfgNewColumn.setRenderer(senderRender);
 				
@@ -115,7 +117,7 @@ public class MailListViewport extends AbstractViewport{
 					}
 		
 				};
-				ColumnConfig clmncnfgNewColumn_1 = new ColumnConfig("title", "邮件标题", 100);
+				ColumnConfig clmncnfgNewColumn_1 = new ColumnConfig("title", ((Messages) Registry.get(Messages.class.getName())).MailListViewport_column_title(), 100);
 				configs.add(clmncnfgNewColumn_1);
 				clmncnfgNewColumn_1.setRenderer(titleRender);
 				
@@ -127,7 +129,7 @@ public class MailListViewport extends AbstractViewport{
 						return Format.ellipse(model.get("content").toString(),30);
 					}
 				};
-				ColumnConfig clmncnfgNewColumn_2 = new ColumnConfig("content", "内容", 200);
+				ColumnConfig clmncnfgNewColumn_2 = new ColumnConfig("content", ((Messages) Registry.get(Messages.class.getName())).MailListViewport_column_content(), 200);
 				configs.add(clmncnfgNewColumn_2);
 				clmncnfgNewColumn_2.setRenderer(contentRender);
 				
@@ -220,10 +222,10 @@ public class MailListViewport extends AbstractViewport{
 			FillToolItem fillToolItem = new FillToolItem();
 			toolBar.add(fillToolItem);
 			
-			Button btnSendbox = new Button("New");
+			Button btnSendbox = new Button(((Messages) Registry.get(Messages.class.getName())).MailListViewport_button_new());
 			toolBar.add(btnSendbox);
 			
-			Button btnDelete = new Button("Delete");
+			Button btnDelete = new Button(((Messages) Registry.get(Messages.class.getName())).MailListViewport_button_delete());
 			toolBar.add(btnDelete);
 			setTopComponent(toolBar);
 		}

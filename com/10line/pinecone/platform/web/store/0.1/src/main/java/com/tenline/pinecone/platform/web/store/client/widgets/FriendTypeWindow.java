@@ -1,5 +1,6 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
@@ -11,6 +12,7 @@ import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 
 public class FriendTypeWindow extends Window {
 	
@@ -19,7 +21,7 @@ public class FriendTypeWindow extends Window {
 	public FriendTypeWindow(CallbackInter cb) {
 		this.callback = cb;
 		setSize("300", "120");
-		setHeading("好友类型");
+		setHeading(((Messages) Registry.get(Messages.class.getName())).FriendTypeWindow_title());
 		setLayout(new FitLayout());
 		
 		LayoutContainer layoutContainer = new LayoutContainer();
@@ -29,11 +31,11 @@ public class FriendTypeWindow extends Window {
 		final SimpleComboBox<String> typeCombobox = new SimpleComboBox<String>();
 		typeCombobox.setAllowBlank(false);
 		layoutContainer.add(typeCombobox, new FormData("95%"));
-		typeCombobox.setFieldLabel("Please input the type of friends");
+		typeCombobox.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).FriendTypeWindow_label_information());
 		add(layoutContainer, new FitData(10));
 		
 		
-		final Button okBtn = new Button("Confirm");
+		final Button okBtn = new Button(((Messages) Registry.get(Messages.class.getName())).FriendTypeWindow_button_confirm());
 		okBtn.addListener(Events.Select, new Listener<ButtonEvent>() {
 			public void handleEvent(ButtonEvent e) {
 				callback.success(typeCombobox.getSimpleValue());
@@ -41,7 +43,7 @@ public class FriendTypeWindow extends Window {
 			}
 		});
 		
-		final Button closeBtn = new Button("Cancel");
+		final Button closeBtn = new Button(((Messages) Registry.get(Messages.class.getName())).FriendTypeWindow_button_cancel());
 		closeBtn.addListener(Events.Select, new Listener<ButtonEvent>() {
 			public void handleEvent(ButtonEvent e) {
 				FriendTypeWindow.this.hide();

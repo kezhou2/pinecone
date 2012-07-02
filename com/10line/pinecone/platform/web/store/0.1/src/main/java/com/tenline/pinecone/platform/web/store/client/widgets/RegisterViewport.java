@@ -37,56 +37,73 @@ public class RegisterViewport extends AbstractViewport {
 			setLabelSeparator("");
 			this.setLabelWidth(60);
 
-			final TextField<String> accountField = new TextField<String>();
-			accountField.setAllowBlank(false);
-			accountField.setEmptyText(((Messages) Registry.get(Messages.class
-					.getName())).accountEmptyText());
-			accountField.setFieldLabel(((Messages) Registry.get(Messages.class
-					.getName())).account());
-			accountField
+			final TextField<String> nameField = new TextField<String>();
+			nameField.setAllowBlank(false);
+			nameField.setValue("Anonymous");
+			nameField.setEmptyText(((Messages) Registry.get(Messages.class
+					.getName())).RegistryViewport_nameBlankWarning());
+			nameField.setFieldLabel(((Messages) Registry.get(Messages.class
+					.getName())).RegistryViewport_name());
+			nameField
+					.setRegex("\\w+([-+.]\\w+)*");
+			nameField.getMessages().setBlankText(
+					((Messages) Registry.get(Messages.class.getName()))
+							.RegistryViewport_nameBlankWarning());
+			nameField.getMessages().setRegexText(
+					((Messages) Registry.get(Messages.class.getName()))
+							.RegistryViewport_nameRegexWarning());
+			
+			final TextField<String> mailField = new TextField<String>();
+			mailField.setAllowBlank(false);
+			mailField.setEmptyText(((Messages) Registry.get(Messages.class
+					.getName())).RegistryViewport_mailBlankWarning());
+			mailField.setFieldLabel(((Messages) Registry.get(Messages.class
+					.getName())).RegistryViewport_mail());
+			mailField
 					.setRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
-			accountField.getMessages().setBlankText(
+			mailField.getMessages().setBlankText(
 					((Messages) Registry.get(Messages.class.getName()))
-							.accountBlankWarning());
-			accountField.getMessages().setRegexText(
+							.RegistryViewport_mailBlankWarning());
+			mailField.getMessages().setRegexText(
 					((Messages) Registry.get(Messages.class.getName()))
-							.accountRegexWarning());
+							.RegistryViewport_mailRegexWarning());
 
 			final TextField<String> passwordField = new TextField<String>();
 			passwordField.setPassword(true);
 			passwordField.setAllowBlank(false);
 			passwordField.setFieldLabel(((Messages) Registry.get(Messages.class
-					.getName())).password());
+					.getName())).RegistryViewport_password());
 			passwordField.getMessages().setBlankText(
 					((Messages) Registry.get(Messages.class.getName()))
-							.passwordBlankWarning());
+							.RegistryViewport_passwordBlankWarning());
 
 			final TextField<String> confirmationField = new TextField<String>();
 			confirmationField.setPassword(true);
 			confirmationField.setAllowBlank(false);
 			confirmationField.setFieldLabel(((Messages) Registry
-					.get(Messages.class.getName())).confirmation());
+					.get(Messages.class.getName())).RegistryViewport_confirmation());
 			confirmationField.getMessages().setBlankText(
 					((Messages) Registry.get(Messages.class.getName()))
-							.confirmationBlankWarning());
+							.RegistryViewport_confirmationBlankWarning());
 
 			final Button submitButton = new Button(
 					((Messages) Registry.get(Messages.class.getName()))
-							.submit());
+							.RegistryViewport_submit());
 			final Button cancelButton = new Button(
 					((Messages) Registry.get(Messages.class.getName()))
-							.cancel());
+							.RegistryViewport_cancel());
 			submitButton
 					.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 						@Override
 						public void componentSelected(ButtonEvent event) {
-							// TODO Auto-generated method stub
 							if (RegisterForm.this.isValid()) {
 								AppEvent appEvent = new AppEvent(
 										UserEvents.REGISTER);
+								appEvent.setData("name",
+										nameField.getValue());
 								appEvent.setData("email",
-										accountField.getValue());
+										mailField.getValue());
 								appEvent.setData("password",
 										passwordField.getValue());
 								Dispatcher.get().dispatch(appEvent);
@@ -113,7 +130,7 @@ public class RegisterViewport extends AbstractViewport {
 			FormData formData = new FormData("85%");
 			formData.setMargins(new Margins(10, 0, 10, 0));
 			
-			add(accountField,formData);
+			add(mailField,formData);
 			add(passwordField,formData);
 			add(confirmationField,formData);
 			addButton(submitButton);

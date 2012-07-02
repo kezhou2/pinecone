@@ -2,9 +2,7 @@ package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
@@ -46,11 +44,10 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.Friend;
-import com.tenline.pinecone.platform.model.Mail;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Images;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
 import com.tenline.pinecone.platform.web.store.client.events.FriendEvents;
 import com.tenline.pinecone.platform.web.store.client.events.MailEvents;
@@ -60,17 +57,15 @@ import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 public class HomeViewport extends AbstractViewport{
 	
 	private MainPanel mainPanel;
-	private UserToolBar userToolBar;
 	private UserHeader userHeader;
 	
 	public HomeViewport() {
 		super();
+
 		body.setHeaderVisible(false);
-		userToolBar = new UserToolBar(); 
 		
 		userHeader = new UserHeader();
-		userToolBar.add(userHeader);
-		body.setTopComponent(userToolBar);
+		header.add(userHeader, new BorderLayoutData(LayoutRegion.EAST,200));
 
 		mainPanel = new MainPanel();
 		body.add(mainPanel, new BorderLayoutData(LayoutRegion.CENTER));
@@ -123,15 +118,10 @@ public class HomeViewport extends AbstractViewport{
 	}
 	
 	private class MainPanel extends ContentPanel{
-		/**application count*/
-		private int count;
 		/**portal use to show application*/
 		private Portal portal;
 		/**portal column num*/
 		private int portalColumn = 2;
-		/**application user installed*/
-		private Collection<Application> userApps;
-		private Map<String,Consumer> appMap = new LinkedHashMap<String,Consumer>();
 		/**use to generate Application BeanModel*/
 		private BeanModelFactory applicationFactory = BeanModelLookup.get().getFactory(Application.class);
 		/**use to generate friend BeanModel*/
@@ -155,12 +145,12 @@ public class HomeViewport extends AbstractViewport{
 			
 			//application content panel
 			ContentPanel appContentpanel = new ContentPanel();
-			appContentpanel.setHeading("My applications");
+			appContentpanel.setHeading(((Messages) Registry.get(Messages.class.getName())).HomeViewport_header_myapp());
 			layoutContainer_2.add(appContentpanel);
 			appContentpanel.setLayout(new FitLayout());
 			List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 			
-			ColumnConfig clmncnfgInfo = new ColumnConfig("id", "Info", 180);
+			ColumnConfig clmncnfgInfo = new ColumnConfig("id", "", 180);
 			configs.add(clmncnfgInfo);
 			GridCellRenderer<BeanModel> infoRender = new GridCellRenderer<BeanModel>() {
 
@@ -184,12 +174,12 @@ public class HomeViewport extends AbstractViewport{
 			
 			//friend content panel
 			ContentPanel friendContentpanel = new ContentPanel();
-			friendContentpanel.setHeading("My friends");
+			friendContentpanel.setHeading(((Messages) Registry.get(Messages.class.getName())).HomeViewport_header_myfriend());
 			layoutContainer_2.add(friendContentpanel);
 			friendContentpanel.setLayout(new FitLayout());
 			List<ColumnConfig> configs_1 = new ArrayList<ColumnConfig>();
 			
-			ColumnConfig clmncnfgInfo_1 = new ColumnConfig("id", "Info", 180);
+			ColumnConfig clmncnfgInfo_1 = new ColumnConfig("id", "", 180);
 			configs_1.add(clmncnfgInfo_1);
 			GridCellRenderer<BeanModel> infoRender_1 = new GridCellRenderer<BeanModel>() {
 
@@ -213,7 +203,7 @@ public class HomeViewport extends AbstractViewport{
 				}
 
 			});
-			devMenuBtn.setToolTip("Configuration");
+			devMenuBtn.setToolTip(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_tooltip_config());
 			
 			Grid<BeanModel> grid_1 = new Grid<BeanModel>(friendStore, new ColumnModel(configs_1));
 			grid_1.setAutoHeight(false);
@@ -230,7 +220,7 @@ public class HomeViewport extends AbstractViewport{
 			layoutContainer_3.setLayout(new FitLayout());
 			
 			ContentPanel cntntpnlNewContentpanel = new ContentPanel();
-			cntntpnlNewContentpanel.setHeading("Dashboard");
+			cntntpnlNewContentpanel.setHeading(((Messages) Registry.get(Messages.class.getName())).HomeViewport_portal_title());
 			cntntpnlNewContentpanel.setLayout(new FitLayout());
 			cntntpnlNewContentpanel.setHeaderVisible(false);
 			
@@ -242,7 +232,7 @@ public class HomeViewport extends AbstractViewport{
 			ToolBar toolBar = new ToolBar();
 			toolBar.setHeight("32px");
 			
-			Text txtDashboard = new Text("Dashboard");
+			Text txtDashboard = new Text(((Messages) Registry.get(Messages.class.getName())).HomeViewport_portal_title());
 			toolBar.add(txtDashboard);
 			
 			FillToolItem fillToolItem = new FillToolItem();
@@ -260,7 +250,7 @@ public class HomeViewport extends AbstractViewport{
 			});
 			toolBar.add(btnGotoStore);
 //			btnGotoStore.setIcon(((Images)Registry.get(Images.class.getName())).store());
-			btnGotoStore.setText("Go to store");
+			btnGotoStore.setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_title());
 //			btnGotoStore.addStyleName("btn-blue");
 			btnGotoStore.setHeight("32px");
 			cntntpnlNewContentpanel.setTopComponent(toolBar);
@@ -382,7 +372,7 @@ public class HomeViewport extends AbstractViewport{
 
 			});
 			
-			com.google.gwt.user.client.ui.Button configBtn = new com.google.gwt.user.client.ui.Button("Setting");
+			com.google.gwt.user.client.ui.Button configBtn = new com.google.gwt.user.client.ui.Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_setting());
 			configLayoutContainer.add(configBtn, new HBoxLayoutData(2, 2, 2, 2));
 			configBtn.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
@@ -391,7 +381,7 @@ public class HomeViewport extends AbstractViewport{
 			});
 			configBtn.setStyleName("btn-blue");
 			
-			com.google.gwt.user.client.ui.Button btnLogout = new com.google.gwt.user.client.ui.Button("logout");
+			com.google.gwt.user.client.ui.Button btnLogout = new com.google.gwt.user.client.ui.Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_logout());
 			btnLogout.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
 					AppEvent appEvent = new AppEvent(UserEvents.LOGOUT);

@@ -111,7 +111,7 @@ public class AppStoreViewport extends AbstractViewport {
 
 		//���ء�������ҳ����ť
 		Button buttonHomePage = new Button();
-		buttonHomePage.setText(((Messages) Registry.get(Messages.class.getName())).homePage());
+		buttonHomePage.setText(((Messages) Registry.get(Messages.class.getName())).HomeViewport_title());
 		buttonHomePage.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 			@Override
@@ -127,7 +127,7 @@ public class AppStoreViewport extends AbstractViewport {
 		HBoxLayoutData flex = new HBoxLayoutData(new Margins(0, 5, 0, 0));  
 		flex.setFlex(1);  
 		header.add(new Text(), flex);  
-		Label label = new Label(((Messages) Registry.get(Messages.class.getName())).label_category());
+		Label label = new Label(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_label_category());
 		header.add(label, new HBoxLayoutData(new Margins(0, 5, 0, 0)));
 		SimpleComboBox<String> consumerCombo = new SimpleComboBox<String>();
 		consumerCombo.add(Arrays.asList("ALL",Category.DOMAIN_GAME,Category.DOMAIN_PET,Category.DOMAIN_SECURITY));
@@ -154,8 +154,8 @@ public class AppStoreViewport extends AbstractViewport {
 		//����
 		final TextField<String> txtfldSearch = new TextField<String>();
 		header.add(txtfldSearch,new HBoxLayoutData(new Margins(0, 5, 0, 0)));
-		txtfldSearch.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).text_search());
-		Button button = new Button(((Messages) Registry.get(Messages.class.getName())).button_search());
+		txtfldSearch.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_text_search());
+		Button button = new Button(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_button_search());
 		button.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
 			@Override
@@ -173,9 +173,16 @@ public class AppStoreViewport extends AbstractViewport {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();  
 
 		//��һ�У�չ������+����ť
-		XTemplate xTemplate = XTemplate
-				.create("<p><b>Product by:</b> {name}</p><br><p><b>Summary:</b> {detail}</p>");
-
+		StringBuilder sb = new StringBuilder();
+		sb.append("<p><b>");
+		sb.append(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_ProductBy());
+		sb.append(":</b> {name}</p><br><p><b>");
+		sb.append(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_Summary());
+		sb.append(":</b> {detail}</p>");
+//		XTemplate xTemplate = XTemplate
+//				.create("<p><b>Product by:</b> {name}</p><br><p><b>Summary:</b> {detail}</p>");
+		XTemplate xTemplate = XTemplate.create(sb.toString());
+		
 		RowExpander rowExpander = new RowExpander();
 		rowExpander.setTemplate(xTemplate);
 		configs.add(rowExpander);  
@@ -183,7 +190,7 @@ public class AppStoreViewport extends AbstractViewport {
 		//�ڶ��У�Ӧ��ͼ�꣬Image
 		ColumnConfig column = new ColumnConfig();  
 		column.setId("icon");  
-		column.setHeader(((Messages) Registry.get(Messages.class.getName())).app_Icon());  
+		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_icon());  
 		column.setWidth(150);  
 		column.setRowHeader(true);
 		GridCellRenderer<BeanModel> iconRenderer = new GridCellRenderer<BeanModel>() {
@@ -201,26 +208,26 @@ public class AppStoreViewport extends AbstractViewport {
 		//�����У�Ӧ�����
 		column = new ColumnConfig();  
 		column.setId("name");  
-		column.setHeader(((Messages) Registry.get(Messages.class.getName())).app_Name());  
+		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_name());  
 		column.setWidth(400);  
 		configs.add(column);  
 
 		//�����У�Ӧ�ð汾��
 		column = new ColumnConfig();  
 		column.setId("version");  
-		column.setHeader(((Messages) Registry.get(Messages.class.getName())).app_version());  
+		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_version());  
 		column.setWidth(100);  
 		configs.add(column);  
 
 		//�����У���װӦ�ã�����װ����ť
-		column = new ColumnConfig("install", ((Messages) Registry.get(Messages.class.getName())).app_install(), 150);  
+		column = new ColumnConfig("install", ((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_install(), 150);  
 		GridCellRenderer<BeanModel> buttonRenderer = new GridCellRenderer<BeanModel>() {
 
 			@Override
 			public Object render(final BeanModel model, String property,
 					ColumnData config, int rowIndex, int colIndex,
 					ListStore<BeanModel> store, Grid<BeanModel> grid) {
-				final Button b = new Button(((Messages) Registry.get(Messages.class.getName())).app_install(), new SelectionListener<ButtonEvent>() {
+				final Button b = new Button(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_install(), new SelectionListener<ButtonEvent>() {
 					@Override
 					public void componentSelected(ButtonEvent ce) {
 						AppEvent event = new AppEvent(ApplicationEvents.INSTALL);
@@ -230,14 +237,15 @@ public class AppStoreViewport extends AbstractViewport {
 							public void handleEvent(MessageBoxEvent ce) {
 							}
 						};
-						MessageBox.info("INFO", "This application has been successfully installed.", listener);
-						ce.getButton().setText("installed");
-						ce.getButton().setToolTip("This Application has already been installed");
+						MessageBox.info(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_title()
+								, ((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_info(), listener);
+						ce.getButton().setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_installed());
+						ce.getButton().setToolTip(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installed_button_tooltip());
 						ce.getButton().setEnabled(false);
 					}
 				});
 				b.setWidth(60);
-				b.setToolTip("Click to install");
+				b.setToolTip(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_install_button_tooltip());
 
 				return b;
 			}
@@ -261,7 +269,7 @@ public class AppStoreViewport extends AbstractViewport {
 	 */
 	private ContentPanel createEast() {
 		ContentPanel eastPanel = new ContentPanel();
-		eastPanel.setHeading(((Messages) Registry.get(Messages.class.getName())).ranking());
+		eastPanel.setHeading(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_title_ranking());
 		eastPanel.setLayout(new FillLayout());
 
 		RpcProxy<Collection<Consumer>> proxy = new RpcProxy<Collection<Consumer>>() {

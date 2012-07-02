@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Images;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 public class FriendInfoPanel extends ContentPanel {
@@ -56,7 +57,7 @@ public class FriendInfoPanel extends ContentPanel {
 		LayoutContainer layoutContainer_2 = new LayoutContainer();
 		layoutContainer_2.setLayout(new FitLayout());
 		
-		txtFriendName = new Text("friend name");
+		txtFriendName = new Text(((Messages) Registry.get(Messages.class.getName())).FriendInfoPanel_label_friendname());
 		layoutContainer_2.add(txtFriendName);
 		layoutContainer_1.add(layoutContainer_2);
 		layoutContainer_2.setBorders(false);
@@ -64,7 +65,7 @@ public class FriendInfoPanel extends ContentPanel {
 		LayoutContainer layoutContainer_3 = new LayoutContainer();
 		layoutContainer_3.setLayout(new HBoxLayout());
 		
-		Button btnInformation = new Button("information");
+		Button btnInformation = new Button(((Messages) Registry.get(Messages.class.getName())).FriendInfoPanel_button_information());
 		layoutContainer_3.add(btnInformation);
 		layoutContainer_1.add(layoutContainer_3);
 		layoutContainer_3.setBorders(false);
@@ -75,7 +76,7 @@ public class FriendInfoPanel extends ContentPanel {
 			}
 		});
 
-		Button btnSendMessage = new Button("Send message");
+		Button btnSendMessage = new Button(((Messages) Registry.get(Messages.class.getName())).FriendInfoPanel_button_sendMsg());
 		layoutContainer_3.add(btnSendMessage);
 		btnSendMessage.setStyleName("btn-blue");
 		btnSendMessage.addMouseUpHandler(new MouseUpHandler() {

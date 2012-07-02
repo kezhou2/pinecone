@@ -4,8 +4,6 @@ import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BeanModel;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
@@ -23,15 +21,24 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.web.store.client.Images;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
-import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
-
+/**
+ * 
+ * @author liugy
+ *
+ */
 public class ApplicationInfoPanel extends ContentPanel {
 	
+	/**application icon*/
 	private Image image;
+	/**show application information*/
 	private Text infoText;
+	/**button to open application on the portal*/
 	private Button openButton;
+	/**button to unintall user's application*/
 	private Button removeButton;
+	/**application bean model*/
 	private BeanModel model;
 	
 	public ApplicationInfoPanel(BeanModel model) {
@@ -41,11 +48,7 @@ public class ApplicationInfoPanel extends ContentPanel {
 		setHeaderVisible(false);
 		setBodyBorder(false);
 		setBorders(false);
-//		this.setStyleAttribute("background", "#FFFFFF");
 		setBodyStyle("background-color: transparent");
-//		this.setStyleAttribute("color", "#FFFFFF");
-//		this.setStyleAttribute("filter", "Alpha(Opacity=10, Style=0)");
-//		this.setStyleAttribute("opacity", "0.10");
 		
 		LayoutContainer layoutContainer = new LayoutContainer();
 		layoutContainer.setLayout(new FitLayout());
@@ -67,7 +70,7 @@ public class ApplicationInfoPanel extends ContentPanel {
 		LayoutContainer layoutContainer_3 = new LayoutContainer();
 		layoutContainer_3.setLayout(new HBoxLayout());
 		
-		openButton = new Button("Open");
+		openButton = new Button(((Messages) Registry.get(Messages.class.getName())).ApplicationInfoPanel_open());
 		layoutContainer_3.add(openButton);
 		openButton.setWidth("60");
 		openButton.setStyleName("btn-blue");
@@ -81,7 +84,7 @@ public class ApplicationInfoPanel extends ContentPanel {
 			}
 		});
 		
-		removeButton = new Button("Remove");
+		removeButton = new Button(((Messages) Registry.get(Messages.class.getName())).ApplicationInfoPanel_remove());
 		layoutContainer_3.add(removeButton);
 		removeButton.setWidth("60");
 		removeButton.setStyleName("btn-blue");

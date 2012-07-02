@@ -1,5 +1,6 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
@@ -11,7 +12,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 public class ConsumerShowViewport extends AbstractViewport {
@@ -29,13 +30,11 @@ public class ConsumerShowViewport extends AbstractViewport {
 	
 	private class MainPanel extends ContentPanel{
 		
-		private Application application;
-		
 		public MainPanel(){
 			this.setHeaderVisible(false);
 			
 			ToolBar toolBar = new ToolBar();
-			Button btnGotoHome = new Button("Go to Home");
+			Button btnGotoHome = new Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_title());
 			btnGotoHome.addListener(Events.Select,new Listener<ButtonEvent>() {
 
 				@Override
@@ -50,7 +49,6 @@ public class ConsumerShowViewport extends AbstractViewport {
 		}
 		
 		public void loadConsumer(Application application){
-			this.application = application;
 			this.setUrl(application.getConsumer().getConnectURI());
 		}
 	}

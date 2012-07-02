@@ -47,7 +47,7 @@ public abstract class AbstractViewport extends Viewport {
 			setHeaderVisible(false);
 			setLayout(new BorderLayout());
 			Image logo = ((Images) Registry.get(Images.class.getName())).logo().createImage();
-			add(logo, new BorderLayoutData(LayoutRegion.WEST));
+			add(logo, new BorderLayoutData(LayoutRegion.WEST,184));
 		}
 		
 	}

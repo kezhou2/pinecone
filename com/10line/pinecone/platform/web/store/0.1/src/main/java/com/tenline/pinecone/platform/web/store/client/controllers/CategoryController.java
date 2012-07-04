@@ -28,19 +28,16 @@ public class CategoryController extends Controller {
 	 * 
 	 */
 	public CategoryController() {
-		// TODO Auto-generated constructor stub
 		registerEventTypes(CategoryEvents.GET_ALL);
 	}
 
 	@Override
 	public void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
 		try {
 			if (event.getType().equals(CategoryEvents.GET_ALL)) {
 				getAll(event);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -55,13 +52,11 @@ public class CategoryController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Collection<Category> result) {
-				// TODO Auto-generated method stub
 				forwardToView(view, event.getType(), result);
 			}
 			

@@ -17,6 +17,7 @@ import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
+import com.extjs.gxt.ui.client.widget.layout.HBoxLayoutData;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -66,7 +67,7 @@ public class FriendInfoPanel extends ContentPanel {
 		layoutContainer_3.setLayout(new HBoxLayout());
 		
 		Button btnInformation = new Button(((Messages) Registry.get(Messages.class.getName())).FriendInfoPanel_button_information());
-		layoutContainer_3.add(btnInformation);
+		layoutContainer_3.add(btnInformation, new HBoxLayoutData(0, 10, 0, 4));
 		layoutContainer_1.add(layoutContainer_3);
 		layoutContainer_3.setBorders(false);
 		btnInformation.setStyleName("btn-blue");

@@ -22,6 +22,7 @@ import com.tenline.pinecone.platform.web.store.client.services.FriendService;
 import com.tenline.pinecone.platform.web.store.client.services.MailService;
 import com.tenline.pinecone.platform.web.store.client.services.UserService;
 import com.tenline.pinecone.platform.web.store.client.widgets.AppStoreViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.ConsumerRegistryViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.ConsumerShowViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
@@ -56,6 +57,7 @@ public class Store implements EntryPoint {
 		Registry.register(ConsumerShowViewport.class.getName(), new ConsumerShowViewport());
 		Registry.register(MailListViewport.class.getName(), new MailListViewport());
 		Registry.register(AppStoreViewport.class.getName(), new AppStoreViewport());
+		Registry.register(ConsumerRegistryViewport.class.getName(), new ConsumerRegistryViewport());
 		//set controller
 		Dispatcher dispatcher = Dispatcher.get();
 		dispatcher.addController(new WidgetController());

@@ -9,6 +9,7 @@ import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.BeanModelFactory;
 import com.extjs.gxt.ui.client.data.BeanModelLookup;
+import com.extjs.gxt.ui.client.event.BaseEvent;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
@@ -312,24 +313,21 @@ public class FriendViewport extends AbstractViewport {
 						final BeanModel lModel = model;
 
 						btn.addListener(Events.Select, new Listener<ButtonEvent>() {
+							@SuppressWarnings("rawtypes")
 							@Override
 							public void handleEvent(ButtonEvent be) {
-								FriendTypeWindow w = new FriendTypeWindow(new CallbackInter(){
+								
+								FriendTypeWindow w = new FriendTypeWindow(new Listener(){
 									@Override
-									public void error() {}
-
-									@Override
-									public void success(String type) {
+									public void handleEvent(BaseEvent be) {
 										AppEvent appEvent = new AppEvent(FriendEvents.ADD);
 										appEvent.setData("receiver", (User)(lModel.get("user")));
-										appEvent.setData("type", type);
+										appEvent.setData("type", be.getSource().toString());
 										Dispatcher.get().dispatch(appEvent);
 									}
-
-									@Override
-									public void cancel() {}
 									
 								});
+								
 								w.show();
 								w.center();
 							}

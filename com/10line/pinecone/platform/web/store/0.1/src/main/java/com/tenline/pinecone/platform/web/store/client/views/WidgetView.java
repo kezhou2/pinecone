@@ -12,9 +12,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.events.CategoryEvents;
 import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.widgets.AppStoreViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.ConsumerRegistryViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.ConsumerShowViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
@@ -55,6 +57,8 @@ public class WidgetView extends View {
 				updateMailListToPanel(event);
 			}else if (event.getType().equals(WidgetEvents.UPDATE_APP_STORE_TO_PANEL)) {
 				updateAppStoreToPanel(event);
+			}else if (event.getType().equals(WidgetEvents.UPDATE_REGISTER_APP_TO_PANEL)) {
+				updateRegisterAppToPanel(event);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,6 +109,7 @@ public class WidgetView extends View {
 	}
 	
 	private void updateSendMailToPanel(AppEvent event) throws Exception{
+		System.out.println("WidgetView updateSendMailToPanel");
 		User receiver = (User)event.getData("friend");
 		RootPanel.get().clear();
 		SendMailViewport smv = Registry.get(SendMailViewport.class.getName());
@@ -113,6 +118,7 @@ public class WidgetView extends View {
 	}
 	
 	private void updateMaxPortletToPanel(AppEvent event) throws Exception{
+		System.out.println("WidgetView updateMaxPortletToPanel");
 		Application application = (Application)event.getData("application");
 		ConsumerShowViewport cv = (ConsumerShowViewport)Registry.get(ConsumerShowViewport.class.getName());
 		cv.loadConsumer(application);
@@ -121,6 +127,7 @@ public class WidgetView extends View {
 	}
 
 	private void updateMailListToPanel(AppEvent event) throws Exception{
+		System.out.println("WidgetView updateMailListToPanel");
 		MailListViewport mv = (MailListViewport)Registry.get(MailListViewport.class.getName());
 		RootPanel.get().clear();
 		RootPanel.get().add(mv);
@@ -128,10 +135,18 @@ public class WidgetView extends View {
 	}
 	
 	private void updateAppStoreToPanel(AppEvent event) throws Exception{
+		System.out.println("WidgetView updateAppStoreToPanel");
 		AppStoreViewport asv = (AppStoreViewport)Registry.get(AppStoreViewport.class.getName());
 		RootPanel.get().clear();
 		RootPanel.get().add(asv);
 		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
 		Dispatcher.get().dispatch(appEvent);
+	}
+	
+	private void updateRegisterAppToPanel(AppEvent event) throws Exception{
+		System.out.println("WidgetView updateRegisterAppToPanel");
+		ConsumerRegistryViewport crv = (ConsumerRegistryViewport)Registry.get(ConsumerRegistryViewport.class.getName());
+		RootPanel.get().clear();
+		RootPanel.get().add(crv);
 	}
 }

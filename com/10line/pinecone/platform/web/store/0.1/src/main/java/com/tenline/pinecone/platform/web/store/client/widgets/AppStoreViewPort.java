@@ -122,6 +122,19 @@ public class AppStoreViewport extends AbstractViewport {
 			}
 		});
 		header.add(buttonHomePage);
+		
+		Button buttonRegister = new Button();
+		buttonRegister.setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_button_register());
+		buttonRegister.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				AppEvent event = new AppEvent(WidgetEvents.UPDATE_REGISTER_APP_TO_PANEL);
+				event.setHistoryEvent(true);
+				Dispatcher.get().dispatch(event);
+			}
+		});
+		header.add(buttonRegister);
 
 		//��������
 		HBoxLayoutData flex = new HBoxLayoutData(new Margins(0, 5, 0, 0));  

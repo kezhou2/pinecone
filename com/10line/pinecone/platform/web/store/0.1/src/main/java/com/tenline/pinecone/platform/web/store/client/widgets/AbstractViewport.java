@@ -31,7 +31,7 @@ public abstract class AbstractViewport extends Viewport {
 	 */
 	public AbstractViewport() {
 		setLayout(new BorderLayout());
-		add(header, new BorderLayoutData(LayoutRegion.NORTH, 50));
+		add(header, new BorderLayoutData(LayoutRegion.NORTH, 60));
 		add(body, new BorderLayoutData(LayoutRegion.CENTER));
 		add(footer, new BorderLayoutData(LayoutRegion.SOUTH, 50));
 	}

@@ -1,6 +1,7 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.event.BaseEvent;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
@@ -16,10 +17,12 @@ import com.tenline.pinecone.platform.web.store.client.Messages;
 
 public class FriendTypeWindow extends Window {
 	
-	private CallbackInter callback;
+	@SuppressWarnings("rawtypes")
+	private Listener listener;
 	
-	public FriendTypeWindow(CallbackInter cb) {
-		this.callback = cb;
+	@SuppressWarnings("rawtypes")
+	public FriendTypeWindow(Listener listener) {
+		this.listener = listener;
 		setSize("300", "120");
 		setHeading(((Messages) Registry.get(Messages.class.getName())).FriendTypeWindow_title());
 		setLayout(new FitLayout());
@@ -37,8 +40,10 @@ public class FriendTypeWindow extends Window {
 		
 		final Button okBtn = new Button(((Messages) Registry.get(Messages.class.getName())).FriendTypeWindow_button_confirm());
 		okBtn.addListener(Events.Select, new Listener<ButtonEvent>() {
+			@SuppressWarnings("unchecked")
 			public void handleEvent(ButtonEvent e) {
-				callback.success(typeCombobox.getSimpleValue());
+				BaseEvent be = new BaseEvent(typeCombobox.getSimpleValue());
+				FriendTypeWindow.this.listener.handleEvent(be);
 				FriendTypeWindow.this.hide();
 			}
 		});

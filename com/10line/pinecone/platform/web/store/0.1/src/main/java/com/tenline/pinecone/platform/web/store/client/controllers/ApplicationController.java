@@ -3,9 +3,7 @@
  */
 package com.tenline.pinecone.platform.web.store.client.controllers;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.mvc.AppEvent;

@@ -15,6 +15,7 @@ import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
+import com.extjs.gxt.ui.client.widget.layout.HBoxLayoutData;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -71,7 +72,7 @@ public class ApplicationInfoPanel extends ContentPanel {
 		layoutContainer_3.setLayout(new HBoxLayout());
 		
 		openButton = new Button(((Messages) Registry.get(Messages.class.getName())).ApplicationInfoPanel_open());
-		layoutContainer_3.add(openButton);
+		layoutContainer_3.add(openButton, new HBoxLayoutData(0, 10, 0, 4));
 		openButton.setWidth("60");
 		openButton.setStyleName("btn-blue");
 		openButton.addMouseUpHandler(new MouseUpHandler() {
@@ -102,7 +103,9 @@ public class ApplicationInfoPanel extends ContentPanel {
 		
 		init();
 	}
-	
+	/**
+	 * intialize the panel, show app info.
+	 */
 	public void init(){
 		try{
 			BeanModel consumer = (BeanModel)model.get("consumer");

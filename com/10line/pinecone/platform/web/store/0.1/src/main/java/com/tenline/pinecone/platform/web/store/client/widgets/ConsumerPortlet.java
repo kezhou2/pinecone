@@ -12,8 +12,11 @@ import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 public class ConsumerPortlet extends Portlet {
 
+	/**application entity*/
 	private Application application;
+	/***/
 	private ToolButton toolButtonClose;
+	/***/
 	private ToolButton toolButtonMax;
 	
 	public ConsumerPortlet(Application application){

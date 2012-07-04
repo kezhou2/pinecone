@@ -1,12 +1,17 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.data.BeanModel;
+import com.extjs.gxt.ui.client.data.BeanModelFactory;
+import com.extjs.gxt.ui.client.data.BeanModelLookup;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
+import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
@@ -28,7 +33,10 @@ import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+import com.tenline.pinecone.platform.model.Category;
+import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.web.store.client.Messages;
+import com.tenline.pinecone.platform.web.store.client.events.CategoryEvents;
 
 public class ConsumerRegistryViewport extends AbstractViewport {
 
@@ -39,6 +47,24 @@ public class ConsumerRegistryViewport extends AbstractViewport {
 		body.add(mainPanel, new BorderLayoutData(LayoutRegion.CENTER));
 	}
 	
+	public void loadInfo(){
+		AppEvent event = new AppEvent(CategoryEvents.GET_ALL);
+		Dispatcher.get().dispatch(event);
+	}
+	
+	public void loadCategories(Collection<Category> categories){
+		mainPanel.loadCategories(categories);
+	}
+	
+	public void loadConsumers(Collection<Consumer> consumers){
+		mainPanel.loadConsumers(consumers);
+	}
+	
+	/**
+	 * Main panel to show
+	 * @author liugy
+	 *
+	 */
 	private class MainPanel extends ContentPanel{
 		
 		/**category ListStore*/
@@ -51,8 +77,11 @@ public class ConsumerRegistryViewport extends AbstractViewport {
 		private ComboBox<BeanModel> cmbxCategory;
 		/**key textfield*/
 		private TextField<String> txtfldKey;
+		/**secret textfield*/
 		private TextField<String> txtfldSecret;
+		/**connect uri*/
 		private TextField<String> txtfldConnectUri;
+		/***/
 		private TextField<String> txtfldAlias;
 		private TextField<String> txtfldVersion;
 		private Grid<BeanModel> myConsumerGrid;
@@ -64,6 +93,10 @@ public class ConsumerRegistryViewport extends AbstractViewport {
 		private TextField<String> txtfldVersion_1;
 		private TextField<String> txtfldAlias_1;
 		private TextField<String> txtfldConnectionUri;
+		
+		/***/
+		private BeanModelFactory consumerFactory = BeanModelLookup.get().getFactory(Consumer.class);
+		private BeanModelFactory categoryFactory = BeanModelLookup.get().getFactory(Category.class);
 		
 		/**user registered consumer grid*/
 //		private Grid<BeanModel> grid;
@@ -203,5 +236,27 @@ public class ConsumerRegistryViewport extends AbstractViewport {
 			tabPanel.add(tbtmRegister);
 			add(tabPanel);
 		}
+		
+		public void loadConsumers(Collection<Consumer> consumers){
+			categoryListStore.removeAll();
+			for(Consumer c:consumers){
+				BeanModel bm = consumerFactory.createModel(c);
+				categoryListStore.add(bm);
+			}
+			
+			categoryListStore.commitChanges();
+		}
+		
+		public void loadCategories(Collection<Category> categories){
+			categoryListStore.removeAll();
+			for(Category c:categories){
+				BeanModel bm = categoryFactory.createModel(c);
+				categoryListStore.add(bm);
+			}
+			
+			categoryListStore.commitChanges();
+		}
 	}
+	
+	
 }

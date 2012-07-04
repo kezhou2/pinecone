@@ -100,23 +100,6 @@ public class HomeViewport extends AbstractViewport{
 		userHeader.loadMails(count);
 	}
 	
-	private class UserToolBar extends ToolBar{
-		
-		public UserToolBar(){
-			LayoutContainer logoLayoutContainer = new LayoutContainer();
-			logoLayoutContainer.setLayout(new FitLayout());
-			
-			Image image = ((Images) Registry.get(Images.class.getName())).logo().createImage();
-			logoLayoutContainer.add(image);
-			add(logoLayoutContainer);
-			logoLayoutContainer.setSize("184", "64");
-			
-			FillToolItem fillToolItem = new FillToolItem();
-			fillToolItem.setHeight("64");
-			add(fillToolItem);
-		}
-	}
-	
 	private class MainPanel extends ContentPanel{
 		/**portal use to show application*/
 		private Portal portal;

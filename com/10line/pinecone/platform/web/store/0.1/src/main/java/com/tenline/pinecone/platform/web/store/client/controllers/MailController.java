@@ -9,12 +9,15 @@ import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.tenline.pinecone.platform.model.Mail;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.MailEvents;
 import com.tenline.pinecone.platform.web.store.client.services.MailService;
 import com.tenline.pinecone.platform.web.store.client.services.MailServiceAsync;
 import com.tenline.pinecone.platform.web.store.client.views.MailView;
+import com.tenline.pinecone.platform.web.store.client.widgets.AbstractViewport;
 
 /**
  * @author Bill
@@ -39,6 +42,8 @@ public class MailController extends Controller {
 	public void handleEvent(AppEvent event) {
 		
 		try {
+			mask();
+			
 			if (event.getType().equals(MailEvents.GET_UNREAD_COUNT)) {
 				getUnread(event);
 			} else if (event.getType().equals(MailEvents.GET_UNREAD)) {
@@ -50,6 +55,7 @@ public class MailController extends Controller {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			unmask();
 		}
 	}
 	
@@ -65,10 +71,12 @@ public class MailController extends Controller {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Collection<Mail> result) {
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -90,13 +98,13 @@ public class MailController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Mail result) {
-				
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -120,17 +128,35 @@ public class MailController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Mail result) {
-				
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
 		});
+	}
+	/**
+	 * unmask the viewport
+	 */
+	private void unmask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.unmask();
+		}
+	}
+	/**
+	 * mask the viewport
+	 */
+	private void mask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.mask(((Messages) Registry.get(Messages.class.getName())).loadingInfo());
+		}
 	}
 
 }

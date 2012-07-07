@@ -136,9 +136,7 @@ public class MailListViewport extends AbstractViewport{
 				ColumnModel columnModel = new ColumnModel(configs); 
 				inboxGrid = new Grid<BeanModel>(inListStore, columnModel);
 				inboxGrid.addListener(Events.RowDoubleClick, new Listener<GridEvent>() {
-					public void handleEvent(GridEvent e) {
-						
-						
+					public void handleEvent(GridEvent e) {	
 					}
 				});
 				tbtmInbox.add(inboxGrid);

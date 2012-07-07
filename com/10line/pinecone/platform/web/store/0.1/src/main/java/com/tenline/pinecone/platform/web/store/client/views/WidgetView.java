@@ -24,6 +24,7 @@ import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.MailListViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.RegisterViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.SendMailViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.SettingViewport;
 
 /**
  * @author Bill
@@ -59,6 +60,8 @@ public class WidgetView extends View {
 				updateAppStoreToPanel(event);
 			}else if (event.getType().equals(WidgetEvents.UPDATE_REGISTER_APP_TO_PANEL)) {
 				updateRegisterAppToPanel(event);
+			}else if (event.getType().equals(WidgetEvents.UPDATE_SETTING_TO_PANEL)) {
+				updateSettingToPanel(event);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,6 +144,9 @@ public class WidgetView extends View {
 		RootPanel.get().add(asv);
 		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
 		Dispatcher.get().dispatch(appEvent);
+		
+		AppEvent catEvent = new AppEvent(CategoryEvents.GET_ALL);
+		Dispatcher.get().dispatch(catEvent);
 	}
 	
 	private void updateRegisterAppToPanel(AppEvent event) throws Exception{
@@ -148,5 +154,13 @@ public class WidgetView extends View {
 		ConsumerRegistryViewport crv = (ConsumerRegistryViewport)Registry.get(ConsumerRegistryViewport.class.getName());
 		RootPanel.get().clear();
 		RootPanel.get().add(crv);
+	}
+	
+	private void updateSettingToPanel(AppEvent event) throws Exception{
+		System.out.println("WidgetView updateSettingToPanel");
+		SettingViewport sv = (SettingViewport)Registry.get(SettingViewport.class.getName());
+		RootPanel.get().clear();
+		RootPanel.get().add(sv);
+		sv.loadInfo();
 	}
 }

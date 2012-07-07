@@ -9,12 +9,15 @@ import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerServiceAsync;
 import com.tenline.pinecone.platform.web.store.client.views.ConsumerView;
+import com.tenline.pinecone.platform.web.store.client.widgets.AbstractViewport;
 
 /**
  * @author Bill
@@ -29,7 +32,6 @@ public class ConsumerController extends Controller {
 	 * 
 	 */
 	public ConsumerController() {
-		// TODO Auto-generated constructor stub
 		registerEventTypes(ConsumerEvents.GET_BY_CATEGORY);
 		registerEventTypes(ConsumerEvents.REGISTER);
 		registerEventTypes(ConsumerEvents.UNREGISTER);
@@ -40,8 +42,9 @@ public class ConsumerController extends Controller {
 
 	@Override
 	public void handleEvent(AppEvent event) {
-		// TODO Auto-generated method stub
 		try {
+			mask();
+			
 			if (event.getType().equals(ConsumerEvents.GET_BY_CATEGORY)) {
 				getByCategory(event);
 			} else if (event.getType().equals(ConsumerEvents.REGISTER)) {
@@ -56,8 +59,8 @@ public class ConsumerController extends Controller {
 				getByName(event);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			unmask();
 		}
 	}
 	
@@ -71,13 +74,13 @@ public class ConsumerController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Collection<Consumer> result) {
-				// TODO Auto-generated method stub
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -94,17 +97,26 @@ public class ConsumerController extends Controller {
 		consumer.setCategory((Category) event.getData("category"));
 		consumer.setConnectURI((String) event.getData("connectURI"));
 		consumer.setName((String) event.getData("name"));
+		consumer.setAlias((String) event.getData("alias"));
+		consumer.setVersion((String) event.getData("version"));
+		Object obj = event.getData("icon");
+		byte[] icon = null;
+		if(obj instanceof byte[]){
+			icon = (byte[])obj;
+			consumer.setIcon(icon);
+		}
+		
 		service.create(consumer, new AsyncCallback<Consumer>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Consumer result) {
-				// TODO Auto-generated method stub
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -121,13 +133,13 @@ public class ConsumerController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Boolean result) {
-				// TODO Auto-generated method stub
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -149,13 +161,13 @@ public class ConsumerController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Consumer result) {
-				// TODO Auto-generated method stub
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -173,15 +185,12 @@ public class ConsumerController extends Controller {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
-				try {
-					throw caught;
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Collection<Consumer> result) {
+				unmask();
 				forwardToView(view, ConsumerEvents.GET_ALL, result);
 			}
 		});
@@ -192,23 +201,37 @@ public class ConsumerController extends Controller {
 	 * @param event
 	 */
 	private void getByName(AppEvent event) {
-		service.show(""+event.getData("name"), new AsyncCallback<Collection<Consumer>>() {
+		service.show("name=='"+event.getData("name")+"'", new AsyncCallback<Collection<Consumer>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
-				try {
-					throw caught;
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Collection<Consumer> result) {
+				unmask();
 				forwardToView(view, ConsumerEvents.GET_ALL, result);
 			}
 		});
 	}
-
+	/**
+	 * unmask the viewport
+	 */
+	private void unmask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.unmask();
+		}
+	}
+	/**
+	 * mask the viewport
+	 */
+	private void mask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.mask(((Messages) Registry.get(Messages.class.getName())).loadingInfo());
+		}
+	}
 }

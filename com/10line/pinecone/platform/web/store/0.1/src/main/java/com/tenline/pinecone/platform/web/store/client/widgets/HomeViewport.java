@@ -12,17 +12,15 @@ import com.extjs.gxt.ui.client.data.BeanModelFactory;
 import com.extjs.gxt.ui.client.data.BeanModelLookup;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
-import com.extjs.gxt.ui.client.event.IconButtonEvent;
 import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.Text;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.button.ToolButton;
 import com.extjs.gxt.ui.client.widget.custom.Portal;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnData;
@@ -32,6 +30,7 @@ import com.extjs.gxt.ui.client.widget.grid.GridCellRenderer;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.BoxLayout.BoxLayoutPack;
+import com.extjs.gxt.ui.client.widget.layout.FillData;
 import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
@@ -68,13 +67,14 @@ public class HomeViewport extends AbstractViewport{
 		header.add(userHeader, new BorderLayoutData(LayoutRegion.EAST,200));
 
 		mainPanel = new MainPanel();
-		body.add(mainPanel, new BorderLayoutData(LayoutRegion.CENTER));
+		BorderLayoutData bld = new BorderLayoutData(LayoutRegion.CENTER);
+		bld.setMargins(new Margins(3,3,3,3));
+		body.add(mainPanel, bld);
 	}
 	/**
 	 * load information
 	 */
 	public void loadInfo(){
-		System.out.println("HomeViewport loadInfo");
 		User user = (User)Registry.get(User.class.getName());
 		userHeader.loadUserInfo(user);
 		//load user's applications
@@ -110,26 +110,187 @@ public class HomeViewport extends AbstractViewport{
 		/**use to generate friend BeanModel*/
 		private BeanModelFactory friendFactory = BeanModelLookup.get().getFactory(Friend.class);
 		
+		/**Store to store application bean*/
 		private ListStore<BeanModel> appStore;
+		/**Store to store friend bean*/
 		private ListStore<BeanModel> friendStore;
-		
 		
 		public MainPanel(){
 			setHeaderVisible(false);
+			this.setBodyBorder(false);
+			this.setBorders(false);
 			appStore = new ListStore<BeanModel>();
 			friendStore = new ListStore<BeanModel>();
 			setLayout(new BorderLayout());
 			
-			LayoutContainer layoutContainer_1 = new LayoutContainer();
-			layoutContainer_1.setLayout(new BorderLayout());
+			LayoutContainer mainLayoutContainer = new LayoutContainer();
+			mainLayoutContainer.setLayout(new BorderLayout());
+			mainLayoutContainer.setBorders(false);
 			
-			LayoutContainer layoutContainer_2 = new LayoutContainer();
-			layoutContainer_2.setLayout(new FillLayout(Orientation.VERTICAL));
+			LayoutContainer eastLayoutContainer = new LayoutContainer();
+			eastLayoutContainer.setLayout(new FillLayout(Orientation.VERTICAL));
+			eastLayoutContainer.setBorders(false);
 			
-			//application content panel
+			//application content panel			 
+			eastLayoutContainer.add(createAppContentPanel(), new FillData(0, 0, 5, 0));
+			//friend content panel
+			eastLayoutContainer.add(createFriendContentPanel(), new FillData(0, 0, 5, 0));
+			
+			BorderLayoutData bld = new BorderLayoutData(LayoutRegion.EAST, 250.0f);
+			bld.setMargins(new Margins(0,0,0,5));
+			mainLayoutContainer.add(eastLayoutContainer, bld);
+			//portal content panel
+			mainLayoutContainer.add(createPortalContentPanel(), new BorderLayoutData(LayoutRegion.CENTER));
+			
+			add(mainLayoutContainer, new BorderLayoutData(LayoutRegion.CENTER));
+		}
+		
+		public ContentPanel createPortalContentPanel(){
+
+			ContentPanel portalContentpanel = new ContentPanel();
+			portalContentpanel.setHeading(((Messages) Registry.get(Messages.class.getName())).HomeViewport_portal_title());
+			portalContentpanel.setLayout(new FitLayout());
+			portalContentpanel.setHeaderVisible(false);
+			portalContentpanel.setBorders(false);
+			portalContentpanel.setBodyBorder(false);
+			
+			portal = new Portal(portalColumn);
+			portalContentpanel.add(portal);
+			portal.setColumnWidth(0, 0.5);
+			portal.setColumnWidth(1, 0.5);
+			
+			ToolBar toolBar = new ToolBar();
+			toolBar.setHeight("38px");
+			
+			Text txtDashboard = new Text(((Messages) Registry.get(Messages.class.getName())).HomeViewport_portal_title());
+			toolBar.add(txtDashboard);
+			txtDashboard.setStyleAttribute("font-size", "18px");
+			txtDashboard.setStyleAttribute("font-weight", "bold");
+			txtDashboard.setStyleAttribute("line-height", "18px");
+			txtDashboard.setStyleAttribute("color","#4D5762");
+			txtDashboard.setStyleAttribute("position","relative");
+			txtDashboard.setStyleAttribute("word-spacing","-0.1em");
+			
+			FillToolItem fillToolItem = new FillToolItem();
+			toolBar.add(fillToolItem);
+			
+			Button btnGotoStore = new Button();
+			btnGotoStore.addListener(Events.Select,new Listener<ButtonEvent>() {
+
+				@Override
+				public void handleEvent(ButtonEvent be) {
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_APP_STORE_TO_PANEL);
+					Dispatcher.get().dispatch(appEvent);
+				}
+
+			});
+			toolBar.add(btnGotoStore);
+//			btnGotoStore.setIcon(((Images)Registry.get(Images.class.getName())).store());
+			btnGotoStore.setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_title());
+//			btnGotoStore.addStyleName("btn-blue");
+			btnGotoStore.setHeight("32px");
+			portalContentpanel.setTopComponent(toolBar);
+						
+			return portalContentpanel;
+		}
+		
+		public ContentPanel createFriendContentPanel(){
+			ContentPanel friendContentpanel = new ContentPanel();
+			friendContentpanel.setHeaderVisible(false);
+			friendContentpanel.setBodyBorder(false);
+			friendContentpanel.setBorders(false);
+			
+			ToolBar friendContentPanelToolBar  = new ToolBar();
+			friendContentPanelToolBar.setHeight("34px");
+			Text friendTitleText = new Text(((Messages) Registry.get(Messages.class.getName())).HomeViewport_header_myfriend());
+			friendTitleText.setStyleAttribute("font-size", "12px");
+			friendTitleText.setStyleAttribute("font-weight", "bold");
+			friendTitleText.setStyleAttribute("line-height", "12px");
+			friendTitleText.setStyleAttribute("color","#4D5762");
+			friendTitleText.setStyleAttribute("position","relative");
+			friendTitleText.setStyleAttribute("word-spacing","-0.1em");
+			
+			friendContentPanelToolBar.add(friendTitleText);
+			FillToolItem appFillToolItem = new FillToolItem();
+			friendContentPanelToolBar.add(appFillToolItem);
+			
+			Button devMenuBtn = new Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_friendconfig());
+			friendContentPanelToolBar.add(devMenuBtn);
+			devMenuBtn.addListener(Events.Select,new Listener<ButtonEvent>() {
+
+				@Override
+				public void handleEvent(ButtonEvent be) {
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_FRIENDS_MANAGE_TO_PANEL);
+					Dispatcher.get().dispatch(appEvent);
+				}
+
+			});
+			devMenuBtn.setToolTip(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_tooltip_friendconfig());
+			devMenuBtn.setHeight("30px");
+			
+			friendContentpanel.setTopComponent(friendContentPanelToolBar);
+			
+			friendContentpanel.setLayout(new FitLayout());
+			List<ColumnConfig> configs_1 = new ArrayList<ColumnConfig>();
+			
+			ColumnConfig clmncnfgInfo_1 = new ColumnConfig("id", "", 180);
+			configs_1.add(clmncnfgInfo_1);
+			GridCellRenderer<BeanModel> infoRender_1 = new GridCellRenderer<BeanModel>() {
+
+				@Override
+				public Object render(BeanModel model, String property,
+						ColumnData config, int rowIndex, int colIndex,
+						ListStore<BeanModel> store, Grid<BeanModel> grid) {
+					FriendInfoPanel panel = new FriendInfoPanel(model);
+					return panel;
+				}
+			};
+			clmncnfgInfo_1.setRenderer(infoRender_1);
+			
+			Grid<BeanModel> grid_1 = new Grid<BeanModel>(friendStore, new ColumnModel(configs_1));
+			grid_1.setAutoHeight(false);
+			grid_1.setAutoWidth(false);
+			grid_1.getView().setAutoFill(true);
+			friendContentpanel.add(grid_1, new FitData(0, 0, 0, 0));
+			grid_1.setBorders(true);
+			grid_1.setHideHeaders(true);
+			
+			return friendContentpanel;
+		}
+		
+		public ContentPanel createAppContentPanel(){
 			ContentPanel appContentpanel = new ContentPanel();
-			appContentpanel.setHeading(((Messages) Registry.get(Messages.class.getName())).HomeViewport_header_myapp());
-			layoutContainer_2.add(appContentpanel);
+			appContentpanel.setHeaderVisible(false);
+			appContentpanel.setBodyBorder(false);
+			appContentpanel.setBorders(false);
+			
+			ToolBar appContentPanelToolBar  = new ToolBar();
+			appContentPanelToolBar.setHeight("34px");
+			Text appTitleText = new Text(((Messages) Registry.get(Messages.class.getName())).HomeViewport_header_myapp());
+			appTitleText.setStyleAttribute("font-size", "12px");
+			appTitleText.setStyleAttribute("font-weight", "bold");
+			appTitleText.setStyleAttribute("line-height", "12px");
+			appTitleText.setStyleAttribute("color","#4D5762");
+			appTitleText.setStyleAttribute("position","relative");
+			appTitleText.setStyleAttribute("word-spacing","-0.1em");
+			appContentPanelToolBar.add(appTitleText);
+			FillToolItem appFillToolItem = new FillToolItem();
+			appContentPanelToolBar.add(appFillToolItem);
+			
+			Button devMenuBtn = new Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_appconfig());
+			appContentPanelToolBar.add(devMenuBtn);
+			devMenuBtn.addListener(Events.Select,new Listener<ButtonEvent>() {
+
+				@Override
+				public void handleEvent(ButtonEvent be) {
+					
+				}
+
+			});
+			devMenuBtn.setToolTip(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_tooltip_appconfig());
+			devMenuBtn.setHeight("30px");
+			appContentpanel.setTopComponent(appContentPanelToolBar);
+			
 			appContentpanel.setLayout(new FitLayout());
 			List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 			
@@ -155,94 +316,7 @@ public class HomeViewport extends AbstractViewport{
 			appContentpanel.add(grid, new FitData(0, 0, 0, 0));
 			grid.setBorders(true);
 			
-			//friend content panel
-			ContentPanel friendContentpanel = new ContentPanel();
-			friendContentpanel.setHeading(((Messages) Registry.get(Messages.class.getName())).HomeViewport_header_myfriend());
-			layoutContainer_2.add(friendContentpanel);
-			friendContentpanel.setLayout(new FitLayout());
-			List<ColumnConfig> configs_1 = new ArrayList<ColumnConfig>();
-			
-			ColumnConfig clmncnfgInfo_1 = new ColumnConfig("id", "", 180);
-			configs_1.add(clmncnfgInfo_1);
-			GridCellRenderer<BeanModel> infoRender_1 = new GridCellRenderer<BeanModel>() {
-
-				@Override
-				public Object render(BeanModel model, String property,
-						ColumnData config, int rowIndex, int colIndex,
-						ListStore<BeanModel> store, Grid<BeanModel> grid) {
-					FriendInfoPanel panel = new FriendInfoPanel(model);
-					return panel;
-				}
-			};
-			clmncnfgInfo_1.setRenderer(infoRender_1);
-			
-			ToolButton devMenuBtn = new ToolButton("x-tool-gear");
-			friendContentpanel.getHeader().addTool(devMenuBtn);
-			devMenuBtn.addSelectionListener(new SelectionListener<IconButtonEvent>() {
-				@Override
-				public void componentSelected(IconButtonEvent ce) {
-					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_FRIENDS_MANAGE_TO_PANEL);
-					Dispatcher.get().dispatch(appEvent);
-				}
-
-			});
-			devMenuBtn.setToolTip(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_tooltip_config());
-			
-			Grid<BeanModel> grid_1 = new Grid<BeanModel>(friendStore, new ColumnModel(configs_1));
-			grid_1.setAutoHeight(false);
-			grid_1.setAutoWidth(false);
-			grid_1.getView().setAutoFill(true);
-			friendContentpanel.add(grid_1, new FitData(0, 0, 0, 0));
-			grid_1.setBorders(true);
-			grid_1.setHideHeaders(true);
-			
-			layoutContainer_1.add(layoutContainer_2, new BorderLayoutData(LayoutRegion.EAST, 250.0f));
-			layoutContainer_2.setBorders(true);
-			
-			LayoutContainer layoutContainer_3 = new LayoutContainer();
-			layoutContainer_3.setLayout(new FitLayout());
-			
-			ContentPanel cntntpnlNewContentpanel = new ContentPanel();
-			cntntpnlNewContentpanel.setHeading(((Messages) Registry.get(Messages.class.getName())).HomeViewport_portal_title());
-			cntntpnlNewContentpanel.setLayout(new FitLayout());
-			cntntpnlNewContentpanel.setHeaderVisible(false);
-			
-			portal = new Portal(portalColumn);
-			cntntpnlNewContentpanel.add(portal);
-			portal.setColumnWidth(0, 0.5);
-			portal.setColumnWidth(1, 0.5);
-			
-			ToolBar toolBar = new ToolBar();
-			toolBar.setHeight("32px");
-			
-			Text txtDashboard = new Text(((Messages) Registry.get(Messages.class.getName())).HomeViewport_portal_title());
-			toolBar.add(txtDashboard);
-			
-			FillToolItem fillToolItem = new FillToolItem();
-			toolBar.add(fillToolItem);
-			
-			Button btnGotoStore = new Button();
-			btnGotoStore.addListener(Events.Select,new Listener<ButtonEvent>() {
-
-				@Override
-				public void handleEvent(ButtonEvent be) {
-					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_APP_STORE_TO_PANEL);
-					Dispatcher.get().dispatch(appEvent);
-				}
-
-			});
-			toolBar.add(btnGotoStore);
-//			btnGotoStore.setIcon(((Images)Registry.get(Images.class.getName())).store());
-			btnGotoStore.setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_title());
-//			btnGotoStore.addStyleName("btn-blue");
-			btnGotoStore.setHeight("32px");
-			cntntpnlNewContentpanel.setTopComponent(toolBar);
-			
-			layoutContainer_3.add(cntntpnlNewContentpanel);
-			layoutContainer_1.add(layoutContainer_3, new BorderLayoutData(LayoutRegion.CENTER));
-			layoutContainer_3.setBorders(true);
-			add(layoutContainer_1, new BorderLayoutData(LayoutRegion.CENTER));
-			layoutContainer_1.setBorders(true);
+			return appContentpanel;
 		}
 	
 		public void loadApps(Collection<Application> userApps){
@@ -359,7 +433,8 @@ public class HomeViewport extends AbstractViewport{
 			configLayoutContainer.add(configBtn, new HBoxLayoutData(2, 2, 2, 2));
 			configBtn.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
-					
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_SETTING_TO_PANEL);
+					Dispatcher.get().dispatch(appEvent);
 				}
 			});
 			configBtn.setStyleName("btn-blue");

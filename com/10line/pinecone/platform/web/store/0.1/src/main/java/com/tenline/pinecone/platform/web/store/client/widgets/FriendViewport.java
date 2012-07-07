@@ -65,27 +65,28 @@ public class FriendViewport extends AbstractViewport {
 		AppEvent event = new AppEvent(FriendEvents.GET_BY_USER);
 		Dispatcher.get().dispatch(event);
 		
-		//load invitations
-		AppEvent event1 = new AppEvent(FriendEvents.GET_REQUESTS);
-		Dispatcher.get().dispatch(event1);
-		
-		//load users
-		AppEvent event2 = new AppEvent(UserEvents.GET_ALL_USER);
-		Dispatcher.get().dispatch(event2);
+//		//load invitations
+//		AppEvent event1 = new AppEvent(FriendEvents.GET_REQUESTS);
+//		Dispatcher.get().dispatch(event1);
+//		
+//		//load users
+//		AppEvent event2 = new AppEvent(UserEvents.GET_ALL_USER);
+//		Dispatcher.get().dispatch(event2);
 	}
 	
 	public void loadFriends(Collection<Friend> friends) {
-//		for(Friend f:friends){
-//			System.out.println("@@@Type"+f.getType());
-//			System.out.println("@@@receiver Name:"+f.getReceiver().getName());
-//			System.out.println("@@@receiver Email:"+f.getReceiver().getEmail());
-//			System.out.println("@@@receiver Password:"+f.getReceiver().getPassword());
-//		}
 		mainPanel.loadFriends(friends);
+		
+		//load invitations
+		AppEvent event1 = new AppEvent(FriendEvents.GET_REQUESTS);
+		Dispatcher.get().dispatch(event1);
 	}
 	
 	public void loadFriendInvite(Collection<Friend> invitations){
 		mainPanel.loadFriendInvite(invitations);
+		//load users
+		AppEvent event2 = new AppEvent(UserEvents.GET_ALL_USER);
+		Dispatcher.get().dispatch(event2);
 	}
 	
 	public void loadAllUser(Collection<User> users){

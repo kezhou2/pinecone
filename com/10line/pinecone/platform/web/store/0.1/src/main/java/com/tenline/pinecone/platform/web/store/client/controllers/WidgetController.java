@@ -29,6 +29,7 @@ public class WidgetController extends Controller {
 		registerEventTypes(WidgetEvents.UPDATE_MAIL_LIST_TO_PANEL);
 		registerEventTypes(WidgetEvents.UPDATE_APP_STORE_TO_PANEL);
 		registerEventTypes(WidgetEvents.UPDATE_REGISTER_APP_TO_PANEL);
+		registerEventTypes(WidgetEvents.UPDATE_SETTING_TO_PANEL);
 	}
 
 	@Override
@@ -51,6 +52,8 @@ public class WidgetController extends Controller {
 			} else if (event.getType().equals(WidgetEvents.UPDATE_APP_STORE_TO_PANEL)) {
 				forwardToView(view, event);
 			} else if (event.getType().equals(WidgetEvents.UPDATE_REGISTER_APP_TO_PANEL)) {
+				forwardToView(view, event);
+			} else if (event.getType().equals(WidgetEvents.UPDATE_SETTING_TO_PANEL)) {
 				forwardToView(view, event);
 			}
 		} catch (Exception e) {

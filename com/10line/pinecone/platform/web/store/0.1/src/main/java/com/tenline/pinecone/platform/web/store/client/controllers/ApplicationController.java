@@ -9,13 +9,16 @@ import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
 import com.tenline.pinecone.platform.web.store.client.services.ApplicationService;
 import com.tenline.pinecone.platform.web.store.client.services.ApplicationServiceAsync;
 import com.tenline.pinecone.platform.web.store.client.views.ApplicationView;
+import com.tenline.pinecone.platform.web.store.client.widgets.AbstractViewport;
 
 /**
  * @author Bill
@@ -39,6 +42,8 @@ public class ApplicationController extends Controller {
 	@Override
 	public void handleEvent(AppEvent event) {
 		try {
+			mask();
+			
 			if (event.getType().equals(ApplicationEvents.GET_BY_USER)) {
 				getByUser(event);
 			} else if (event.getType().equals(ApplicationEvents.INSTALL)) {
@@ -50,7 +55,8 @@ public class ApplicationController extends Controller {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+			unmask();
+		} 
 	}
 	
 	/**
@@ -65,13 +71,15 @@ public class ApplicationController extends Controller {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Collection<Application> result) {
-				//TODO for test
-//				forwardToView(view, event.getType(), result);
-				forwardToView(view, event.getType(), Database.getApplications());
+				unmask();
+				
+				forwardToView(view, event.getType(), result);
+				Registry.register("MyApps", result);
 			}
 			
 		});
@@ -82,7 +90,17 @@ public class ApplicationController extends Controller {
 	 * @param event
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	private void install(final AppEvent event) throws Exception {
+		Consumer consumer = (Consumer) event.getData("consumer");
+		Collection<Application> list = (Collection<Application>)Registry.get("MyApps");
+		for(Application a:list){
+			if(a.getConsumer().getId().equals(consumer.getId())){
+				unmask();
+				return;
+			}
+		}
+		
 		Application application = new Application();
 		application.setConsumer((Consumer) event.getData("consumer"));
 		application.setDefault(false);
@@ -93,11 +111,14 @@ public class ApplicationController extends Controller {
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Application result) {
+				unmask();
 				forwardToView(view, event.getType(), result);
+				((Collection<Application>)Registry.get("MyApps")).add(result);
 			}
 			
 		});
@@ -109,29 +130,35 @@ public class ApplicationController extends Controller {
 	 * @throws Exception
 	 */
 	private void uninstall(final AppEvent event) throws Exception {
-		String filter = "id=='"+event.getData("id").toString()+"'";
-//		service.delete(filter, new AsyncCallback<Boolean>() {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				caught.printStackTrace();
-//			}
-//
-//			@Override
-//			public void onSuccess(Boolean result) {
-//				forwardToView(view, event.getType(), result);
-//			}
-//			
-//		});
-		//TODO
-		for(Application app:Database.getApplications()){
-			if(app.getId().equals(event.getData("id").toString())){
-				System.out.println("ApplicationController uninstall");
-				Database.getApplications().remove(app);
-				forwardToView(view, event.getType(), Database.getApplications());
-				break;
+		System.out.println("ApplicationController uninstall:"+event.getData("id").toString());
+		String filter = event.getData("id").toString();
+		service.delete(filter, new AsyncCallback<Boolean>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+				unmask();
 			}
-		}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onSuccess(Boolean result) {
+				System.out.println("result:"+result);
+//				forwardToView(view, event.getType(), result);
+				Collection<Application> list = (Collection<Application>)Registry.get("MyApps");
+				for(Application a:list){
+					if(a.getId().equals(event.getData("id").toString())){
+						list.remove(a);
+						unmask();
+						forwardToView(view, event.getType(), list);
+						break;
+					}
+				}
+				unmask();
+			}
+			
+		});
+//		}
 	}
 	
 	/**
@@ -145,29 +172,41 @@ public class ApplicationController extends Controller {
 		Application application = event.getData("application");
 		if (isDefault != null) application.setDefault(isDefault);
 		if (status != null) application.setStatus(status);
-//		service.update(application, new AsyncCallback<Application>() {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				caught.printStackTrace();
-//			}
-//
-//			@Override
-//			public void onSuccess(Application result) {
-//				forwardToView(view, event.getType(), result);
-//			}
-//			
-//		});
-		//TODO
-		for(Application app:Database.getApplications()){
-			if(app.getId().equals(application.getId())){
-				app.setDefault(isDefault);
-				app.setStatus(status);
-				break;
+		service.update(application, new AsyncCallback<Application>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+				unmask();
 			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onSuccess(Application result) {
+				Collection<Application> list = (Collection<Application>)Registry.get("MyApps");
+				unmask();
+				forwardToView(view, event.getType(), list);
+			}
+			
+		});
+	}
+	/**
+	 * unmask the viewport
+	 */
+	private void unmask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.unmask();
 		}
-		
-		forwardToView(view, event.getType(), Database.getApplications());
+	}
+	/**
+	 * mask the viewport
+	 */
+	private void mask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.mask(((Messages) Registry.get(Messages.class.getName())).loadingInfo());
+		}
 	}
 
 }

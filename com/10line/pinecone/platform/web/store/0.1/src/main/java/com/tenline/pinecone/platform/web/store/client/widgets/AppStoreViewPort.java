@@ -1,7 +1,6 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,9 +8,8 @@ import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.core.XTemplate;
 import com.extjs.gxt.ui.client.data.BaseListLoader;
+import com.extjs.gxt.ui.client.data.BaseModelData;
 import com.extjs.gxt.ui.client.data.BeanModel;
-import com.extjs.gxt.ui.client.data.BeanModelFactory;
-import com.extjs.gxt.ui.client.data.BeanModelLookup;
 import com.extjs.gxt.ui.client.data.BeanModelReader;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.ListLoader;
@@ -33,10 +31,9 @@ import com.extjs.gxt.ui.client.widget.ListView;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.Text;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
-import com.extjs.gxt.ui.client.widget.form.SimpleComboValue;
-import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnData;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
@@ -50,9 +47,8 @@ import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout.HBoxLayoutAlign;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayoutData;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.tenline.pinecone.platform.model.Category;
+import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
 import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
@@ -65,7 +61,9 @@ import com.tenline.pinecone.platform.web.store.client.services.ConsumerServiceAs
  *
  */
 public class AppStoreViewport extends AbstractViewport {
-	ListStore<BeanModel> store;
+	private ListStore<BeanModel> consumerStore;
+	private ListStore<BaseModelData> categoriesStore;
+	private ComboBox<BaseModelData> categoryCombo;
 	public AppStoreViewport() {
 		super();
 		body.add(new MainPanel(),new BorderLayoutData(LayoutRegion.CENTER));
@@ -142,27 +140,30 @@ public class AppStoreViewport extends AbstractViewport {
 		header.add(new Text(), flex);  
 		Label label = new Label(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_label_category());
 		header.add(label, new HBoxLayoutData(new Margins(0, 5, 0, 0)));
-		SimpleComboBox<String> consumerCombo = new SimpleComboBox<String>();
-		consumerCombo.add(Arrays.asList("ALL",Category.DOMAIN_GAME,Category.DOMAIN_PET,Category.DOMAIN_SECURITY));
-		consumerCombo.setTriggerAction(TriggerAction.ALL);
-		consumerCombo.setEditable(false);
-		consumerCombo.setForceSelection(true);
-		consumerCombo.addSelectionChangedListener(new SelectionChangedListener<SimpleComboValue<String>>() {
+		categoryCombo = new ComboBox<BaseModelData>();
+//		consumerCombo.add(Arrays.asList("ALL",Category.DOMAIN_GAME,Category.DOMAIN_PET,Category.DOMAIN_SECURITY));
+		categoryCombo.setTriggerAction(TriggerAction.ALL);
+		categoryCombo.setEditable(false);
+		categoryCombo.setForceSelection(true);
+		categoryCombo.setDisplayField("domain");
+		categoriesStore = new ListStore<BaseModelData>();
+		categoryCombo.setStore(categoriesStore);
+		categoryCombo.addSelectionChangedListener(new SelectionChangedListener<BaseModelData>() {
 
 			@Override
-			public void selectionChanged(SelectionChangedEvent<SimpleComboValue<String>> se) {
+			public void selectionChanged(SelectionChangedEvent<BaseModelData> se) {
 				AppEvent event;
-				if("all".equalsIgnoreCase(se.getSelectedItem().getValue())) {
+				if("all".equalsIgnoreCase(se.getSelectedItem().get("domain").toString())) {
 					event = new AppEvent(ConsumerEvents.GET_ALL);
 				} else {
 					event = new AppEvent(ConsumerEvents.GET_BY_CATEGORY);
-					event.setData("id", se.getSelectedItem().getValue());
+					event.setData("id", se.getSelectedItem().get("id"));
 				}
 
 				Dispatcher.get().dispatch(event);
 			}
 		});
-		header.add(consumerCombo, new HBoxLayoutData(new Margins(0, 25, 0, 0)));
+		header.add(categoryCombo, new HBoxLayoutData(new Margins(0, 25, 0, 0)));
 
 		//����
 		final TextField<String> txtfldSearch = new TextField<String>();
@@ -212,7 +213,8 @@ public class AppStoreViewport extends AbstractViewport {
 			public Object render(BeanModel model, String property,
 					ColumnData config, int rowIndex, int colIndex,
 					ListStore<BeanModel> store, Grid<BeanModel> grid) {
-				return ((Images) Registry.get(Images.class.getName())).consumerIcon().getHTML();
+				return ((AbstractImagePrototype) model.get("icons")).getHTML();
+//				return ((Images) Registry.get(Images.class.getName())).consumerIcon().getHTML();
 			}
 		};
 		column.setRenderer(iconRenderer);
@@ -266,9 +268,9 @@ public class AppStoreViewport extends AbstractViewport {
 		column.setRenderer(buttonRenderer);
 		configs.add(column);  
 
-		store = new ListStore<BeanModel>();
+		consumerStore = new ListStore<BeanModel>();
 		ColumnModel cm = new ColumnModel(configs);
-		Grid<BeanModel> grid = new Grid<BeanModel>(store, cm);
+		Grid<BeanModel> grid = new Grid<BeanModel>(consumerStore, cm);
 		grid.setBorders(true);
 		grid.addPlugin(rowExpander);
 		//��ȡӦ���б�����
@@ -301,21 +303,20 @@ public class AppStoreViewport extends AbstractViewport {
 		listView.setStore(store);
 		listView.setDisplayProperty("name");
 		eastPanel.add(listView);
-		listView.setHeight("245");
+		listView.setHeight("200");
 		return eastPanel;
 	}
 	public void setAppGridData(List<BeanModel> result) {
-		List<BeanModel> list = new ArrayList<BeanModel>();
-		BeanModelFactory consumerFactory = BeanModelLookup.get().getFactory(Consumer.class);
-		Consumer c = new Consumer("key", "secret", "displayName", "connectURI");
-		BeanModel bean = consumerFactory.createModel(c);
-		bean.set("detail", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla vel, urna.<br/><br/>Aliquam commodo ullamcorper erat. Nullam vel justo in neque porttitor laoreet. Aenean lacus dui, consequat eu, adipiscing eget, nonummy non, nisi. Morbi nunc est, dignissim non, ornare sed, luctus eu, massa. Vivamus eget quam. Vivamus tincidunt diam nec urna. Curabitur velit.");
-		bean.set("install", ((Images) Registry.get(Images.class.getName())).consumerIcon());
-		bean.set("consumer", c);
-		list.add(bean);
-		store.removeAll();
-		store.add(list);
-		store.commitChanges();
+		consumerStore.removeAll();
+		consumerStore.add(result);
+		consumerStore.commitChanges();
+	}
+	
+	public void setCategories(List<BaseModelData> categories){
+		System.out.println("setCategories:"+categories.size());
+		categoriesStore.removeAll();
+		categoriesStore.add(categories);
+		categoriesStore.commitChanges();
 	}
 
 }

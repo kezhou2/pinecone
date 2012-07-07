@@ -11,8 +11,11 @@ import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.Text;
+import com.extjs.gxt.ui.client.widget.form.Field;
+import com.extjs.gxt.ui.client.widget.form.Field.FieldMessages;
 import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.BoxLayout.BoxLayoutPack;
@@ -35,15 +38,24 @@ import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
  */
 public class LoginViewport extends AbstractViewport {
 	
+	private MainPanel mainPanel;
+	
 	public LoginViewport() {
-		MainPanel mainPanel = new MainPanel();
+		mainPanel = new MainPanel();
 		body.add(mainPanel, new BorderLayoutData(LayoutRegion.CENTER));
+	}
+	
+	public void logout(){
+		mainPanel.logout();
 	}
 	
 	private class MainPanel extends ContentPanel{
 		
-//		public final String videoUrl = "http://player.youku.com/player.php/sid/XMzMzNjU3Mzgw/v.swf";
-		public final String videoUrl = "";
+		public final String videoUrl = "http://player.youku.com/player.php/sid/XMzMzNjU3Mzgw/v.swf";
+//		public final String videoUrl = "";
+		
+		private TextField<String> nameText;
+		private TextField<String> pwdText;
 		
 		public MainPanel(){
 			setLayout(new BorderLayout());
@@ -73,7 +85,7 @@ public class LoginViewport extends AbstractViewport {
 			txtLoginToContinue.setStyleAttribute("position", "relative");
 			txtLoginToContinue.setStyleAttribute("word-spacing", "-0.1em");
 			
-			final TextField<String> nameText = new TextField<String>();
+			nameText = new TextField<String>();
 			FormData fd_txtfldName = new FormData("80%");
 			fd_txtfldName.setMargins(new Margins(20, 10, 10, 10));
 			layoutContainer_1.add(nameText, fd_txtfldName);
@@ -82,8 +94,17 @@ public class LoginViewport extends AbstractViewport {
 			//style
 			nameText.setLabelStyle("font-size: 18px;font-weight: bold;line-height: 18px;margin-bottom: 10px;color: #4D5762;	position: relative;	word-spacing: -0.1em;");
 			nameText.setHeight("30px");
+			nameText.setValidator(new Validator(){
+
+				@Override
+				public String validate(Field<?> field, String value) {
+					return null;
+				}
+				
+			});
+			nameText.setValidateOnBlur(true);
 			
-			final TextField<String> pwdText = new TextField<String>();
+			pwdText = new TextField<String>();
 			pwdText.setPassword(true);
 			FormData fd_txtfldPassword = new FormData("80%");
 			fd_txtfldPassword.setMargins(new Margins(20, 10, 10, 10));
@@ -94,7 +115,7 @@ public class LoginViewport extends AbstractViewport {
 			pwdText.setAllowBlank(false);
 			//style
 			pwdText.setLabelStyle("font-size: 18px;font-weight: bold;line-height: 18px;margin-bottom: 10px;color: #4D5762;	position: relative;	word-spacing: -0.1em;");
-			pwdText.setHeight("26px");
+			pwdText.setHeight("30px");
 			
 			LayoutContainer layoutContainer_3 = new LayoutContainer();
 			HBoxLayout hbl_layoutContainer_3 = new HBoxLayout();
@@ -115,7 +136,7 @@ public class LoginViewport extends AbstractViewport {
 			loginButton.setStyleName("btn-green");
 			loginButton.setSize("60px", "30px");
 			
-			Button regButton = new Button(((Messages) Registry.get(Messages.class.getName())).LoginViewport_logout());
+			Button regButton = new Button(((Messages) Registry.get(Messages.class.getName())).LoginViewport_register());
 			layoutContainer_3.add(regButton, new HBoxLayoutData(0, 0, 0, 10));
 			FormData fd_layoutContainer_3 = new FormData("100%");
 			fd_layoutContainer_3.setMargins(new Margins(0, 90, 0, 50));
@@ -145,6 +166,11 @@ public class LoginViewport extends AbstractViewport {
 			VideoContentpanel.setUrl(videoUrl);
 			add(videoLayoutContainer, new BorderLayoutData(LayoutRegion.CENTER));
 			videoLayoutContainer.setBorders(false);
+		}
+		
+		public void logout(){
+			nameText.setValue("");
+			pwdText.setValue("");
 		}
 	}
 

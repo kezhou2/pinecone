@@ -10,12 +10,15 @@ import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.FriendEvents;
 import com.tenline.pinecone.platform.web.store.client.services.FriendService;
 import com.tenline.pinecone.platform.web.store.client.services.FriendServiceAsync;
 import com.tenline.pinecone.platform.web.store.client.views.FriendView;
+import com.tenline.pinecone.platform.web.store.client.widgets.AbstractViewport;
 
 /**
  * @author Bill
@@ -41,6 +44,8 @@ public class FriendController extends Controller {
 	@Override
 	public void handleEvent(AppEvent event) {
 		try {
+			mask();
+			
 			if (event.getType().equals(FriendEvents.GET_BY_USER)) {
 				getByUser(event);
 			} else if (event.getType().equals(FriendEvents.GET_REQUESTS)) {
@@ -56,6 +61,7 @@ public class FriendController extends Controller {
 			} 
 		} catch (Exception e) {
 			e.printStackTrace();
+			unmask();
 		}
 	}
 	
@@ -70,8 +76,9 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("", caught.getMessage());
+				Info.display("getByUser", caught.getMessage());
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
@@ -82,12 +89,14 @@ public class FriendController extends Controller {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display("", caught.getMessage());
+						Info.display("getByUser", caught.getMessage());
 						caught.printStackTrace();
+						unmask();
 					}
 
 					@Override
 					public void onSuccess(Collection<Friend> result) {
+						unmask();
 						result.addAll(temp);
 						forwardToView(view, event.getType(),result);
 					}
@@ -109,12 +118,14 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("", caught.getMessage());
+				Info.display("getRequests", caught.getMessage());
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Collection<Friend> result) {
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -132,12 +143,14 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("", caught.getMessage());
+				Info.display("check", caught.getMessage());
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Collection<Friend> result) {
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -159,12 +172,14 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("", caught.getMessage());
+				Info.display("add", caught.getMessage());
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Friend result) {
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -183,12 +198,14 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("", caught.getMessage());
+				Info.display("delete", caught.getMessage());
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Boolean result) {
+				unmask();
 				System.out.println("FriendController delete:"+result);
 				forwardToView(view, event.getType(), result);
 			}
@@ -211,16 +228,35 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("", caught.getMessage());
+				Info.display("setting", caught.getMessage());
 				caught.printStackTrace();
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Friend result) {
+				unmask();
 				forwardToView(view, event.getType(), result);
 			}
 			
 		});
 	}
-	
+	/**
+	 * unmask the viewport
+	 */
+	private void unmask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.unmask();
+		}
+	}
+	/**
+	 * mask the viewport
+	 */
+	private void mask(){
+		if(RootPanel.get().getWidgetCount() > 0){
+			AbstractViewport av = (AbstractViewport)(RootPanel.get().getWidget(0));
+			av.mask(((Messages) Registry.get(Messages.class.getName())).loadingInfo());
+		}
+	}
 }

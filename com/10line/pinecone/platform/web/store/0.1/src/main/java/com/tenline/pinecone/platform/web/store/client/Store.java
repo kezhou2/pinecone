@@ -3,11 +3,14 @@
  */
 package com.tenline.pinecone.platform.web.store.client;
 
+import java.util.ArrayList;
+
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.web.store.client.controllers.ApplicationController;
 import com.tenline.pinecone.platform.web.store.client.controllers.CategoryController;
 import com.tenline.pinecone.platform.web.store.client.controllers.ConsumerController;
@@ -17,6 +20,7 @@ import com.tenline.pinecone.platform.web.store.client.controllers.UserController
 import com.tenline.pinecone.platform.web.store.client.controllers.WidgetController;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.services.ApplicationService;
+import com.tenline.pinecone.platform.web.store.client.services.CategoryService;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
 import com.tenline.pinecone.platform.web.store.client.services.FriendService;
 import com.tenline.pinecone.platform.web.store.client.services.MailService;
@@ -30,6 +34,7 @@ import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.MailListViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.RegisterViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.SendMailViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.SettingViewport;
 
 /**
  * 
@@ -48,6 +53,7 @@ public class Store implements EntryPoint {
 		Registry.register(FriendService.class.getName(), GWT.create(FriendService.class));
 		Registry.register(MailService.class.getName(), GWT.create(MailService.class));
 		Registry.register(UserService.class.getName(), GWT.create(UserService.class));
+		Registry.register(CategoryService.class.getName(), GWT.create(CategoryService.class));
 		//register widgets
 		Registry.register(LoginViewport.class.getName(), new LoginViewport());
 		Registry.register(RegisterViewport.class.getName(), new RegisterViewport());
@@ -58,6 +64,11 @@ public class Store implements EntryPoint {
 		Registry.register(MailListViewport.class.getName(), new MailListViewport());
 		Registry.register(AppStoreViewport.class.getName(), new AppStoreViewport());
 		Registry.register(ConsumerRegistryViewport.class.getName(), new ConsumerRegistryViewport());
+		Registry.register(SettingViewport.class.getName(), new SettingViewport());
+		
+		//set user application
+		Registry.register("MyApps", new ArrayList<Application>());
+		
 		//set controller
 		Dispatcher dispatcher = Dispatcher.get();
 		dispatcher.addController(new WidgetController());

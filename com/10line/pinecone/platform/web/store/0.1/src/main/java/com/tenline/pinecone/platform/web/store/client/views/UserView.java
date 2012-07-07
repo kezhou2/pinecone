@@ -10,13 +10,12 @@ import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.mvc.View;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.tenline.pinecone.platform.model.Friend;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
-import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
 
 /**
  * @author Bill
@@ -44,7 +43,9 @@ public class UserView extends View {
 				
 			} else if (event.getType().equals(UserEvents.GET_ALL_USER)) {
 				getAllUser(event);
-			}
+			} else if (event.getType().equals(UserEvents.SETTING)) {
+				setting(event);
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,6 +62,8 @@ public class UserView extends View {
 	}
 	
 	private void logout(AppEvent event) throws Exception {
+		LoginViewport lv = (LoginViewport)Registry.get(LoginViewport.class.getName());
+		lv.logout();
 		AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
 		Dispatcher.get().dispatch(appEvent);
 	}                                                   
@@ -79,6 +82,10 @@ public class UserView extends View {
 		Collection<User> users = (Collection<User>)event.getData();
 		FriendViewport friendView = (FriendViewport)Registry.get(FriendViewport.class.getName());
 		friendView.loadAllUser(users);
+	}
+	
+	private void setting(AppEvent event) throws Exception{
+		MessageBox.info("Info", "Setting successfuly!", null);
 	}
 
 }

@@ -60,8 +60,6 @@ public class MailListViewport extends AbstractViewport{
 		private Grid<BeanModel> outboxGrid;
 		private ListStore<BeanModel> inListStore = new ListStore<BeanModel>();
 		private ListStore<BeanModel> outListStore = new ListStore<BeanModel>();
-		private String READ = "Read";
-		private String UNREAD = "Unread";
 		
 		/**use to generate Mail BeanModel*/
 		private BeanModelFactory mailFactory = BeanModelLookup.get().getFactory(Mail.class);
@@ -205,7 +203,7 @@ public class MailListViewport extends AbstractViewport{
 			//tool bar
 			ToolBar toolBar = new ToolBar();
 			
-			Button btnBack = new Button("Back");
+			Button btnBack = new Button(((Messages) Registry.get(Messages.class.getName())).MailListViewport_button_back());
 			toolBar.add(btnBack);
 			btnBack.addListener(Events.Select,new Listener<ButtonEvent>() {
 

@@ -83,6 +83,15 @@ public class FriendController extends Controller {
 
 			@Override
 			public void onSuccess(Collection<Friend> result) {
+				 
+//				System.out.println("Receiver*******************************");
+//				for(Friend f:result){
+//					System.out.println("id:"+f.getSender().getId());
+//					System.out.println("name:"+f.getSender().getName());
+//					System.out.println("password:"+f.getSender().getPassword());
+//					System.out.println("email:"+f.getSender().getEmail());
+//				}
+				
 				final Collection<Friend> temp = result;
 				service.show("isDecided==true&&sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
 						new AsyncCallback<Collection<Friend>>() {
@@ -96,6 +105,14 @@ public class FriendController extends Controller {
 
 					@Override
 					public void onSuccess(Collection<Friend> result) {
+						
+//						System.out.println("sender*******************************");
+//						for(Friend f:result){
+//							System.out.println("id:"+f.getReceiver().getId());
+//							System.out.println("name:"+f.getReceiver().getName());
+//							System.out.println("password:"+f.getReceiver().getPassword());
+//							System.out.println("email:"+f.getReceiver().getEmail());
+//						}
 						unmask();
 						result.addAll(temp);
 						forwardToView(view, event.getType(),result);

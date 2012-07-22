@@ -3,13 +3,18 @@
  */
 package com.tenline.pinecone.platform.web.store.client.views;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.data.BeanModel;
+import com.extjs.gxt.ui.client.data.BeanModelFactory;
+import com.extjs.gxt.ui.client.data.BeanModelLookup;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.View;
 import com.tenline.pinecone.platform.model.Application;
+import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 
@@ -19,6 +24,9 @@ import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
  */
 public class ApplicationView extends View {
 
+	/**use to generate Application BeanModel*/
+	private BeanModelFactory applicationFactory = BeanModelLookup.get().getFactory(Application.class);
+	
 	/**
 	 * @param controller
 	 */
@@ -47,7 +55,23 @@ public class ApplicationView extends View {
 	private void onGetByUser(AppEvent event) throws Exception{
 		HomeViewport view = (HomeViewport)Registry.get(HomeViewport.class.getName());
 		Collection<Application> userApps = (Collection<Application>)event.getData();
-		view.loadApps(userApps);
+		
+		Collection<BeanModel> models = new ArrayList<BeanModel>();
+		for(Application app:userApps){
+			BeanModel bm = applicationFactory.createModel(app);
+//			System.out.println("***********************************");
+//			for(String key:bm.getPropertyNames()){
+//				System.out.println(key+":"+bm.get(key));
+//			}
+//			
+//			System.out.println("&&&app consumer"+app.getConsumer());
+			bm.set("thisconsumer", app.getConsumer());
+			bm.set("thisapplication", app);
+			models.add(bm);
+		}
+		
+		
+		view.loadApps(models);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -55,13 +79,29 @@ public class ApplicationView extends View {
 		System.out.println("ApplicationView onSetting");
 		HomeViewport view = (HomeViewport)Registry.get(HomeViewport.class.getName());
 		Collection<Application> userApps = (Collection<Application>)event.getData();
-		view.loadApps(userApps);
+		
+		Collection<BeanModel> models = new ArrayList<BeanModel>();
+		for(Application app:userApps){
+			BeanModel bm = applicationFactory.createModel(app);
+			bm.set("thisconsumer", app.getConsumer());
+			bm.set("thisapplication", app);
+			models.add(bm);
+		}
+		view.loadApps(models);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void onUninstall(AppEvent event) throws Exception{
 		HomeViewport view = (HomeViewport)Registry.get(HomeViewport.class.getName());
 		Collection<Application> userApps = (Collection<Application>)event.getData();
-		view.loadApps(userApps);
+		
+		Collection<BeanModel> models = new ArrayList<BeanModel>();
+		for(Application app:userApps){
+			BeanModel bm = applicationFactory.createModel(app);
+			bm.set("thisconsumer", app.getConsumer());
+			bm.set("thisapplication", app);
+			models.add(bm);
+		}
+		view.loadApps(models);
 	}
 }

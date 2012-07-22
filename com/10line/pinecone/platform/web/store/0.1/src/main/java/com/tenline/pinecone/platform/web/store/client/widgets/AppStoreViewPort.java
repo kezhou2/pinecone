@@ -15,6 +15,7 @@ import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.ListLoader;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
@@ -23,6 +24,7 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.store.Store;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.Label;
@@ -33,6 +35,7 @@ import com.extjs.gxt.ui.client.widget.Text;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
+import com.extjs.gxt.ui.client.widget.form.StoreFilterField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnData;
@@ -46,6 +49,8 @@ import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout.HBoxLayoutAlign;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayoutData;
+import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
+import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.tenline.pinecone.platform.model.Consumer;
@@ -56,7 +61,6 @@ import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerServiceAsync;
 /**
- * Ӧ���̵�ҳ��
  * @author lue
  *
  */
@@ -66,7 +70,9 @@ public class AppStoreViewport extends AbstractViewport {
 	private ComboBox<BaseModelData> categoryCombo;
 	public AppStoreViewport() {
 		super();
-		body.add(new MainPanel(),new BorderLayoutData(LayoutRegion.CENTER));
+		BorderLayoutData bld = new BorderLayoutData(LayoutRegion.CENTER);
+		bld.setMargins(new Margins(3,3,3,3));
+		body.add(new MainPanel(),bld);
 	}
 	private class MainPanel extends ContentPanel{
 
@@ -74,40 +80,42 @@ public class AppStoreViewport extends AbstractViewport {
 			setHeaderVisible(false);
 			setCollapsible(true);
 			setLayout(new BorderLayout());
+			setBorders(false);
+			setBodyBorder(false);
 
 			BorderLayoutData centerLayoutData = new BorderLayoutData(LayoutRegion.CENTER);
+			centerLayoutData.setMargins(new Margins(0,3,0,3));
 			centerLayoutData.setCollapsible(true);
 			centerLayoutData.setSplit(true);
 
 			add(createCenter(), centerLayoutData);
-			add(createEast(), new BorderLayoutData(LayoutRegion.EAST,300.0f));
+			
+			BorderLayoutData eastLayoutData = new BorderLayoutData(LayoutRegion.EAST,300.0f);
+			eastLayoutData.setMargins(new Margins(0,0,0,3));
+			
+			add(createEast(), eastLayoutData);
 		}
 
 	}
-	/**
-	 * ����Ӧ���б�
-	 * @return
-	 */
+	
 	private ContentPanel createCenter() {
 		ContentPanel centerPanel = new ContentPanel();
 		centerPanel.setHeaderVisible(false);
 		centerPanel.setLayout(new BorderLayout());
+		centerPanel.setBorders(false);
+		centerPanel.setBodyBorder(false);
 
-		LayoutContainer header = createHeader();
+		centerPanel.setTopComponent(createToolBar());
 		Grid<BeanModel> grid = initGrid();
 
-		centerPanel.add(header,new BorderLayoutData(LayoutRegion.NORTH,30));
 		centerPanel.add(grid, new BorderLayoutData(LayoutRegion.CENTER));
 
 		return centerPanel;
 	}
-	private LayoutContainer createHeader() {
-		LayoutContainer header = new LayoutContainer();
-		HBoxLayout layout = new HBoxLayout();  
-		layout.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);  
-		header.setLayout(layout);
+	private ToolBar createToolBar() {
+		ToolBar toolBar = new ToolBar();
+		toolBar.setHeight("38px");
 
-		//���ء�������ҳ����ť
 		Button buttonHomePage = new Button();
 		buttonHomePage.setText(((Messages) Registry.get(Messages.class.getName())).HomeViewport_title());
 		buttonHomePage.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -119,7 +127,8 @@ public class AppStoreViewport extends AbstractViewport {
 				Dispatcher.get().dispatch(event);
 			}
 		});
-		header.add(buttonHomePage);
+		toolBar.add(buttonHomePage);
+		buttonHomePage.setHeight("32px");
 		
 		Button buttonRegister = new Button();
 		buttonRegister.setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_button_register());
@@ -132,16 +141,21 @@ public class AppStoreViewport extends AbstractViewport {
 				Dispatcher.get().dispatch(event);
 			}
 		});
-		header.add(buttonRegister);
+		toolBar.add(buttonRegister);
+		buttonRegister.setHeight("32px");
 
-		//��������
-		HBoxLayoutData flex = new HBoxLayoutData(new Margins(0, 5, 0, 0));  
-		flex.setFlex(1);  
-		header.add(new Text(), flex);  
+		FillToolItem fillToolItem = new FillToolItem();
+		toolBar.add(fillToolItem);
+		
+//		LayoutContainer lc = new LayoutContainer();
+//		lc.setLayout(new HBoxLayout());
+//		lc.setSize("330px", "35px");
+//		toolBar.add(lc);
+		
 		Label label = new Label(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_label_category());
-		header.add(label, new HBoxLayoutData(new Margins(0, 5, 0, 0)));
+		toolBar.add(label);
 		categoryCombo = new ComboBox<BaseModelData>();
-//		consumerCombo.add(Arrays.asList("ALL",Category.DOMAIN_GAME,Category.DOMAIN_PET,Category.DOMAIN_SECURITY));
+		categoryCombo.setWidth("70px");
 		categoryCombo.setTriggerAction(TriggerAction.ALL);
 		categoryCombo.setEditable(false);
 		categoryCombo.setForceSelection(true);
@@ -163,26 +177,41 @@ public class AppStoreViewport extends AbstractViewport {
 				Dispatcher.get().dispatch(event);
 			}
 		});
-		header.add(categoryCombo, new HBoxLayoutData(new Margins(0, 25, 0, 0)));
-
-		//����
-		final TextField<String> txtfldSearch = new TextField<String>();
-		header.add(txtfldSearch,new HBoxLayoutData(new Margins(0, 5, 0, 0)));
-		txtfldSearch.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_text_search());
-		Button button = new Button(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_button_search());
-		button.addSelectionListener(new SelectionListener<ButtonEvent>() {
+		toolBar.add(categoryCombo);
+		categoryCombo.setLabelStyle("font-size: 18px;font-weight: bold;line-height: 18px;margin-bottom: 10px;color: #4D5762;	position: relative;	word-spacing: -0.1em;");
+		categoryCombo.setStyleAttribute("autoCreate", "{tag: \"input\", type: \"text\", size: \"20\", autocomplete: \"off\", maxlength: \"10\"}");
+		
+		Text text1 = new Text(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_label_search());
+		toolBar.add(text1);
+		StoreFilterField<BeanModel> filter = new StoreFilterField<BeanModel>() {
 
 			@Override
-			public void componentSelected(ButtonEvent ce) {
-				String name = txtfldSearch.getValue();
-				AppEvent event = new AppEvent(ConsumerEvents.GET_BY_NAME);
-				event.setData("name",name);
-				Dispatcher.get().dispatch(event);
+			protected boolean doSelect(Store<BeanModel> store,
+					BeanModel parent, BeanModel record, String property,
+					String filter) {
+				System.out.println("###############checking");
+				for (String key : record.getPropertyNames()) {
+					System.out.println("check:"+key);
+					if (record.get(key).toString().contains(filter)) {
+						return true;
+					}
+				}
+				return false;
 			}
-		});
-		header.add(button,new HBoxLayoutData(new Margins(0, 5, 0, 0)));
-		return header;
+
+		};
+		filter.bind(consumerStore);
+		filter.setWidth("120px");
+		filter.setEmptyText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_text_search());
+		toolBar.add(filter);
+		
+		Button blankBtn = new Button();
+		toolBar.add(blankBtn);
+		blankBtn.setEnabled(false);
+		blankBtn.setHeight("30px");
+		return toolBar;
 	}
+	
 	private Grid<BeanModel> initGrid() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();  
 
@@ -224,7 +253,7 @@ public class AppStoreViewport extends AbstractViewport {
 		column = new ColumnConfig();  
 		column.setId("name");  
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_name());  
-		column.setWidth(400);  
+		column.setWidth(300);  
 		configs.add(column);  
 
 		//�����У�Ӧ�ð汾��
@@ -271,8 +300,9 @@ public class AppStoreViewport extends AbstractViewport {
 		consumerStore = new ListStore<BeanModel>();
 		ColumnModel cm = new ColumnModel(configs);
 		Grid<BeanModel> grid = new Grid<BeanModel>(consumerStore, cm);
-		grid.setBorders(true);
+//		grid.setBorders(false);
 		grid.addPlugin(rowExpander);
+		grid.setStripeRows(true);
 		//��ȡӦ���б�����
 		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
 		Dispatcher.get().dispatch(appEvent);
@@ -284,8 +314,28 @@ public class AppStoreViewport extends AbstractViewport {
 	 */
 	private ContentPanel createEast() {
 		ContentPanel eastPanel = new ContentPanel();
-		eastPanel.setHeading(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_title_ranking());
+		eastPanel.setHeaderVisible(false);
 		eastPanel.setLayout(new FillLayout());
+		eastPanel.setBorders(false);
+		eastPanel.setBodyBorder(false);
+		
+		ToolBar toolBar = new ToolBar();
+		toolBar.setHeight("34px");
+		
+		Text txtTitle = new Text(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_title_ranking());
+		txtTitle.setStyleAttribute("font-size", "12px");
+		txtTitle.setStyleAttribute("font-weight", "bold");
+		txtTitle.setStyleAttribute("line-height", "12px");
+		txtTitle.setStyleAttribute("color","#4D5762");
+		txtTitle.setStyleAttribute("position","relative");
+		txtTitle.setStyleAttribute("word-spacing","-0.1em");
+		toolBar.add(txtTitle);
+		eastPanel.setTopComponent(toolBar);
+		
+		Button blankBtn = new Button();
+		toolBar.add(blankBtn);
+		blankBtn.setEnabled(false);
+		blankBtn.setHeight("30px");
 
 		RpcProxy<Collection<Consumer>> proxy = new RpcProxy<Collection<Consumer>>() {
 			@Override
@@ -304,6 +354,7 @@ public class AppStoreViewport extends AbstractViewport {
 		listView.setDisplayProperty("name");
 		eastPanel.add(listView);
 		listView.setHeight("200");
+//		listView.setBorders(false);
 		return eastPanel;
 	}
 	public void setAppGridData(List<BeanModel> result) {

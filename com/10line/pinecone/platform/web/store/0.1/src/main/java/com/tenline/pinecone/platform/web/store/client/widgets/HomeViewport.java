@@ -8,8 +8,6 @@ import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BeanModel;
-import com.extjs.gxt.ui.client.data.BeanModelFactory;
-import com.extjs.gxt.ui.client.data.BeanModelLookup;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
@@ -43,7 +41,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.model.Friend;
+import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
@@ -80,20 +78,21 @@ public class HomeViewport extends AbstractViewport{
 		//load user's applications
 		AppEvent appEvent = new AppEvent(ApplicationEvents.GET_BY_USER);
 		Dispatcher.get().dispatch(appEvent);
+	}
+	
+	public void loadApps(Collection<BeanModel> userApps){
+		mainPanel.loadApps(userApps);
+		
 		//load user's friends
 		AppEvent friEvent = new AppEvent(FriendEvents.GET_BY_USER);
 		Dispatcher.get().dispatch(friEvent);
+	}
+	
+	public void loadFriends(Collection<BeanModel> userFriends){
+		mainPanel.loadFriends(userFriends);
 		//load user's messages
 		AppEvent msgEvent = new AppEvent(MailEvents.GET_UNREAD_COUNT);
 		Dispatcher.get().dispatch(msgEvent);
-	}
-	
-	public void loadApps(Collection<Application> userApps){
-		mainPanel.loadApps(userApps);
-	}
-	
-	public void loadFriends(Collection<Friend> userFriends){
-		mainPanel.loadFriends(userFriends);
 	}
 	
 	public void loadMails(int count){
@@ -105,10 +104,7 @@ public class HomeViewport extends AbstractViewport{
 		private Portal portal;
 		/**portal column num*/
 		private int portalColumn = 2;
-		/**use to generate Application BeanModel*/
-		private BeanModelFactory applicationFactory = BeanModelLookup.get().getFactory(Application.class);
-		/**use to generate friend BeanModel*/
-		private BeanModelFactory friendFactory = BeanModelLookup.get().getFactory(Friend.class);
+		
 		
 		/**Store to store application bean*/
 		private ListStore<BeanModel> appStore;
@@ -217,13 +213,11 @@ public class HomeViewport extends AbstractViewport{
 			Button devMenuBtn = new Button(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_friendconfig());
 			friendContentPanelToolBar.add(devMenuBtn);
 			devMenuBtn.addListener(Events.Select,new Listener<ButtonEvent>() {
-
 				@Override
 				public void handleEvent(ButtonEvent be) {
 					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_FRIENDS_MANAGE_TO_PANEL);
 					Dispatcher.get().dispatch(appEvent);
 				}
-
 			});
 			devMenuBtn.setToolTip(((Messages) Registry.get(Messages.class.getName())).HomeViewport_button_tooltip_friendconfig());
 			devMenuBtn.setHeight("30px");
@@ -254,6 +248,7 @@ public class HomeViewport extends AbstractViewport{
 			friendContentpanel.add(grid_1, new FitData(0, 0, 0, 0));
 			grid_1.setBorders(true);
 			grid_1.setHideHeaders(true);
+			grid_1.setStripeRows(true);
 			
 			return friendContentpanel;
 		}
@@ -263,6 +258,7 @@ public class HomeViewport extends AbstractViewport{
 			appContentpanel.setHeaderVisible(false);
 			appContentpanel.setBodyBorder(false);
 			appContentpanel.setBorders(false);
+			appContentpanel.getBody();
 			
 			ToolBar appContentPanelToolBar  = new ToolBar();
 			appContentPanelToolBar.setHeight("34px");
@@ -315,57 +311,44 @@ public class HomeViewport extends AbstractViewport{
 			grid.setHideHeaders(true);
 			appContentpanel.add(grid, new FitData(0, 0, 0, 0));
 			grid.setBorders(true);
+			grid.setStripeRows(true);
 			
 			return appContentpanel;
 		}
 	
-		public void loadApps(Collection<Application> userApps){
-			
-//			System.out.println("HomeViewport loadApps. size"+userApps.size());
-			int iCount = 0;
-			for(LayoutContainer lc:portal.getItems()){
-				lc.removeAll();
-			}
-			
-			for(Application app:userApps){
-				if(app.getStatus().equals(Application.OPENED)){
-//					System.out.println("HomeViewport open a portlet.");
-					ConsumerPortlet p = new ConsumerPortlet(app);
-					p.setHeading(app.getConsumer().getName());
-					p.setUrl(app.getConsumer().getConnectURI());
-					portal.add(p, iCount%portalColumn);
-					iCount++;
+		public void loadApps(Collection<BeanModel> userApps){
+			try{
+				int iCount = 0;
+				for(LayoutContainer lc:portal.getItems()){
+					lc.removeAll();
 				}
+				
+				
+				for(BeanModel bm:userApps){
+					
+					if(bm.get("status").equals(Application.OPENED)){
+						ConsumerPortlet p = new ConsumerPortlet((Application)bm.get("thisapplication"));
+						Consumer con = (Consumer)bm.get("thisconsumer");
+						p.setHeading(con.getName());
+						p.setUrl(con.getConnectURI());
+						portal.add(p, iCount%portalColumn);
+						iCount++;
+					}
+				}
+				
+				appStore.removeAll();
+				appStore.add(new ArrayList<BeanModel>(userApps));
+				appStore.commitChanges();
+				
+			}catch(Exception ex){
+				ex.printStackTrace();
 			}
-			
-			appStore.removeAll();
-			for(Application app:userApps){
-				BeanModel bm = applicationFactory.createModel(app);
-				bm.set("consumer", app.getConsumer());
-				bm.set("application", app);
-				appStore.add(bm);
-			}
-			appStore.commitChanges();
 		}
 		
-		public void loadFriends(Collection<Friend> userFriends){
-			if(Registry.get(User.class.getName()) != null){
-				User user = Registry.get(User.class.getName());
-			
-				friendStore.removeAll();
-				for(Friend f:userFriends){
-					
-					BeanModel bm = friendFactory.createModel(f);
-					if(f.getReceiver().getId().equals(user.getId())){
-						bm.set("friend", f.getSender());
-					}else{
-						bm.set("friend", f.getReceiver());
-					}
-					
-					friendStore.add(bm);
-				}
-				friendStore.commitChanges();
-			}
+		public void loadFriends(Collection<BeanModel> userFriends){
+			friendStore.removeAll();
+			friendStore.add(new ArrayList<BeanModel>(userFriends));
+			friendStore.commitChanges();
 		}
 
 	}

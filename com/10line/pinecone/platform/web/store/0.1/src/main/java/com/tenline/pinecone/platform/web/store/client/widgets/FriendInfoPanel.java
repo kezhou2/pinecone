@@ -81,7 +81,7 @@ public class FriendInfoPanel extends ContentPanel {
 		btnSendMessage.addMouseUpHandler(new MouseUpHandler() {
 			public void onMouseUp(MouseUpEvent event) {
 				AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_SEND_MAIL_TO_PANEL);
-				appEvent.setData("friend", FriendInfoPanel.this.model.get("friend"));
+				appEvent.setData("thisfriend", FriendInfoPanel.this.model.get("thisfriend"));
 				Dispatcher.get().dispatch(appEvent);
 			}
 		});
@@ -94,7 +94,7 @@ public class FriendInfoPanel extends ContentPanel {
 	
 	public void init(){
 		try{
-			User user = (User)model.get("friend");
+			User user = (User)model.get("thisfriend");
 			
 //			System.out.println("User name:"+user.getName());
 //			System.out.println("User id:"+user.getId());

@@ -75,8 +75,10 @@ public class WidgetView extends View {
 	 */
 	private void updateLoginToPanel(AppEvent event) throws Exception {
 		System.out.println("WidgetView updateLoginToPanel");
+//		RootPanel.get().clear();
+//		RootPanel.get().add((Widget) Registry.get(LoginViewport.class.getName()));
 		RootPanel.get().clear();
-		RootPanel.get().add((Widget) Registry.get(LoginViewport.class.getName()));
+		RootPanel.get().add((Widget) Registry.get(HomeViewport.class.getName()));
 	}
 	
 	/**

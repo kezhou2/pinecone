@@ -31,4 +31,10 @@ public interface Images extends ImageBundle {
 	AbstractImagePrototype store();
 	@Resource("consumerIcon.png")
 	AbstractImagePrototype consumerIcon();
+	@Resource("fun-thing.jpg")
+	AbstractImagePrototype funThing();
+	@Resource("social-networking.jpg")
+	AbstractImagePrototype socialNetworking();
+	@Resource("internet-of-thing.jpg")
+	AbstractImagePrototype internetOfThing();
 }

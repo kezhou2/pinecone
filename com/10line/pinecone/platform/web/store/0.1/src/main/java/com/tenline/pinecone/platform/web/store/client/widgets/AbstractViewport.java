@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
+import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.Viewport;
@@ -31,7 +32,11 @@ public abstract class AbstractViewport extends Viewport {
 	 */
 	public AbstractViewport() {
 		setLayout(new BorderLayout());
-		add(header, new BorderLayoutData(LayoutRegion.NORTH, 60));
+		this.setStyleAttribute("background-color","transparent");
+		
+		BorderLayoutData headerBld = new BorderLayoutData(LayoutRegion.NORTH, 60);
+		headerBld.setMargins(new Margins(0,0,0,0));
+		add(header, headerBld);
 		add(body, new BorderLayoutData(LayoutRegion.CENTER));
 		add(footer, new BorderLayoutData(LayoutRegion.SOUTH, 50));
 	}
@@ -48,6 +53,9 @@ public abstract class AbstractViewport extends Viewport {
 			setLayout(new BorderLayout());
 			Image logo = ((Images) Registry.get(Images.class.getName())).logo().createImage();
 			add(logo, new BorderLayoutData(LayoutRegion.WEST,184));
+			
+//			setBodyStyle("background-color: transparent");
+			this.setBodyStyleName("abstractviewport-header");
 		}
 		
 	}
@@ -61,7 +69,13 @@ public abstract class AbstractViewport extends Viewport {
 		
 		protected Body() {
 			setHeaderVisible(false);
-			setLayout(new BorderLayout());
+			
+			BorderLayout bl = new BorderLayout();
+			setLayout(bl);
+			setBorders(false);
+			setBodyBorder(false);
+			this.setBodyStyleName("abstractviewport-background");
+			
 		}
 		
 	}
@@ -79,6 +93,10 @@ public abstract class AbstractViewport extends Viewport {
 			LayoutContainer copyrightContainer = new LayoutContainer(new CenterLayout());
 			copyrightContainer.add(new LabelField(((Messages) Registry.get(Messages.class.getName())).copyright()));
 			add(copyrightContainer, new BorderLayoutData(LayoutRegion.CENTER));
+			setBorders(false);
+			setBodyBorder(false);
+			copyrightContainer.setStyleName("abstractviewport-footer");
+//			copyrightContainer.setStyleAttribute("background-color","transparent");
 		}
 		
 	}

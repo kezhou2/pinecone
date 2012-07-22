@@ -74,7 +74,7 @@ public class FriendViewport extends AbstractViewport {
 //		Dispatcher.get().dispatch(event2);
 	}
 	
-	public void loadFriends(Collection<Friend> friends) {
+	public void loadFriends(Collection<BeanModel> friends) {
 		mainPanel.loadFriends(friends);
 		
 		//load invitations
@@ -514,24 +514,10 @@ public class FriendViewport extends AbstractViewport {
 
 		}
 		
-		public void loadFriends(Collection<Friend> friends) {
-			if(Registry.get(User.class.getName()) != null){
-				User user = (User)Registry.get(User.class.getName());
-				//load user's friends
-				friendStore.removeAll();
-				for(Friend f:friends){
-					BeanModel bm = friendFactory.createModel(f);
-					if(f.getReceiver().getId().equals(user.getId())){
-						bm.set("friend", f.getSender());
-					}else{
-						bm.set("friend", f.getReceiver());
-					}
-					
-					friendStore.add(bm);
-				}
-				
-				friendStore.commitChanges();
-			}
+		public void loadFriends(Collection<BeanModel> friends) {
+			friendStore.removeAll();
+			friendStore.add(new ArrayList<BeanModel>(friends));
+			friendStore.commitChanges();
 		}
 		
 		public void loadFriendInvite(Collection<Friend> friends){

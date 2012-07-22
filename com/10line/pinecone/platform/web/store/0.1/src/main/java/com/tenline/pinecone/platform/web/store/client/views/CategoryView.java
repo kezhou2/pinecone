@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.extjs.gxt.ui.client.Registry;
-import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.BeanModelFactory;
@@ -17,9 +16,7 @@ import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.View;
 import com.tenline.pinecone.platform.model.Category;
-import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.web.store.client.events.CategoryEvents;
-import com.tenline.pinecone.platform.web.store.client.events.FriendEvents;
 import com.tenline.pinecone.platform.web.store.client.widgets.AppStoreViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.ConsumerRegistryViewport;
 

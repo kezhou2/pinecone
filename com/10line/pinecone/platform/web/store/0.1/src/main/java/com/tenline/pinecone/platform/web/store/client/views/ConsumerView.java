@@ -21,6 +21,7 @@ import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.widgets.AppStoreViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.ConsumerRegistryViewport;
 
 /**
  * @author Bill
@@ -79,9 +80,12 @@ public class ConsumerView extends View {
 					ex.printStackTrace();
 				}
 			}
-			System.out.println(((ArrayList<Consumer>)event.getData()).size());
+//			System.out.println(((ArrayList<Consumer>)event.getData()).size());
 		}
 		appStoreViewPort.setAppGridData(data);
+		
+		ConsumerRegistryViewport crv = Registry.get(ConsumerRegistryViewport.class.getName());
+		crv.loadConsumers(data);
 	}
 	
 	@SuppressWarnings("unchecked")

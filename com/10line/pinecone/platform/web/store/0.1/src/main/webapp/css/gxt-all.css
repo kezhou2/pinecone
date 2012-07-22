@@ -7453,19 +7453,7 @@ body.x-body-masked .x-window-plain .x-window-mc {
     background-image:url(../images/default/window/icon-error.gif);
 }
 
-/** extra: add by liugy */
-.btn-green {
-	color: #fff !important;
-	text-shadow: 0 1px 1px rgba(0,0,0,0.25);
-	border:1px solid #749217 !important;
-	background-color: #6AB620 !important;
-}
-.btn-green:hover, .btn-green:focus, .btn-green:active {
-	-moz-box-shadow:0 0 5px rgba(116, 146, 23, 0.9);
-	-webkit-box-shadow: 0 0 5px rgba(116, 146, 23, 0.9);
-	box-shadow: 0 0 5px rgba(116, 146, 23, 0.9);
-	border:1px solid #749217 !important;
-}
+
 
 .btn-blue {
 	color: #fff !important;
@@ -7489,3 +7477,161 @@ body.x-body-masked .x-window-plain .x-window-mc {
 	position: relative;
 	word-spacing: -0.1em;
 }
+
+.loginviewport-background{
+	background: white;
+}
+
+.loginviewport-title-panel{
+	background: #f4f4f4;
+	margin-bottom: 32px;	
+	border-top: none;	
+	border-left: none;	
+	border-right: none;
+	border-bottom: 8px solid #e3d4a5;	
+}
+
+.loginviewport-input-panel{
+	padding: 20px 25px 15px;
+	background: #f1f1f1;
+	border: 1px solid #e5e5e5;	
+}
+
+.loginviewport-title-text{
+	font-size:21px;
+	font-weight:bold;
+	line-height:28px;
+	margin-bottom:18px;
+	color:black;
+	position:relative;
+	word-spacing:-0.1em;
+}
+
+.loginviewport-tooltip-text{
+	font-size:18px;
+	font-weight:bold;
+	line-height:30px;
+	color:#4D5762;
+	position:relative;
+	word-spacing:-0.1em;
+	
+	background: #fff6bf;
+	border: #fdd845 solid 1px;
+	margin: 15px 0;
+}
+
+.video-panel{
+	padding: 1px;	
+	border-bottom: 4px solid #e3e3e3;	
+	border-top: 4px solid #e3e3e3;	
+	border-left: 4px solid #e3e3e3;	
+	border-right: 4px solid #e3e3e3;	
+}
+
+.video-panel:hover{
+	padding: 1px;	
+	border-bottom: 4px solid #888;	
+	border-top: 4px solid #888;	
+	border-left: 4px solid #888;	
+	border-right: 4px solid #888;	
+}
+
+.btn-green {
+	color: #fff !important;
+	text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+	border:1px solid #749217 !important;
+	background-color: #6AB620 !important;
+	
+	display: inline-block;
+	padding: 5px 10px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 11px;
+	font-family: Tahoma, Arial, sans-serif;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	position: relative;
+	cursor: pointer;
+	background: #fff;
+}
+.btn-green:hover, .btn-green:focus, .btn-green:active {
+	-moz-box-shadow:0 0 5px rgba(116, 146, 23, 0.9);
+	-webkit-box-shadow: 0 0 5px rgba(116, 146, 23, 0.9);
+	box-shadow: 0 0 5px rgba(116, 146, 23, 0.9);
+	border:1px solid #749217 !important;
+	outline: medium none;
+	opacity: 0.9;
+	-khtml-opacity: .9;
+}
+
+.abstractviewport-background{
+	background: white;
+}
+
+.header-title{
+	font-size: 16px;
+	line-height: 18px;
+	margin-bottom: 10px;
+	font-weight: bold;
+	color: #4D5762;
+	position: relative;
+	word-spacing: -0.1em;
+}
+
+.header-description{
+	font-style: normal;
+	quotes: "" "";
+	display: block;
+	font-size: 14px;
+	min-height: 42px;
+	line-height: 24px;
+	padding: 0 0 0 0px;
+	color: #666;
+	font-family: Georgia,"Times New Roman",Times,serif;
+	margin: 0.5em 0;
+}
+
+.img-border{
+	border: 1px solid #e5e5e5;
+}
+
+.registerviewport-title{
+	text-align: left;
+	color: #dd4b39;
+	font-size: 1.10em;
+	font-weight: bold;
+	line-height: 24px;
+	border-bottom: 1px solid #888; 
+}
+
+.registerviewport-input-panel{
+	padding: 20px 25px 15px;
+	background: #f1f1f1;
+	border: 1px solid #e5e5e5;	
+}
+
+.abstractviewport-footer{
+	background: -moz-linear-gradient( center bottom, rgb(242,242,242) 20%, rgb(254,254,254) 80% );
+	border-top: 4px solid #D9D9D9;
+	color: #999;
+	float: left;
+	font-size: 11px;
+	width: 100%;
+	background: -webkit-gradient( linear, left bottom, left top, color-stop(0.2, rgb(242,242,242)), color-stop(0.8, rgb(254,254,254)) );
+	background: -moz-linear-gradient( center bottom, rgb(242,242,242) 20%, rgb(254,254,254) 80% );
+	padding-bottom: 2em;	
+}
+
+.abstractviewport-header{
+	border-bottom: 1px solid #e5e5e5;
+	border-top: 1px solid #D1D1D1;
+	border-left: 1px solid #D1D1D1;
+	border-right: 1px solid #D1D1D1;
+	background: #EEE;
+	background:-webkit-gradient(linear,left top,left bottom,from(#FBFBFB),to(#E8E8E8));
+	background:-moz-linear-gradient(top,#FBFBFB,#E8E8E8;
+	background: linear-gradient(#FBFBFB,#E8E8E8);
+	-pie-background: linear-gradient(#FBFBFB,#E8E8E8);
+}
+
+

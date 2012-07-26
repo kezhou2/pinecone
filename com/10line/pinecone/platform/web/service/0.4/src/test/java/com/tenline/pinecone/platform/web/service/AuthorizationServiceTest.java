@@ -80,14 +80,12 @@ public abstract class AuthorizationServiceTest extends AbstractServiceTest {
 			assertNotNull(token);
 			assertNotNull(tokenSecret);
 		} else {
-			System.out.println("11111111111");
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = authorizationAPI.authorizeToken(token);
 		if (response.isDone()) {
 			assertNotNull(response.getMessage());
 		} else {
-			System.out.println("22222222222222222");
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = authorizationAPI.confirmAuthorization(token, "yes");
@@ -96,7 +94,6 @@ public abstract class AuthorizationServiceTest extends AbstractServiceTest {
 			verifier = ((OAuthCallbackUrl) response.getMessage()).verifier;
 			assertNotNull(verifier);
 		} else {
-			System.out.println("33333333333333333");
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 		response = authorizationAPI.accessToken(consumerKey, consumerSecret, token, tokenSecret, verifier);
@@ -106,7 +103,6 @@ public abstract class AuthorizationServiceTest extends AbstractServiceTest {
 			assertNotNull(token);
 			assertNotNull(tokenSecret);
 		} else {
-			System.out.println("444444444444");
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
 	}

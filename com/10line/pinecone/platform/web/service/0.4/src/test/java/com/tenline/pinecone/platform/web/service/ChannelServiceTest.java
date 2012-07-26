@@ -41,21 +41,17 @@ public class ChannelServiceTest extends AuthorizationServiceTest {
 	}
 	
 	@Test
-	public void testPublish() throws Exception {
+	public void test() throws Exception {
 		APIResponse response = channelAPI.publish(subject, MediaType.TEXT_PLAIN, "Hello World".getBytes(),
 				consumerKey, consumerSecret, token, tokenSecret);
 		if (response.isDone()) {
 			assertEquals("Publish Successful!", response.getMessage().toString());
-		} else {
-			logger.log(Level.SEVERE, response.getMessage().toString());
-		}
-	}
-	
-	@Test
-	public void testSubscribe() throws Exception {
-		APIResponse response = channelAPI.subscribe(subject, consumerKey, consumerSecret, token, tokenSecret);
-		if (response.isDone()) {
-			assertEquals("Hello World", new String((byte[]) response.getMessage()));
+			response = channelAPI.subscribe(subject, consumerKey, consumerSecret, token, tokenSecret);
+			if (response.isDone()) {
+				assertEquals("Hello World", new String((byte[]) response.getMessage()));
+			} else {
+				logger.log(Level.SEVERE, response.getMessage().toString());
+			}
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

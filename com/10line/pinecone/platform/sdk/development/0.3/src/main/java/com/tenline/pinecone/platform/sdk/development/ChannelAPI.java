@@ -3,23 +3,18 @@
  */
 package com.tenline.pinecone.platform.sdk.development;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.api.client.http.HttpMethod;
-import com.google.gson.Gson;
-import com.tenline.pinecone.platform.model.Device;
 
 /**
  * @author Bill
  *
  */
 public class ChannelAPI extends ResourceAPI {
-	
-	/**
-	 * Google Json
-	 */
-	private Gson gson;
 	
 	/**
 	 * 
@@ -30,7 +25,6 @@ public class ChannelAPI extends ResourceAPI {
 	public ChannelAPI(String host, String port, String context) {
 		super(host, port, context);
 		// TODO Auto-generated constructor stub
-		gson = new Gson();
 	}
 	
 	/**
@@ -52,16 +46,16 @@ public class ChannelAPI extends ResourceAPI {
 				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		byte[] bytes = new byte[connection.getInputStream().available()];
-		connection.getInputStream().read(bytes);
-		connection.getInputStream().close();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			response.setDone(true);
-			if (connection.getContentType().indexOf("application/json") >= 0) {
-				response.setMessage(gson.fromJson(new String(bytes, "utf-8"), Device.class));
+			if (connection.getContentType().indexOf("application/octet-stream") >= 0) {
+				response.setMessage(new ObjectInputStream(connection.getInputStream()).readObject());
 			} else {
+				byte[] bytes = new byte[connection.getInputStream().available()];
+				connection.getInputStream().read(bytes);
 				response.setMessage(bytes);
 			}
+			connection.getInputStream().close();
 		} else {
 			response.setDone(false);
 			response.setMessage("Subscribe Channel Error Code: Http (" + connection.getResponseCode() + ")");
@@ -95,8 +89,8 @@ public class ChannelAPI extends ResourceAPI {
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		if (contentType.indexOf("application/json") >= 0) {
-			connection.getOutputStream().write(gson.toJson(content).getBytes("utf-8"));
+		if (contentType.indexOf("application/octet-stream") >= 0) {
+			new ObjectOutputStream(connection.getOutputStream()).writeObject(content);
 		} else {
 			connection.getOutputStream().write((byte[]) content);
 		}

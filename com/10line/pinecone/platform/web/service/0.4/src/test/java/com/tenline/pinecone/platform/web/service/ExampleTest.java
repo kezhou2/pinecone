@@ -140,6 +140,7 @@ public class ExampleTest extends AuthorizationServiceTest {
 		if (response.isDone()) {
 			variable = (Variable) response.getMessage();
 			assertEquals("鱼缸水温", variable.getName());
+			assertEquals(Device.CLOSED, variable.getDevice().getStatus());
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}

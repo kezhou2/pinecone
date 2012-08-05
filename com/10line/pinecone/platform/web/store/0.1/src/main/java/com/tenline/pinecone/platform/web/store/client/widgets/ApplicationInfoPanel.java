@@ -81,6 +81,7 @@ public class ApplicationInfoPanel extends ContentPanel {
 				appEvent.setData("application", ApplicationInfoPanel.this.model.get("application"));
 				appEvent.setData("status", Application.OPENED);
 				appEvent.setData("default", false);
+				appEvent.setHistoryEvent(true);
 				Dispatcher.get().dispatch(appEvent);
 			}
 		});
@@ -94,6 +95,7 @@ public class ApplicationInfoPanel extends ContentPanel {
 				System.out.println("ApplicationInfoPanel uninstall");
 				AppEvent appEvent = new AppEvent(ApplicationEvents.UNINSTALL);
 				appEvent.setData("id", ApplicationInfoPanel.this.model.get("id"));
+				appEvent.setHistoryEvent(true);
 				Dispatcher.get().dispatch(appEvent);
 			}
 		});

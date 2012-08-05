@@ -52,7 +52,9 @@ public abstract class AbstractViewport extends Viewport {
 			setHeaderVisible(false);
 			setLayout(new BorderLayout());
 			Image logo = ((Images) Registry.get(Images.class.getName())).logo().createImage();
-			add(logo, new BorderLayoutData(LayoutRegion.WEST,184));
+			BorderLayoutData bld = new BorderLayoutData(LayoutRegion.WEST,184);
+			bld.setMargins(new Margins(0,10,0,10));
+			add(logo, bld);
 			
 //			setBodyStyle("background-color: transparent");
 			this.setBodyStyleName("abstractviewport-header");

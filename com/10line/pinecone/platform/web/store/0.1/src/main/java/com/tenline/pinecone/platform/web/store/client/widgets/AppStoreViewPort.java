@@ -15,7 +15,6 @@ import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.ListLoader;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
@@ -32,27 +31,30 @@ import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.ListView;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.Text;
-import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.StoreFilterField;
-import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnData;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.grid.GridCellRenderer;
+import com.extjs.gxt.ui.client.widget.grid.GridViewConfig;
 import com.extjs.gxt.ui.client.widget.grid.RowExpander;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
+import com.extjs.gxt.ui.client.widget.layout.BoxLayout.BoxLayoutPack;
+import com.extjs.gxt.ui.client.widget.layout.FillData;
 import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout.HBoxLayoutAlign;
-import com.extjs.gxt.ui.client.widget.layout.HBoxLayoutData;
 import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.user.client.ui.Button;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
@@ -79,21 +81,26 @@ public class AppStoreViewport extends AbstractViewport {
 		public MainPanel() {
 			setHeaderVisible(false);
 			setCollapsible(true);
-			setLayout(new BorderLayout());
+			setLayout(new FillLayout());
 			setBorders(false);
 			setBodyBorder(false);
+			
+			LayoutContainer mainlc = new LayoutContainer();
+			this.add(mainlc,new FillData(0,0,0,0));
+			mainlc.setLayout(new BorderLayout());
+			mainlc.addStyleName("abstractviewport-background");
 
 			BorderLayoutData centerLayoutData = new BorderLayoutData(LayoutRegion.CENTER);
-			centerLayoutData.setMargins(new Margins(0,3,0,3));
+			centerLayoutData.setMargins(new Margins(5,5,5,5));
 			centerLayoutData.setCollapsible(true);
 			centerLayoutData.setSplit(true);
 
-			add(createCenter(), centerLayoutData);
+			mainlc.add(createCenter(), centerLayoutData);
 			
 			BorderLayoutData eastLayoutData = new BorderLayoutData(LayoutRegion.EAST,300.0f);
-			eastLayoutData.setMargins(new Margins(0,0,0,3));
+			eastLayoutData.setMargins(new Margins(5,5,5,5));
 			
-			add(createEast(), eastLayoutData);
+			mainlc.add(createEast(), eastLayoutData);
 		}
 
 	}
@@ -104,6 +111,7 @@ public class AppStoreViewport extends AbstractViewport {
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.setBorders(false);
 		centerPanel.setBodyBorder(false);
+		centerPanel.addStyleName("appstoreviewport-panel");
 
 		centerPanel.setTopComponent(createToolBar());
 		Grid<BeanModel> grid = initGrid();
@@ -115,44 +123,31 @@ public class AppStoreViewport extends AbstractViewport {
 	private ToolBar createToolBar() {
 		ToolBar toolBar = new ToolBar();
 		toolBar.setHeight("38px");
+		toolBar.addStyleName("appstoreviewport-toolbar");
 
+		LayoutContainer lc = new LayoutContainer();
+		lc.setLayout(new FillLayout());
 		Button buttonHomePage = new Button();
-		buttonHomePage.setText(((Messages) Registry.get(Messages.class.getName())).HomeViewport_title());
-		buttonHomePage.addSelectionListener(new SelectionListener<ButtonEvent>() {
-
-			@Override
-			public void componentSelected(ButtonEvent ce) {
-				AppEvent event = new AppEvent(WidgetEvents.UPDATE_USERHOME_TO_PANEL);
-				event.setHistoryEvent(true);
-				Dispatcher.get().dispatch(event);
+		buttonHomePage.setHTML("<img class='btn-img-left' src='../images/icons/back.png'>"+
+				((Messages) Registry.get(Messages.class.getName())).HomeViewport_title()+
+				"</img>");
+		buttonHomePage.addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent event) {
+				AppEvent event1 = new AppEvent(WidgetEvents.UPDATE_USERHOME_TO_PANEL);
+				event1.setHistoryEvent(true);
+				Dispatcher.get().dispatch(event1);
 			}
 		});
-		toolBar.add(buttonHomePage);
+		lc.add(buttonHomePage);
+		toolBar.add(lc);
 		buttonHomePage.setHeight("32px");
-		
-		Button buttonRegister = new Button();
-		buttonRegister.setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_button_register());
-		buttonRegister.addSelectionListener(new SelectionListener<ButtonEvent>() {
-
-			@Override
-			public void componentSelected(ButtonEvent ce) {
-				AppEvent event = new AppEvent(WidgetEvents.UPDATE_REGISTER_APP_TO_PANEL);
-				event.setHistoryEvent(true);
-				Dispatcher.get().dispatch(event);
-			}
-		});
-		toolBar.add(buttonRegister);
-		buttonRegister.setHeight("32px");
+		buttonHomePage.setStyleName("abstractviewport-btn");
 
 		FillToolItem fillToolItem = new FillToolItem();
 		toolBar.add(fillToolItem);
 		
-//		LayoutContainer lc = new LayoutContainer();
-//		lc.setLayout(new HBoxLayout());
-//		lc.setSize("330px", "35px");
-//		toolBar.add(lc);
-		
 		Label label = new Label(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_label_category());
+		label.addStyleName("homeviewport-title-small");
 		toolBar.add(label);
 		categoryCombo = new ComboBox<BaseModelData>();
 		categoryCombo.setWidth("70px");
@@ -173,7 +168,7 @@ public class AppStoreViewport extends AbstractViewport {
 					event = new AppEvent(ConsumerEvents.GET_BY_CATEGORY);
 					event.setData("id", se.getSelectedItem().get("id"));
 				}
-
+				event.setHistoryEvent(false);
 				Dispatcher.get().dispatch(event);
 			}
 		});
@@ -182,6 +177,7 @@ public class AppStoreViewport extends AbstractViewport {
 		categoryCombo.setStyleAttribute("autoCreate", "{tag: \"input\", type: \"text\", size: \"20\", autocomplete: \"off\", maxlength: \"10\"}");
 		
 		Text text1 = new Text(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_label_search());
+		text1.addStyleName("homeviewport-title-small");
 		toolBar.add(text1);
 		StoreFilterField<BeanModel> filter = new StoreFilterField<BeanModel>() {
 
@@ -205,7 +201,7 @@ public class AppStoreViewport extends AbstractViewport {
 		filter.setEmptyText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_text_search());
 		toolBar.add(filter);
 		
-		Button blankBtn = new Button();
+		com.extjs.gxt.ui.client.widget.button.Button blankBtn = new com.extjs.gxt.ui.client.widget.button.Button();
 		toolBar.add(blankBtn);
 		blankBtn.setEnabled(false);
 		blankBtn.setHeight("30px");
@@ -236,6 +232,7 @@ public class AppStoreViewport extends AbstractViewport {
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_icon());  
 		column.setWidth(150);  
 		column.setRowHeader(true);
+		
 		GridCellRenderer<BeanModel> iconRenderer = new GridCellRenderer<BeanModel>() {
 
 			@Override
@@ -271,11 +268,13 @@ public class AppStoreViewport extends AbstractViewport {
 			public Object render(final BeanModel model, String property,
 					ColumnData config, int rowIndex, int colIndex,
 					ListStore<BeanModel> store, Grid<BeanModel> grid) {
-				final Button b = new Button(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_install(), new SelectionListener<ButtonEvent>() {
+				final com.extjs.gxt.ui.client.widget.button.Button b = 
+					new com.extjs.gxt.ui.client.widget.button.Button(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_install(), new SelectionListener<ButtonEvent>() {
 					@Override
 					public void componentSelected(ButtonEvent ce) {
 						AppEvent event = new AppEvent(ApplicationEvents.INSTALL);
 						event.setData("consumer",model.get("consumer"));
+						event.setHistoryEvent(true);
 						Dispatcher.get().dispatch(event);
 						final Listener<MessageBoxEvent> listener = new Listener<MessageBoxEvent>() {
 							public void handleEvent(MessageBoxEvent ce) {
@@ -295,7 +294,7 @@ public class AppStoreViewport extends AbstractViewport {
 			}
 		};
 		column.setRenderer(buttonRenderer);
-		configs.add(column);  
+		configs.add(column);
 
 		consumerStore = new ListStore<BeanModel>();
 		ColumnModel cm = new ColumnModel(configs);
@@ -303,6 +302,10 @@ public class AppStoreViewport extends AbstractViewport {
 //		grid.setBorders(false);
 		grid.addPlugin(rowExpander);
 		grid.setStripeRows(true);
+		grid.setHideHeaders(true);
+//		grid.getView().getHeader().addStyleName("appstoreviewport-table-header");
+		
+//		grid.addStyleName("appstoreviewport-table-header-1");
 		//��ȡӦ���б�����
 		AppEvent appEvent = new AppEvent(ConsumerEvents.GET_ALL);
 		Dispatcher.get().dispatch(appEvent);
@@ -312,27 +315,52 @@ public class AppStoreViewport extends AbstractViewport {
 	 * �������а�
 	 * @return
 	 */
-	private ContentPanel createEast() {
+	private LayoutContainer createEast() {
+		LayoutContainer mainlc = new LayoutContainer();
+		mainlc.setLayout(new BorderLayout());
+		LayoutContainer toolbarLayoutContainer = new LayoutContainer();
+		BorderLayoutData toolbarBld = new BorderLayoutData(LayoutRegion.NORTH, 40.0f);
+		toolbarBld.setMargins(new Margins(0,0,0,0));
+		mainlc.add(toolbarLayoutContainer,toolbarBld);
+		toolbarLayoutContainer.addStyleName("abstractviewport-background");
+		
+		HBoxLayout hbl_toolbarLayoutContainer = new HBoxLayout();
+		hbl_toolbarLayoutContainer.setPack(BoxLayoutPack.START);
+		hbl_toolbarLayoutContainer.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCHMAX);
+		toolbarLayoutContainer.setLayout(hbl_toolbarLayoutContainer);
+		
+		Button buttonRegister = new Button();
+		buttonRegister.setHTML("<img class='btn-img-left' src='../images/icons/graphic-design.png'>"+
+				((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_button_register()+
+				"</img>");
+		buttonRegister.addMouseUpHandler(new MouseUpHandler() {
+			public void onMouseUp(MouseUpEvent e) {
+				AppEvent event = new AppEvent(WidgetEvents.UPDATE_REGISTER_APP_TO_PANEL);
+				event.setHistoryEvent(true);
+				Dispatcher.get().dispatch(event);
+			}
+		});
+		toolbarLayoutContainer.add(buttonRegister);
+		buttonRegister.setHeight("32px");
+		buttonRegister.setStyleName("abstractviewport-btn");
+	
 		ContentPanel eastPanel = new ContentPanel();
 		eastPanel.setHeaderVisible(false);
 		eastPanel.setLayout(new FillLayout());
 		eastPanel.setBorders(false);
 		eastPanel.setBodyBorder(false);
+		eastPanel.addStyleName("appstoreviewport-panel");
 		
 		ToolBar toolBar = new ToolBar();
 		toolBar.setHeight("34px");
+		toolBar.addStyleName("appstoreviewport-toolbar");
 		
 		Text txtTitle = new Text(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_title_ranking());
-		txtTitle.setStyleAttribute("font-size", "12px");
-		txtTitle.setStyleAttribute("font-weight", "bold");
-		txtTitle.setStyleAttribute("line-height", "12px");
-		txtTitle.setStyleAttribute("color","#4D5762");
-		txtTitle.setStyleAttribute("position","relative");
-		txtTitle.setStyleAttribute("word-spacing","-0.1em");
+		txtTitle.addStyleName("homeviewport-title-small");
 		toolBar.add(txtTitle);
 		eastPanel.setTopComponent(toolBar);
 		
-		Button blankBtn = new Button();
+		com.extjs.gxt.ui.client.widget.button.Button blankBtn = new com.extjs.gxt.ui.client.widget.button.Button();
 		toolBar.add(blankBtn);
 		blankBtn.setEnabled(false);
 		blankBtn.setHeight("30px");
@@ -354,8 +382,13 @@ public class AppStoreViewport extends AbstractViewport {
 		listView.setDisplayProperty("name");
 		eastPanel.add(listView);
 		listView.setHeight("200");
-//		listView.setBorders(false);
-		return eastPanel;
+		listView.setBorders(false);
+		
+		BorderLayoutData mainBld = new BorderLayoutData(LayoutRegion.CENTER);
+		mainBld.setMargins(new Margins(0,0,0,0));
+		mainlc.add(eastPanel,mainBld);
+		
+		return mainlc;
 	}
 	public void setAppGridData(List<BeanModel> result) {
 		consumerStore.removeAll();

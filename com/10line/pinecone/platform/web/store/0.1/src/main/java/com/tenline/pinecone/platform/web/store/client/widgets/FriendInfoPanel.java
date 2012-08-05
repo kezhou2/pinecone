@@ -82,6 +82,7 @@ public class FriendInfoPanel extends ContentPanel {
 			public void onMouseUp(MouseUpEvent event) {
 				AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_SEND_MAIL_TO_PANEL);
 				appEvent.setData("thisfriend", FriendInfoPanel.this.model.get("thisfriend"));
+				appEvent.setHistoryEvent(true);
 				Dispatcher.get().dispatch(appEvent);
 			}
 		});

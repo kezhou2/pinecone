@@ -33,6 +33,7 @@ public class ConsumerPortlet extends Portlet {
 			public void componentSelected(IconButtonEvent ce) {
 				AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_MAX_PORTLET_TO_PANEL);
 				appEvent.setData("application", ConsumerPortlet.this.application);
+				appEvent.setHistoryEvent(true);
 				Dispatcher.get().dispatch(appEvent);
 			}
 		});
@@ -45,6 +46,7 @@ public class ConsumerPortlet extends Portlet {
 				appEvent.setData("application", ConsumerPortlet.this.application);
 				appEvent.setData("status", Application.CLOSED);
 				appEvent.setData("default", false);
+				appEvent.setHistoryEvent(true);
 				Dispatcher.get().dispatch(appEvent);
 			}
 

@@ -209,6 +209,7 @@ public class RegisterViewport extends AbstractViewport {
 										mailField.getValue());
 								appEvent.setData("password",
 										passwordField.getValue());
+								appEvent.setHistoryEvent(true);
 								Dispatcher.get().dispatch(appEvent);
 							}
 						}
@@ -216,14 +217,12 @@ public class RegisterViewport extends AbstractViewport {
 					});
 			cancelButton.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
-							Dispatcher
-									.get()
-									.dispatch(
-											new AppEvent(
-													WidgetEvents.UPDATE_LOGIN_TO_PANEL));
-						}
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_LOGIN_TO_PANEL);
+					appEvent.setHistoryEvent(true);
+					Dispatcher.get().dispatch(appEvent);
+				}
 
-					});
+			});
 			
 			LayoutContainer buttonLayoutContainer = new LayoutContainer();
 			HBoxLayout hbl_layoutContainer_4 = new HBoxLayout();

@@ -140,6 +140,7 @@ public class LoginViewport extends AbstractViewport {
 					AppEvent appEvent = new AppEvent(UserEvents.LOGIN);
 					appEvent.setData("email", nameText.getValue());
 					appEvent.setData("password", pwdText.getValue());
+					appEvent.setHistoryEvent(true);
 					Dispatcher.get().dispatch(appEvent);
 				}
 			});

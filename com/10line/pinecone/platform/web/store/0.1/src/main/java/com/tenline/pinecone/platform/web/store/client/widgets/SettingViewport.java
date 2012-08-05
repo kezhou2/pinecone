@@ -174,6 +174,7 @@ public class SettingViewport extends AbstractViewport {
 								//TODO
 //								appEvent.setData("avatar", uploadfield.get);
 								
+								appEvent.setHistoryEvent(true);
 								Dispatcher.get().dispatch(appEvent);
 							}
 						}

@@ -78,7 +78,7 @@ public class WidgetView extends View {
 //		RootPanel.get().clear();
 //		RootPanel.get().add((Widget) Registry.get(LoginViewport.class.getName()));
 		RootPanel.get().clear();
-		RootPanel.get().add((Widget) Registry.get(HomeViewport.class.getName()));
+		RootPanel.get().add((Widget) Registry.get(SendMailViewport.class.getName()));
 	}
 	
 	/**

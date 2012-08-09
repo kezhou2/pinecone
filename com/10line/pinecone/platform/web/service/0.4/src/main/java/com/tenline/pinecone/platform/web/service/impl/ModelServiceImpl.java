@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.jdo.PersistenceManagerFactory;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tenline.pinecone.platform.web.service.ModelService;
-import com.tenline.pinecone.platform.web.service.oauth.OAuthUtils;
 
 /**
  * @author Bill
@@ -93,10 +91,9 @@ public class ModelServiceImpl extends JdoDaoSupport implements ModelService {
 	@Override
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-	public void show(String entityClass, String filter, HttpServletRequest request, HttpServletResponse response) {
+	public void show(String entityClass, String filter, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		try {
-			OAuthUtils.doFilter(request, response);
 			String queryString = "select from " + entityClass;
 			if (!filter.equals("all")) queryString += " where " + filter;
 			ObjectOutputStream output = new ObjectOutputStream(response.getOutputStream());
@@ -105,10 +102,7 @@ public class ModelServiceImpl extends JdoDaoSupport implements ModelService {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 	}
 
 }

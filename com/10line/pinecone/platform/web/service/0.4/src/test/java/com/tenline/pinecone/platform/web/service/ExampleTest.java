@@ -25,7 +25,7 @@ import com.tenline.pinecone.platform.sdk.development.APIResponse;
  * @author Bill
  *
  */
-public class ExampleTest extends AuthorizationServiceTest {
+public class ExampleTest extends AbstractServiceTest {
 	
 	private User user;
 	
@@ -43,7 +43,6 @@ public class ExampleTest extends AuthorizationServiceTest {
 	
 	@Before
 	public void testSetup() throws Exception {
-		super.testSetup();
 		category = new Category();
 		category.setType(Category.COM);
 		driver = new Driver();
@@ -107,7 +106,6 @@ public class ExampleTest extends AuthorizationServiceTest {
 		variable = null;
 		item = null;
 		modelAPI = null;
-		super.testShutdown();
 	}
 	
 	@Test
@@ -122,7 +120,7 @@ public class ExampleTest extends AuthorizationServiceTest {
 		} else {
 			logger.log(Level.SEVERE, response.getMessage().toString());
 		}
-		response = modelAPI.show(Device.class, "id=='"+device.getId()+"'", consumerKey, consumerSecret, token, tokenSecret);
+		response = modelAPI.show(Device.class, "id=='"+device.getId()+"'");
 		if (response.isDone()) {
 			assertEquals(1, ((Collection<Device>) response.getMessage()).size());
 		} else {

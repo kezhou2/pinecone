@@ -71,12 +71,6 @@
       <artifactId>resteasy-jaxrs</artifactId>
       <version>${resteasy.version}</version>
     </dependency>
-    <!-- OAuth -->
-    <dependency>
-      <groupId>net.oauth.core</groupId>
-      <artifactId>oauth-provider</artifactId>
-      <version>20100527</version>
-    </dependency>
 	<!-- Test scope -->
 	<dependency>
 	  <groupId>junit</groupId>

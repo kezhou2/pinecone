@@ -13,7 +13,6 @@ import javax.cache.Cache;
 import javax.cache.CacheConfiguration.Duration;
 import javax.cache.CacheConfiguration.ExpiryType;
 import javax.cache.Caching;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import com.tenline.pinecone.platform.model.Message;
 import com.tenline.pinecone.platform.web.service.ChannelService;
-import com.tenline.pinecone.platform.web.service.oauth.OAuthUtils;
 
 /**
  * @author Bill
@@ -46,10 +44,9 @@ public class ChannelServiceImpl implements ChannelService {
 	}
 
 	@Override
-	public void subscribe(String subject, HttpServletRequest request, HttpServletResponse response) {
+	public void subscribe(String subject, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		try {
-			OAuthUtils.doFilter(request, response);
 			if (cache.containsKey(subject)) {
 				Message message = (Message) cache.get(subject);
 				response.setCharacterEncoding(message.getCharacterEncoding());
@@ -62,17 +59,13 @@ public class ChannelServiceImpl implements ChannelService {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} 
 	}
 
 	@Override
-	public Response publish(String subject, HttpServletRequest request, HttpServletResponse response) {
+	public Response publish(String subject, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		try {
-			OAuthUtils.doFilter(request, response);
 			InputStream input = request.getInputStream();
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			int data;
@@ -88,9 +81,6 @@ public class ChannelServiceImpl implements ChannelService {
 			message.setContentBytes(output.toByteArray());
 			cache.put(subject, message);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ServletException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 

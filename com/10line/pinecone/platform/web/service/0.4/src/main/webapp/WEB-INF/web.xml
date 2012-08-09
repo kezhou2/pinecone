@@ -19,10 +19,5 @@
 		<servlet-name>Dispatcher</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>Dispatcher</servlet-name>
-		<url-pattern>/oauth/*</url-pattern>
-	</servlet-mapping>
 
 </web-app>

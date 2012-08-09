@@ -53,12 +53,10 @@ public interface ModelService {
 	 * 
 	 * @param entityClass
 	 * @param filter
-	 * @param request
 	 * @param response
 	 */
 	@GET
 	@Path("/show/{entityClass}/{filter}")
-	void show(@PathParam("entityClass") String entityClass, @PathParam("filter") String filter,
-			  @Context HttpServletRequest request, @Context HttpServletResponse response);
+	void show(@PathParam("entityClass") String entityClass, @PathParam("filter") String filter, @Context HttpServletResponse response);
 	
 }

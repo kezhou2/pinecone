@@ -20,7 +20,7 @@ import com.tenline.pinecone.platform.sdk.development.ChannelAPI;
  * @author Bill
  *
  */
-public class ChannelServiceTest extends AuthorizationServiceTest {
+public class ChannelServiceTest extends AbstractServiceTest {
 	
 	private String subject;
 	
@@ -28,7 +28,6 @@ public class ChannelServiceTest extends AuthorizationServiceTest {
 	
 	@Before
 	public void testSetup() throws Exception {
-		super.testSetup();
 		subject = "test";
 		channelAPI = new ChannelAPI(HOST, PORT, CONTEXT);
 	}
@@ -37,16 +36,14 @@ public class ChannelServiceTest extends AuthorizationServiceTest {
 	public void testShutdown() throws Exception {
 		subject = null;
 		channelAPI = null;
-		super.testShutdown();
 	}
 	
 	@Test
 	public void test() throws Exception {
-		APIResponse response = channelAPI.publish(subject, MediaType.TEXT_PLAIN, "Hello World".getBytes(),
-				consumerKey, consumerSecret, token, tokenSecret);
+		APIResponse response = channelAPI.publish(subject, MediaType.TEXT_PLAIN, "Hello World".getBytes());
 		if (response.isDone()) {
 			assertEquals("Publish Successful!", response.getMessage().toString());
-			response = channelAPI.subscribe(subject, consumerKey, consumerSecret, token, tokenSecret);
+			response = channelAPI.subscribe(subject);
 			if (response.isDone()) {
 				assertEquals("Hello World", new String((byte[]) response.getMessage()));
 			} else {

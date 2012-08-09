@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.google.api.client.http.HttpMethod;
-
 /**
  * @author Bill
  *
@@ -31,20 +29,13 @@ public class ModelAPI extends ResourceAPI {
 	 * 
 	 * @param entityClass
 	 * @param filter
-	 * @param consumerKey
-	 * @param consumerSecret
-	 * @param token
-	 * @param tokenSecret
 	 * @return
 	 * @throws Exception
 	 */
-	public APIResponse show(Class<?> entityClass, String filter, String consumerKey, String consumerSecret, 
-		String token, String tokenSecret) throws Exception {
+	public APIResponse show(Class<?> entityClass, String filter) throws Exception {
 		APIResponse response = new APIResponse();
 		String requestUrl = url + "/show/" + entityClass.getName() + "/" + filter;
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
-		connection.setRequestProperty("Authorization", APIHelper.getAuthorization(requestUrl, HttpMethod.GET.name(), 
-				consumerKey, consumerSecret, token, tokenSecret));
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {

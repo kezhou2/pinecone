@@ -1,13 +1,12 @@
+/**
+ * 
+ */
 package com.tenline.pinecone.platform.model;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
@@ -22,12 +21,6 @@ public class Consumer extends Entity {
 	 * 
 	 */
 	private static final long serialVersionUID = -5000904696622430634L;
-
-	@Persistent
-    private String key;
-	
-	@Persistent
-    private String secret;
 	
 	@Persistent
     private String name;
@@ -47,12 +40,6 @@ public class Consumer extends Entity {
 	@Persistent
 	private Integer nut = Integer.valueOf(0); // Virtual Coin
 	
-	@NotPersistent
-    private Set<String> scopes;
-	
-	@NotPersistent
-    private String[] permissions;
-	
 	@Persistent(defaultFetchGroup = "true")
 	private Category category;
 	
@@ -69,50 +56,6 @@ public class Consumer extends Entity {
 	 */
 	public Consumer() {
 		// TODO Auto-generated constructor stub
-	}
-    
-    public Consumer(String key, String secret, String displayName, String connectURI) {
-        this.setKey(key);
-        this.setSecret(secret);
-        this.setName(displayName);
-        this.setConnectURI(connectURI);
-    }
-    
-    public Consumer(String key, String secret, String displayName, String connectURI,
-                         String[] perms) {
-        this.setKey(key);
-        this.setSecret(secret);
-        this.setName(displayName);
-        this.setConnectURI(connectURI);
-        this.setPermissions(perms);
-    }
-	
-	/**
-	 * @param key the key to set
-	 */
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	/**
-	 * @return the key
-	 */
-	public String getKey() {
-		return key;
-	}
-    
-    /**
-	 * @param secret the secret to set
-	 */
-	public void setSecret(String secret) {
-		this.secret = secret;
-	}
-
-	/**
-	 * @return the secret
-	 */
-	public String getSecret() {
-		return secret;
 	}
     
     /**
@@ -201,36 +144,6 @@ public class Consumer extends Entity {
 	 */
 	public Integer getNut() {
 		return nut;
-	}
-
-	/**
-     * Returns the OAuth Consumer's scopes. These are the scopes the consumer
-     * will be able to access directly 
-     */
-    public String[] getScopes() {
-        synchronized (this) {
-            return scopes != null ? scopes.toArray(new String[]{}) : null;
-        }
-    }
-    
-    public void setScopes(String[] scopes) {
-        synchronized (this) {
-            this.scopes = new HashSet<String>(Arrays.asList(scopes));
-        }
-    }
-
-	/**
-	 * @param permissions the permissions to set
-	 */
-	public void setPermissions(String[] permissions) {
-		this.permissions = permissions;
-	}
-
-	/**
-	 * @return the permissions
-	 */
-	public String[] getPermissions() {
-		return permissions;
 	}
 
 	/**

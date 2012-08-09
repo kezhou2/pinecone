@@ -14,13 +14,15 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.extjs.gxt.ui.client.data.BeanModelTag;
+
 /**
  * @author Bill
  *
  */
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
-public abstract class Entity implements Serializable {
+public abstract class Entity implements Serializable, BeanModelTag {
 
 	/**
 	 * 

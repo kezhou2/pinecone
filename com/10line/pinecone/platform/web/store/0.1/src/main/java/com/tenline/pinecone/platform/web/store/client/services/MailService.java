@@ -39,20 +39,20 @@ public interface MailService extends AbstractService {
 	 */
 	public Collection<Mail> show(String filter) throws Exception;
 
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<Mail> showByReceiver(String filter) throws Exception;
-
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<Mail> showBySender(String filter) throws Exception;
+//	/**
+//	 * 
+//	 * @param filter
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public Collection<Mail> showByReceiver(String filter) throws Exception;
+//
+//	/**
+//	 * 
+//	 * @param filter
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public Collection<Mail> showBySender(String filter) throws Exception;
 	
 }

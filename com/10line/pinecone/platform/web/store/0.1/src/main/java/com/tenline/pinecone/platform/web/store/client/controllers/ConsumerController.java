@@ -70,7 +70,7 @@ public class ConsumerController extends Controller {
 	 * @throws Exception
 	 */
 	private void getByCategory(final AppEvent event) throws Exception {
-		service.showByCategory("id=='"+event.getData("id").toString()+"'", new AsyncCallback<Collection<Consumer>>() {
+		service.show("category.id=='"+event.getData("id").toString()+"'", new AsyncCallback<Collection<Consumer>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -129,7 +129,8 @@ public class ConsumerController extends Controller {
 	 * @throws Exception
 	 */
 	private void unregister(final AppEvent event) throws Exception {
-		service.delete("id=='"+event.getData("id").toString()+"'", new AsyncCallback<Boolean>() {
+		Consumer consumer = event.getData("consumer");
+		service.delete(consumer, new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

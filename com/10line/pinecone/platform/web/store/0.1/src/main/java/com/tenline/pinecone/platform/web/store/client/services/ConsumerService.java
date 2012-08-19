@@ -39,12 +39,12 @@ public interface ConsumerService extends AbstractService {
 	 */
 	public Collection<Consumer> show(String filter) throws Exception;
 	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<Consumer> showByCategory(String filter) throws Exception;
+//	/**
+//	 * 
+//	 * @param filter
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public Collection<Consumer> showByCategory(String filter) throws Exception;
 	
 }

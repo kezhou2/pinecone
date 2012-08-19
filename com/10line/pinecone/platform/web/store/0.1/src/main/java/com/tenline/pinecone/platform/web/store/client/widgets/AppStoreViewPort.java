@@ -365,11 +365,12 @@ public class AppStoreViewport extends AbstractViewport {
 		blankBtn.setEnabled(false);
 		blankBtn.setHeight("30px");
 
+		//TODO need to refresh rank list
 		RpcProxy<Collection<Consumer>> proxy = new RpcProxy<Collection<Consumer>>() {
 			@Override
 			protected void load(Object loadConfig, AsyncCallback<Collection<Consumer>> callback) {
 				ConsumerServiceAsync service = Registry.get(ConsumerService.class.getName());
-				service.show("all", callback);
+//				service.show("all", callback);
 			}
 		};
 		ListLoader<ListLoadResult<BeanModel>> loader = new BaseListLoader<ListLoadResult<BeanModel>>(

@@ -210,8 +210,8 @@ public class FriendController extends Controller {
 	 */
 	private void delete(final AppEvent event) throws Exception {
 		System.out.println("FriendController delete: id="+event.getData("id"));
-		String filter = event.getData("id");
-		service.delete(filter, new AsyncCallback<Boolean>() {
+		Friend friend = event.getData("friend");
+		service.delete(friend, new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {

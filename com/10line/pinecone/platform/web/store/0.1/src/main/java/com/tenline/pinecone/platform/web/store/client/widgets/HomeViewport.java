@@ -436,18 +436,17 @@ public class HomeViewport extends AbstractViewport{
 			layoutContainer_1.setLayout(new FillLayout(Orientation.VERTICAL));
 			
 			LayoutContainer nameLayoutContainer = new LayoutContainer();
-			HBoxLayout hbl_nameLayoutContainer = new HBoxLayout();
-			hbl_nameLayoutContainer.setPack(BoxLayoutPack.END);
-			hbl_nameLayoutContainer.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCHMAX);
-			nameLayoutContainer.setLayout(hbl_nameLayoutContainer);
+			nameLayoutContainer.setLayout(new FitLayout());
+//			HBoxLayout hbl_nameLayoutContainer = new HBoxLayout();
+//			hbl_nameLayoutContainer.setPack(BoxLayoutPack.END);
+//			hbl_nameLayoutContainer.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCHMAX);
+//			nameLayoutContainer.setLayout(hbl_nameLayoutContainer);
 			
 			nameTxt = new Text();
-			nameLayoutContainer.add(nameTxt, new HBoxLayoutData(6, 3, 3, 3));
+//			nameLayoutContainer.add(nameTxt, new HBoxLayoutData(6, 3, 3, 3));
+			nameLayoutContainer.add(nameTxt);
 			nameTxt.setAutoWidth(true);
-			nameTxt.setStyleAttribute("font-size","14px");
-			nameTxt.setStyleAttribute("text-align", "right");
-			nameTxt.setStyleAttribute("width", "auto !important");
-			nameTxt.setStyleAttribute("overflow","visible !important");
+			nameTxt.addStyleName("homeviewport-welcome-text");
 			
 			LayoutContainer configLayoutContainer = new LayoutContainer();
 			HBoxLayout hbl_configLayoutContainer = new HBoxLayout();
@@ -479,7 +478,7 @@ public class HomeViewport extends AbstractViewport{
 
 		public void loadUserInfo(User user){
 			if(user != null){
-				nameTxt.setText(user.getName());
+				nameTxt.setText(((Messages) Registry.get(Messages.class.getName())).HomeViewport_label_welcomeBack()+user.getName());
 			}
 		}
 		

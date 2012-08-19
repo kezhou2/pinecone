@@ -141,7 +141,7 @@ public class UserController extends Controller {
 		User user = new User();
 		user.setEmail(event.getData("email").toString());
 		user.setPassword(event.getData("password").toString());
-		user.setName("Anonymous");
+		user.setName(event.getData("name").toString());
 		service.create(user, new AsyncCallback<User>() {
 
 			@Override

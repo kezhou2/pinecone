@@ -6,7 +6,7 @@ package com.tenline.pinecone.platform.web.store.server;
 import java.util.Collection;
 
 import com.tenline.pinecone.platform.model.Consumer;
-import com.tenline.pinecone.platform.sdk.ConsumerAPI;
+import com.tenline.pinecone.platform.model.Entity;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
 
@@ -16,21 +16,17 @@ import com.tenline.pinecone.platform.web.store.client.services.ConsumerService;
  */
 @SuppressWarnings("serial")
 public class ConsumerServiceImpl extends AbstractService implements ConsumerService {
-
-	private ConsumerAPI consumerAPI;
 	
 	/**
 	 * 
 	 */
 	public ConsumerServiceImpl() {
-		// TODO Auto-generated constructor stub
-		consumerAPI = new ConsumerAPI(HOST, PORT, CONTEXT);
+		super();
 	}
 
 	@Override
-	public boolean delete(String id) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = consumerAPI.delete(id);
+	public boolean delete(Entity entity) throws Exception {
+		APIResponse response = modelAPI.delete(entity);
 		if (response.isDone()) return true;
 		else return false;
 	}
@@ -38,33 +34,29 @@ public class ConsumerServiceImpl extends AbstractService implements ConsumerServ
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<Consumer> show(String filter) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = consumerAPI.show(filter);
+		APIResponse response = modelAPI.show(Consumer.class,filter);
 		if (response.isDone()) return (Collection<Consumer>) response.getMessage();
 		else return null;
 	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
-	public Collection<Consumer> showByCategory(String filter) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = consumerAPI.showByCategory(filter);
-		if (response.isDone()) return (Collection<Consumer>) response.getMessage();
-		else return null;
-	}
+//	@Override
+//	@SuppressWarnings("unchecked")
+//	public Collection<Consumer> showByCategory(String filter) throws Exception {
+//		APIResponse response = consumerAPI.showByCategory(filter);
+//		if (response.isDone()) return (Collection<Consumer>) response.getMessage();
+//		else return null;
+//	}
 
 	@Override
 	public Consumer create(Consumer consumer) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = consumerAPI.create(consumer);
+		APIResponse response = modelAPI.create(consumer);
 		if (response.isDone()) return (Consumer) response.getMessage();
 		else return null;
 	}
 
 	@Override
 	public Consumer update(Consumer consumer) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = consumerAPI.update(consumer);
+		APIResponse response = modelAPI.update(consumer);
 		if (response.isDone()) return (Consumer) response.getMessage();
 		else return null;
 	}

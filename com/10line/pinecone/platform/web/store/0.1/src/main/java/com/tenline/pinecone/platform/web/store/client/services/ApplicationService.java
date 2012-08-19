@@ -39,20 +39,20 @@ public interface ApplicationService extends AbstractService {
 	 */
 	public Collection<Application> show(String filter) throws Exception;
 	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<Application> showByUser(String filter) throws Exception;
-	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<Application> showByConsumer(String filter) throws Exception;
+//	/**
+//	 * 
+//	 * @param filter
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public Collection<Application> showByUser(String filter) throws Exception;
+//	
+//	/**
+//	 * 
+//	 * @param filter
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public Collection<Application> showByConsumer(String filter) throws Exception;
 
 }

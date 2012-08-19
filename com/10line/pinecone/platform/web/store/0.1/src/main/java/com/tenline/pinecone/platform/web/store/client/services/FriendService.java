@@ -39,20 +39,20 @@ public interface FriendService extends AbstractService {
 	 */
 	public Collection<Friend> show(String filter) throws Exception;
 	
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<Friend> showByReceiver(String filter) throws Exception;
-
-	/**
-	 * 
-	 * @param filter
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<Friend> showBySender(String filter) throws Exception;
+//	/**
+//	 * 
+//	 * @param filter
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public Collection<Friend> showByReceiver(String filter) throws Exception;
+//
+//	/**
+//	 * 
+//	 * @param filter
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public Collection<Friend> showBySender(String filter) throws Exception;
 	
 }

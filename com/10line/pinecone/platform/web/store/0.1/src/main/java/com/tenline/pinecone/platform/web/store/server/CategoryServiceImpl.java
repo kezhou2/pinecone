@@ -6,7 +6,7 @@ package com.tenline.pinecone.platform.web.store.server;
 import java.util.Collection;
 
 import com.tenline.pinecone.platform.model.Category;
-import com.tenline.pinecone.platform.sdk.CategoryAPI;
+import com.tenline.pinecone.platform.model.Entity;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.web.store.client.services.CategoryService;
 
@@ -17,36 +17,30 @@ import com.tenline.pinecone.platform.web.store.client.services.CategoryService;
 @SuppressWarnings("serial")
 public class CategoryServiceImpl extends AbstractService implements CategoryService {
 	
-	private CategoryAPI categoryAPI;
-
 	/**
 	 * 
 	 */
 	public CategoryServiceImpl() {
-		// TODO Auto-generated constructor stub
-		categoryAPI = new CategoryAPI(HOST, PORT, CONTEXT);
+		super();
 	}
 
 	@Override
-	public boolean delete(String id) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = categoryAPI.delete(id);
+	public boolean delete(Entity entity) throws Exception {
+		APIResponse response = modelAPI.delete(entity);
 		if (response.isDone()) return true;
 		else return false;
 	}
 
 	@Override
 	public Category create(Category category) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = categoryAPI.create(category);
+		APIResponse response = modelAPI.create(category);
 		if (response.isDone()) return (Category) response.getMessage();
 		else return null;
 	}
 
 	@Override
 	public Category update(Category category) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = categoryAPI.update(category);
+		APIResponse response = modelAPI.update(category);
 		if (response.isDone()) return (Category) response.getMessage();
 		else return null;
 	}
@@ -54,8 +48,7 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<Category> show(String filter) throws Exception {
-		// TODO Auto-generated method stub
-		APIResponse response = categoryAPI.show(filter);
+		APIResponse response = modelAPI.show(Category.class,filter);
 		if (response.isDone()) return (Collection<Category>) response.getMessage();
 		else return null;
 	}

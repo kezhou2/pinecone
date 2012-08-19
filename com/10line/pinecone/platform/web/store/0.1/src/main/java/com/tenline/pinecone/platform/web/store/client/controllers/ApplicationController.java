@@ -65,8 +65,8 @@ public class ApplicationController extends Controller {
 	 * @throws Exception
 	 */
 	private void getByUser(final AppEvent event) throws Exception {
-		String filter = "id=='"+((User) Registry.get(User.class.getName())).getId()+"'";
-		service.showByUser(filter, new AsyncCallback<Collection<Application>>() {
+		String filter = "user.id=='"+((User) Registry.get(User.class.getName())).getId()+"'";
+		service.show(filter, new AsyncCallback<Collection<Application>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -131,8 +131,9 @@ public class ApplicationController extends Controller {
 	 */
 	private void uninstall(final AppEvent event) throws Exception {
 		System.out.println("ApplicationController uninstall:"+event.getData("id").toString());
-		String filter = event.getData("id").toString();
-		service.delete(filter, new AsyncCallback<Boolean>() {
+		Application application = event.getData("application");
+		
+		service.delete(application, new AsyncCallback<Boolean>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -144,7 +145,6 @@ public class ApplicationController extends Controller {
 			@Override
 			public void onSuccess(Boolean result) {
 				System.out.println("result:"+result);
-//				forwardToView(view, event.getType(), result);
 				Collection<Application> list = (Collection<Application>)Registry.get("MyApps");
 				for(Application a:list){
 					if(a.getId().equals(event.getData("id").toString())){

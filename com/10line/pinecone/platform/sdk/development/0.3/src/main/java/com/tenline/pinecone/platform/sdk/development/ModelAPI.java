@@ -6,6 +6,9 @@ package com.tenline.pinecone.platform.sdk.development;
 import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+
+import com.tenline.pinecone.platform.model.Entity;
 
 /**
  * @author Bill
@@ -39,9 +42,14 @@ public class ModelAPI extends ResourceAPI {
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			response.setDone(true);
-			response.setMessage(new ObjectInputStream(connection.getInputStream()).readObject());
-			connection.getInputStream().close();
+			try {
+				response.setMessage(new ObjectInputStream(connection.getInputStream()).readObject());
+			} catch(Exception ex) {
+				response.setMessage(new ArrayList<Entity>());
+			} finally {
+				response.setDone(true);
+				connection.getInputStream().close();	
+			}
 		} else {
 			response.setDone(false);
 			response.setMessage("Show " + entityClass.getSimpleName() + " Error Code: Http (" + connection.getResponseCode() + ")");

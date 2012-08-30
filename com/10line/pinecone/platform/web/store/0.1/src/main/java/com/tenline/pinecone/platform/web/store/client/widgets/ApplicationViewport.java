@@ -39,7 +39,7 @@ import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
  */
 public class ApplicationViewport extends AbstractViewport {
 	
-	private ListStore<BeanModel> applicationGridStore = new ListStore<BeanModel>();
+	private ListStore<BeanModel> consumerGridStore = new ListStore<BeanModel>();
 
 	/**
 	 * 
@@ -52,7 +52,7 @@ public class ApplicationViewport extends AbstractViewport {
 		navigator.getMenu().add(new LogoutItem());
 		header.add(navigator);
 		LayoutContainer centerContainer = new LayoutContainer(new FitLayout());
-		centerContainer.add(new ApplicationPanel(), new FitData(20));
+		centerContainer.add(new ConsumerPanel(), new FitData(20));
 		body.add(centerContainer, new BorderLayoutData(LayoutRegion.CENTER));
 	}
 	
@@ -61,9 +61,9 @@ public class ApplicationViewport extends AbstractViewport {
 	 * @author Bill
 	 *
 	 */
-	private class ApplicationPanel extends ContentPanel {
+	private class ConsumerPanel extends ContentPanel {
 		
-		private ApplicationPanel() {
+		private ConsumerPanel() {
 			setHeading(((Messages) Registry.get(Messages.class.getName())).application());
 			setLayout(new FitLayout());
 			ArrayList<ColumnConfig> config = new ArrayList<ColumnConfig>();
@@ -94,7 +94,7 @@ public class ApplicationViewport extends AbstractViewport {
 				}
 				
 			});
-			add(new ApplicationGrid(new ColumnModel(config)));
+			add(new ConsumerGrid(new ColumnModel(config)));
 		}
 		
 	}
@@ -104,11 +104,11 @@ public class ApplicationViewport extends AbstractViewport {
 	 * @author Bill
 	 *
 	 */
-	private class ApplicationGrid extends Grid<BeanModel> {
+	private class ConsumerGrid extends Grid<BeanModel> {
 		
-		private ApplicationGrid(ColumnModel model) {
-			super(applicationGridStore, model);
-			applicationGridStore.setModelComparer(new SimpleModelComparer<BeanModel>());
+		private ConsumerGrid(ColumnModel model) {
+			super(consumerGridStore, model);
+			consumerGridStore.setModelComparer(new SimpleModelComparer<BeanModel>());
 			getView().setAutoFill(true);
 		}
 		
@@ -116,12 +116,12 @@ public class ApplicationViewport extends AbstractViewport {
 	
 	/**
 	 * 
-	 * @param application
+	 * @param consumer
 	 */
-	public void updateApplicationToGrid(BeanModel application) {
-		if (!applicationGridStore.contains(application)) {
-			applicationGridStore.add(application);
-			applicationGridStore.commitChanges();
+	public void updateConsumerToGrid(BeanModel consumer) {
+		if (!consumerGridStore.contains(consumer)) {
+			consumerGridStore.add(consumer);
+			consumerGridStore.commitChanges();
 		}
 	}
 	

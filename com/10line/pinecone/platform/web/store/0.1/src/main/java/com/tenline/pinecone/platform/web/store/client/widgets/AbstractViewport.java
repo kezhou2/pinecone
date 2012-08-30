@@ -25,6 +25,7 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.Consumer;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.Store;
@@ -129,9 +130,13 @@ public abstract class AbstractViewport extends Viewport {
 			addSelectionListener(new SelectionListener<MenuEvent>() {
 
 				@Override
-				public void componentSelected(MenuEvent ce) {
+				public void componentSelected(MenuEvent event) {
 					// TODO Auto-generated method stub
-					
+					FriendViewport view = Registry.get(FriendViewport.class.getName());
+					view.updateToRootPanel();
+					ArrayList<String> model = new ArrayList<String>();
+					model.add(User.class.getName()); model.add("all");
+					Dispatcher.get().dispatch(ModelEvents.GET_ALL_USER, model);
 				}
 				
 			});

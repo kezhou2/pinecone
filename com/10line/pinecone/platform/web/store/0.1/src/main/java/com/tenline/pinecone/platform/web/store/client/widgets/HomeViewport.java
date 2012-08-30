@@ -13,12 +13,14 @@ import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.ListView;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FillData;
 import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.tenline.pinecone.platform.web.store.client.Messages;
+import com.tenline.pinecone.platform.web.store.client.Store;
 
 /**
  * @author Bill
@@ -26,6 +28,7 @@ import com.tenline.pinecone.platform.web.store.client.Messages;
  */
 public class HomeViewport extends AbstractViewport {
 	
+	private Button identity = new Button();
 	private ApplicationConsole applicationConsole = new ApplicationConsole();
 	private ListStore<BeanModel> applicationListStore = new ListStore<BeanModel>();
 	private ListStore<BeanModel> friendListStore = new ListStore<BeanModel>();
@@ -36,6 +39,7 @@ public class HomeViewport extends AbstractViewport {
 	public HomeViewport() {
 		super();
 		// TODO Auto-generated constructor stub
+		header.add(identity);
 		navigator.getMenu().add(new ApplicationItem());
 		navigator.getMenu().add(new FriendItem());
 		navigator.getMenu().add(new LogoutItem());
@@ -47,6 +51,16 @@ public class HomeViewport extends AbstractViewport {
 		eastContainer.add(new ApplicationPanel(), new FillData(20, 20, 20, 10));
 		eastContainer.add(new FriendPanel(), new FillData(0, 20, 20, 10));
 		body.add(eastContainer, new BorderLayoutData(LayoutRegion.EAST, 250));
+	}
+	
+	/**
+	 * 
+	 * @param text
+	 * @param title
+	 */
+	public void updateIdentity(String text, String title) {
+		identity.setText(text);
+		identity.setTitle(title);
 	}
 	
 	/**
@@ -80,7 +94,7 @@ public class HomeViewport extends AbstractViewport {
 				@Override
 				public void selectionChanged(SelectionChangedEvent<BeanModel> event) {
 					// TODO Auto-generated method stub
-					updateApplicationToConsole((BeanModel) event.getSelectedItem());
+					updateApplicationToConsole(event.getSelectedItem());
 				}
 				
 			});
@@ -125,6 +139,16 @@ public class HomeViewport extends AbstractViewport {
 			setDisplayProperty("name");
 			friendListStore.setModelComparer(new SimpleModelComparer<BeanModel>());
 			setStore(friendListStore);
+			getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<BeanModel>() {
+
+				@Override
+				public void selectionChanged(SelectionChangedEvent<BeanModel> event) {
+					// TODO Auto-generated method stub
+					Registry.unregister(Store.CURRENT_USER);
+					Registry.register(Store.CURRENT_USER, event.getSelectedItem());
+				}
+				
+			});
 		}
 		
 	}

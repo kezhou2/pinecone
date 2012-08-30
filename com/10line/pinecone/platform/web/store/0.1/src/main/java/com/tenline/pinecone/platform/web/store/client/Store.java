@@ -10,6 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.tenline.pinecone.platform.web.store.client.controllers.ModelController;
 import com.tenline.pinecone.platform.web.store.client.services.ModelService;
 import com.tenline.pinecone.platform.web.store.client.widgets.ApplicationViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.RegisterViewport;
@@ -36,6 +37,7 @@ public class Store implements EntryPoint {
 		
 		// Widgets
 		Registry.register(ApplicationViewport.class.getName(), GWT.create(ApplicationViewport.class));
+		Registry.register(FriendViewport.class.getName(), GWT.create(FriendViewport.class));
 		Registry.register(HomeViewport.class.getName(), GWT.create(HomeViewport.class));
 		Registry.register(LoginViewport.class.getName(), GWT.create(LoginViewport.class));
 		Registry.register(RegisterViewport.class.getName(), GWT.create(RegisterViewport.class));

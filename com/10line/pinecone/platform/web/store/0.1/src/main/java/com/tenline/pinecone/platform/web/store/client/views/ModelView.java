@@ -17,6 +17,7 @@ import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.web.store.client.Store;
 import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
 import com.tenline.pinecone.platform.web.store.client.widgets.ApplicationViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
 
@@ -45,8 +46,10 @@ public class ModelView extends View {
 			loginUser(event);
 		} else if (event.getType().equals(ModelEvents.LOGOUT_USER)) {
 			logoutUser();
+		} else if (event.getType().equals(ModelEvents.GET_ALL_USER)) {
+			updateUserToGrid(event);
 		} else if (event.getType().equals(ModelEvents.GET_ALL_CONSUMER)) {
-			updateApplicationToGrid(event);
+			updateConsumerToGrid(event);
 		} else if (event.getType().equals(ModelEvents.GET_APPLICATION_BY_USER)) {
 			updateApplicationToList(event);
 		} else if (event.getType().equals(ModelEvents.GET_FRIEND_BY_RECEIVER)) {
@@ -65,11 +68,25 @@ public class ModelView extends View {
 	 * 
 	 * @param event
 	 */
-	private void updateApplicationToGrid(AppEvent event) {
+	private void updateConsumerToGrid(AppEvent event) {
 		ApplicationViewport view = Registry.get(ApplicationViewport.class.getName());
-		List<BeanModel> applications = event.getData();
-		for (BeanModel application : applications) {
-			view.updateApplicationToGrid(application);	
+		List<BeanModel> consumers = event.getData();
+		for (BeanModel consumer : consumers) {
+			view.updateConsumerToGrid(consumer);	
+		}
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void updateUserToGrid(AppEvent event) {
+		FriendViewport view = Registry.get(FriendViewport.class.getName());
+		List<BeanModel> users = event.getData();
+		for (BeanModel user : users) {
+			if (!user.get("id").equals(((BeanModel) Registry.get(Store.CURRENT_USER)).get("id"))){
+				view.updateUserToGrid(user);	
+			}
 		}
 	}
 	
@@ -114,13 +131,15 @@ public class ModelView extends View {
 	private void loginUser(AppEvent event) {
 		List<BeanModel> models = event.getData();
 		if (models.size() == 1) {
-			Registry.register(Store.CURRENT_USER, models.get(0));
+			BeanModel model = models.get(0);
+			Registry.register(Store.CURRENT_USER, model);
 			ArrayList<String> application = new ArrayList<String>();
 			application.add(Application.class.getName());
-			application.add("user.id=='" + ((BeanModel) Registry.get(Store.CURRENT_USER)).get("id") + "'");
+			application.add("user.id=='" + model.get("id") + "'");
 			Dispatcher.get().dispatch(ModelEvents.GET_APPLICATION_BY_USER, application);
 			HomeViewport view = Registry.get(HomeViewport.class.getName());
 			view.updateToRootPanel();
+			view.updateIdentity(model.get("name").toString(), model.get("email").toString());
 		} else {
 			LoginViewport view = Registry.get(LoginViewport.class.getName());
 			view.showErrorDialog();

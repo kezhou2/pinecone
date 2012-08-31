@@ -52,6 +52,7 @@ public class ModelController extends Controller {
 		registerEventTypes(ModelEvents.GET_ALL_USER);
 		registerEventTypes(ModelEvents.GET_ALL_CONSUMER);
 		registerEventTypes(ModelEvents.GET_APPLICATION_BY_USER);
+		registerEventTypes(ModelEvents.GET_INVITATION_BY_RECEIVER);
 		registerEventTypes(ModelEvents.GET_FRIEND_BY_RECEIVER);
 		registerEventTypes(ModelEvents.GET_FRIEND_BY_SENDER);
 	}
@@ -132,7 +133,8 @@ public class ModelController extends Controller {
 					   event.getType().equals(ModelEvents.GET_ALL_CONSUMER) ||
 					   event.getType().equals(ModelEvents.GET_APPLICATION_BY_USER) ||
 					   event.getType().equals(ModelEvents.GET_FRIEND_BY_RECEIVER) ||
-					   event.getType().equals(ModelEvents.GET_FRIEND_BY_SENDER)) {
+					   event.getType().equals(ModelEvents.GET_FRIEND_BY_SENDER) ||
+					   event.getType().equals(ModelEvents.GET_INVITATION_BY_RECEIVER)) {
 				show(event, event.getData());
 			} else if (event.getType().equals(ModelEvents.LOGOUT_USER)) {
 				forwardToView(view, event);

@@ -12,6 +12,7 @@ import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.mvc.View;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.web.store.client.Store;
@@ -20,6 +21,7 @@ import com.tenline.pinecone.platform.web.store.client.widgets.ApplicationViewpor
 import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.NavigatorViewport;
 
 /**
  * @author Bill
@@ -38,29 +40,26 @@ public class ModelView extends View {
 	@Override
 	protected void handleEvent(AppEvent event) {
 		// TODO Auto-generated method stub
-		if (event.getType().equals(ModelEvents.REGISTER_USER) ||
-			event.getType().equals(ModelEvents.REGISTER_CONSUMER)) {
-			LoginViewport view = Registry.get(LoginViewport.class.getName());
-			view.updateToRootPanel();
+		if (event.getType().equals(ModelEvents.REGISTER_USER)) {
+			registerUser();
+		} else if (event.getType().equals(ModelEvents.REGISTER_CONSUMER)) {
+			registerConsumer();
 		} else if (event.getType().equals(ModelEvents.LOGIN_USER)) {
 			loginUser(event);
 		} else if (event.getType().equals(ModelEvents.LOGOUT_USER)) {
 			logoutUser();
 		} else if (event.getType().equals(ModelEvents.GET_ALL_USER)) {
-			updateUserToGrid(event);
+			getAllUser(event);
 		} else if (event.getType().equals(ModelEvents.GET_ALL_CONSUMER)) {
-			updateConsumerToGrid(event);
+			getAllConsumer(event);
 		} else if (event.getType().equals(ModelEvents.GET_APPLICATION_BY_USER)) {
-			updateApplicationToList(event);
+			getApplicationByUser(event);
 		} else if (event.getType().equals(ModelEvents.GET_FRIEND_BY_RECEIVER)) {
-			updateFriendToList(event, "sender");
+			getFriendByReceiver(event);
 		} else if (event.getType().equals(ModelEvents.GET_FRIEND_BY_SENDER)) {
-			updateFriendToList(event, "receiver");
-			BeanModel model = Registry.get(Store.CURRENT_USER);
-			ArrayList<String> friend = new ArrayList<String>();
-			friend.add(Friend.class.getName());
-			friend.add("receiver.id=='" + model.get("id") + "'");
-			Dispatcher.get().dispatch(ModelEvents.GET_FRIEND_BY_RECEIVER, friend);
+			getFriendBySender(event);
+		} else if (event.getType().equals(ModelEvents.GET_INVITATION_BY_RECEIVER)) {
+			getInvitationByReceiver(event);
 		}
 	}
 	
@@ -84,7 +83,7 @@ public class ModelView extends View {
 		FriendViewport view = Registry.get(FriendViewport.class.getName());
 		List<BeanModel> users = event.getData();
 		for (BeanModel user : users) {
-			if (!user.get("id").equals(((BeanModel) Registry.get(Store.CURRENT_USER)).get("id"))){
+			if (!user.get("id").equals(((BeanModel) Registry.get(Store.CURRENT_OWNER)).get("id"))){
 				view.updateUserToGrid(user);	
 			}
 		}
@@ -103,10 +102,6 @@ public class ModelView extends View {
 				view.updateApplicationToConsole((BeanModel) application.get("consumer"));
 			}
 		}
-		ArrayList<String> friend = new ArrayList<String>();
-		friend.add(Friend.class.getName());
-		friend.add("sender.id=='" + ((BeanModel) Registry.get(Store.CURRENT_USER)).get("id") + "'");
-		Dispatcher.get().dispatch(ModelEvents.GET_FRIEND_BY_SENDER, friend);
 	}
 	
 	/**
@@ -126,20 +121,34 @@ public class ModelView extends View {
 	
 	/**
 	 * 
+	 */
+	private void registerUser() {
+		LoginViewport view = Registry.get(LoginViewport.class.getName());
+		view.updateToRootPanel();
+	}
+	
+	/**
+	 * 
+	 */
+	private void registerConsumer() {
+		LoginViewport view = Registry.get(LoginViewport.class.getName());
+		view.updateToRootPanel();
+	}
+	
+	/**
+	 * 
 	 * @param event
 	 */
 	private void loginUser(AppEvent event) {
 		List<BeanModel> models = event.getData();
 		if (models.size() == 1) {
 			BeanModel model = models.get(0);
-			Registry.register(Store.CURRENT_USER, model);
+			Registry.register(Store.CURRENT_OWNER, model);
+			Registry.register(Store.CURRENT_VIEWER, model);
 			ArrayList<String> application = new ArrayList<String>();
 			application.add(Application.class.getName());
 			application.add("user.id=='" + model.get("id") + "'");
 			Dispatcher.get().dispatch(ModelEvents.GET_APPLICATION_BY_USER, application);
-			HomeViewport view = Registry.get(HomeViewport.class.getName());
-			view.updateToRootPanel();
-			view.updateIdentity(model.get("name").toString(), model.get("email").toString());
 		} else {
 			LoginViewport view = Registry.get(LoginViewport.class.getName());
 			view.showErrorDialog();
@@ -150,9 +159,79 @@ public class ModelView extends View {
 	 * 
 	 */
 	private void logoutUser() {
-		Registry.unregister(Store.CURRENT_USER);
+		Registry.unregister(Store.CURRENT_OWNER);
+		Registry.unregister(Store.CURRENT_VIEWER);
 		LoginViewport view = Registry.get(LoginViewport.class.getName());
 		view.updateToRootPanel();
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void getAllUser(AppEvent event) {
+		updateUserToGrid(event);
+		FriendViewport view = Registry.get(FriendViewport.class.getName());
+		view.updateIdentityToOwner();
+		view.updateToRootPanel();
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void getAllConsumer(AppEvent event) {
+		updateConsumerToGrid(event);
+		ApplicationViewport view = Registry.get(ApplicationViewport.class.getName());
+		view.updateIdentityToOwner();
+		view.updateToRootPanel();
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void getApplicationByUser(AppEvent event) {
+		updateApplicationToList(event);
+		BeanModel model = Registry.get(Store.CURRENT_VIEWER);
+		ArrayList<String> friend = new ArrayList<String>();
+		friend.add(Friend.class.getName());
+		friend.add("sender.id=='" + model.get("id") + "'");
+		Dispatcher.get().dispatch(ModelEvents.GET_FRIEND_BY_SENDER, friend);
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void getFriendByReceiver(AppEvent event) {
+		updateFriendToList(event, "sender");
+		HomeViewport view = Registry.get(HomeViewport.class.getName());
+		view.updateIdentityToViewer();
+		view.updateToRootPanel();
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void getFriendBySender(AppEvent event) {
+		updateFriendToList(event, "receiver");
+		BeanModel model = Registry.get(Store.CURRENT_VIEWER);
+		ArrayList<String> friend = new ArrayList<String>();
+		friend.add(Friend.class.getName());
+		friend.add("receiver.id=='" + model.get("id") + "'");
+		Dispatcher.get().dispatch(ModelEvents.GET_FRIEND_BY_RECEIVER, friend);
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void getInvitationByReceiver(AppEvent event) {
+		List<BeanModel> models = event.getData();
+		NavigatorViewport view = (NavigatorViewport) RootPanel.get().getWidget(0);
+		view.updateFriendInvitation(String.valueOf(models.size()));
 	}
 
 }

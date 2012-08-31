@@ -26,6 +26,7 @@ public interface ModelEvents {
 	static final EventType GET_APPLICATION_BY_USER = new EventType(); 
 	
 	static final EventType INVITE_FRIEND = new EventType();
+	static final EventType GET_INVITATION_BY_RECEIVER = new EventType();
 	static final EventType GET_FRIEND_BY_SENDER = new EventType();
 	static final EventType GET_FRIEND_BY_RECEIVER = new EventType();
 

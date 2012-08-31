@@ -22,7 +22,8 @@ import com.tenline.pinecone.platform.web.store.client.widgets.RegisterViewport;
  */
 public class Store implements EntryPoint {
 	
-	public static final String CURRENT_USER = "current.user";
+	public static final String CURRENT_OWNER = "current.owner";
+	public static final String CURRENT_VIEWER = "current.viewer";
 	
 	@Override
 	public void onModuleLoad() {

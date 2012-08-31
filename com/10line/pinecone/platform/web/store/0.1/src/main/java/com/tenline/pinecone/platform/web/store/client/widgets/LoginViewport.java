@@ -57,7 +57,7 @@ public class LoginViewport extends AbstractViewport {
 		
 		private VideoDemo() {
 			setHeading(((Messages) Registry.get(Messages.class.getName())).videoDemo());
-			setUrl("http://player.youku.com/player.php/sid/XNDI3OTU4NzAw/v.swf");
+			setUrl("http://player.youku.com/player.php/sid/XMzMzNjU3Mzgw/v.swf");
 		}
 		
 	}

@@ -3,32 +3,35 @@
  */
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
+import java.util.ArrayList;
+
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
+import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.ListView;
-import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FillData;
 import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
+import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.Store;
+import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
 
 /**
  * @author Bill
  *
  */
-public class HomeViewport extends AbstractViewport {
-	
-	private Button identity = new Button();
+public class HomeViewport extends NavigatorViewport {
+
 	private ApplicationConsole applicationConsole = new ApplicationConsole();
 	private ListStore<BeanModel> applicationListStore = new ListStore<BeanModel>();
 	private ListStore<BeanModel> friendListStore = new ListStore<BeanModel>();
@@ -39,11 +42,9 @@ public class HomeViewport extends AbstractViewport {
 	public HomeViewport() {
 		super();
 		// TODO Auto-generated constructor stub
-		header.add(identity);
-		navigator.getMenu().add(new ApplicationItem());
-		navigator.getMenu().add(new FriendItem());
-		navigator.getMenu().add(new LogoutItem());
-		header.add(navigator);
+		header.add(new ApplicationButton());
+		header.add(new FriendButton());
+		header.add(accountButton);
 		LayoutContainer centerContainer = new LayoutContainer(new FitLayout());
 		centerContainer.add(applicationConsole, new FitData(20));
 		body.add(centerContainer, new BorderLayoutData(LayoutRegion.CENTER));
@@ -51,16 +52,6 @@ public class HomeViewport extends AbstractViewport {
 		eastContainer.add(new ApplicationPanel(), new FillData(20, 20, 20, 10));
 		eastContainer.add(new FriendPanel(), new FillData(0, 20, 20, 10));
 		body.add(eastContainer, new BorderLayoutData(LayoutRegion.EAST, 250));
-	}
-	
-	/**
-	 * 
-	 * @param text
-	 * @param title
-	 */
-	public void updateIdentity(String text, String title) {
-		identity.setText(text);
-		identity.setTitle(title);
 	}
 	
 	/**
@@ -144,8 +135,13 @@ public class HomeViewport extends AbstractViewport {
 				@Override
 				public void selectionChanged(SelectionChangedEvent<BeanModel> event) {
 					// TODO Auto-generated method stub
-					Registry.unregister(Store.CURRENT_USER);
-					Registry.register(Store.CURRENT_USER, event.getSelectedItem());
+					Registry.unregister(Store.CURRENT_VIEWER);
+					Registry.register(Store.CURRENT_VIEWER, event.getSelectedItem());
+					BeanModel viewer = (BeanModel) Registry.get(Store.CURRENT_VIEWER);
+					ArrayList<String> application = new ArrayList<String>();
+					application.add(Application.class.getName());
+					application.add("user.id=='" + viewer.get("id") + "'");
+					Dispatcher.get().dispatch(ModelEvents.GET_APPLICATION_BY_USER, application);
 				}
 				
 			});

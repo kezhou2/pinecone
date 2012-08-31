@@ -37,7 +37,7 @@ import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
  * @author Bill
  *
  */
-public class ApplicationViewport extends AbstractViewport {
+public class ApplicationViewport extends NavigatorViewport {
 	
 	private ListStore<BeanModel> consumerGridStore = new ListStore<BeanModel>();
 
@@ -47,10 +47,9 @@ public class ApplicationViewport extends AbstractViewport {
 	public ApplicationViewport() {
 		super();
 		// TODO Auto-generated constructor stub
-		navigator.getMenu().add(new HomeItem());
-		navigator.getMenu().add(new FriendItem());
-		navigator.getMenu().add(new LogoutItem());
-		header.add(navigator);
+		header.add(new HomeButton());
+		header.add(new FriendButton());
+		header.add(accountButton);
 		LayoutContainer centerContainer = new LayoutContainer(new FitLayout());
 		centerContainer.add(new ConsumerPanel(), new FitData(20));
 		body.add(centerContainer, new BorderLayoutData(LayoutRegion.CENTER));
@@ -86,7 +85,7 @@ public class ApplicationViewport extends AbstractViewport {
 							BeanModel application = BeanModelLookup.get().getFactory(Application.class).createModel(new Application());
 							application.set("status", Application.CLOSED);
 							application.set("consumer", model.getBean());
-							application.set("user", Registry.get(Store.CURRENT_USER));
+							application.set("user", Registry.get(Store.CURRENT_OWNER));
 							showInstallDialog(application);
 						}
 						

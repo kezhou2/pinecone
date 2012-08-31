@@ -37,7 +37,7 @@ import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
  * @author Bill
  *
  */
-public class FriendViewport extends AbstractViewport {
+public class FriendViewport extends NavigatorViewport {
 
 	private ListStore<BeanModel> userGridStore = new ListStore<BeanModel>();
 	
@@ -47,10 +47,9 @@ public class FriendViewport extends AbstractViewport {
 	public FriendViewport() {
 		super();
 		// TODO Auto-generated constructor stub
-		navigator.getMenu().add(new ApplicationItem());
-		navigator.getMenu().add(new HomeItem());
-		navigator.getMenu().add(new LogoutItem());
-		header.add(navigator);
+		header.add(new HomeButton());
+		header.add(new ApplicationButton());
+		header.add(accountButton);
 		LayoutContainer centerContainer = new LayoutContainer(new FitLayout());
 		centerContainer.add(new UserPanel(), new FitData(20));
 		body.add(centerContainer, new BorderLayoutData(LayoutRegion.CENTER));
@@ -83,7 +82,7 @@ public class FriendViewport extends AbstractViewport {
 						public void componentSelected(ButtonEvent event) {
 							// TODO Auto-generated method stub
 							BeanModel friend = BeanModelLookup.get().getFactory(Friend.class).createModel(new Friend());
-							friend.set("sender", Registry.get(Store.CURRENT_USER));
+							friend.set("sender", Registry.get(Store.CURRENT_OWNER));
 							friend.set("receiver", model.getBean());
 							addFriendDialog(friend);
 						}

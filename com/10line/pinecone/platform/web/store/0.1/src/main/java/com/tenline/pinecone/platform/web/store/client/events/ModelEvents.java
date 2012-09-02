@@ -14,20 +14,9 @@ public interface ModelEvents {
 	/**
 	 * 
 	 */
-	static final EventType REGISTER_USER = new EventType();
-	static final EventType LOGIN_USER = new EventType();
-	static final EventType LOGOUT_USER = new EventType();
-	static final EventType GET_ALL_USER = new EventType();
-	
-	static final EventType REGISTER_CONSUMER = new EventType();
-	static final EventType GET_ALL_CONSUMER = new EventType();
-	
-	static final EventType INSTALL_APPLICATION = new EventType();
-	static final EventType GET_APPLICATION_BY_USER = new EventType(); 
-	
-	static final EventType INVITE_FRIEND = new EventType();
-	static final EventType GET_INVITATION_BY_RECEIVER = new EventType();
-	static final EventType GET_FRIEND_BY_SENDER = new EventType();
-	static final EventType GET_FRIEND_BY_RECEIVER = new EventType();
+	static final EventType CREATE = new EventType();
+	static final EventType DELETE = new EventType();
+	static final EventType UPDATE = new EventType();
+	static final EventType SHOW = new EventType();
 
 }

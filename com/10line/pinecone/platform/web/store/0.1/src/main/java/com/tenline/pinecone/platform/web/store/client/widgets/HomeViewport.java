@@ -4,6 +4,7 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
@@ -11,7 +12,7 @@ import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
-import com.extjs.gxt.ui.client.mvc.Dispatcher;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
@@ -22,9 +23,10 @@ import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.tenline.pinecone.platform.model.Application;
+import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.Store;
-import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
+import com.tenline.pinecone.platform.web.store.client.controllers.ModelController;
 
 /**
  * @author Bill
@@ -32,6 +34,10 @@ import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
  */
 public class HomeViewport extends NavigatorViewport {
 
+	public static final String VIEWER_GET_APPLICATIONS = "viewer.get.applications";
+	public static final String VIEWER_GET_FRIENDS_AS_SENDER = "viewer.get.friends.as.sender";
+	public static final String VIEWER_GET_FRIENDS_AS_RECEIVER = "viewer.get.friends.as.receiver";
+	
 	private ApplicationConsole applicationConsole = new ApplicationConsole();
 	private ListStore<BeanModel> applicationListStore = new ListStore<BeanModel>();
 	private ListStore<BeanModel> friendListStore = new ListStore<BeanModel>();
@@ -135,13 +141,12 @@ public class HomeViewport extends NavigatorViewport {
 				@Override
 				public void selectionChanged(SelectionChangedEvent<BeanModel> event) {
 					// TODO Auto-generated method stub
-					Registry.unregister(Store.CURRENT_VIEWER);
 					Registry.register(Store.CURRENT_VIEWER, event.getSelectedItem());
 					BeanModel viewer = (BeanModel) Registry.get(Store.CURRENT_VIEWER);
-					ArrayList<String> application = new ArrayList<String>();
-					application.add(Application.class.getName());
-					application.add("user.id=='" + viewer.get("id") + "'");
-					Dispatcher.get().dispatch(ModelEvents.GET_APPLICATION_BY_USER, application);
+					ArrayList<String> model = new ArrayList<String>();
+					model.add(Application.class.getName());
+					model.add("user.id=='" + viewer.get("id") + "'");
+					ModelController.show(VIEWER_GET_APPLICATIONS, model, HomeViewport.this);
 				}
 				
 			});
@@ -179,6 +184,40 @@ public class HomeViewport extends NavigatorViewport {
 	 */
 	public void updateApplicationToConsole(BeanModel application) {
 		applicationConsole.setUrl(application.get("connectURI").toString());
+	}
+
+	@Override
+	public void handleViewCallback(AppEvent event) {
+		// TODO Auto-generated method stub
+		if (event.getData("type").equals(VIEWER_GET_APPLICATIONS)) {
+			List<BeanModel> applications = event.getData("model");
+			for (BeanModel application : applications) {
+				updateApplicationToList((BeanModel) application.get("consumer"));
+				if (applications.indexOf(application) == 0) {
+					updateApplicationToConsole((BeanModel) application.get("consumer"));
+				}
+			}
+			BeanModel viewer = Registry.get(Store.CURRENT_VIEWER);
+			ArrayList<String> model = new ArrayList<String>();
+			model.add(Friend.class.getName()); 
+			model.add("sender.id=='" + viewer.get("id") + "'&&isDecided==true");
+			ModelController.show(VIEWER_GET_FRIENDS_AS_SENDER, model, this);
+		} else if (event.getData("type").equals(VIEWER_GET_FRIENDS_AS_SENDER)) {
+			List<BeanModel> friends = event.getData("model");
+			for (BeanModel friend : friends) {
+				updateFriendToList((BeanModel) friend.get("receiver"));	
+			}
+			BeanModel viewer = Registry.get(Store.CURRENT_VIEWER);
+			ArrayList<String> model = new ArrayList<String>();
+			model.add(Friend.class.getName()); 
+			model.add("receiver.id=='" + viewer.get("id") + "'&&isDecided==true");
+			ModelController.show(VIEWER_GET_FRIENDS_AS_RECEIVER, model, this);
+		} else if (event.getData("type").equals(VIEWER_GET_FRIENDS_AS_RECEIVER)) {
+			List<BeanModel> friends = event.getData("model");
+			for (BeanModel friend : friends) {
+				updateFriendToList((BeanModel) friend.get("sender"));	
+			}
+		}
 	}
 
 }

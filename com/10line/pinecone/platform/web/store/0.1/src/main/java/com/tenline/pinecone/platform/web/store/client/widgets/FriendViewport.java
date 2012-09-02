@@ -4,6 +4,7 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.extjs.gxt.ui.client.GXT;
 import com.extjs.gxt.ui.client.Registry;
@@ -14,7 +15,7 @@ import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.mvc.Dispatcher;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
@@ -31,7 +32,7 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.tenline.pinecone.platform.model.Friend;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.Store;
-import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
+import com.tenline.pinecone.platform.web.store.client.controllers.ModelController;
 
 /**
  * @author Bill
@@ -39,6 +40,9 @@ import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
  */
 public class FriendViewport extends NavigatorViewport {
 
+	public static String OWNER_INVITE_FRIEND = "owner.invite.friend";
+	public static String OWNER_GET_ALL_OTHER_USERS = "owner.get.all.other.users";
+	
 	private ListStore<BeanModel> userGridStore = new ListStore<BeanModel>();
 	
 	/**
@@ -81,10 +85,7 @@ public class FriendViewport extends NavigatorViewport {
 						@Override
 						public void componentSelected(ButtonEvent event) {
 							// TODO Auto-generated method stub
-							BeanModel friend = BeanModelLookup.get().getFactory(Friend.class).createModel(new Friend());
-							friend.set("sender", Registry.get(Store.CURRENT_OWNER));
-							friend.set("receiver", model.getBean());
-							addFriendDialog(friend);
+							inviteFriendDialog(model);
 						}
 						
 					});
@@ -124,9 +125,9 @@ public class FriendViewport extends NavigatorViewport {
 	
 	/**
 	 * 
-	 * @param model
+	 * @param receiver
 	 */
-	private void addFriendDialog(final BeanModel model) {
+	private void inviteFriendDialog(final BeanModel receiver) {
 		MessageBox msgBox = new MessageBox();
 		msgBox.setMessage(((Messages) Registry.get(Messages.class.getName())).addToFriendMessage());
 		msgBox.setTitle(((Messages) Registry.get(Messages.class.getName())).addToFriendTitle());
@@ -138,12 +139,25 @@ public class FriendViewport extends NavigatorViewport {
 			public void handleEvent(MessageBoxEvent msgEvent) {
 				// TODO Auto-generated method stub
 				if (msgEvent.getButtonClicked().getText().equals(GXT.MESSAGES.messageBox_ok())) {
-					Dispatcher.get().dispatch(ModelEvents.INVITE_FRIEND, model);
+					BeanModel model = BeanModelLookup.get().getFactory(Friend.class).createModel(new Friend());
+					model.set("sender", Registry.get(Store.CURRENT_OWNER)); model.set("receiver", receiver);
+					ModelController.create(OWNER_INVITE_FRIEND, model, FriendViewport.this);
 				}
 			}
 			
 		});
 		msgBox.show();
+	}
+
+	@Override
+	public void handleViewCallback(AppEvent event) {
+		// TODO Auto-generated method stub
+		if (event.getData("type").equals(OWNER_GET_ALL_OTHER_USERS)) {
+			List<BeanModel> users = event.getData("model");
+			for (BeanModel user : users) {
+				updateUserToGrid(user);	
+			}
+		}
 	}
 
 }

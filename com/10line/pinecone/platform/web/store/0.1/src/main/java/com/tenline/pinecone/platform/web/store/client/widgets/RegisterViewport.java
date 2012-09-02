@@ -10,7 +10,7 @@ import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.BeanModelLookup;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.mvc.Dispatcher;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
@@ -21,13 +21,16 @@ import com.extjs.gxt.ui.client.widget.layout.FillLayout;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Messages;
-import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
+import com.tenline.pinecone.platform.web.store.client.controllers.ModelController;
 
 /**
  * @author Bill
  *
  */
 public class RegisterViewport extends AbstractViewport {
+	
+	public static final String USER_REGISTER_TO_SITE = "user.register.to.site";
+	public static final String CONSUMER_REGISTER_TO_SITE = "consumer.register.to.site";
 
 	/**
 	 * 
@@ -90,7 +93,7 @@ public class RegisterViewport extends AbstractViewport {
 						model.set("email", accountField.getValue());
 						model.set("name", nameField.getValue());
 						model.set("password", passwordField.getValue());
-						Dispatcher.get().dispatch(ModelEvents.REGISTER_USER, model);
+						ModelController.create(USER_REGISTER_TO_SITE, model, RegisterViewport.this);
 					}
 				}
 				
@@ -157,7 +160,7 @@ public class RegisterViewport extends AbstractViewport {
 						model.set("connectURI", urlField.getValue());
 						model.set("name", nameField.getValue());
 						model.set("version", versionField.getValue());
-						Dispatcher.get().dispatch(ModelEvents.REGISTER_CONSUMER, model);
+						ModelController.create(CONSUMER_REGISTER_TO_SITE, model, RegisterViewport.this);
 					}
 				}
 				
@@ -180,6 +183,16 @@ public class RegisterViewport extends AbstractViewport {
 			addButton(cancelButton);
 		}
 		
+	}
+
+	@Override
+	public void handleViewCallback(AppEvent event) {
+		// TODO Auto-generated method stub
+		if (event.getData("type").equals(CONSUMER_REGISTER_TO_SITE) ||
+			event.getData("type").equals(USER_REGISTER_TO_SITE)) {
+			LoginViewport view = Registry.get(LoginViewport.class.getName());
+			view.updateToRootPanel();	
+		}
 	}
 
 }

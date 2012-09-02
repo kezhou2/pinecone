@@ -4,6 +4,7 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.IconAlign;
@@ -11,7 +12,6 @@ import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
@@ -22,7 +22,7 @@ import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 import com.tenline.pinecone.platform.web.store.client.Store;
-import com.tenline.pinecone.platform.web.store.client.events.ModelEvents;
+import com.tenline.pinecone.platform.web.store.client.controllers.ModelController;
 
 /**
  * @author Bill
@@ -48,30 +48,27 @@ public abstract class NavigatorViewport extends AbstractViewport {
 	/**
 	 * 
 	 */
-	public void updateIdentityToOwner() {
+	public void updateIdentity() {
 		BeanModel owner = Registry.get(Store.CURRENT_OWNER);
-		MenuItem item = (MenuItem) accountButton.getMenu().getItem(0);
-		item.setText(owner.get("name").toString());
-		item.setTitle(owner.get("email").toString());
+		MenuItem identityItem = (MenuItem) accountButton.getMenu().getItem(0);
+		identityItem.setText(owner.get("name").toString());
+		identityItem.setTitle(owner.get("email").toString());
 	}
 	
 	/**
 	 * 
+	 * @param invitations
 	 */
-	public void updateIdentityToViewer() {
-		BeanModel viewer = Registry.get(Store.CURRENT_VIEWER);
-		MenuItem item = (MenuItem) accountButton.getMenu().getItem(0);
-		item.setText(viewer.get("name").toString());
-		item.setTitle(viewer.get("email").toString());
-	}
-	
-	/**
-	 * 
-	 * @param number
-	 */
-	public void updateFriendInvitation(String number) {
-		MenuItem item = (MenuItem) accountButton.getMenu().getItem(2);
-		item.setText(((Messages) Registry.get(Messages.class.getName())).friendInvitation()+" ("+number+")");
+	public void updateInvitation(List<BeanModel> invitations) {
+		MenuItem invitationItem = (MenuItem) accountButton.getMenu().getItem(2);
+		String text = ((Messages) Registry.get(Messages.class.getName())).invitation();
+		invitationItem.setText(text + " (" + invitations.size() + ")");
+		if (invitationItem.getSubMenu().removeAll()) {
+			for (BeanModel invitation : invitations) {
+				BeanModel sender = invitation.get("sender");
+				invitationItem.getSubMenu().add(new MenuItem(sender.get("name").toString()));
+			}		
+		}
 	}
 	
 	/**
@@ -92,13 +89,15 @@ public abstract class NavigatorViewport extends AbstractViewport {
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
-					Registry.unregister(Store.CURRENT_VIEWER);
+					HomeViewport view = Registry.get(HomeViewport.class.getName());
+					view.updateIdentity();
+					view.updateToRootPanel();
+
 					Registry.register(Store.CURRENT_VIEWER, Registry.get(Store.CURRENT_OWNER));
 					BeanModel viewer = (BeanModel) Registry.get(Store.CURRENT_VIEWER);
-					ArrayList<String> application = new ArrayList<String>();
-					application.add(Application.class.getName());
-					application.add("user.id=='" + viewer.get("id") + "'");
-					Dispatcher.get().dispatch(ModelEvents.GET_APPLICATION_BY_USER, application);
+					ArrayList<String> model = new ArrayList<String>();
+					model.add(Application.class.getName()); model.add("user.id=='" + viewer.get("id") + "'");
+					ModelController.show(HomeViewport.VIEWER_GET_APPLICATIONS, model, view);
 				}
 				
 			}); 
@@ -124,9 +123,13 @@ public abstract class NavigatorViewport extends AbstractViewport {
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
+					ApplicationViewport view = Registry.get(ApplicationViewport.class.getName());
+					view.updateIdentity();
+					view.updateToRootPanel();
+					
 					ArrayList<String> model = new ArrayList<String>();
 					model.add(Consumer.class.getName()); model.add("all");
-					Dispatcher.get().dispatch(ModelEvents.GET_ALL_CONSUMER, model);
+					ModelController.show(ApplicationViewport.OWNER_GET_ALL_CONSUMERS, model, view);
 				}
 				
 			}); 
@@ -152,9 +155,14 @@ public abstract class NavigatorViewport extends AbstractViewport {
 				@Override
 				public void componentSelected(ButtonEvent event) {
 					// TODO Auto-generated method stub
+					FriendViewport view = Registry.get(FriendViewport.class.getName());
+					view.updateIdentity();
+					view.updateToRootPanel();
+					
+					BeanModel owner = Registry.get(Store.CURRENT_OWNER);
 					ArrayList<String> model = new ArrayList<String>();
-					model.add(User.class.getName()); model.add("all");
-					Dispatcher.get().dispatch(ModelEvents.GET_ALL_USER, model);
+					model.add(User.class.getName()); model.add("id!='" + owner.get("id") + "'");
+					ModelController.show(FriendViewport.OWNER_GET_ALL_OTHER_USERS, model, view);
 				}
 				
 			});
@@ -202,6 +210,7 @@ public abstract class NavigatorViewport extends AbstractViewport {
 		
 		private InvitationItem() {
 			setIcon(((Images) Registry.get(Images.class.getName())).invitation());
+			setSubMenu(new Menu());
 		}
 		
 	}
@@ -219,9 +228,12 @@ public abstract class NavigatorViewport extends AbstractViewport {
 			addSelectionListener(new SelectionListener<MenuEvent>() {
 
 				@Override
-				public void componentSelected(MenuEvent ce) {
+				public void componentSelected(MenuEvent event) {
 					// TODO Auto-generated method stub
-					Dispatcher.get().dispatch(ModelEvents.LOGOUT_USER);
+					Registry.unregister(Store.CURRENT_OWNER);
+					Registry.unregister(Store.CURRENT_VIEWER);
+					LoginViewport view = Registry.get(LoginViewport.class.getName());
+					view.updateToRootPanel();
 				}
 				
 			});

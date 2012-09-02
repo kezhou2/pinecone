@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
+import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.Viewport;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -46,6 +47,12 @@ public abstract class AbstractViewport extends Viewport {
 		RootPanel.get().clear();
 		RootPanel.get().add(this);
 	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	public abstract void handleViewCallback(AppEvent event); 
 	
 	/**
 	 * 

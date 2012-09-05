@@ -236,6 +236,34 @@ public class ModelController extends Controller {
 	 * @param model
 	 * @param view
 	 */
+	public static void delete(String type, BeanModel model, AbstractViewport view) {
+		AppEvent event = new AppEvent(ModelEvents.DELETE);
+		event.setData("type", type);
+		event.setData("model", model);
+		event.setData("view", view);
+		Dispatcher.get().dispatch(event);
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param model
+	 * @param view
+	 */
+	public static void update(String type, BeanModel model, AbstractViewport view) {
+		AppEvent event = new AppEvent(ModelEvents.UPDATE);
+		event.setData("type", type);
+		event.setData("model", model);
+		event.setData("view", view);
+		Dispatcher.get().dispatch(event);
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param model
+	 * @param view
+	 */
 	public static void show(String type, ArrayList<String> model, AbstractViewport view) {
 		AppEvent event = new AppEvent(ModelEvents.SHOW);
 		event.setData("type", type);

@@ -35,7 +35,7 @@ public class User extends Entity {
     private String phone;
     
     @Persistent
-    private byte[] avatar;
+    private String avatar;
     
     @Persistent
 	private Integer nut = Integer.valueOf(0); // Virtual Coin
@@ -134,14 +134,14 @@ public class User extends Entity {
 	/**
 	 * @param avatar the avatar to set
 	 */
-	public void setAvatar(byte[] avatar) {
+	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
 
 	/**
 	 * @return the avatar
 	 */
-	public byte[] getAvatar() {
+	public String getAvatar() {
 		return avatar;
 	}
 

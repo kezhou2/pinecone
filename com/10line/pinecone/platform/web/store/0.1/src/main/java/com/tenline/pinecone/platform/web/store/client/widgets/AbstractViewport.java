@@ -5,17 +5,15 @@ package com.tenline.pinecone.platform.web.store.client.widgets;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
-import com.extjs.gxt.ui.client.mvc.AppEvent;
+import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.Viewport;
-import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
-import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
-import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.tenline.pinecone.platform.web.store.client.Images;
 import com.tenline.pinecone.platform.web.store.client.Messages;
 
@@ -33,41 +31,33 @@ public abstract class AbstractViewport extends Viewport {
 	 * 
 	 */
 	public AbstractViewport() {
-		// TODO Auto-generated constructor stub
 		setLayout(new BorderLayout());
-		add(header, new BorderLayoutData(LayoutRegion.NORTH, 60));
+		this.setStyleAttribute("background-color","transparent");
+		
+		BorderLayoutData headerBld = new BorderLayoutData(LayoutRegion.NORTH, 60);
+		headerBld.setMargins(new Margins(0,0,0,0));
+		add(header, headerBld);
 		add(body, new BorderLayoutData(LayoutRegion.CENTER));
 		add(footer, new BorderLayoutData(LayoutRegion.SOUTH, 50));
 	}
 	
 	/**
 	 * 
-	 */
-	public void updateToRootPanel() {
-		RootPanel.get().clear();
-		RootPanel.get().add(this);
-	}
-	
-	/**
-	 * 
-	 * @param event
-	 */
-	public abstract void handleViewCallback(AppEvent event); 
-	
-	/**
-	 * 
 	 * @author Bill
 	 *
 	 */
-	protected class Header extends ToolBar {
+	protected class Header extends ContentPanel {
 		
 		protected Header() {
-			Button logo = new Button();
-			logo.setIcon(((Images) Registry.get(Images.class.getName())).logo());
-			logo.setWidth(260);
-			logo.setHeight(55);
-			add(logo);
-			add(new FillToolItem());
+			setHeaderVisible(false);
+			setLayout(new BorderLayout());
+			Image logo = ((Images) Registry.get(Images.class.getName())).logo().createImage();
+			BorderLayoutData bld = new BorderLayoutData(LayoutRegion.WEST,184);
+			bld.setMargins(new Margins(0,10,0,10));
+			add(logo, bld);
+			
+//			setBodyStyle("background-color: transparent");
+			this.setBodyStyleName("abstractviewport-header");
 		}
 		
 	}
@@ -81,7 +71,13 @@ public abstract class AbstractViewport extends Viewport {
 		
 		protected Body() {
 			setHeaderVisible(false);
-			setLayout(new BorderLayout());
+			
+			BorderLayout bl = new BorderLayout();
+			setLayout(bl);
+			setBorders(false);
+			setBodyBorder(false);
+			this.setBodyStyleName("abstractviewport-background");
+			
 		}
 		
 	}
@@ -91,11 +87,18 @@ public abstract class AbstractViewport extends Viewport {
 	 * @author Bill
 	 *
 	 */
-	protected class Footer extends ToolBar {
+	protected class Footer extends ContentPanel {
 		
 		protected Footer() {
-			setLayout(new CenterLayout());
-			add(new LabelField(((Messages) Registry.get(Messages.class.getName())).copyright()));
+			setHeaderVisible(false);
+			setLayout(new BorderLayout());
+			LayoutContainer copyrightContainer = new LayoutContainer(new CenterLayout());
+			copyrightContainer.add(new LabelField(((Messages) Registry.get(Messages.class.getName())).copyright()));
+			add(copyrightContainer, new BorderLayoutData(LayoutRegion.CENTER));
+			setBorders(false);
+			setBodyBorder(false);
+			copyrightContainer.setStyleName("abstractviewport-footer");
+//			copyrightContainer.setStyleAttribute("background-color","transparent");
 		}
 		
 	}

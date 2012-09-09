@@ -219,12 +219,20 @@ public class MailListViewport extends AbstractViewport{
 			hbl_lc1.setPack(BoxLayoutPack.END);
 			lc1.setLayout(hbl_lc1);
 			lc1.setWidth("140");
-			Button btnSendbox = new Button();
-			btnSendbox.setHTML("<img class='btn-img-center' src='../images/icons/current-work.png' />");
-			btnSendbox.setTitle(((Messages) Registry.get(Messages.class.getName())).MailListViewport_button_new());
-			btnSendbox.setSize("60px", "32px");
-			btnSendbox.addStyleName("abstractviewport-btn");
-			lc1.add(btnSendbox, new HBoxLayoutData(0, 2, 0, 2));
+			Button btnNewbox = new Button();
+			btnNewbox.setHTML("<img class='btn-img-center' src='../images/icons/current-work.png' />");
+			btnNewbox.setTitle(((Messages) Registry.get(Messages.class.getName())).MailListViewport_button_new());
+			btnNewbox.setSize("60px", "32px");
+			btnNewbox.addStyleName("abstractviewport-btn");
+			btnNewbox.addMouseUpHandler(new MouseUpHandler() {
+				public void onMouseUp(MouseUpEvent event) {
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_CREATE_MAIL_TO_PANEL);
+					appEvent.setHistoryEvent(true);
+					Dispatcher.get().dispatch(appEvent);
+				}
+
+			});
+			lc1.add(btnNewbox, new HBoxLayoutData(0, 2, 0, 2));
 			toolBar.add(lc1);
 			
 			Button btnDelete = new Button();

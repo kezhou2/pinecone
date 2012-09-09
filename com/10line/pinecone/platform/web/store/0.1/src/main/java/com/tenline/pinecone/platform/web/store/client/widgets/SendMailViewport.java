@@ -3,9 +3,6 @@ package com.tenline.pinecone.platform.web.store.client.widgets;
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.Events;
-import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.util.Margins;
@@ -20,19 +17,17 @@ import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.BoxLayout.BoxLayoutPack;
 import com.extjs.gxt.ui.client.widget.layout.FillData;
 import com.extjs.gxt.ui.client.widget.layout.FillLayout;
-import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
 import com.extjs.gxt.ui.client.widget.layout.HBoxLayout.HBoxLayoutAlign;
-import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
-import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Messages;
+import com.tenline.pinecone.platform.web.store.client.events.MailEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 public class SendMailViewport extends AbstractViewport {
@@ -54,7 +49,6 @@ public class SendMailViewport extends AbstractViewport {
 		private TextField<String> titleTextfield;
 		private HtmlEditor contentHtmleditor;
 		
-		private User sender;
 		private User receiver;
 		
 		public MainPanel(){
@@ -138,6 +132,16 @@ public class SendMailViewport extends AbstractViewport {
 			Button sendButton = new Button(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_button_send());
 			sendButton.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
+					AppEvent e = new AppEvent(MailEvents.SEND);
+					e.setData("content", contentHtmleditor.getRawValue());
+					if(receiver != null){
+						e.setData("receiver",receiver);
+					}else{
+						e.setData("receiver",receiverTextfield.getValue());
+					}
+					e.setData("title", titleTextfield.getValue());
+					e.setHistoryEvent(true);
+					Dispatcher.get().dispatch(e);
 				}
 			});
 			lc.add(sendButton);
@@ -154,11 +158,10 @@ public class SendMailViewport extends AbstractViewport {
 		}
 		
 		public void setContactInfo(User receiver){
-			User user = (User)Registry.get(User.class.getName());
-			this.sender = user;
-			this.receiver = receiver; 
-			
-			receiverTextfield.setValue(receiver.getEmail());
+			if(receiver != null){
+				this.receiver = receiver; 
+				receiverTextfield.setValue(receiver.getEmail());
+			}
 		}
 	}
 }

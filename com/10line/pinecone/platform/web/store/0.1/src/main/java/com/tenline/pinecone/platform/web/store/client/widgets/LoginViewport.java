@@ -3,35 +3,33 @@
  */
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
-import com.extjs.gxt.ui.client.data.BeanModel;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.event.MessageBoxEvent;
-import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
+import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.MessageBox;
-import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.Text;
+import com.extjs.gxt.ui.client.widget.form.Field;
+import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.Validator;
+import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
+import com.extjs.gxt.ui.client.widget.layout.BoxLayout.BoxLayoutPack;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
-import com.extjs.gxt.ui.client.widget.layout.VBoxLayout;
-import com.extjs.gxt.ui.client.widget.layout.VBoxLayoutData;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.tenline.pinecone.platform.model.Application;
-import com.tenline.pinecone.platform.model.User;
+import com.extjs.gxt.ui.client.widget.layout.FormData;
+import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
+import com.extjs.gxt.ui.client.widget.layout.HBoxLayoutData;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.tenline.pinecone.platform.web.store.client.Messages;
-import com.tenline.pinecone.platform.web.store.client.Store;
-import com.tenline.pinecone.platform.web.store.client.controllers.ModelController;
+import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
+import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
 /**
  * @author Bill
@@ -39,134 +37,170 @@ import com.tenline.pinecone.platform.web.store.client.controllers.ModelControlle
  */
 public class LoginViewport extends AbstractViewport {
 	
-	public static final String USER_LOGIN_TO_SITE = "user.login.to.site";
-
-	/**
-	 * 
-	 */
+	private MainPanel mainPanel;
+	
 	public LoginViewport() {
-		super();
-		// TODO Auto-generated constructor stub
-		LayoutContainer centerContainer = new LayoutContainer(new FitLayout());
-		centerContainer.add(new VideoDemo(), new FitData(20));
-		body.add(centerContainer, new BorderLayoutData(LayoutRegion.CENTER));
-		LayoutContainer eastContainer = new LayoutContainer(new VBoxLayout());
-		eastContainer.add(new UserForm(), new VBoxLayoutData(new Margins(20)));
-		body.add(eastContainer, new BorderLayoutData(LayoutRegion.EAST, 350));
+		mainPanel = new MainPanel();
+		BorderLayoutData bld = new BorderLayoutData(LayoutRegion.CENTER);
+		bld.setMargins(new Margins(0,10,0,10));
+		body.add(mainPanel, bld);
 	}
 	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class VideoDemo extends ContentPanel {
-		
-		private VideoDemo() {
-			setHeading(((Messages) Registry.get(Messages.class.getName())).videoDemo());
-			setUrl("http://player.youku.com/player.php/sid/XMzMzNjU3Mzgw/v.swf");
-		}
-		
+	public void logout(){
+		mainPanel.logout();
 	}
 	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class UserForm extends FormPanel {
+	private class MainPanel extends ContentPanel{
 		
-		private UserForm() {
-			setLabelSeparator("");
-			setLabelWidth(30);
-			setHeading(((Messages) Registry.get(Messages.class.getName())).login());
+		public final String videoUrl = "http://player.youku.com/player.php/sid/XMzMzNjU3Mzgw/v.swf";
+//		public final String videoUrl = "";
+		
+		private TextField<String> nameText;
+		private TextField<String> pwdText;
+		
+		public MainPanel(){
+			setLayout(new BorderLayout());
+			setBorders(false);
+			setBodyBorder(false);
+			setHeaderVisible(false);
+			this.setBodyStyleName("loginviewport-background");
 			
-			final TextField<String> accountField = new TextField<String>();
-			accountField.setAllowBlank(false);
-			accountField.setEmptyText(((Messages) Registry.get(Messages.class.getName())).accountEmptyText());
-			accountField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).account());
-			accountField.setRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
-			accountField.getMessages().setBlankText(((Messages) Registry.get(Messages.class.getName())).accountBlankWarning());
-			accountField.getMessages().setRegexText(((Messages) Registry.get(Messages.class.getName())).accountRegexWarning());
+			LayoutContainer loginLayoutContainer = new LayoutContainer();
+			loginLayoutContainer.setLayout(new BorderLayout());
+			loginLayoutContainer.setBorders(true);
+			loginLayoutContainer.addStyleName("loginviewport-input-panel");
 			
-			final TextField<String> passwordField = new TextField<String>();
-			passwordField.setPassword(true);
-			passwordField.setAllowBlank(false);		
-			passwordField.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).password());
-			passwordField.getMessages().setBlankText(((Messages) Registry.get(Messages.class.getName())).passwordBlankWarning());	
+			LayoutContainer loginHeader = new LayoutContainer();
+			loginHeader.addStyleName("loginviewport-title-panel");
+			BorderLayoutData headerBld = new BorderLayoutData(LayoutRegion.NORTH,50);
+			loginLayoutContainer.add(loginHeader,headerBld);
+			Text titleText = new Text(((Messages) Registry.get(Messages.class.getName())).LoginViewport_title());
+			loginHeader.setLayout(new HBoxLayout());
+			loginHeader.add(titleText,new HBoxLayoutData(8, 0, 5, 10));
+			loginHeader.setBorders(true);
+			titleText.addStyleName("loginviewport-title-text");
 			
-			final Button loginButton = new Button(((Messages) Registry.get(Messages.class.getName())).login());
-			final Button registerButton = new Button(((Messages) Registry.get(Messages.class.getName())).register());
-			loginButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			LayoutContainer formLayoutContainer = new LayoutContainer();
+			BorderLayoutData bld = new BorderLayoutData(LayoutRegion.CENTER);
+			loginLayoutContainer.add(formLayoutContainer, bld);
+	
+			FormLayout fl_layoutContainer_1 = new FormLayout();
+			fl_layoutContainer_1.setLabelSeparator("");
+			fl_layoutContainer_1.setLabelAlign(LabelAlign.RIGHT);
+			formLayoutContainer.setLayout(fl_layoutContainer_1);
+			
+			Text txtLoginToContinue = new Text(((Messages) Registry.get(Messages.class.getName())).LoginViewport_loginToContinue());
+			FormData fd_txtLoginToContinue = new FormData("100%");
+			fd_txtLoginToContinue.setMargins(new Margins(30, 0, 0, 20));
+			formLayoutContainer.add(txtLoginToContinue, fd_txtLoginToContinue);
+			//style
+			txtLoginToContinue.addStyleName("loginviewport-tooltip-text-yellow");
+			
+			nameText = new TextField<String>();
+			FormData fd_txtfldName = new FormData("90%");
+			fd_txtfldName.setMargins(new Margins(20, 10, 10, 0));
+			formLayoutContainer.add(nameText, fd_txtfldName);
+			nameText.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).LoginViewport_account());
+			nameText.setAllowBlank(false);
+			//style
+			nameText.setLabelStyle("font-size: 18px;font-weight: bold;line-height: 18px;margin-bottom: 10px;color: #4D5762;	position: relative;	word-spacing: -0.1em;");
+			nameText.setHeight("30px");
+			nameText.setValidator(new Validator(){
 
 				@Override
-				public void componentSelected(ButtonEvent event) {
-					// TODO Auto-generated method stub
-					if (UserForm.this.isValid()) {
-						ArrayList<String> model = new ArrayList<String>();
-						model.add(User.class.getName()); 
-						model.add("email=='" + accountField.getValue() + "'&&password=='" + passwordField.getValue() + "'");
-						ModelController.show(USER_LOGIN_TO_SITE, model, LoginViewport.this);
-					}
+				public String validate(Field<?> field, String value) {
+					return null;
 				}
 				
 			});
-			registerButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
-
-				@Override
-				public void componentSelected(ButtonEvent event) {
-					// TODO Auto-generated method stub
-					RegisterViewport view = Registry.get(RegisterViewport.class.getName());
-					view.updateToRootPanel();
-				}
-				
-			});
+			nameText.setValidateOnBlur(true);
 			
-			add(accountField);
-			add(passwordField);
-			addButton(loginButton);
-			addButton(registerButton);
+			pwdText = new TextField<String>();
+			pwdText.setPassword(true);
+			FormData fd_txtfldPassword = new FormData("90%");
+			fd_txtfldPassword.setMargins(new Margins(20, 10, 10, 0));
+			formLayoutContainer.add(pwdText, fd_txtfldPassword);
+			pwdText.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).LoginViewport_password());
+			BorderLayoutData bld_layoutContainer_1 = new BorderLayoutData(LayoutRegion.EAST, 400.0f);
+			bld_layoutContainer_1.setMargins(new Margins(10, 20, 10, 10));
+			pwdText.setAllowBlank(false);
+			//style
+			pwdText.setLabelStyle("font-size: 18px;font-weight: bold;line-height: 18px;margin-bottom: 10px;color: #4D5762;	position: relative;	word-spacing: -0.1em;");
+			pwdText.setHeight("30px");
+			
+			LayoutContainer layoutContainer_3 = new LayoutContainer();
+			HBoxLayout hbl_layoutContainer_3 = new HBoxLayout();
+			hbl_layoutContainer_3.setPack(BoxLayoutPack.END);
+			layoutContainer_3.setLayout(hbl_layoutContainer_3);
+			
+			Button loginButton = new Button(((Messages) Registry.get(Messages.class.getName())).LoginViewport_login());
+			layoutContainer_3.add(loginButton, new HBoxLayoutData(0, 0, 0, 0));
+			loginButton.addMouseUpHandler(new MouseUpHandler() {
+				public void onMouseUp(MouseUpEvent event) {
+					AppEvent appEvent = new AppEvent(UserEvents.LOGIN);
+					appEvent.setData("email", nameText.getValue());
+					appEvent.setData("password", pwdText.getValue());
+					appEvent.setHistoryEvent(true);
+					Dispatcher.get().dispatch(appEvent);
+				}
+			});
+			//style
+			loginButton.setStyleName("btn-green");
+			loginButton.setSize("60px", "30px");
+			
+			FormData fd_layoutContainer_3 = new FormData("100%");
+			fd_layoutContainer_3.setMargins(new Margins(0, 50, 0, 50));
+			formLayoutContainer.add(layoutContainer_3, fd_layoutContainer_3);
+			
+			Text txtRegister = new Text(((Messages) Registry.get(Messages.class.getName())).LoginViewport_tipsRegister());
+			FormData fd_txtRegister = new FormData("100%");
+			fd_txtRegister.setMargins(new Margins(30, 0, 10, 20));
+			txtRegister.addStyleName("loginviewport-tooltip-text-blue");
+			formLayoutContainer.add(txtRegister, fd_txtRegister);
+			
+			LayoutContainer layoutContainer_4 = new LayoutContainer();
+			HBoxLayout hbl_layoutContainer_4 = new HBoxLayout();
+			hbl_layoutContainer_4.setPack(BoxLayoutPack.END);
+			layoutContainer_4.setLayout(hbl_layoutContainer_4);
+				
+			Button regButton = new Button(((Messages) Registry.get(Messages.class.getName())).LoginViewport_register());
+			layoutContainer_4.add(regButton, new HBoxLayoutData(0, 0, 0, 10));
+			regButton.addMouseUpHandler(new MouseUpHandler() {
+				public void onMouseUp(MouseUpEvent event) {
+					AppEvent appEvent = new AppEvent(WidgetEvents.UPDATE_REGISTER_TO_PANEL);
+					appEvent.setHistoryEvent(true);
+					Dispatcher.get().dispatch(appEvent);
+				}
+			});
+			//style
+			regButton.setStyleName("btn-green");
+			regButton.setSize("60px", "30px");
+				
+			FormData fd_layoutContainer_4 = new FormData("100%");
+			fd_layoutContainer_4.setMargins(new Margins(0, 50, 0, 50));
+			formLayoutContainer.add(layoutContainer_4, fd_layoutContainer_4);
+			
+			add(loginLayoutContainer, bld_layoutContainer_1);
+			
+			LayoutContainer videoLayoutContainer = new LayoutContainer();
+			videoLayoutContainer.setLayout(new FitLayout());
+			
+			ContentPanel videoContentpanel = new ContentPanel();
+			videoContentpanel.setHeaderVisible(false);
+			videoContentpanel.setHeading("Video");
+			videoContentpanel.setCollapsible(true);
+			videoLayoutContainer.add(videoContentpanel, new FitData(15,15,15,15));
+			videoLayoutContainer.add(videoContentpanel);
+			videoContentpanel.setUrl(videoUrl);
+			add(videoLayoutContainer, new BorderLayoutData(LayoutRegion.CENTER));
+			videoLayoutContainer.setBorders(false);
+			videoContentpanel.setBodyBorder(false);
+			videoContentpanel.addStyleName("video-panel");
 		}
 		
-	}
-	
-	/**
-	 * 
-	 */
-	public void showErrorDialog() {
-		RootPanel.get().clear();
-		String title = ((Messages) Registry.get(Messages.class.getName())).loginErrorTitle();
-		String msg = ((Messages) Registry.get(Messages.class.getName())).loginErrorMessage();
-		MessageBox.info(title, msg, new Listener<MessageBoxEvent>() {
-
-			@Override
-			public void handleEvent(MessageBoxEvent event) {
-				// TODO Auto-generated method stub
-				LoginViewport.this.updateToRootPanel();
-			}
-			
-		});
-	}
-
-	@Override
-	public void handleViewCallback(AppEvent event) {
-		// TODO Auto-generated method stub
-		if (event.getData("type").equals(USER_LOGIN_TO_SITE)) {
-			List<BeanModel> users = event.getData("model");
-			if (users.size() == 1) {
-				Registry.register(Store.CURRENT_OWNER, users.get(0));
-				Registry.register(Store.CURRENT_VIEWER, users.get(0));
-				
-				HomeViewport view = Registry.get(HomeViewport.class.getName());
-				view.updateIdentity();
-				view.updateToRootPanel();
-				
-				BeanModel viewer = (BeanModel) Registry.get(Store.CURRENT_VIEWER);
-				ArrayList<String> model = new ArrayList<String>();
-				model.add(Application.class.getName()); 
-				model.add("user.id=='" + viewer.get("id") + "'");
-				ModelController.show(HomeViewport.VIEWER_GET_APPLICATIONS, model, view);
-			} else { showErrorDialog(); }
+		public void logout(){
+			nameText.setValue("");
+			pwdText.setValue("");
 		}
 	}
 

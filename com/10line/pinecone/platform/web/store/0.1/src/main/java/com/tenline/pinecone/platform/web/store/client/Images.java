@@ -37,4 +37,6 @@ public interface Images extends ImageBundle {
 	AbstractImagePrototype socialNetworking();
 	@Resource("internet-of-thing.jpg")
 	AbstractImagePrototype internetOfThing();
+	@Resource("upload.png")
+	AbstractImagePrototype upload();
 }

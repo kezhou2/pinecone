@@ -7,13 +7,73 @@
     
   <!-- Store Remote Service -->
   <servlet>
-  	<servlet-name>ModelService</servlet-name>
-  	<servlet-class>com.tenline.pinecone.platform.web.store.server.ModelServiceImpl</servlet-class>
+  	<servlet-name>ApplicationService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.ApplicationServiceImpl</servlet-class>
   </servlet>
         
   <servlet-mapping>
-  	<servlet-name>ModelService</servlet-name>
-  	<url-pattern>/store/model/service</url-pattern>
+  	<servlet-name>ApplicationService</servlet-name>
+  	<url-pattern>/store/application/service</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
+  	<servlet-name>CategoryService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.CategoryServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>CategoryService</servlet-name>
+  	<url-pattern>/store/category/service</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
+  	<servlet-name>ConsumerService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.ConsumerServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>ConsumerService</servlet-name>
+  	<url-pattern>/store/consumer/service</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
+  	<servlet-name>FriendService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.FriendServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>FriendService</servlet-name>
+  	<url-pattern>/store/friend/service</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>MailService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.MailServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>MailService</servlet-name>
+  	<url-pattern>/store/mail/service</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>UserService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.UserServiceImpl</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>UserService</servlet-name>
+  	<url-pattern>/store/user/service</url-pattern>
+  </servlet-mapping> 
+  
+  <servlet>
+  	<servlet-name>FileUploadService</servlet-name>
+  	<servlet-class>com.tenline.pinecone.platform.web.store.server.FileUploadServlet</servlet-class>
+  </servlet>
+        
+  <servlet-mapping>
+  	<servlet-name>FileUploadService</servlet-name>
+  	<url-pattern>/fileupload.html</url-pattern>
   </servlet-mapping>  
   
   <!-- Default page to serve -->

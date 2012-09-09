@@ -1665,6 +1665,8 @@ fieldset.x-panel-collapsed .x-fieldset-bwrap {
 	right: 0;
 	z-index: 1;
 	top: 0;
+	width:80px;
+	height:30px;
 }
 
 .x-form-file-wrap .x-form-file-text {
@@ -2608,7 +2610,7 @@ div.x-toolbar-no-items {
 
 .x-grid3-row td.x-grid3-cell,.x-grid3-summary-row td.x-grid3-cell {
 	line-height: 14px;
-	vertical-align: top;
+	vertical-align: middle;
 	padding-left: 1px;
 	padding-right: 1px;
 	-moz-outline: none;
@@ -8530,6 +8532,24 @@ body.x-body-masked .x-window-plain .x-window-mc {
 	padding: 3px 8px;
 }
 
+.applicationInfo-text-title {
+	font: bold 14px arial, tahoma, helvetica, sans-serif !important;
+	line-height: 24px;
+	color: black;
+	position: relative;
+	word-spacing: -0.1em;
+	padding: 3px 8px;
+}
+
+.applicationInfo-text-version {
+	font: bold 12px arial, tahoma, helvetica, sans-serif !important;
+	line-height: 24px;
+	color: black;
+	position: relative;
+	word-spacing: -0.1em;
+	padding: 3px 8px;
+}
+
 .homeviewport-welcome-text{
 	font: 13px arial,sans-serif;
 	min-width: 40px;
@@ -8558,6 +8578,23 @@ body.x-body-masked .x-window-plain .x-window-mc {
 }
 
 .homeviewport-btn-text:hover{
+	text-decoration:underline;
+}
+
+.abstract-btn-text{
+	font: 13px arial,sans-serif;
+	text-align: center;
+	color: #15c;
+	font-size: 11px;
+	font-weight: bold;
+	height: 27px;
+	line-height: 27px;
+	border: none !important;
+	cursor: default;	
+	background-color: transparent
+}
+
+.abstract-btn-text:hover{
 	text-decoration:underline;
 }
 

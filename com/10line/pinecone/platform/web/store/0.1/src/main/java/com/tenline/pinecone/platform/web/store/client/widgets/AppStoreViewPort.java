@@ -57,6 +57,7 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Button;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.web.store.client.Messages;
+import com.tenline.pinecone.platform.web.store.client.controllers.ApplicationController;
 import com.tenline.pinecone.platform.web.store.client.events.ApplicationEvents;
 import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
@@ -222,6 +223,8 @@ public class AppStoreViewport extends AbstractViewport {
 //				.create("<p><b>Product by:</b> {name}</p><br><p><b>Summary:</b> {detail}</p>");
 		XTemplate xTemplate = XTemplate.create(sb.toString());
 		
+		String labelStyle = "color: #222;font-weight: bold;line-height:40px;";
+		
 		RowExpander rowExpander = new RowExpander();
 		rowExpander.setTemplate(xTemplate);
 		configs.add(rowExpander);  
@@ -230,7 +233,7 @@ public class AppStoreViewport extends AbstractViewport {
 		ColumnConfig column = new ColumnConfig();  
 		column.setId("icon");  
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_icon());  
-		column.setWidth(150);  
+		column.setWidth(80);  
 		column.setRowHeader(true);
 		
 		GridCellRenderer<BeanModel> iconRenderer = new GridCellRenderer<BeanModel>() {
@@ -251,13 +254,15 @@ public class AppStoreViewport extends AbstractViewport {
 		column.setId("name");  
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_name());  
 		column.setWidth(300);  
+		column.setStyle(labelStyle);
 		configs.add(column);  
 
 		//�����У�Ӧ�ð汾��
 		column = new ColumnConfig();  
 		column.setId("version");  
 		column.setHeader(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_gridtitle_version());  
-		column.setWidth(100);  
+		column.setWidth(100); 
+		column.setStyle(labelStyle);
 		configs.add(column);  
 
 		//�����У���װӦ�ã�����װ����ť
@@ -268,12 +273,12 @@ public class AppStoreViewport extends AbstractViewport {
 			public Object render(final BeanModel model, String property,
 					ColumnData config, int rowIndex, int colIndex,
 					ListStore<BeanModel> store, Grid<BeanModel> grid) {
-				final com.extjs.gxt.ui.client.widget.button.Button b = 
-					new com.extjs.gxt.ui.client.widget.button.Button(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_install(), new SelectionListener<ButtonEvent>() {
-					@Override
-					public void componentSelected(ButtonEvent ce) {
+
+				final Button b = new Button(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_install());
+				b.addMouseUpHandler(new MouseUpHandler() {
+					public void onMouseUp(MouseUpEvent e) {
 						AppEvent event = new AppEvent(ApplicationEvents.INSTALL);
-						event.setData("consumer",model.get("consumer"));
+						event.setData(ApplicationController.APP_CONSUMER,model.get(ApplicationController.APP_CONSUMER));
 						event.setHistoryEvent(true);
 						Dispatcher.get().dispatch(event);
 						final Listener<MessageBoxEvent> listener = new Listener<MessageBoxEvent>() {
@@ -282,14 +287,16 @@ public class AppStoreViewport extends AbstractViewport {
 						};
 						MessageBox.info(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_title()
 								, ((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_info(), listener);
-						ce.getButton().setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_installed());
-						ce.getButton().setToolTip(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installed_button_tooltip());
-						ce.getButton().setEnabled(false);
+						b.setText(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installdialog_button_installed());
+						b.setTitle(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_installed_button_tooltip());
+						b.setEnabled(false);
 					}
 				});
-				b.setWidth(60);
-				b.setToolTip(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_install_button_tooltip());
-
+				b.setWidth("60px");
+				b.setTitle(((Messages) Registry.get(Messages.class.getName())).AppStoreViewport_install_button_tooltip());
+				b.setStyleName("abstractviewport-btn");
+				b.setSize("80px", "30px");
+				
 				return b;
 			}
 		};
@@ -300,6 +307,7 @@ public class AppStoreViewport extends AbstractViewport {
 		ColumnModel cm = new ColumnModel(configs);
 		Grid<BeanModel> grid = new Grid<BeanModel>(consumerStore, cm);
 //		grid.setBorders(false);
+		grid.setAutoExpandColumn("install");
 		grid.addPlugin(rowExpander);
 		grid.setStripeRows(true);
 		grid.setHideHeaders(true);

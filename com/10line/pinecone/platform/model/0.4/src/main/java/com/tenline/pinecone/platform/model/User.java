@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.model;
 
 import java.util.Collection;
 
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -34,7 +35,8 @@ public class User extends Entity {
     @Persistent
     private String phone;
     
-    @Persistent
+    @Persistent()
+    @Column(length = 1024)
     private String avatar;
     
     @Persistent

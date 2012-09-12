@@ -6,6 +6,7 @@ package com.tenline.pinecone.platform.web.service.impl;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URLDecoder;
 
 import javax.jdo.PersistenceManagerFactory;
 import javax.servlet.http.HttpServletRequest;
@@ -94,6 +95,7 @@ public class ModelServiceImpl extends JdoDaoSupport implements ModelService {
 	public void show(String entityClass, String filter, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		try {
+			filter = URLDecoder.decode(filter, "UTF-8");
 			String queryString = "select from " + entityClass;
 			if (!filter.equals("all")) queryString += " where " + filter;
 			ObjectOutputStream output = new ObjectOutputStream(response.getOutputStream());

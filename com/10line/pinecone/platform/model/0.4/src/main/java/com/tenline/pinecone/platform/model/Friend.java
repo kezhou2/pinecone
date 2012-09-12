@@ -27,16 +27,10 @@ public class Friend extends Entity {
 	public static final String COLLEAGUE = "colleague";
 	
 	/**
-	 * 
-	 */
-	public static final Integer NO_DECIDED = 0;
-	public static final Integer HAS_DECIDED = 1;
-	
-	/**
 	 * Whether decision is made to agree or not
 	 */
 	@Persistent
-	private Integer decided;
+	private Boolean decided;
 	
 	@Persistent
 	private String type;
@@ -57,14 +51,14 @@ public class Friend extends Entity {
 	/**
 	 * @param decided the decided to set
 	 */
-	public void setDecided(Integer decided) {
+	public void setDecided(Boolean decided) {
 		this.decided = decided;
 	}
 
 	/**
 	 * @return the decided
 	 */
-	public Integer getDecided() {
+	public Boolean getDecided() {
 		return decided;
 	}
 

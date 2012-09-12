@@ -6,6 +6,7 @@ package com.tenline.pinecone.platform.sdk.development;
 import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import com.tenline.pinecone.platform.model.Entity;
@@ -37,7 +38,7 @@ public class ModelAPI extends ResourceAPI {
 	 */
 	public APIResponse show(Class<?> entityClass, String filter) throws Exception {
 		APIResponse response = new APIResponse();
-		String requestUrl = url + "/show/" + entityClass.getName() + "/" + filter;
+		String requestUrl = url + "/show/" + entityClass.getName() + "/" + URLEncoder.encode(filter, "UTF-8");
 		connection = (HttpURLConnection) new URL(requestUrl).openConnection();
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();

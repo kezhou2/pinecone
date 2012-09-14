@@ -12,9 +12,7 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.sdk.DeviceAPI;
-import com.tenline.pinecone.platform.sdk.ItemAPI;
-import com.tenline.pinecone.platform.sdk.VariableAPI;
+import com.tenline.pinecone.platform.sdk.ModelAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
 /**
@@ -27,12 +25,10 @@ public abstract class AbstractEndpointAdmin {
 	 * Web Service API
 	 */
 	private Device device;
-	private DeviceAPI deviceAPI;
 	
 	private Variable variable;
-	private VariableAPI variableAPI;
 	
-	private ItemAPI itemAPI;
+	private ModelAPI modelAPI;
 	
 	/**
 	 * Endpoints
@@ -49,9 +45,7 @@ public abstract class AbstractEndpointAdmin {
 	 */
 	public AbstractEndpointAdmin() {
 		// TODO Auto-generated constructor stub
-		deviceAPI = new DeviceAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
-		variableAPI = new VariableAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
-		itemAPI = new ItemAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
+		modelAPI = new ModelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 	}
 	
 	/**
@@ -61,9 +55,7 @@ public abstract class AbstractEndpointAdmin {
 	public void initialize(User user) {
 		try {
 			endpoints = new ArrayList<IEndpoint>();
-			APIResponse response = deviceAPI.showByUser("id=='"+ user.getId() + "'",
-					IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-					APIHelper.getToken(), APIHelper.getTokenSecret());
+			APIResponse response = modelAPI.show(Device.class, "user.id=='"+ user.getId() + "'");
 			if (response.isDone()) {
 				fetchDevice(response);
 			} else {
@@ -91,7 +83,7 @@ public abstract class AbstractEndpointAdmin {
 	 */
 	public void initializeEndpoint(Device device) {
 		try {
-			APIResponse response = deviceAPI.show("id=='"+device.getId()+"'");
+			APIResponse response = modelAPI.show(Device.class, "id=='"+device.getId()+"'");
 			if (response.isDone()) {
 				fetchDevice(response);
 			} else {
@@ -120,9 +112,7 @@ public abstract class AbstractEndpointAdmin {
 			device = (Device) object;
 			device.setVariables(new ArrayList<Variable>());
 			try {
-				response = variableAPI.showByDevice("id=='"+device.getId()+"'",
-						IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-						APIHelper.getToken(), APIHelper.getTokenSecret());
+				response = modelAPI.show(Variable.class, "device.id=='"+device.getId()+"'");
 				if (response.isDone()) {
 					fetchVariable(response);
 				} else {
@@ -147,9 +137,7 @@ public abstract class AbstractEndpointAdmin {
 			variable.setItems(new ArrayList<Item>());
 			device.getVariables().add(variable);
 			try {
-				response = itemAPI.showByVariable("id=='"+variable.getId()+"'",
-						IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-						APIHelper.getToken(), APIHelper.getTokenSecret());
+				response = modelAPI.show(Item.class, "variable.id=='"+variable.getId()+"'");
 				if (response.isDone()) {
 					fetchItem(response);
 				} else {

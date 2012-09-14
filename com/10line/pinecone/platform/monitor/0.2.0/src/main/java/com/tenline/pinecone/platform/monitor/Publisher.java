@@ -14,7 +14,7 @@ import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Record;
 import com.tenline.pinecone.platform.model.Variable;
-import com.tenline.pinecone.platform.sdk.RecordAPI;
+import com.tenline.pinecone.platform.sdk.ModelAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
 import com.tenline.pinecone.platform.sdk.development.ChannelAPI;
 
@@ -72,7 +72,7 @@ public class Publisher {
 	/**
 	 * Publisher Web Service API
 	 */
-	private RecordAPI recordAPI;
+	private ModelAPI modelAPI;
 	
 	/**
 	 * 
@@ -80,7 +80,7 @@ public class Publisher {
 	public Publisher() {
 		readQueue = new LinkedList<Device>();
 		channel = new ChannelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
-		recordAPI = new RecordAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
+		modelAPI = new ModelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 	}
 	
 	/**
@@ -122,9 +122,7 @@ public class Publisher {
 			int index = variable.getType().indexOf("image");
 			if (index >= 0) {
 				String subject = variable.getId() + "-device";
-				APIResponse response = channel.publish(subject, variable.getType().substring(index), 
-								item.getValue(), IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-								APIHelper.getToken(), APIHelper.getTokenSecret());
+				APIResponse response = channel.publish(subject, variable.getType().substring(index), item.getValue());
 				if (response.isDone()) logger.info(response.getMessage());
 				else logger.error(response.getMessage());
 				item.setValue(subject.getBytes());
@@ -132,14 +130,12 @@ public class Publisher {
 				Record record = new Record();
 				record.setTimestamp(new Date());
 				record.setItem(item);
-				APIResponse response = recordAPI.create(record);
+				APIResponse response = modelAPI.create(record);
 				if (response.isDone()) logger.info(response.getMessage());
 				else logger.error(response.getMessage());
 			}
 		}
-		APIResponse response = channel.publish(device.getId() + "-device", "application/json", content,
-				IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-				APIHelper.getToken(), APIHelper.getTokenSecret());
+		APIResponse response = channel.publish(device.getId() + "-device", "application/json", content);
 		if (response.isDone()) logger.info(response.getMessage());
 		else logger.error(response.getMessage());
 	}

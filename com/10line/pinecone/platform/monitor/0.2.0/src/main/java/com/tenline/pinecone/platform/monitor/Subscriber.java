@@ -76,9 +76,7 @@ public class Subscriber {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					APIResponse response = channel.subscribe(device.getId() + "-application",
-							IConstants.OAUTH_CONSUMER_KEY, IConstants.OAUTH_CONSUMER_SECRET,
-							APIHelper.getToken(), APIHelper.getTokenSecret());
+					APIResponse response = channel.subscribe(device.getId() + "-application");
 					if (response.isDone()) {
 						scheduler.addToWriteQueue((Device) response.getMessage());
 						logger.info("Add to write queue");

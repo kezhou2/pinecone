@@ -20,6 +20,7 @@ import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.controllers.FriendController;
 import com.tenline.pinecone.platform.web.store.client.events.FriendEvents;
 import com.tenline.pinecone.platform.web.store.client.events.UserEvents;
+import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 
@@ -29,8 +30,9 @@ import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
  */
 public class FriendView extends View {
 
-	/**use to generate friend BeanModel*/
+	/**use to generate user BeanModel*/
 	private BeanModelFactory friendFactory = BeanModelLookup.get().getFactory(Friend.class);
+	private BeanModelFactory userFactory = BeanModelLookup.get().getFactory(User.class);
 	/**
 	 * @param controller
 	 */
@@ -51,6 +53,8 @@ public class FriendView extends View {
 				deleteFriend(event);	
 			} else if (event.getType().equals(FriendEvents.SETTING)) {
 				settingFriend(event);	
+			} else if (event.getType().equals(FriendEvents.INIT_MAIL_SENDER)){
+				initMailSender(event);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,6 +155,30 @@ public class FriendView extends View {
 		
 		AppEvent appEvent3 = new AppEvent(UserEvents.GET_ALL_USER);
 		Dispatcher.get().dispatch(appEvent3);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void initMailSender(AppEvent event){
+		System.out.println("FriendView initMailSender");
+		User user = (User)Registry.get(User.class.getName());
+		Collection<Friend> userFriends = (Collection<Friend>)event.getData();
+		System.out.println("FiendView***********initMailSender size:"+userFriends.size());
+		
+		Collection<BeanModel> models = new ArrayList<BeanModel>();
+ 		for(Friend f:userFriends){
+			
+			if(f.getReceiver().getId().equals(user.getId())){
+				BeanModel bm = userFactory.createModel(f.getSender());
+				models.add(bm);
+			}else{
+				BeanModel bm = userFactory.createModel(f.getReceiver());
+				models.add(bm);
+			}
+		}
+ 		
+ 		AppEvent e = new AppEvent(WidgetEvents.UPDATE_CREATE_MAIL_TO_PANEL);
+ 		e.setData(models);
+ 		Dispatcher.get().dispatch(e);
 	}
 
 }

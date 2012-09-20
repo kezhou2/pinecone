@@ -1,14 +1,21 @@
 package com.tenline.pinecone.platform.web.store.client.widgets;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
+import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.button.ButtonBar;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.TextField;
@@ -25,8 +32,8 @@ import com.extjs.gxt.ui.client.widget.layout.HBoxLayout.HBoxLayoutAlign;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.web.store.client.Messages;
+import com.tenline.pinecone.platform.web.store.client.controllers.UserController;
 import com.tenline.pinecone.platform.web.store.client.events.MailEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
 
@@ -39,17 +46,20 @@ public class SendMailViewport extends AbstractViewport {
 		body.add(mainPanel, new BorderLayoutData(LayoutRegion.CENTER));
 	}
 	
-	public void loadContactInfo(User receiver){
-		mainPanel.setContactInfo(receiver);
+	public void loadReceiverInfo(BeanModel receiver){
+		mainPanel.setReceiverInfo(receiver);
+	}
+	
+	public void loadFriends(Collection<BeanModel> friends){
+		mainPanel.loadFriendInfo(friends);
 	}
 	
 	private class MainPanel extends ContentPanel{
 		
-		private TextField<String> receiverTextfield;
+		private ComboBox<BeanModel> receiverComboBox;
+		private ListStore<BeanModel> friendsList;
 		private TextField<String> titleTextfield;
 		private HtmlEditor contentHtmleditor;
-		
-		private User receiver;
 		
 		public MainPanel(){
 			this.setHeaderVisible(false);
@@ -103,14 +113,20 @@ public class SendMailViewport extends AbstractViewport {
 			
 			String labelStyle = "padding-top: 8px; color: #222;font-weight: bold;";
 			
-			receiverTextfield = new TextField<String>();
-			receiverTextfield.setAllowBlank(false);
+			receiverComboBox = new ComboBox<BeanModel>();
+			receiverComboBox.setAllowBlank(false);
+			receiverComboBox.setDisplayField("email");
+			receiverComboBox.setTypeAhead(true);
+			receiverComboBox.setTriggerAction(TriggerAction.ALL);
 			FormData fd_txtfldNewTextfield = new FormData("100%");
 			fd_txtfldNewTextfield.setMargins(new Margins(0, 0, 0, 0));
-			mailContainer.add(receiverTextfield, fd_txtfldNewTextfield);
-			receiverTextfield.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_label_receiver());
-			receiverTextfield.setLabelStyle(labelStyle);
-			receiverTextfield.setHeight("30px");
+			mailContainer.add(receiverComboBox, fd_txtfldNewTextfield);
+			receiverComboBox.setFieldLabel(((Messages) Registry.get(Messages.class.getName())).SendMailViewport_label_receiver());
+			receiverComboBox.setLabelStyle(labelStyle);
+			receiverComboBox.setHeight("30px");
+			friendsList = new ListStore<BeanModel>();
+			receiverComboBox.setStore(friendsList);
+			receiverComboBox.setTriggerStyle("trigger-arrow");
 			
 			titleTextfield = new TextField<String>();
 			mailContainer.add(titleTextfield, new FormData("100%"));
@@ -133,13 +149,15 @@ public class SendMailViewport extends AbstractViewport {
 			sendButton.addMouseUpHandler(new MouseUpHandler() {
 				public void onMouseUp(MouseUpEvent event) {
 					AppEvent e = new AppEvent(MailEvents.SEND);
-					e.setData("content", contentHtmleditor.getRawValue());
-					if(receiver != null){
-						e.setData("receiver",receiver);
+					
+					if(receiverComboBox.getValue() != null){
+						e.setData("receiver",receiverComboBox.getValue().get(UserController.USER_INSTANCE));
 					}else{
-						e.setData("receiver",receiverTextfield.getValue());
+						return;
 					}
+					
 					e.setData("title", titleTextfield.getValue());
+					e.setData("content", contentHtmleditor.getRawValue());
 					e.setHistoryEvent(true);
 					Dispatcher.get().dispatch(e);
 				}
@@ -157,11 +175,18 @@ public class SendMailViewport extends AbstractViewport {
 			
 		}
 		
-		public void setContactInfo(User receiver){
-			if(receiver != null){
-				this.receiver = receiver; 
-				receiverTextfield.setValue(receiver.getEmail());
-			}
+		public void setReceiverInfo(BeanModel receiverBeanModel){
+			friendsList.remove(0);
+			friendsList.add(receiverBeanModel);
+			friendsList.commitChanges();
+			receiverComboBox.select(receiverBeanModel);
+		}
+		
+		public void loadFriendInfo(Collection<BeanModel> friends){
+			friendsList.remove(0);
+			friendsList.add(new ArrayList<BeanModel>(friends));
+			friendsList.commitChanges();
+			receiverComboBox.select(null);
 		}
 	}
 }

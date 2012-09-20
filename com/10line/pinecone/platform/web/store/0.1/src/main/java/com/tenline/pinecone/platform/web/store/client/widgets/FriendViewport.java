@@ -361,6 +361,7 @@ public class FriendViewport extends AbstractViewport {
 					grid.setHideHeaders(true);
 					grid.setStripeRows(true);
 					grid.setAutoExpandColumn("delete");
+					
 					myFriendContentpanel.add(grid);
 					view.setGroupRenderer(new GridGroupRenderer() {
 						public String render(GroupColumnData data) {
@@ -521,12 +522,13 @@ public class FriendViewport extends AbstractViewport {
 					addCC.setStyle(labelStyle);
 	
 					ColumnModel cm = new ColumnModel(configs);
-					EditorGrid<BeanModel> grid = new EditorGrid<BeanModel>(
+					Grid<BeanModel> grid = new Grid<BeanModel>(
 							userStore, cm);
 					grid.setStripeRows(true);
 					grid.setHideHeaders(true);
 					grid.setColumnReordering(true); 
 					grid.setAutoExpandColumn("email");
+
 					searchContentpanel.add(grid);
 				}
 	
@@ -618,7 +620,7 @@ public class FriendViewport extends AbstractViewport {
 					columnConfig_1.setRenderer(infoCellRender);
 					columnConfig_1.setStyle(labelStyle);
 	
-					ColumnConfig columnConfig_2 = new ColumnConfig("yes", "", 50);
+					ColumnConfig columnConfig_2 = new ColumnConfig("yes", "", 100);
 					configs.add(columnConfig_2);
 					GridCellRenderer<BeanModel> yesCellRender = new GridCellRenderer<BeanModel>() {
 						@Override
@@ -642,7 +644,7 @@ public class FriendViewport extends AbstractViewport {
 	
 											AppEvent appEvent = new AppEvent(
 													FriendEvents.SETTING);
-											appEvent.setData("isDecided", true);
+											appEvent.setData("decided", true);
 											appEvent.setData(FriendController.FRIEND_INSTANCE, f);
 											appEvent.setHistoryEvent(true);
 											Dispatcher.get().dispatch(appEvent);
@@ -656,7 +658,7 @@ public class FriendViewport extends AbstractViewport {
 	
 					ColumnConfig columnConfig_3 = new ColumnConfig("no",
 							((Messages) Registry.get(Messages.class.getName()))
-									.FriendViewport_button_reject(), 50);
+									.FriendViewport_button_reject(), 100);
 					configs.add(columnConfig_3);
 					GridCellRenderer<BeanModel> noCellRender = new GridCellRenderer<BeanModel>() {
 						@Override
@@ -698,7 +700,8 @@ public class FriendViewport extends AbstractViewport {
 				grid.setAutoExpandColumn("info");
 				grid.setStripeRows(true);
 				grid.setHideHeaders(true);
-				grid.setColumnReordering(true);
+//				grid.setColumnReordering(true);
+
 				invitationContentpanel.add(grid);
 	
 				ToolBar toolBar_2 = new ToolBar();
@@ -725,7 +728,7 @@ public class FriendViewport extends AbstractViewport {
 		}
 
 		public void loadFriendInvite(List<BeanModel> friends) {
-			System.out.println("FriendViewport loadFriendInvite:"+friends);
+			System.out.println("FriendViewport loadFriendInvite size:"+friends.size());
 			requestStore.removeAll();
 			requestStore.add(friends);
 			requestStore.commitChanges();

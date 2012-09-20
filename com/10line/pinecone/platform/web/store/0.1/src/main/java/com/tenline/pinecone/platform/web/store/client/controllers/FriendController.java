@@ -3,6 +3,7 @@
  */
 package com.tenline.pinecone.platform.web.store.client.controllers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
@@ -45,6 +46,7 @@ public class FriendController extends Controller {
 		registerEventTypes(FriendEvents.ADD);
 		registerEventTypes(FriendEvents.DELETE);
 		registerEventTypes(FriendEvents.SETTING);
+		registerEventTypes(FriendEvents.INIT_MAIL_SENDER);
 	}
 
 	@Override
@@ -64,6 +66,8 @@ public class FriendController extends Controller {
 				delete(event);
 			} else if (event.getType().equals(FriendEvents.SETTING)) {
 				setting(event);
+			} else if (event.getType().equals(FriendEvents.INIT_MAIL_SENDER)) {
+				initMailSender(event);
 			} 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,7 +81,9 @@ public class FriendController extends Controller {
 	 * @throws Exception
 	 */
 	private void getByUser(final AppEvent event) throws Exception {
-		service.show("isDecided&&receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+		//TODO decided 查询条件无效
+//		service.show("decided==true&&receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+		service.show("receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'",
 				new AsyncCallback<Collection<Friend>>() {
 
 			@Override
@@ -101,7 +107,8 @@ public class FriendController extends Controller {
 				final Collection<Friend> temp = result;
 				
 				System.out.println("FiendController======getByUser temp size:"+temp.size());
-				service.show("isDecided&&sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+//				service.show("decided==true&&sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+				service.show("sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
 						new AsyncCallback<Collection<Friend>>() {
 
 					@Override
@@ -124,8 +131,66 @@ public class FriendController extends Controller {
 						System.out.println("FiendController======getByUser result size:"+result.size());
 						unmask();
 						result.addAll(temp);
+						
+						Collection<Friend> data = new ArrayList<Friend>();
+						for(Friend f:result){
+							if(f.getDecided())
+								data.add(f);
+						}
+						
 						System.out.println("FiendController======getByUser size:"+temp.size());
-						forwardToView(view, event.getType(),result);
+						forwardToView(view, event.getType(),data);
+					}
+					
+				});
+			}
+			
+		});
+	}
+	/**
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	private void initMailSender(final AppEvent event) throws Exception {
+		//TODO decided 查询条件无效 
+		service.show("receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'",
+				new AsyncCallback<Collection<Friend>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Info.display("getByUser", caught.getMessage());
+				caught.printStackTrace();
+				unmask();
+			}
+
+			@Override
+			public void onSuccess(Collection<Friend> result) {
+
+				final Collection<Friend> temp = result;
+//				service.show("decided==true&&sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+				service.show("sender.id=='"+((User)Registry.get(User.class.getName())).getId()+"'", 
+						new AsyncCallback<Collection<Friend>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display("getByUser", caught.getMessage());
+						caught.printStackTrace();
+						unmask();
+					}
+
+					@Override
+					public void onSuccess(Collection<Friend> result) {
+						unmask();
+						result.addAll(temp);
+						
+						Collection<Friend> data = new ArrayList<Friend>();
+						for(Friend f:result){
+							if(f.getDecided())
+								data.add(f);
+						}
+						
+						forwardToView(view, event.getType(),data);
 					}
 					
 				});
@@ -141,7 +206,11 @@ public class FriendController extends Controller {
 	 */
 	private void getRequests(final AppEvent event) throws Exception {
 		System.out.println("FriendController getRequests");
-		String filter = "!isDecided&&receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'";
+		//TODO decided 查询条件有问题
+//		String filter = "decided=="+Friend.NO_DECIDED+"&&receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'";
+//		String filter = "decided==false&&receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'";
+		String filter = "receiver.id=='"+((User)Registry.get(User.class.getName())).getId()+"'";
+//		System.out.println("FriendController getRequests filter:"+filter);
 		service.show(filter, new AsyncCallback<Collection<Friend>>() {
 
 			@Override
@@ -154,7 +223,13 @@ public class FriendController extends Controller {
 			@Override
 			public void onSuccess(Collection<Friend> result) {
 				unmask();
-				forwardToView(view, event.getType(), result);
+				Collection<Friend> data = new ArrayList<Friend>();
+				for(Friend f:result){
+					if(!f.getDecided())
+						data.add(f);
+				}
+//				System.out.println("FriendController getRequests size:"+data.size());
+				forwardToView(view, event.getType(), data);
 			}
 			
 		});
@@ -196,6 +271,7 @@ public class FriendController extends Controller {
 		friend.setReceiver((User) event.getData(FRIEND_RECEIVER));
 		friend.setSender((User) Registry.get(User.class.getName()));
 		friend.setType((String) event.getData("type"));
+		friend.setDecided(false);
 		service.create(friend, new AsyncCallback<Friend>() {
 
 			@Override
@@ -247,10 +323,12 @@ public class FriendController extends Controller {
 	 * @throws Exception
 	 */
 	private void setting(final AppEvent event) throws Exception {
-		Boolean isDecided = event.getData("isDecided");
+		System.out.println("FriendController setting");
+		Boolean decided = event.getData("decided");
+		System.out.println("######decide="+decided);
 		String type = event.getData("type");
 		Friend friend = event.getData(FRIEND_INSTANCE);
-		if (isDecided != null) friend.setDecided(isDecided);
+		if (decided != null) friend.setDecided(decided);
 		if (type != null) friend.setType(type);
 		service.update(friend, new AsyncCallback<Friend>() {
 

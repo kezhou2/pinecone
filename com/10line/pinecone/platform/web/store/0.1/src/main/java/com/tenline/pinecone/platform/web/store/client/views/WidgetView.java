@@ -3,7 +3,12 @@
  */
 package com.tenline.pinecone.platform.web.store.client.views;
 
+import java.util.Collection;
+
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.data.BeanModel;
+import com.extjs.gxt.ui.client.data.BeanModelFactory;
+import com.extjs.gxt.ui.client.data.BeanModelLookup;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
@@ -12,6 +17,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.User;
+import com.tenline.pinecone.platform.web.store.client.controllers.FriendController;
+import com.tenline.pinecone.platform.web.store.client.controllers.UserController;
 import com.tenline.pinecone.platform.web.store.client.events.CategoryEvents;
 import com.tenline.pinecone.platform.web.store.client.events.ConsumerEvents;
 import com.tenline.pinecone.platform.web.store.client.events.WidgetEvents;
@@ -22,6 +29,7 @@ import com.tenline.pinecone.platform.web.store.client.widgets.FriendViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.HomeViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.LoginViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.MailListViewport;
+import com.tenline.pinecone.platform.web.store.client.widgets.ReadMailViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.RegisterViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.SendMailViewport;
 import com.tenline.pinecone.platform.web.store.client.widgets.SettingViewport;
@@ -32,6 +40,7 @@ import com.tenline.pinecone.platform.web.store.client.widgets.SettingViewport;
  */
 public class WidgetView extends View {
 
+	private BeanModelFactory userFactory = BeanModelLookup.get().getFactory(User.class);
 	/**
 	 * @param controller
 	 */
@@ -64,6 +73,8 @@ public class WidgetView extends View {
 				updateSettingToPanel(event);
 			}else if (event.getType().equals(WidgetEvents.UPDATE_CREATE_MAIL_TO_PANEL)) {
 				updateCreateMailToPanel(event);
+			}else if (event.getType().equals(WidgetEvents.UPDATE_READ_MAIL_TO_PANEL)) {
+				updateReadMailToPanel(event);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,18 +128,21 @@ public class WidgetView extends View {
 	
 	private void updateSendMailToPanel(AppEvent event) throws Exception{
 		System.out.println("WidgetView updateSendMailToPanel");
-		User receiver = (User)event.getData("friend");
+		User receiver = (User)event.getData(FriendController.FRIEND_FRIEND);
 		RootPanel.get().clear();
 		SendMailViewport smv = Registry.get(SendMailViewport.class.getName());
-		smv.loadContactInfo(receiver);
+		BeanModel model = userFactory.createModel(receiver);
+		model.set(UserController.USER_INSTANCE, receiver);
+		smv.loadReceiverInfo(model);
 		RootPanel.get().add(smv);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void updateCreateMailToPanel(AppEvent event) throws Exception{
 		System.out.println("WidgetView updateCreateMailToPanel");
 		RootPanel.get().clear();
 		SendMailViewport smv = Registry.get(SendMailViewport.class.getName());
-		smv.loadContactInfo(null);
+		smv.loadFriends((Collection<BeanModel>)event.getData());
 		RootPanel.get().add(smv);
 	}
 	
@@ -174,5 +188,13 @@ public class WidgetView extends View {
 		RootPanel.get().clear();
 		RootPanel.get().add(sv);
 		sv.loadInfo();
+	}
+	
+	private void updateReadMailToPanel(AppEvent event) throws Exception{
+		System.out.println("WidgetView updateReadMailToPanel");
+		ReadMailViewport view = (ReadMailViewport)Registry.get(ReadMailViewport.class.getName());
+		RootPanel.get().clear();
+		RootPanel.get().add(view);
+		view.loadInfo((BeanModel)event.getData());
 	}
 }

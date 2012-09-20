@@ -20,5 +20,6 @@ public interface FriendEvents {
 	static final EventType ADD = new EventType();
 	static final EventType DELETE = new EventType();
 	static final EventType SETTING = new EventType();
+	static final EventType INIT_MAIL_SENDER = new EventType();
 
 }

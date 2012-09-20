@@ -6,6 +6,7 @@ package com.tenline.pinecone.platform.web.store.client.controllers;
 import java.util.Collection;
 
 import com.extjs.gxt.ui.client.Registry;
+import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,6 +26,7 @@ import com.tenline.pinecone.platform.web.store.client.widgets.AbstractViewport;
  */
 public class MailController extends Controller {
 	
+	public final static String MAIL_INSTANCE = "this_mail";
 	private MailView view = new MailView(this);
 	private MailServiceAsync service = Registry.get(MailService.class.getName());
 	
@@ -36,6 +38,7 @@ public class MailController extends Controller {
 		registerEventTypes(MailEvents.GET_UNREAD);
 		registerEventTypes(MailEvents.SEND);
 		registerEventTypes(MailEvents.SETTING);
+		registerEventTypes(MailEvents.READ);
 	}
 
 	@Override
@@ -52,6 +55,8 @@ public class MailController extends Controller {
 				send(event);
 			} else if (event.getType().equals(MailEvents.SETTING)) {
 				setting(event);
+			} else if (event.getType().equals(MailEvents.READ)) {
+				read(event);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,6 +82,7 @@ public class MailController extends Controller {
 			@Override
 			public void onSuccess(Collection<Mail> result) {
 				unmask();
+				System.out.println("Mail Controller getUread size:"+result.size());
 				forwardToView(view, event.getType(), result);
 			}
 			
@@ -128,7 +134,7 @@ public class MailController extends Controller {
 		String content = event.getData("content");
 		String title = event.getData("title");
 		Boolean isRead = event.getData("isRead");
-		Mail mail = event.getData("mail");
+		Mail mail = event.getData(MAIL_INSTANCE);
 		if (content != null) mail.setContent(content);
 		if (isRead != null) mail.setRead(isRead);
 		if (title != null) mail.setTitle(title);
@@ -148,6 +154,26 @@ public class MailController extends Controller {
 			
 		});
 	}
+	
+	private void read(final AppEvent event) throws Exception {
+		BeanModel bm = (BeanModel)event.getData();
+		Mail mail = (Mail)bm.get(MailController.MAIL_INSTANCE);
+		mail.setRead(true);
+		service.update(mail, new AsyncCallback<Mail>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+				unmask();
+			}
+
+			@Override
+			public void onSuccess(Mail result) {
+				unmask();
+				forwardToView(view, event.getType(), result);
+			}
+		});
+	}
+	
 	/**
 	 * unmask the viewport
 	 */

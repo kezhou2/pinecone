@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.util.Collection;
 
 import com.google.gwt.user.server.Base64Utils;
+import com.tenline.pinecone.platform.model.Application;
 import com.tenline.pinecone.platform.model.Category;
 import com.tenline.pinecone.platform.model.Consumer;
 import com.tenline.pinecone.platform.model.Friend;
+import com.tenline.pinecone.platform.model.Mail;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.sdk.ModelAPI;
 import com.tenline.pinecone.platform.sdk.development.APIResponse;
@@ -22,9 +24,18 @@ public class TestNewAPI {
 		TestNewAPI api = new TestNewAPI();
 		try {
 //			api.testShowAllUser();
-//			api.showAllFriends();
 			System.out.println("*************************");
-			api.showFriends();
+//			api.showAllFriends();
+//			System.out.println("*************************");
+//			api.showFriends();
+//			api.deleteFriend(25);
+			
+//			api.showApplication();
+//			api.deleteApplicaiton(22);
+			
+//			api.testAvatar();
+			
+			api.showAllMail();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,7 +53,7 @@ public class TestNewAPI {
 				System.out.println("sender id:" + f.getSender().getId());
 				System.out.println("receiver name:" + f.getReceiver().getName());
 				System.out.println("receiver id:" + f.getReceiver().getId());
-				System.out.println("isDecided:" + f.isDecided());
+				System.out.println("isDecided:" + f.getDecided());
 				
 //				f.setDecided(true);
 //				response = api.update(f);
@@ -55,7 +66,7 @@ public class TestNewAPI {
 	public void showFriends() throws Exception{
 		ModelAPI api = new ModelAPI("pinecone-service.cloudfoundry.com", "80",
 				null);
-		APIResponse response = api.show(Friend.class, "!isDecided");
+		APIResponse response = api.show(Friend.class, "decided==false&&receiver.id=='1'");
 		if (response.isDone()) {
 			Collection<Friend> friends = (Collection<Friend>) response.getMessage();
 			for(Friend f:friends){
@@ -64,7 +75,7 @@ public class TestNewAPI {
 				System.out.println("sender id:" + f.getSender().getId());
 				System.out.println("receiver name:" + f.getReceiver().getName());
 				System.out.println("receiver id:" + f.getReceiver().getId());
-				System.out.println("isDecided:" + f.isDecided());
+				System.out.println("isDecided:" + f.getDecided());
 				
 //				f.setDecided(true);
 //				response = api.update(f);
@@ -74,10 +85,10 @@ public class TestNewAPI {
 		}
 	}
 	
-	public void deleteFriend() throws Exception{
+	public void deleteFriend(int id) throws Exception{
 		ModelAPI api = new ModelAPI("pinecone-service.cloudfoundry.com", "80",
 				null);
-		APIResponse response = api.show(Friend.class, "id=='5'");
+		APIResponse response = api.show(Friend.class, "id=='"+id+"'");
 		if (response.isDone()) {
 			Collection<Friend> friends = (Collection<Friend>) response.getMessage();
 			for(Friend f:friends){
@@ -108,7 +119,7 @@ public class TestNewAPI {
 						System.out.println("friend id:" + f.getId());
 						System.out.println("sender name:" + f.getSender().getName());
 						System.out.println("receiver name:" + f.getReceiver().getName());
-						System.out.println("isDecide:" + f.isDecided());
+						System.out.println("isDecide:" + f.getDecided());
 					}
 				}
 				
@@ -120,13 +131,15 @@ public class TestNewAPI {
 						System.out.println("friend id:" + f.getId());
 						System.out.println("sender name:" + f.getSender().getName());
 						System.out.println("receiver name:" + f.getReceiver().getName());
-						System.out.println("isDecide:" + f.isDecided());
+						System.out.println("isDecide:" + f.getDecided());
 					}
 				}
 			}
 
 		}
 	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	public void testShowAllUser() throws Exception {
@@ -164,6 +177,40 @@ public class TestNewAPI {
 
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void showApplication() throws Exception{
+		ModelAPI api = new ModelAPI("pinecone-service.cloudfoundry.com", "80",
+				null);
+		APIResponse response = api.show(Application.class, "all");
+		if (response.isDone()) {
+			Collection<Application> apps = (Collection<Application>) response.getMessage();
+			for (Application a : apps) {
+				System.out.println("app id:" + a.getId());
+				System.out.println("app status:" + a.getStatus());
+				System.out.println("app consumer id:" + a.getConsumer().getId());
+				System.out.println("app consumer name:" + a.getConsumer().getName());
+			}
+
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void deleteApplicaiton(int id) throws Exception {
+		ModelAPI api = new ModelAPI("pinecone-service.cloudfoundry.com", "80",
+				null);
+		APIResponse response = api.show(Application.class, "id=='"+id+"'");
+		if (response.isDone()) {
+			Collection<Application> apps = (Collection<Application>) response.getMessage();
+			for (Application a : apps) {
+				response = api.delete(a);
+				if (response.isDone()) {
+					System.out.println(response.getMessage());
+				}
+			}
+
+		}
+	}
 
 	public void createConsumer() throws Exception {
 		ModelAPI api = new ModelAPI("pinecone-service.cloudfoundry.com", "80",
@@ -186,6 +233,26 @@ public class TestNewAPI {
 			con.setCategory(c);
 			// con.set
 			// fo`}
+
+		}
+	}
+	
+	public void showAllMail() throws Exception{
+		ModelAPI api = new ModelAPI("pinecone-service.cloudfoundry.com", "80",
+				null);
+		APIResponse response = api.show(Mail.class, "all");
+		if (response.isDone()) {
+			Collection<Mail> mails = (Collection<Mail>) response.getMessage();
+			for (Mail m : mails) {
+				System.out.println("mail id:" + m.getId());
+				System.out.println("mail title:" + m.getTitle());
+				System.out.println("mail content:" + m.getContent());
+				System.out.println("mail receiver id:" + m.getReceiver().getId());
+				System.out.println("mail receiver name:" + m.getReceiver().getName());
+				System.out.println("mail sender id:" + m.getSender().getId());
+				System.out.println("mail sender name:" + m.getSender().getName());
+				System.out.println("mail isRead:" + m.isRead());
+			}
 
 		}
 	}
@@ -222,7 +289,8 @@ public class TestNewAPI {
 					System.out.println("user email:" + user.getEmail());
 					System.out.println("user avatar:" + user.getAvatar());
 
-					user.setAvatar(base64);
+//					user.setAvatar(base64);
+					user.setAvatar(null);
 					
 					response = api.update(user);
 					
@@ -244,6 +312,73 @@ public class TestNewAPI {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void testBug() throws Exception{
+		
+		ModelAPI api = new ModelAPI("pinecone-service.cloudfoundry.com", "80",null);
+		
+		String filter = "email=='liugy503@gmail.com'&&password=='198297'";
+		APIResponse response = api.show(User.class, filter);
+		if (response.isDone()) {
+			Collection<User> users = (Collection<User>)response.getMessage();
+			for(User u:users){
+				System.out.println("###### login user:"+u.getEmail());
+				response = api.show(Friend.class, "receiver.id=='"+u.getId()+"'");
+				if(response.isDone()){
+					Collection<Friend> friends = (Collection<Friend>)response.getMessage();
+					for(Friend f:friends){
+						System.out.println("friend id:" + f.getId());
+						System.out.println("sender name:" + f.getSender().getName());
+						System.out.println("sender id:" + f.getSender().getId());
+						System.out.println("receiver name:" + f.getReceiver().getName());
+						System.out.println("receiver id:" + f.getReceiver().getId());
+						System.out.println("isDecided:" + f.getDecided());
+						
+						f.setDecided(true);
+						response = api.update(f);
+						if(response.isDone()){
+							
+							{
+								System.out.println("###### after update:");
+								APIResponse res = api.show(Friend.class, "receiver.id=='"+u.getId()+"'");
+								if(res.isDone()){
+									Collection<Friend> s = (Collection<Friend>)res.getMessage();
+									for(Friend a:s){
+										System.out.println("friend id:" + f.getId());
+										System.out.println("sender name:" + f.getSender().getName());
+										System.out.println("sender id:" + f.getSender().getId());
+										System.out.println("receiver name:" + f.getReceiver().getName());
+										System.out.println("receiver id:" + f.getReceiver().getId());
+										System.out.println("isDecided:" + f.getDecided());
+									}
+								}
+							}
+							
+							response = api.show(User.class, "email=='temp@gmail.com'&&password=='temp'");
+							if(response.isDone()){
+								Collection<User> us = (Collection<User>)response.getMessage();
+								for(User uu:us){
+									System.out.println("###### login user:"+uu.getEmail());
+									response = api.show(Friend.class, "sender.id=='"+uu.getId()+"'");
+									if(response.isDone()){
+										Collection<Friend> fs = (Collection<Friend>)response.getMessage();
+										for(Friend ff:fs){
+											System.out.println("friend id:" + ff.getId());
+											System.out.println("sender name:" + ff.getSender().getName());
+											System.out.println("sender id:" + ff.getSender().getId());
+											System.out.println("receiver name:" + ff.getReceiver().getName());
+											System.out.println("receiver id:" + f.getReceiver().getId());
+											System.out.println("isDecided:" + ff.getDecided());
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

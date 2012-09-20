@@ -25,4 +25,5 @@ public interface WidgetEvents {
 	static final EventType UPDATE_REGISTER_APP_TO_PANEL = new EventType();
 	static final EventType UPDATE_SETTING_TO_PANEL = new EventType();
 	static final EventType UPDATE_CREATE_MAIL_TO_PANEL = new EventType();
+	static final EventType UPDATE_READ_MAIL_TO_PANEL = new EventType();
 }

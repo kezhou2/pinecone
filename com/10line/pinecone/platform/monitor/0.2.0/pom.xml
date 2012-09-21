@@ -51,7 +51,7 @@
         <extensions>true</extensions>
         <configuration>
         	<instructions>
-        		<Bundle-Name>${pom.artifactId} bundle</Bundle-Name>
+        		<Bundle-Name>${project.artifactId} bundle</Bundle-Name>
         	</instructions>
         </configuration> 
       </plugin> 

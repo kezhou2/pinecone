@@ -3,11 +3,15 @@
  */
 package com.tenline.pinecone.platform.monitor.desktop;
 
+import java.util.Properties;
+
+import javax.swing.UIManager;
+
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.tenline.pinecone.platform.monitor.APIHelper;
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 import com.tenline.pinecone.platform.monitor.BundleHelper;
 import com.tenline.pinecone.platform.monitor.ServiceHelper;
 
@@ -39,9 +43,13 @@ public class Activator implements BundleActivator {
 		// TODO Auto-generated method stub
 		BundleHelper.getInstance(bundleContext);
 		ServiceHelper.getInstance(bundleContext);
-		APIHelper.getInstance();
+		// Setup Java Swing Skin
+		Properties props = new Properties();
+		props.put("logoString", "");
+		HiFiLookAndFeel.setCurrentTheme(props);
+		UIManager.setLookAndFeel(new HiFiLookAndFeel());
+		UIManager.getDefaults().put("ClassLoader", HiFiLookAndFeel.class.getClassLoader());
 		window = new MainWindow();
-		window.setVisible(true);
 		logger.info("Start Bundle");
 	}
 

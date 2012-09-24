@@ -30,6 +30,12 @@
       <artifactId>httpcomponents</artifactId>
       <version>0.1.0</version>
     </dependency>
+    <!-- JTattoo Swing Skin -->
+    <dependency>
+   	  <groupId>com.jtattoo</groupId>
+      <artifactId>swing-skin</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

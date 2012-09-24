@@ -4,173 +4,250 @@
 package com.tenline.pinecone.platform.monitor.desktop;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.awt.event.KeyEvent;
+import java.util.Collection;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
-import org.apache.log4j.Logger;
-import org.osgi.service.obr.Resource;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
 
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.monitor.APIHelper;
-import com.tenline.pinecone.platform.monitor.BundleHelper;
+import com.tenline.pinecone.platform.monitor.IConstants;
+import com.tenline.pinecone.platform.sdk.ModelAPI;
+import com.tenline.pinecone.platform.sdk.development.APIResponse;
 
+/**
+ * @author Bill
+ *
+ */
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-
-	/**
-	 * Logger
-	 */
-	private Logger logger = Logger.getLogger(getClass());
-
+	
 	/**
 	 * Endpoint Admin
 	 */
 	private EndpointAdmin endpointAdmin;
-
+	
 	/**
-	 * UI Controls
+	 * Screen Size
 	 */
-	private JButton showDevicesButton;
+	private Dimension screenSize;
+	
+	/**
+	 * Web Service API
+	 */
+	private ModelAPI modelAPI;
 
 	/**
 	 * 
 	 */
 	public MainWindow() {
+		super("Device Console");
+		// TODO Auto-generated constructor stub
+		center();
 		endpointAdmin = new EndpointAdmin();
+		modelAPI = new ModelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 395, 427);
-		initializeMainPanel();
+		setJMenuBar(new MenuBar());
+		setContentPane(new MainPanel());
+		setVisible(true);
+		new LoginDialog().setVisible(true);
 	}
-
+	
 	/**
 	 * 
 	 */
 	public void close() {
 		endpointAdmin.close();
 	}
-
+	
 	/**
 	 * 
 	 */
-	private void initializeMainPanel() {
-		final JPanel panel = new JPanel();
-		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		panel.setLayout(null);
-		setContentPane(panel);
-		JLabel label = new JLabel("SNS Id:");
-		label.setBounds(41, 32, 73, 15);
-		panel.add(label);
-		final JTextField textField = new JTextField();
-		textField.setBounds(124, 29, 119, 23);
-		panel.add(textField);
-		textField.setColumns(10);
-		textField.setText("251760162"); // SNS Id
-		JButton button = new JButton("Login");
-		button.setActionCommand("Login");
-		button.setBounds(260, 29, 80, 23);
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					User user = APIHelper.login("", "");
-					if (user != null) {
-						showDevicesButton.setEnabled(true);
-						endpointAdmin.initialize(user);
-					} else {
-						showDevicesButton.setEnabled(false);
-					}
-				} catch (Exception ex) {
-					// TODO Auto-generated catch block
-					logger.error(ex.getMessage());
-				}
-			}
-		});
-		panel.add(button);
-		showDevicesButton = new JButton("Show Devices");
-		showDevicesButton.setActionCommand("Show Devices");
-		showDevicesButton.setBounds(100, 100, 130, 25);
-		showDevicesButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new DeviceDialog().setVisible(true);
-			}
-		});
-		panel.add(showDevicesButton);
-		showDevicesButton.setEnabled(false);
+	private void center() {
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize(screenSize.width / 2, screenSize.height / 2);
+	    setLocation((screenSize.width - getWidth()) / 2, (screenSize.height - getHeight()) / 2);
 	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class MenuBar extends JMenuBar {
+		
+		private MenuBar() {
+			JMenu menu = new JMenu("User");
+			menu.setMnemonic('U');
+			JMenuItem menuItem = new JMenuItem("Login");
+		    menuItem.setMnemonic('L');
+		    menuItem.addActionListener(new ActionListener() {
 
-	private class DeviceDialog extends JDialog {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					// TODO Auto-generated method stub
+					new LoginDialog().setVisible(true);
+				}
+				
+	        });
+		    menu.add(menuItem);
+		    menu.addSeparator();
+	        menuItem = new JMenuItem("Exit");
+	        menuItem.setMnemonic('x');
+	        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_MASK));
+	        menuItem.addActionListener(new ActionListener() {
 
-		private JComboBox comboBox;
-
-		/**
-		 * 
-		 */
-		public DeviceDialog() {
-			super(MainWindow.this);
-			setBounds(100, 100, 462, 202);
-			getContentPane().setLayout(new BorderLayout());
-			initializeDevicesPanel();
-			initializeOperationPanel();
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					// TODO Auto-generated method stub
+					System.exit(0);
+				}
+				
+	        });
+	        menu.add(menuItem);
+			add(menu);
+			menu = new JMenu("Help");
+			menu.setMnemonic('H');
+			menuItem = new JMenuItem("About");
+	        menuItem.setMnemonic('A');
+	        menu.add(menuItem);
+			add(menu);
 		}
-
-		/**
-		 * 
-		 */
-		private void initializeDevicesPanel() {
-			JPanel panel = new JPanel();
-			panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-			panel.setLayout(null);
-			getContentPane().add(panel, BorderLayout.CENTER);
-			comboBox = new JComboBox();
-			Hashtable<String, Resource> items = BundleHelper.getRemoteBundles();
-			for (Enumeration<String> keys = items.keys(); keys.hasMoreElements();) {
-				String key = keys.nextElement();
-				comboBox.addItem(items.get(key).getPresentationName() + " (" + items.get(key).getSymbolicName()
-						+ "-" + items.get(key).getVersion().toString() + ")");
-			}
-			comboBox.setBounds(26, 71, 398, 32);
-			panel.add(comboBox);
-			JLabel label = new JLabel("Devices:");
-			label.setBounds(26, 29, 82, 15);
-			panel.add(label);
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class LoginDialog extends JDialog {
+		  
+		private LoginDialog() {
+			super(MainWindow.this, "Login", true);
+			setSize(getOwner().getWidth() / 2, getOwner().getHeight() / 2);
+			setLocationRelativeTo(getOwner());
+			setLayout(new BorderLayout());
+			add(new LoginPanel(this), BorderLayout.CENTER);
 		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class LoginPanel extends JPanel {
+		
+		private LoginPanel(final LoginDialog dialog) {
+			setLayout(new GridLayout(3, 2, 3, 3));
+			setBorder(BorderFactory.createEmptyBorder(40, 30, 40, 30));
+		    add(new JLabel("Email:"));
+		    final JTextField emailField = new JTextField();
+		    add(emailField);
+		    add(new JLabel("Password:"));
+		    final JPasswordField passwordField = new JPasswordField();
+		    add(passwordField);
+		    JButton submitButton = new JButton("Submit");
+		    submitButton.addActionListener(new ActionListener() {
 
-		/**
-		 * 
-		 */
-		private void initializeOperationPanel() {
-			JPanel panel = new JPanel();
-			panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(panel, BorderLayout.SOUTH);
-			JButton button = new JButton("Add Device");
-			button.setActionCommand("Add Device");
-			panel.add(button);
-			getRootPane().setDefaultButton(button);
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				@Override
+				@SuppressWarnings("unchecked")
+				public void actionPerformed(ActionEvent event) {
+					// TODO Auto-generated method stub
 					try {
-						String temp = comboBox.getSelectedItem().toString();
-						String[] identifier = temp.substring(temp.indexOf("(") + 1, temp.length() - 1).split("-");
-						endpointAdmin.initializeEndpoint(APIHelper.createDevice(identifier[0], identifier[1]));
-					} catch (Exception ex) {
+						String filter = "email=='" + emailField.getText() +
+						"'&&password=='" + passwordField.getPassword().toString() + "'";
+						APIResponse response = modelAPI.show(User.class, filter);
+						if (response.isDone()) {
+							Collection<User> users = (Collection<User>) response.getMessage();
+							System.out.println(users.size());
+							if (users.size() == 1) dialog.setVisible(false);	
+						}
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						logger.error(ex.getMessage());
+						e.printStackTrace();
 					}
 				}
-			});
-		}
+		    	
+		    });
+		    add(submitButton);
+		    JButton cancelButton = new JButton("Cancel");
+		    cancelButton.addActionListener(new ActionListener() {
 
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					// TODO Auto-generated method stub
+					dialog.setVisible(false);
+				}
+		    	
+		    });
+		    add(cancelButton);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class MainPanel extends JPanel {
+		
+		private MainPanel() {
+			setLayout(new BorderLayout());
+			setBorder(BorderFactory.createEmptyBorder(0, 4, 4, 4));
+			add(new DevicePanel(), BorderLayout.CENTER);
+			add(new DriverPanel(), BorderLayout.WEST);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class DriverPanel extends JScrollPane {
+		
+		private DriverPanel() {
+			super(new JTree());
+			setPreferredSize(new Dimension((int) screenSize.getWidth() / 6, (int) screenSize.getHeight() / 2));
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class DevicePanel extends JScrollPane {
+		
+		private DevicePanel() {
+			super(new JTable(new Object[][]{}, new Object[]{ "Name", "Address", "Port" }));
+//			JTable deviceTable = (JTable) getViewport().getView();
+		}
+		
 	}
 
 }

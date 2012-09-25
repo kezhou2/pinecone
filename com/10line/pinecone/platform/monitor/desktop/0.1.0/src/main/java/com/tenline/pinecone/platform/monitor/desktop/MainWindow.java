@@ -27,6 +27,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.monitor.IConstants;
@@ -54,17 +59,24 @@ public class MainWindow extends JFrame {
 	 * Web Service API
 	 */
 	private ModelAPI modelAPI;
+	
+	/**
+	 * OSGI Bundle
+	 */
+	private Bundle bundle;
 
 	/**
 	 * 
+	 * @param bundleContext
 	 */
-	public MainWindow() {
-		super("Device Console");
+	public MainWindow(BundleContext bundleContext) {
 		// TODO Auto-generated constructor stub
 		center();
 		endpointAdmin = new EndpointAdmin();
+		bundle = bundleContext.getBundle();
 		modelAPI = new ModelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle(bundle.getHeaders().get("Device-Console").toString());
 		setJMenuBar(new MenuBar());
 		setContentPane(new MainPanel());
 		setVisible(true);
@@ -95,9 +107,9 @@ public class MainWindow extends JFrame {
 	private class MenuBar extends JMenuBar {
 		
 		private MenuBar() {
-			JMenu menu = new JMenu("User");
+			JMenu menu = new JMenu(bundle.getHeaders().get("User").toString());
 			menu.setMnemonic('U');
-			JMenuItem menuItem = new JMenuItem("Login");
+			JMenuItem menuItem = new JMenuItem(bundle.getHeaders().get("Login").toString());
 		    menuItem.setMnemonic('L');
 		    menuItem.addActionListener(new ActionListener() {
 
@@ -110,7 +122,7 @@ public class MainWindow extends JFrame {
 	        });
 		    menu.add(menuItem);
 		    menu.addSeparator();
-	        menuItem = new JMenuItem("Exit");
+	        menuItem = new JMenuItem(bundle.getHeaders().get("Exit").toString());
 	        menuItem.setMnemonic('x');
 	        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_MASK));
 	        menuItem.addActionListener(new ActionListener() {
@@ -124,9 +136,9 @@ public class MainWindow extends JFrame {
 	        });
 	        menu.add(menuItem);
 			add(menu);
-			menu = new JMenu("Help");
+			menu = new JMenu(bundle.getHeaders().get("Help").toString());
 			menu.setMnemonic('H');
-			menuItem = new JMenuItem("About");
+			menuItem = new JMenuItem(bundle.getHeaders().get("About").toString());
 	        menuItem.setMnemonic('A');
 	        menu.add(menuItem);
 			add(menu);
@@ -142,7 +154,7 @@ public class MainWindow extends JFrame {
 	private class LoginDialog extends JDialog {
 		  
 		private LoginDialog() {
-			super(MainWindow.this, "Login", true);
+			super(MainWindow.this, bundle.getHeaders().get("Login").toString(), true);
 			setSize(getOwner().getWidth() / 2, getOwner().getHeight() / 2);
 			setLocationRelativeTo(getOwner());
 			setLayout(new BorderLayout());
@@ -161,13 +173,13 @@ public class MainWindow extends JFrame {
 		private LoginPanel(final LoginDialog dialog) {
 			setLayout(new GridLayout(3, 2, 3, 3));
 			setBorder(BorderFactory.createEmptyBorder(40, 30, 40, 30));
-		    add(new JLabel("Email:"));
+		    add(new JLabel(bundle.getHeaders().get("Email").toString() + ":"));
 		    final JTextField emailField = new JTextField();
 		    add(emailField);
-		    add(new JLabel("Password:"));
+		    add(new JLabel(bundle.getHeaders().get("Password").toString() + ":"));
 		    final JPasswordField passwordField = new JPasswordField();
 		    add(passwordField);
-		    JButton submitButton = new JButton("Submit");
+		    JButton submitButton = new JButton(bundle.getHeaders().get("Submit").toString());
 		    submitButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -180,7 +192,6 @@ public class MainWindow extends JFrame {
 						APIResponse response = modelAPI.show(User.class, filter);
 						if (response.isDone()) {
 							Collection<User> users = (Collection<User>) response.getMessage();
-							System.out.println(users.size());
 							if (users.size() == 1) dialog.setVisible(false);	
 						}
 					} catch (Exception e) {
@@ -191,7 +202,7 @@ public class MainWindow extends JFrame {
 		    	
 		    });
 		    add(submitButton);
-		    JButton cancelButton = new JButton("Cancel");
+		    JButton cancelButton = new JButton(bundle.getHeaders().get("Cancel").toString());
 		    cancelButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -231,6 +242,15 @@ public class MainWindow extends JFrame {
 		
 		private DriverPanel() {
 			super(new JTree());
+			JTree driverTree = (JTree) getViewport().getView();
+			DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+			DefaultMutableTreeNode child1 = new DefaultMutableTreeNode("Child 1");
+			root.add(child1);
+			DefaultMutableTreeNode child2 = new DefaultMutableTreeNode("Child 2");
+			root.add(child2);
+			DefaultMutableTreeNode leaf1 = new DefaultMutableTreeNode("Leaf 1");
+			child2.add(leaf1);
+			driverTree.setModel(new DefaultTreeModel(root));
 			setPreferredSize(new Dimension((int) screenSize.getWidth() / 6, (int) screenSize.getHeight() / 2));
 		}
 		

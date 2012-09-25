@@ -49,7 +49,7 @@ public class Activator implements BundleActivator {
 		HiFiLookAndFeel.setCurrentTheme(props);
 		UIManager.setLookAndFeel(new HiFiLookAndFeel());
 		UIManager.getDefaults().put("ClassLoader", HiFiLookAndFeel.class.getClassLoader());
-		window = new MainWindow();
+		window = new MainWindow(bundleContext);
 		logger.info("Start Bundle");
 	}
 

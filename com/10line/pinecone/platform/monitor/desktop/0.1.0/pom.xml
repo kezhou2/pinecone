@@ -46,8 +46,18 @@
         <extensions>true</extensions>
         <configuration>
         	<instructions>
-        		<Bundle-Name>monitor ${pom.artifactId} bundle</Bundle-Name>
+        		<Bundle-Name>monitor ${project.artifactId} bundle</Bundle-Name>
         		<Bundle-Activator>com.tenline.pinecone.platform.monitor.desktop.Activator</Bundle-Activator>
+        		<Login>%Login</Login>
+        		<Device-Console>%Device-Console</Device-Console>
+        		<User>%User</User>
+        		<Exit>%Exit</Exit>
+        		<Help>%Help</Help>
+        		<About>%About</About>
+        		<Email>%Email</Email>
+        		<Password>%Password</Password>
+        		<Submit>%Submit</Submit>
+        		<Cancel>%Cancel</Cancel>
         	</instructions>
         </configuration> 
       </plugin> 

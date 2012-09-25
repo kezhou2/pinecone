@@ -48,6 +48,7 @@
         <configuration>        	
           <instructions>
         	<Bundle-Name>Pinecone Java Development SDK</Bundle-Name>
+        	<Import-Package>com.tenline.pinecone.platform.model</Import-Package>
           </instructions>
         </configuration> 
       </plugin>

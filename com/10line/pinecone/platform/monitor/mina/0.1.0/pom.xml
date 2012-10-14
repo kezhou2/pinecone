@@ -46,7 +46,7 @@
         <extensions>true</extensions>
         <configuration>
         	<instructions>
-        		<Bundle-Name>monitor ${pom.artifactId} bundle</Bundle-Name>
+        		<Bundle-Name>monitor ${project.artifactId} bundle</Bundle-Name>
         	</instructions>
         </configuration> 
       </plugin> 

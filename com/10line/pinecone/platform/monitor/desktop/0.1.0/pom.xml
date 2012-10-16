@@ -58,6 +58,9 @@
         		<Password>%Password</Password>
         		<Submit>%Submit</Submit>
         		<Cancel>%Cancel</Cancel>
+        		<Driver>%Driver</Driver>
+        		<Add-Device-Title>%Add-Device-Title</Add-Device-Title>
+        		<Add-Device-Message>%Add-Device-Message</Add-Device-Message>
         	</instructions>
         </configuration> 
       </plugin> 

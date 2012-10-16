@@ -20,19 +20,24 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import com.tenline.pinecone.platform.model.Category;
+import com.tenline.pinecone.platform.model.Driver;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.monitor.IConstants;
 import com.tenline.pinecone.platform.sdk.ModelAPI;
@@ -44,11 +49,6 @@ import com.tenline.pinecone.platform.sdk.development.APIResponse;
  */
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-	
-	/**
-	 * Endpoint Admin
-	 */
-	private EndpointAdmin endpointAdmin;
 	
 	/**
 	 * Screen Size
@@ -64,17 +64,28 @@ public class MainWindow extends JFrame {
 	 * OSGI Bundle
 	 */
 	private Bundle bundle;
+	
+	/**
+	 * Current User
+	 */
+	private User currentUser;
+	
+	/**
+	 * Driver Tree
+	 */
+	private DriverTree driverTree;
 
 	/**
 	 * 
 	 * @param bundleContext
+	 * @throws Exception 
 	 */
-	public MainWindow(BundleContext bundleContext) {
+	public MainWindow(BundleContext bundleContext) throws Exception {
 		// TODO Auto-generated constructor stub
 		center();
-		endpointAdmin = new EndpointAdmin();
 		bundle = bundleContext.getBundle();
 		modelAPI = new ModelAPI(IConstants.WEB_SERVICE_HOST, IConstants.WEB_SERVICE_PORT, IConstants.WEB_SERVICE_CONTEXT);
+		driverTree = new DriverTree();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(bundle.getHeaders().get("Device-Console").toString());
 		setJMenuBar(new MenuBar());
@@ -87,7 +98,7 @@ public class MainWindow extends JFrame {
 	 * 
 	 */
 	public void close() {
-		endpointAdmin.close();
+		////////
 	}
 	
 	/**
@@ -183,16 +194,14 @@ public class MainWindow extends JFrame {
 		    submitButton.addActionListener(new ActionListener() {
 
 				@Override
-				@SuppressWarnings("unchecked")
 				public void actionPerformed(ActionEvent event) {
 					// TODO Auto-generated method stub
 					try {
-						String filter = "email=='" + emailField.getText() +
-						"'&&password=='" + passwordField.getPassword().toString() + "'";
-						APIResponse response = modelAPI.show(User.class, filter);
-						if (response.isDone()) {
-							Collection<User> users = (Collection<User>) response.getMessage();
-							if (users.size() == 1) dialog.setVisible(false);	
+						User user = login(emailField.getText(), String.valueOf(passwordField.getPassword()));
+						if (user != null) {
+							currentUser = user;
+							driverTree.buildTreeNode(" ("+ user.getEmail() +")");
+							dialog.setVisible(false);	
 						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -215,6 +224,20 @@ public class MainWindow extends JFrame {
 		    add(cancelButton);
 		}
 		
+		@SuppressWarnings("unchecked")
+		private User login(String email, String password) throws Exception {
+			String filter = "email=='" + email + "'&&password=='" + password + "'";
+			APIResponse response = modelAPI.show(User.class, filter);
+			User user = null;
+			if (response.isDone()) {
+				Collection<User> users = (Collection<User>) response.getMessage();
+				if (users.size() == 1) {
+					user = (User) users.toArray()[0];
+				} 
+			}
+			return user;
+		}
+		
 	}
 	
 	/**
@@ -224,11 +247,10 @@ public class MainWindow extends JFrame {
 	 */
 	private class MainPanel extends JPanel {
 		
-		private MainPanel() {
+		private MainPanel() throws Exception {
 			setLayout(new BorderLayout());
 			setBorder(BorderFactory.createEmptyBorder(0, 4, 4, 4));
-			add(new DevicePanel(), BorderLayout.CENTER);
-			add(new DriverPanel(), BorderLayout.WEST);
+			add(new JScrollPane(driverTree), BorderLayout.CENTER);
 		}
 		
 	}
@@ -238,34 +260,90 @@ public class MainWindow extends JFrame {
 	 * @author Bill
 	 *
 	 */
-	private class DriverPanel extends JScrollPane {
+	private class DriverTree extends JTree {
 		
-		private DriverPanel() {
-			super(new JTree());
-			JTree driverTree = (JTree) getViewport().getView();
-			DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
-			DefaultMutableTreeNode child1 = new DefaultMutableTreeNode("Child 1");
-			root.add(child1);
-			DefaultMutableTreeNode child2 = new DefaultMutableTreeNode("Child 2");
-			root.add(child2);
-			DefaultMutableTreeNode leaf1 = new DefaultMutableTreeNode("Leaf 1");
-			child2.add(leaf1);
-			driverTree.setModel(new DefaultTreeModel(root));
-			setPreferredSize(new Dimension((int) screenSize.getWidth() / 6, (int) screenSize.getHeight() / 2));
+		/**
+		 * @throws Exception 
+		 * 
+		 */
+		private DriverTree() throws Exception {
+			buildTreeNode("");
+			addTreeSelectionListener(new TreeSelectionListener() {
+
+				@Override
+				public void valueChanged(TreeSelectionEvent event) {
+					// TODO Auto-generated method stub
+					TreeNode node = (TreeNode) event.getPath().getLastPathComponent();
+					if (node.isLeaf() && currentUser != null) {
+						if (popupDialogToAddDevice() == JOptionPane.YES_OPTION) {
+							// Add Device
+						}
+					}
+				}
+				
+			});
 		}
 		
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class DevicePanel extends JScrollPane {
+		private int popupDialogToAddDevice() {
+			String message = bundle.getHeaders().get("Add-Device-Message").toString();
+			String title = bundle.getHeaders().get("Add-Device-Title").toString();
+			int optionType = JOptionPane.YES_NO_OPTION;
+			int messageType = JOptionPane.QUESTION_MESSAGE;
+			return JOptionPane.showConfirmDialog(MainWindow.this, message, title, optionType, messageType);
+		}
 		
-		private DevicePanel() {
-			super(new JTable(new Object[][]{}, new Object[]{ "Name", "Address", "Port" }));
-//			JTable deviceTable = (JTable) getViewport().getView();
+		private void buildTreeNode(Object rootNodeName) throws Exception {
+			rootNodeName = bundle.getHeaders().get("Driver").toString() + rootNodeName;
+			setModel(new DefaultTreeModel(buildRootNode(rootNodeName)));
+		}
+		
+		@SuppressWarnings("unchecked")
+		private DefaultMutableTreeNode buildRootNode(Object rootNodeName) throws Exception {
+			DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootNodeName);
+			APIResponse response = modelAPI.show(Category.class, "all");
+			if (response.isDone()) {
+				for (Category category : (Collection<Category>) response.getMessage()) {
+					rootNode.add(buildCategoryNode(category));
+				}
+			}
+			return rootNode;
+		}
+		
+		@SuppressWarnings("unchecked")
+		private CategoryNode buildCategoryNode(Category category) throws Exception {
+			CategoryNode categoryNode = new CategoryNode(category);
+			APIResponse response = modelAPI.show(Driver.class, "category.id=='"+category.getId()+"'");
+			if (response.isDone()) {
+				for (Driver driver : (Collection<Driver>) response.getMessage()) {
+					categoryNode.add(buildDriverNode(driver));
+				}
+			}
+			return categoryNode;
+		}
+		
+		private DriverNode buildDriverNode(Driver driver) {
+			return new DriverNode(driver);
+		}
+		
+		private class CategoryNode extends DefaultMutableTreeNode {
+			
+			private CategoryNode(Category category) {
+				super(category.getType() + "." + category.getName() + "." +
+				category.getDomain() + "." + category.getSubdomain());
+			}
+			
+		}
+		
+		private class DriverNode extends DefaultMutableTreeNode {
+			
+			private Driver driver;
+			private DriverNode(Driver driver) {
+				super(driver.getAlias() + "-" + driver.getVersion());
+				this.driver = driver;
+			}
+			@SuppressWarnings("unused")
+			public Driver getDriver() { return driver; }
+			
 		}
 		
 	}

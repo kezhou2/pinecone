@@ -25,16 +25,6 @@ public interface IConstants {
 	static final String WEB_SERVICE_CONTEXT = null;
 	
 	/**
-	 * OAuth Consumer Key
-	 */
-	static final String OAUTH_CONSUMER_KEY = "";
-	
-	/**
-	 * OAuth Consumer Secret
-	 */
-	static final String OAUTH_CONSUMER_SECRET = "";
-	
-	/**
 	 * Repository URL
 	 */
 	static final String REPOSITORY_URL = "http://pinecone.googlecode.com/svn/repository/releases.xml";

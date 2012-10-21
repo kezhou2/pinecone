@@ -5,12 +5,15 @@ package com.tenline.pinecone.platform.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  * @author Bill
  *
  */
 @javax.persistence.Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Entity {
 
 	@Id

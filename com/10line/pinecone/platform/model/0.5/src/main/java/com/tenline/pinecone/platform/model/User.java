@@ -3,8 +3,12 @@
  */
 package com.tenline.pinecone.platform.model;
 
+import java.util.Collection;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 /**
  * @author Bill
@@ -30,6 +34,9 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
     
     @Column
 	private Integer nut = Integer.valueOf(0); // Virtual Coin
+    
+    @OneToMany(cascade = CascadeType.REMOVE)
+	private Collection<Device> devices;
 
 	/**
 	 * 
@@ -120,6 +127,20 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public Integer getNut() {
 		return nut;
+	}
+
+	/**
+	 * @param devices the devices to set
+	 */
+	public void setDevices(Collection<Device> devices) {
+		this.devices = devices;
+	}
+	
+	/**
+	 * @return the devices
+	 */
+	public Collection<Device> getDevices() {
+		return devices;
 	}
 
 }

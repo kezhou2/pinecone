@@ -5,19 +5,13 @@ package com.tenline.pinecone.platform.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 /**
  * @author Bill
  *
  */
 @Entity
-public class User {
-	
-	@Id
-	@GeneratedValue
-    private Long id;
+public class User extends com.tenline.pinecone.platform.model.Entity {
 	
 	@Column
 	private String name;
@@ -42,20 +36,6 @@ public class User {
 	 */
 	public User() {
 		// TODO Auto-generated constructor stub
-	}
-	
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
 	}
 
 	/**

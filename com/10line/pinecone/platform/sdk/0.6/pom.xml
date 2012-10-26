@@ -30,6 +30,12 @@
  	  <artifactId>pushlet</artifactId>
  	  <version>2.0.4</version>
 	</dependency>
+	<!-- Spring Rest Client -->
+	<dependency>
+ 	  <groupId>at.furti</groupId>
+ 	  <artifactId>spring-rest-client</artifactId>
+ 	  <version>0.0.1-SNAPSHOT</version>
+	</dependency>
   </dependencies>
   <build>
   	<plugins>

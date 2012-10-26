@@ -4,6 +4,7 @@
   	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
   		http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	
+    <!-- Spring Data REST - JPA Exporter -->
 	<context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:spring-data-rest/*.xml</param-value>
@@ -23,5 +24,17 @@
         <servlet-name>exporter</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
+    
+    <!-- Pushlet -->
+	<servlet>
+		<servlet-name>pushlet</servlet-name>
+		<servlet-class>nl.justobjects.pushlet.servlet.Pushlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>pushlet</servlet-name>
+		<url-pattern>/pushlet.srv</url-pattern>
+	</servlet-mapping>
 
 </web-app>

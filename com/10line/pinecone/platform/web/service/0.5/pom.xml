@@ -30,11 +30,11 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
-  	<!-- Pinecone Model -->
+  	<!-- Pinecone SDK -->
   	<dependency>
  	  <groupId>com.10line.pinecone.platform</groupId>
- 	  <artifactId>model</artifactId>
- 	  <version>0.5</version>
+ 	  <artifactId>sdk</artifactId>
+ 	  <version>0.6</version>
 	</dependency>
 	<!-- Spring Data REST Framework -->
 	<dependency>

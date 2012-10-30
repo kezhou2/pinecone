@@ -26,15 +26,6 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
     @Column
     private String password;
     
-    @Column
-    private String phone;
-    
-    @Column
-    private String avatar;
-    
-    @Column
-	private Integer nut = Integer.valueOf(0); // Virtual Coin
-    
     @OneToMany(cascade = CascadeType.REMOVE)
 	private Collection<Device> devices;
 
@@ -85,48 +76,6 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public String getPassword() {
 		return password;
-	}
-
-	/**
-	 * @param phone the phone to set
-	 */
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	/**
-	 * @return the phone
-	 */
-	public String getPhone() {
-		return phone;
-	}
-
-	/**
-	 * @param avatar the avatar to set
-	 */
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	/**
-	 * @return the avatar
-	 */
-	public String getAvatar() {
-		return avatar;
-	}
-
-	/**
-	 * @param nut the nut to set
-	 */
-	public void setNut(Integer nut) {
-		this.nut = nut;
-	}
-
-	/**
-	 * @return the nut
-	 */
-	public Integer getNut() {
-		return nut;
 	}
 
 	/**

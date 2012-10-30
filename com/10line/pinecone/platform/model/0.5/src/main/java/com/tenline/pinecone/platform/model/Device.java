@@ -20,6 +20,9 @@ public class Device extends com.tenline.pinecone.platform.model.Entity {
 	
 	@Column
 	private String name;
+	
+	@Column
+	private String code;
 
 	@ManyToOne
 	private User user;
@@ -46,6 +49,20 @@ public class Device extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * @param code the code to set
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	/**
+	 * @return the code
+	 */
+	public String getCode() {
+		return code;
 	}
 
 	/**

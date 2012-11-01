@@ -44,8 +44,8 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Constructor with full pushlet URL.
 	 */
-	public ChannelClient(String aPushletURL) {
-		pushletURL = aPushletURL;
+	public ChannelClient(String baseURL) {
+		pushletURL = baseURL + "/channel";
 	}
 
 	/**
@@ -602,9 +602,6 @@ public class ChannelClient implements Protocol {
 		}
 
 		protected PasswordAuthentication getPasswordAuthentication() {
-			// System.out.println("[HttpAuthenticateProxy] Username = " + theUser);
-			// System.out.println("[HttpAuthenticateProxy] Password = " + thePassword);
-
 			return new PasswordAuthentication(theUser, thePassword.toCharArray());
 		}
 

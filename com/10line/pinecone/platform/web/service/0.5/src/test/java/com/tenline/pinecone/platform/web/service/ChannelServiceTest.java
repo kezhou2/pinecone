@@ -33,7 +33,8 @@ public class ChannelServiceTest extends AbstractServiceTest {
 	@Before
 	public void testSetup() throws Exception {
 		theAttributes.put("hello", "world");
-		client = new ChannelClient(URL + "/channel");
+		client = new ChannelClient(URL);
+		client.setDebug(true);
 		client.join();
 		client.listen(new ChannelClientListener() {
 

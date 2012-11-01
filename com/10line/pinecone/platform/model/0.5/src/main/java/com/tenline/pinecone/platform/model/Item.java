@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 public class Item extends com.tenline.pinecone.platform.model.Entity {
 	
 	@Column
-	private byte[] value;
+	private String value;
 	
 	@Column
 	private String text;
@@ -40,14 +40,14 @@ public class Item extends com.tenline.pinecone.platform.model.Entity {
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(byte[] value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 
 	/**
 	 * @return the value
 	 */
-	public byte[] getValue() {
+	public String getValue() {
 		return value;
 	}
 

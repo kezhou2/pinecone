@@ -28,7 +28,6 @@ public class ChannelServiceTest extends AbstractServiceTest {
 	private String subject = "test";
 	private Map<String, String> theAttributes = new HashMap<String, String>();
 	private ChannelClient client;
-	private boolean isRunning = true;
 	
 	@Before
 	public void testSetup() throws Exception {
@@ -49,7 +48,6 @@ public class ChannelServiceTest extends AbstractServiceTest {
 				// TODO Auto-generated method stub
 				logger.log(Level.INFO, "onData -- " + theEvent.toXML());
 				assertEquals("world", theEvent.getField("hello"));
-				isRunning = false;
 			}
 
 			@Override
@@ -69,7 +67,6 @@ public class ChannelServiceTest extends AbstractServiceTest {
 	
 	@After
 	public void testShutdown() throws Exception {
-		while(isRunning){}	
 		subject = null;
 		theAttributes.clear();
 		theAttributes = null;

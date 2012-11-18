@@ -14,7 +14,7 @@
 	<repository>
       <id>pinecone</id>
       <name>pinecone repo</name>
-      <url>http://pinecone.googlecode.com/svn/repository</url>
+      <url>https://pinecone.googlecode.com/svn/repository</url>
 	</repository>
   </repositories>
   <dependencies>

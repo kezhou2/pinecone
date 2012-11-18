@@ -25,7 +25,6 @@ public class Variable extends com.tenline.pinecone.platform.model.Entity {
 	public static final String WRITE = "write";
 	public static final String DISCRETE = "discrete";
 	public static final String CONTINUOUS = "continuous";
-	public static final String IMAGE_JPEG = "image/jpeg";
 	
 	@Column
 	private String name;

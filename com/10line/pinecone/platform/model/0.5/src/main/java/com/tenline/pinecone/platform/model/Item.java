@@ -3,13 +3,9 @@
  */
 package com.tenline.pinecone.platform.model;
 
-import java.util.Collection;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
  * @author Bill
@@ -26,9 +22,6 @@ public class Item extends com.tenline.pinecone.platform.model.Entity {
 	
 	@ManyToOne
 	private Variable variable;
-	
-	@OneToMany(cascade = CascadeType.REMOVE)
-	private Collection<Record> records;
 
 	/**
 	 * 
@@ -77,20 +70,6 @@ public class Item extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public Variable getVariable() {
 		return variable;
-	}
-
-	/**
-	 * @param records the records to set
-	 */
-	public void setRecords(Collection<Record> records) {
-		this.records = records;
-	}
-
-	/**
-	 * @return the records
-	 */
-	public Collection<Record> getRecords() {
-		return records;
 	}
 
 }

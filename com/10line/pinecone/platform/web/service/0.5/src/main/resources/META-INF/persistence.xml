@@ -6,7 +6,6 @@
     <class>com.tenline.pinecone.platform.model.Device</class>
     <class>com.tenline.pinecone.platform.model.Variable</class>
     <class>com.tenline.pinecone.platform.model.Item</class>
-    <class>com.tenline.pinecone.platform.model.Record</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

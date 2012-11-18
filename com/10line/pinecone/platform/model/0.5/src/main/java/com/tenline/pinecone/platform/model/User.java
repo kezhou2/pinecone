@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import org.springframework.data.rest.repository.annotation.RestResource;
+
 /**
  * @author Bill
  *
@@ -24,6 +26,7 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
     private String email;
     
     @Column
+    @RestResource(exported = false)
     private String password;
     
     @OneToMany(cascade = CascadeType.REMOVE)

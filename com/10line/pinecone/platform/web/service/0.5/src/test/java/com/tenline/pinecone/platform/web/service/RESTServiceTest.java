@@ -5,6 +5,7 @@ package com.tenline.pinecone.platform.web.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.UUID;
 import java.util.logging.Level;
@@ -61,8 +62,7 @@ public class RESTServiceTest extends AbstractServiceTest {
 			logger.log(Level.INFO, user.getName());
 			assertEquals("billmse@gmail.com", user.getEmail());
 			logger.log(Level.INFO, user.getEmail());
-			assertEquals("19821027", user.getPassword());
-			logger.log(Level.INFO, user.getPassword());
+			assertNull(user.getPassword());
 			for (Link link : user.get_links()) {
 				logger.log(Level.INFO, "--------------------");
 				logger.log(Level.INFO, link.getRel());
@@ -79,8 +79,7 @@ public class RESTServiceTest extends AbstractServiceTest {
 			logger.log(Level.INFO, user.getName());
 			assertEquals("bill_mse@163.com", user.getEmail());
 			logger.log(Level.INFO, user.getEmail());
-			assertEquals("123456", user.getPassword());
-			logger.log(Level.INFO, user.getPassword());
+			assertNull(user.getPassword());
 			logger.log(Level.INFO, "--------------------");
 		}
 		for (Entity entity : client.get("/device")) {

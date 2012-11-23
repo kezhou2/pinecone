@@ -6,8 +6,6 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/data/jpa 
        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
- 
-  <import resource="orm-context.xml"/>
   
   <jpa:repositories base-package="com.tenline.pinecone.platform.web.service"/>
     

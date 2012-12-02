@@ -17,9 +17,6 @@ import android.view.View.OnClickListener;
  */
 public class LoginActivity extends Activity {
 
-    private static final String HOME_ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.home"; 
-    private static final String REGISTER_ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.register";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +28,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View view) {
 				// TODO Auto-generated method stub
 				Log.i(getClass().getSimpleName(), "onClick");
-				startActivity(new Intent(LoginActivity.HOME_ACTIVITY_ACTION));
+				startActivity(new Intent(DeviceActivity.ACTIVITY_ACTION));
 		    	finish();
 			}
         	
@@ -42,7 +39,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View view) {
 				// TODO Auto-generated method stub
 				Log.i(getClass().getSimpleName(), "onClick");
-				startActivity(new Intent(LoginActivity.REGISTER_ACTIVITY_ACTION));
+				startActivity(new Intent(RegisterActivity.ACTIVITY_ACTION));
 			}
         	
         });

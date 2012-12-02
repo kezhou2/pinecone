@@ -15,6 +15,8 @@ import android.view.View.OnClickListener;
  */
 public class RegisterActivity extends Activity {
 	
+	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.register";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

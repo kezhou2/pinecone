@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pinecone</string>
-    <string name="logo_text">IOT Application Platform - Smart Your Life!</string>
+    <string name="logo_text">Smart Your Life!</string>
     <string name="logo_desc">http://www.pinecone.cc</string>
     <string name="email_text">Email:</string>
     <string name="password_text">Password:</string>
     <string name="confirm_text">Confirm:</string>
     <string name="name_text">Name:</string>
-    <string name="login_text">login</string>
-    <string name="register_text">register</string>
-    <string name="submit_text">submit</string>
+    <string name="login_text">Login</string>
+    <string name="register_text">Register</string>
+    <string name="submit_text">Submit</string>
+    <string name="add_text">Add</string>
+    <string name="logout_text">Logout</string>
 </resources>

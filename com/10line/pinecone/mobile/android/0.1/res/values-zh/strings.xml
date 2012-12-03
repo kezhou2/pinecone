@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">松果网</string>
-    <string name="logo_text">物联网应用平台 - 智能你的生活!</string>
+    <string name="logo_text">智能你的生活!</string>
     <string name="logo_desc">http://www.pinecone.cc</string>
     <string name="email_text">电子邮件:</string>
     <string name="password_text">密码:</string>
@@ -10,4 +10,6 @@
     <string name="login_text">登录</string>
     <string name="register_text">注册</string>
     <string name="submit_text">提交</string>
+    <string name="add_text">添加</string>
+    <string name="logout_text">退出</string>
 </resources>

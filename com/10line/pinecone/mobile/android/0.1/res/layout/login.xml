@@ -11,10 +11,10 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="20dp" >
 
-    <ImageView android:id="@+id/logo"
+    <ImageView android:id="@+id/app_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/logo_desc"
+        android:contentDescription="@string/app_url"
         android:layout_gravity="left"
         android:src="@drawable/icon" />
 
@@ -30,48 +30,49 @@
         
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/logo_text"
+            android:text="@string/app_slogan"
             android:textAppearance="?android:attr/textAppearanceSmall" />
         
     </LinearLayout>
 
 </LinearLayout>
 
-<TextView android:id="@+id/email_text"
+<TextView android:id="@+id/user_email"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:layout_gravity="left"
-	android:text="@string/email_text"
+	android:text="@string/user_email"
 	android:textAppearance="?android:attr/textAppearanceMedium" />
 
-<EditText android:id="@+id/email"
+<EditText android:id="@+id/user_email_input"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:hint="@string/user_email_tips"
     android:inputType="textEmailAddress" >
 	<requestFocus />
 </EditText>
 
-<TextView android:id="@+id/password_text"
+<TextView android:id="@+id/user_password"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:layout_gravity="left"
-	android:text="@string/password_text"
+	android:text="@string/user_password"
 	android:textAppearance="?android:attr/textAppearanceMedium" />
 
-<EditText android:id="@+id/password"
+<EditText android:id="@+id/user_password_input"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="20dp"
     android:inputType="textPassword" />
 
-<Button android:id="@+id/login"
+<Button android:id="@+id/user_login"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/login_text" />
+    android:text="@string/user_login" />
 
-<Button android:id="@+id/register"
+<Button android:id="@+id/user_register"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/register_text" />
+    android:text="@string/user_register" />
 
 </LinearLayout>

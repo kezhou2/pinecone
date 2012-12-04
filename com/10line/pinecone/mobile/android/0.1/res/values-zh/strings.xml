@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <!-- App Properties -->
     <string name="app_name">松果网</string>
-    <string name="logo_text">智能你的生活!</string>
-    <string name="logo_desc">http://www.pinecone.cc</string>
-    <string name="email_text">电子邮件:</string>
-    <string name="password_text">密码:</string>
-    <string name="confirm_text">确认:</string>
-    <string name="name_text">昵称:</string>
-    <string name="login_text">登录</string>
-    <string name="register_text">注册</string>
-    <string name="submit_text">提交</string>
-    <string name="add_text">添加</string>
-    <string name="logout_text">退出</string>
+    <string name="app_slogan">智能你的生活！</string>
+    <string name="app_url">http://www.pinecone.cc</string>
+    
+    <!-- App Operations -->
+    <string name="app_ok">确定</string>
+    <string name="app_cancel">取消</string>
+    
+    <!-- User Properties -->
+    <string name="user_email">电子邮件：</string>
+    <string name="user_email_tips">请输入用户邮件</string>
+    <string name="user_password">密码：</string>
+    <string name="user_confirm">确认：</string>
+    <string name="user_name">昵称：</string>
+    <string name="user_name_tips">请输入用户昵称</string>
+    
+    <!-- User Operations -->
+    <string name="user_register">注册</string>
+    <string name="user_login">登录</string>
+    <string name="user_logout">退出</string>
+    <string name="user_submit">提交</string>
+    
+    <!-- Device Properties -->
+    <string name="device_code">编号：</string>
+    <string name="device_code_tips">请输入设备编号</string>
+    <string name="device_name">名称：</string>
+    <string name="device_name_tips">请输入设备名称</string>
+    
+    <!-- Device Operations -->
+    <string name="device_add">添加设备</string>
+    
 </resources>

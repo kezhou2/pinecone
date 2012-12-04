@@ -22,7 +22,7 @@ public class RegisterActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.i(getClass().getSimpleName(), "onCreate");
         setContentView(R.layout.register);
-        findViewById(R.id.submit).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.user_submit).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

@@ -22,7 +22,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 		Log.i(getClass().getSimpleName(), "onCreate");
         setContentView(R.layout.login);
-        findViewById(R.id.login).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.user_login).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
@@ -33,7 +33,7 @@ public class LoginActivity extends Activity {
 			}
         	
         });
-        findViewById(R.id.register).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.user_register).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {

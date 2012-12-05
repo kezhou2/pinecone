@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
@@ -16,6 +17,7 @@ import javax.persistence.Transient;
  *
  */
 @javax.persistence.Entity
+@Table(name = "entities")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Entity {
 

@@ -10,12 +10,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * @author Bill
  *
  */
 @Entity
+@Table(name = "devices")
 public class Device extends com.tenline.pinecone.platform.model.Entity {
 	
 	@Column

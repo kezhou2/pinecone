@@ -10,12 +10,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * @author Bill
  *
  */
 @Entity
+@Table(name = "variables")
 public class Variable extends com.tenline.pinecone.platform.model.Entity {
 
 	/**

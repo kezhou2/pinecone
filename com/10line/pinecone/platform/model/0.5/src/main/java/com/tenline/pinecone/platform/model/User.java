@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.springframework.data.rest.repository.annotation.RestResource;
 
@@ -17,6 +18,7 @@ import org.springframework.data.rest.repository.annotation.RestResource;
  *
  */
 @Entity
+@Table(name = "users")
 public class User extends com.tenline.pinecone.platform.model.Entity {
 	
 	@Column

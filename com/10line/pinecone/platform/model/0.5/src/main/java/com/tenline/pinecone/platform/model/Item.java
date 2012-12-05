@@ -6,12 +6,14 @@ package com.tenline.pinecone.platform.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Bill
  *
  */
 @Entity
+@Table(name = "items")
 public class Item extends com.tenline.pinecone.platform.model.Entity {
 	
 	@Column

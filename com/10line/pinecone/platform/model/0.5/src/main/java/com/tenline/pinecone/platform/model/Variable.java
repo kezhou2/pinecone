@@ -37,7 +37,7 @@ public class Variable extends com.tenline.pinecone.platform.model.Entity {
 	@ManyToOne
 	private Device device;
 	
-	@OneToMany(cascade = CascadeType.REMOVE)
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "variable")
 	private Collection<Item> items;
 	
 	/**

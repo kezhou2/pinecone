@@ -29,7 +29,7 @@ public class Device extends com.tenline.pinecone.platform.model.Entity {
 	@ManyToOne
 	private User user;
 	
-	@OneToMany(cascade = CascadeType.REMOVE)
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "device")
 	private Collection<Variable> variables;
 	
 	/**

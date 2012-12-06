@@ -21,7 +21,7 @@ import org.springframework.data.rest.repository.annotation.RestResource;
 @Table(name = "users")
 public class User extends com.tenline.pinecone.platform.model.Entity {
 	
-	@Column
+	@Column(name = "username")
 	private String name;
     
     @Column
@@ -31,8 +31,15 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
     @RestResource(exported = false)
     private String password;
     
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @Column
+    @RestResource(exported = false)
+    private boolean enabled = true;
+    
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
 	private Collection<Device> devices;
+    
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
+    private Collection<Authority> authorities;
 
 	/**
 	 * 
@@ -84,6 +91,20 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
 	}
 
 	/**
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	/**
+	 * @return the enabled
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
 	 * @param devices the devices to set
 	 */
 	public void setDevices(Collection<Device> devices) {
@@ -95,6 +116,20 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public Collection<Device> getDevices() {
 		return devices;
+	}
+
+	/**
+	 * @param authorities the authorities to set
+	 */
+	public void setAuthorities(Collection<Authority> authorities) {
+		this.authorities = authorities;
+	}
+	
+	/**
+	 * @return the authorities
+	 */
+	public Collection<Authority> getAuthorities() {
+		return authorities;
 	}
 
 }

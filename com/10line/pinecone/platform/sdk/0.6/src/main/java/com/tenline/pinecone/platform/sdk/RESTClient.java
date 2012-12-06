@@ -47,11 +47,21 @@ public class RESTClient {
 		connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
-		connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+		if (content instanceof Entity) {
+			connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+		} else if (content instanceof String) {
+			connection.setRequestProperty("Content-Type", "text/uri-list; charset=utf-8");
+		}
 		connection.setUseCaches(false);
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		mapper.writeValue(connection.getOutputStream(), content);
+		if (content instanceof Entity) {
+			mapper.writeValue(connection.getOutputStream(), content);
+		} else if (content instanceof String) {
+			connection.getOutputStream().write((baseUrl + content.toString()).getBytes());
+			connection.getOutputStream().flush();
+	        connection.getOutputStream().close();
+		}
         responseMessage = connection.getResponseMessage();
 		connection.disconnect();
 		return responseMessage;

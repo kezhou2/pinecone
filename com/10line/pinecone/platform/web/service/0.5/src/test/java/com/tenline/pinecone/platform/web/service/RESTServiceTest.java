@@ -106,7 +106,7 @@ public class RESTServiceTest extends AbstractServiceTest {
 			logger.log(Level.INFO, device.getName());
 			assertEquals("123456", device.getCode());
 			logger.log(Level.INFO, device.getCode());
-			logger.log(Level.INFO, client.put("/user/" + user.getId() + "/devices", "/device/" + device.getId()));	
+			logger.log(Level.INFO, client.post("/device/" + device.getId() + "/user", "/user/" + user.getId()));	
 			logger.log(Level.INFO, "--------------------");
 		}
 		assertEquals(1, client.get("/user/" + user.getId() + "/devices").size());

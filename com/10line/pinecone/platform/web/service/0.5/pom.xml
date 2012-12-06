@@ -42,6 +42,12 @@
  	  <artifactId>spring-data-rest-webmvc</artifactId>
  	  <version>1.0.0.RC2</version>
 	</dependency>
+	<!-- Spring Security OAuth2 -->
+	<dependency>
+ 	  <groupId>org.springframework.security.oauth</groupId>
+ 	  <artifactId>spring-security-oauth2</artifactId>
+ 	  <version>1.0.0.RC3</version>
+	</dependency>
 	<!-- Test scope -->
 	<dependency>
 	  <groupId>junit</groupId>

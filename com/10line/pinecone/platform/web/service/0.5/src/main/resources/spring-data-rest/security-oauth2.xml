@@ -10,14 +10,25 @@
        http://www.springframework.org/schema/security/oauth2 
        http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
   
-  <sec:http auto-config="true">
-      <!--  <sec:intercept-url pattern="/**" access="ROLE_USER" /> -->
+  <!-- Empty filter chain for the RESTful service -->
+  <sec:http pattern="/rest/**" create-session="stateless" security="none"/>
+
+  <!-- Empty filter chain for the channel service -->
+  <sec:http pattern="/channel*" security="none"/>
+
+  <!-- Additional filter chain for normal users, matching all other requests -->
+  <sec:http>
+    <sec:intercept-url pattern='/**' access='ROLE_USER' />
+    <sec:form-login/>
+    <sec:remember-me/>
+    <sec:logout />
   </sec:http>
   
+  <!-- JDBC-based Authentication Mananger -->
   <sec:authentication-manager>
-      <sec:authentication-provider>
-          <sec:jdbc-user-service data-source-ref="dataSource"/>
-      </sec:authentication-provider>
+  	<sec:authentication-provider>
+      <sec:jdbc-user-service data-source-ref="dataSource"/>
+  	</sec:authentication-provider>
   </sec:authentication-manager>
     
 </beans>

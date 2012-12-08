@@ -10,6 +10,8 @@
        http://www.springframework.org/schema/security/oauth2 
        http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
   
+  <!-- Enables Spring Security Debugging --><sec:debug/>
+  
   <!-- Empty filter chain for the RESTful service -->
   <sec:http pattern="/rest/**" create-session="stateless" security="none"/>
 

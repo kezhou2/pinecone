@@ -33,4 +33,16 @@
     <!-- Device Operations -->
     <string name="device_add">添加设备</string>
     
+    <!-- Validation Properties -->
+    <string name="error_only_numeric_digits_allowed">只允许填写数字</string>
+	<string name="error_this_field_cannot_contain_special_character">不能包含特殊字符</string>
+	<string name="error_only_standard_letters_are_allowed">只允许填写字母</string>
+	<string name="error_field_must_not_be_empty">不能为空</string>
+    <string name="error_email_address_not_valid">不是有效邮件地址</string>
+    <string name="error_creditcard_number_not_valid">不是有效信用卡号</string>
+    <string name="error_phone_not_valid">不是有效电话号码</string>
+    <string name="error_domain_not_valid">不是有效域名</string>
+	<string name="error_ip_not_valid">不是有效IP地址</string>
+	<string name="error_url_not_valid">不是有效URL地址</string>
+    
 </resources>

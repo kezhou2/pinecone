@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:validation="http://schemas.android.com/apk/res/com.tenline.pinecone.mobile.android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
@@ -44,13 +45,15 @@
 	android:text="@string/user_email"
 	android:textAppearance="?android:attr/textAppearanceMedium" />
 
-<EditText android:id="@+id/user_email_input"
+<com.tenline.pinecone.mobile.android.view.FormEditText 
+    validation:testType="email"
+    android:id="@+id/user_email_input"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/user_email_tips"
     android:inputType="textEmailAddress" >
 	<requestFocus />
-</EditText>
+</com.tenline.pinecone.mobile.android.view.FormEditText>
 
 <TextView android:id="@+id/user_password"
 	android:layout_width="wrap_content"
@@ -59,7 +62,8 @@
 	android:text="@string/user_password"
 	android:textAppearance="?android:attr/textAppearanceMedium" />
 
-<EditText android:id="@+id/user_password_input"
+<com.tenline.pinecone.mobile.android.view.FormEditText 
+    android:id="@+id/user_password_input"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="20dp"

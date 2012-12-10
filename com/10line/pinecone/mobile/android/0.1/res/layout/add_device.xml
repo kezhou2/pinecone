@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:validation="http://schemas.android.com/apk/res/com.tenline.pinecone.mobile.android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
@@ -11,12 +12,14 @@
         android:text="@string/device_code"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText android:id="@+id/device_code_input"
+    <com.tenline.pinecone.mobile.android.view.FormEditText 
+        validation:testType="alphaNumeric"
+        android:id="@+id/device_code_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/device_code_tips" >
         <requestFocus />
-    </EditText>
+    </com.tenline.pinecone.mobile.android.view.FormEditText>
     
     <TextView android:id="@+id/device_name"
         android:layout_width="wrap_content"
@@ -24,9 +27,28 @@
         android:text="@string/device_name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText android:id="@+id/device_name_input"
+    <com.tenline.pinecone.mobile.android.view.FormEditText 
+        android:id="@+id/device_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+    	android:layout_marginBottom="20dp"
         android:hint="@string/device_name_tips" />
+    
+    <LinearLayout android:layout_width="fill_parent"
+    	android:layout_height="wrap_content" >"
+        
+        <Button android:id="@+id/app_ok"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/app_ok" />
+        
+        <Button android:id="@+id/app_cancel"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:text="@string/app_cancel" />
+        
+    </LinearLayout>
 
 </LinearLayout>

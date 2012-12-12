@@ -23,6 +23,16 @@
   	  <groupId>com.10line.pinecone.platform</groupId>
   	  <artifactId>model</artifactId>
   	  <version>0.5</version>
+  	  <exclusions>
+  	    <exclusion>
+  	      <groupId>org.hibernate.javax.persistence</groupId>
+      	  <artifactId>hibernate-jpa-2.0-api</artifactId>
+  	    </exclusion>
+  	    <exclusion>
+  	      <groupId>org.springframework.data</groupId>
+      	  <artifactId>spring-data-rest-repository</artifactId>
+  	    </exclusion>
+  	  </exclusions>
   	</dependency>
   	<!-- Pushlet -->
 	<dependency>

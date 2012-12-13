@@ -12,7 +12,44 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <platform.version>4.0.1.2</platform.version>
   </properties>
+  <repositories>
+    <repository>
+      <id>pinecone</id>
+      <name>pinecone repo</name>
+      <url>https://pinecone.googlecode.com/svn/repository</url>
+	</repository>
+	<repository>
+      <id>springsource-repo</id>
+      <name>SpringSource Repository</name>
+      <url>http://repo.springsource.org/release</url>
+	</repository>
+  </repositories>
   <dependencies>
+    <!-- Pinecone Model -->
+  	<dependency>
+  	  <groupId>com.10line.pinecone.platform</groupId>
+  	  <artifactId>model</artifactId>
+  	  <version>0.5</version>
+  	  <exclusions>
+  	    <exclusion>
+  	      <groupId>org.springframework.data</groupId>
+      	  <artifactId>spring-data-rest-repository</artifactId>
+  	    </exclusion>
+  	  </exclusions>
+  	</dependency>
+	<!-- Spring for Android -->
+	<dependency>
+      <groupId>org.springframework.android</groupId>
+      <artifactId>spring-android-rest-template</artifactId>
+      <version>1.0.1.RELEASE</version>
+	</dependency> 
+	<!-- Jackson -->
+	<dependency>
+ 	  <groupId>org.codehaus.jackson</groupId>
+ 	  <artifactId>jackson-mapper-asl</artifactId>
+ 	  <version>1.9.7</version>
+	</dependency>
+    <!-- Google Android SDK -->
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>

@@ -36,7 +36,7 @@ public class RegisterActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.i(getClass().getSimpleName(), "onClick");
-				if (userEmail.testValidity() && userName.testValidity() &&
+				if (userName.testValidity() && userEmail.testValidity() &&
 					userPassword.testValidity() && userConfirm.testValidity()) { finish();}
 			}
         	

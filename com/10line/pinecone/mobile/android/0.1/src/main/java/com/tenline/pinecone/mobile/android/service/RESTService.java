@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -57,17 +56,13 @@ public class RESTService extends AbstractService {
 			form.add("j_password", params.get(1).toString());
 			return get(template.postForLocation(baseUrl + path, form).toString().substring(baseUrl.length())).toString();
 		} else {
-			baseUrl += "/rest";
-			HttpHeaders headers = new HttpHeaders();
-			HttpEntity<Object> request = null;
 			if (params.get(0) instanceof Entity) {
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				request = new HttpEntity<Object>(params.get(0), headers);
-			} else if (params.get(0) instanceof String) {
+				return template.postForObject(baseUrl + "/rest" + path, params.get(0), String.class);
+			} else {
+				HttpHeaders headers = new HttpHeaders();
 				headers.set("Content-Type", "text/uri-list; charset=utf-8");
-				request = new HttpEntity<Object>(baseUrl + params.get(0), headers);
+				return template.postForObject(baseUrl + "/rest" + path, new HttpEntity<Object>(baseUrl + "/rest" + params.get(0), headers), String.class);
 			}
-			return ((ResponseEntity<String>) template.postForEntity(baseUrl + path, request, String.class)).getBody();
 		}
 	}
 	

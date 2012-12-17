@@ -25,30 +25,12 @@
 	</repository>
   </repositories>
   <dependencies>
-    <!-- Pinecone Model -->
+    <!-- Pinecone SDK -->
   	<dependency>
   	  <groupId>com.10line.pinecone.platform</groupId>
-  	  <artifactId>model</artifactId>
-  	  <version>0.5</version>
-  	  <exclusions>
-  	    <exclusion>
-  	      <groupId>org.springframework.data</groupId>
-      	  <artifactId>spring-data-rest-repository</artifactId>
-  	    </exclusion>
-  	  </exclusions>
+  	  <artifactId>sdk</artifactId>
+  	  <version>0.6</version>
   	</dependency>
-	<!-- Spring for Android -->
-	<dependency>
-      <groupId>org.springframework.android</groupId>
-      <artifactId>spring-android-rest-template</artifactId>
-      <version>1.0.1.RELEASE</version>
-	</dependency> 
-	<!-- Jackson -->
-	<dependency>
- 	  <groupId>org.codehaus.jackson</groupId>
- 	  <artifactId>jackson-mapper-asl</artifactId>
- 	  <version>1.9.7</version>
-	</dependency>
     <!-- Google Android SDK -->
     <dependency>
       <groupId>com.google.android</groupId>

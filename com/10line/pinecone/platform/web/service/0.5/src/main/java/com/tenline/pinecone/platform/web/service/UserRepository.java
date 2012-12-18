@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@RestResource(path = "names", rel = "names")
 	public List<User> findByName(@Param("name") String name);
 	
+	@RestResource(path = "emails", rel = "emails")
+	public List<User> findByEmail(@Param("email") String email);
+	
 }

@@ -4,11 +4,8 @@
 package com.tenline.pinecone.mobile.android;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +18,7 @@ import android.widget.Toast;
  * @author Bill
  *
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends AbstractActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,12 +34,16 @@ public class LoginActivity extends Activity {
 				// TODO Auto-generated method stub
 				Log.i(getClass().getSimpleName(), "onClick");
 				if (userName.testValidity() && userPassword.testValidity()) {
-					RESTService service = ((RESTService) helper.getService());
-					if (!service.post(RESTService.LOGIN_URL, userName.getText().toString(), userPassword.getText().toString())
-						.contains("Reason: Bad credentials")) {
-						startActivity(new Intent(DeviceActivity.ACTIVITY_ACTION)); finish();
-					} else {
-						Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_LONG).show();
+					try {
+						RESTService service = ((RESTService) helper.getService());
+						if (!service.post(RESTService.LOGIN_URL, userName.getText().toString(), userPassword.getText().toString())
+							.contains("Reason: Bad credentials")) {
+							startActivity(new Intent(DeviceActivity.ACTIVITY_ACTION)); finish();
+						} else {
+							Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_LONG).show();
+						}	
+					} catch (Exception e) {
+						Log.e(getClass().getSimpleName(), e.getMessage());
 					}
 				}
 			}
@@ -58,23 +59,6 @@ public class LoginActivity extends Activity {
 			}
         	
         });
-    }
-    
-    private ServiceConnectionHelper helper = new ServiceConnectionHelper();
-	
-	@Override
-    protected void onStart() {
-        super.onStart();
-        bindService(new Intent(this, RESTService.class), helper, Context.BIND_AUTO_CREATE);
-    }
-	
-	@Override
-    protected void onStop() {
-        super.onStop();
-        if (helper.isBound()) {
-            unbindService(helper);
-            helper.setBound(false);
-        }
     }
 
 }

@@ -20,4 +20,7 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
 	@RestResource(path = "codes", rel = "codes")
 	public List<Device> findByCode(@Param("code") String code);
 	
+	@RestResource(path = "names", rel = "names")
+	public List<Device> findByName(@Param("name") String name);
+	
 }

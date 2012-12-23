@@ -36,7 +36,7 @@ public class RESTService extends AbstractService {
 	private ObjectMapper mapper = new ObjectMapper();
 	private String baseUrl = "http://pinecone-service.cloudfoundry.com";
 	public static final String LOGIN_URL = "/j_spring_security_check";
-//	private static final String LOGOUT_URL = "/j_spring_security_logout";
+	public static final String LOGOUT_URL = "/j_spring_security_logout";
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -98,7 +98,7 @@ public class RESTService extends AbstractService {
 	@SuppressWarnings("unchecked")
 	public Object get(String path) throws Exception {
 		Log.i(getClass().getSimpleName(), path);
-		if (path.contains("spring_security_login") || path.contains("index.html")) {
+		if (path.contains("spring_security") || path.contains("index.html")) {
 			return template.getForObject(baseUrl + path, String.class);
 		} else {
 			ArrayList<Entity> entities = new ArrayList<Entity>();

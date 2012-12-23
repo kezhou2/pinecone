@@ -54,8 +54,8 @@ public class AddDeviceDialogBuilder extends Builder {
 						Device device = (Device) ((ArrayList<Device>)service.get(filter)).toArray()[0];
 						service.post("/device/" + device.getId() + "/user", "/user/" + activity.getIntent().getStringExtra("userId"));
 						device.setName(deviceName.getText().toString()); service.put("/device/" + device.getId(), device);
-						Toast.makeText(activity, R.string.device_add, Toast.LENGTH_LONG).show();
-						activity.initDeviceList(); dialog.cancel();
+						activity.initFetchTask("/user/" + activity.getIntent().getStringExtra("userId") + "/devices");
+						Toast.makeText(activity, R.string.device_add, Toast.LENGTH_LONG).show(); dialog.cancel();
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

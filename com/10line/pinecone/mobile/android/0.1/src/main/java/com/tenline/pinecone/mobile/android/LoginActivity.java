@@ -3,8 +3,11 @@
  */
 package com.tenline.pinecone.mobile.android;
 
+import java.util.ArrayList;
+
 import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
+import com.tenline.pinecone.platform.model.User;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +33,7 @@ public class LoginActivity extends AbstractActivity {
         findViewById(R.id.user_login).setOnClickListener(new OnClickListener() {
 
 			@Override
+			@SuppressWarnings("rawtypes")
 			public void onClick(View view) {
 				// TODO Auto-generated method stub
 				Log.i(getClass().getSimpleName(), "onClick");
@@ -38,7 +42,10 @@ public class LoginActivity extends AbstractActivity {
 						RESTService service = ((RESTService) helper.getService());
 						if (!service.post(RESTService.LOGIN_URL, userName.getText().toString(), userPassword.getText().toString())
 							.contains("Reason: Bad credentials")) {
-							startActivity(new Intent(DeviceActivity.ACTIVITY_ACTION)); finish();
+							User user = (User) ((ArrayList) service.get("/user/search/names?name=" + userName.getText().toString())).toArray()[0];
+							Intent intent = new Intent(DeviceActivity.ACTIVITY_ACTION);
+							intent.putExtra("userId", String.valueOf(user.getId()));
+							startActivity(intent); finish();
 						} else {
 							Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_LONG).show();
 						}	

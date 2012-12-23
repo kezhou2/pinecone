@@ -6,9 +6,9 @@ package com.tenline.pinecone.mobile.android;
 import java.util.ArrayList;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.validation.UserEmailIsExistedValidator;
+import com.tenline.pinecone.mobile.android.validation.UserEmailValidator;
 import com.tenline.pinecone.mobile.android.validation.EqualityValidator;
-import com.tenline.pinecone.mobile.android.validation.UserNameIsExistedValidator;
+import com.tenline.pinecone.mobile.android.validation.UserNameValidator;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
 import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.User;
@@ -32,9 +32,9 @@ public class RegisterActivity extends AbstractActivity {
 		Log.i(getClass().getSimpleName(), "onCreate");
         setContentView(R.layout.register);
         final FormEditText userEmail = (FormEditText) findViewById(R.id.user_email_input);
-        userEmail.addValidator(new UserEmailIsExistedValidator(getString(R.string.error_user_email_is_existed), this));
+        userEmail.addValidator(new UserEmailValidator(getString(R.string.error_user_email_is_existed), this));
         final FormEditText userName = (FormEditText) findViewById(R.id.user_name_input);
-        userName.addValidator(new UserNameIsExistedValidator(getString(R.string.error_user_name_is_existed), this));
+        userName.addValidator(new UserNameValidator(getString(R.string.error_user_name_is_existed), this));
         final FormEditText userPassword = (FormEditText) findViewById(R.id.user_password_input);
         final FormEditText userConfirm = (FormEditText) findViewById(R.id.user_confirm_input);
         userConfirm.addValidator(new EqualityValidator(getString(R.string.error_password_is_not_equal), userPassword));

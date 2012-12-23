@@ -15,19 +15,16 @@ import android.widget.EditText;
  * @author Bill
  *
  */
-public class UserEmailIsExistedValidator extends Validator {
-
-	private RegisterActivity activity;
+public class UserEmailValidator extends UserValidator {
 	
 	/**
 	 * 
 	 * @param _customErrorMessage
 	 * @param activity
 	 */
-	public UserEmailIsExistedValidator(String _customErrorMessage, RegisterActivity activity) {
-		super(_customErrorMessage);
+	public UserEmailValidator(String _customErrorMessage, RegisterActivity activity) {
+		super(_customErrorMessage, activity);
 		// TODO Auto-generated constructor stub
-		this.activity = activity;
 	}
 
 	@Override

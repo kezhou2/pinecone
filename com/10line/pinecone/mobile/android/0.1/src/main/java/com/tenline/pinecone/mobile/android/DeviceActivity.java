@@ -3,10 +3,13 @@
  */
 package com.tenline.pinecone.mobile.android;
 
+import java.util.ArrayList;
+
+import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.view.AddDeviceDialogBuilder;
+import com.tenline.pinecone.platform.model.Device;
 
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,15 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * @author Bill
  *
  */
-public class DeviceActivity extends ListActivity {
+public class DeviceActivity extends AbstractListActivity {
 	
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.device";
 
@@ -31,14 +32,25 @@ public class DeviceActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i(getClass().getSimpleName(), "onCreate");
-		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, new String[]{"Bill's Robot", "Jane's Smart Lamp"}));
+		initFetchTask("/user/"+getIntent().getStringExtra("userId")+"/devices");
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
+			@SuppressWarnings("unchecked")
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				startActivity(new Intent(VariableActivity.ACTIVITY_ACTION));
+				try {
+					RESTService service = (RESTService) helper.getService();
+					String deviceName = getListView().getItemAtPosition(position).toString();
+					Device device = (Device) ((ArrayList<Device>) service.get("/device/search/names?name="+deviceName)).toArray()[0];
+					Intent intent = new Intent(VariableActivity.ACTIVITY_ACTION);
+					intent.putExtra("deviceId", String.valueOf(device.getId()));
+					startActivity(intent);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Log.e(getClass().getSimpleName(), e.getMessage());
+				}
 			}
 			
 		});
@@ -54,12 +66,8 @@ public class DeviceActivity extends ListActivity {
 	@SuppressWarnings("deprecation")
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
-		case R.id.device_add:
-			showDialog(AddDeviceDialogBuilder.DIALOG_ID);
-			break;
-		case R.id.user_logout:
-			Toast.makeText(this, R.string.user_logout, Toast.LENGTH_LONG).show();
-			break;
+		case R.id.device_add: showDialog(AddDeviceDialogBuilder.DIALOG_ID); break;
+		case R.id.user_logout: logout(); break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

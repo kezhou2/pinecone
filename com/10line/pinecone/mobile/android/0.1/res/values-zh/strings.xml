@@ -3,7 +3,7 @@
     
     <!-- App Properties -->
     <string name="app_name">松果网</string>
-    <string name="app_slogan">智能你的生活！</string>
+    <string name="app_slogan">物联网应用平台-智能你的生活！</string>
     <string name="app_url">http://www.pinecone.cc</string>
     
     <!-- App Operations -->
@@ -48,5 +48,8 @@
 	<string name="error_login">用户名或者密码错误！</string>
 	<string name="error_user_name_is_existed">用户名已经存在</string>
 	<string name="error_user_email_is_existed">电子邮箱已经存在</string>
+	<string name="error_device_code_is_not_existed">请先接入设备</string>
+	<string name="error_device_has_been_activated">设备已经激活</string>
+	<string name="error_device_name_is_existed">设备名已经存在</string>
     
 </resources>

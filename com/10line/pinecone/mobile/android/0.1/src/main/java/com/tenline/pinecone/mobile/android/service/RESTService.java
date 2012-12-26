@@ -34,7 +34,6 @@ public class RESTService extends AbstractService {
 
 	private RestTemplate template;
 	private ObjectMapper mapper = new ObjectMapper();
-	private String baseUrl = "http://pinecone-service.cloudfoundry.com";
 	public static final String LOGIN_URL = "/j_spring_security_check";
 	public static final String LOGOUT_URL = "/j_spring_security_logout";
 

@@ -21,13 +21,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleAdapter.ViewBinder;
+import android.widget.TextView;
 
 /**
  * @author Bill
  *
  */
-public class VariableActivity extends AbstractListActivity implements ChannelServiceListener {
+public class VariableActivity extends AbstractListActivity implements ChannelServiceListener, ViewBinder {
 
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.variable";
 	
@@ -115,6 +118,14 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 	public void onData(Event theEvent) {
 		// TODO Auto-generated method stub
 		Log.i(getClass().getSimpleName(), theEvent.toString());
+		for (int i=0; i<getListView().getCount(); i++) {
+			View view = getListView().getChildAt(i);
+			if (view.getId() == Long.valueOf(theEvent.getField("var_id"))) {
+				SimpleAdapter adapter = (SimpleAdapter) getListAdapter();
+				TextView variableValue = (TextView) view.findViewById(R.id.variable_value);
+				adapter.setViewText(variableValue, theEvent.getField("var_value")); break;
+			}
+		}
 	}
 
 	@Override
@@ -128,21 +139,24 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 		// TODO Auto-generated method stub
 		Log.e(getClass().getSimpleName(), message);
 	}
-
-	private ArrayList<HashMap<String, String>> items;
 	
 	@Override
 	protected void buildListAdapter(ArrayList<?> result) {
 		// TODO Auto-generated method stub
-		items = new ArrayList<HashMap<String, String>>();      
+		ArrayList<HashMap<String, Variable>> items = new ArrayList<HashMap<String, Variable>>();      
         for (int i=0; i<result.size(); i++) {
-        	HashMap<String, String> item = new HashMap<String, String>();
-        	item.put("variable_text", ((Variable) result.get(i)).getName());
-        	item.put("variable_value", "60");
-        	items.add(item);
+        	HashMap<String, Variable> item = new HashMap<String, Variable>();
+        	item.put("variable", (Variable) result.get(i)); items.add(item);
         }
-		setListAdapter(new SimpleAdapter(this, items, R.layout.variable_item, 
-			new String[]{"variable_text","variable_value"}, new int[]{R.id.variable_text,R.id.variable_value}));
+        SimpleAdapter adapter = new SimpleAdapter(this, items, R.layout.variable_item, new String[]{"variable"}, new int[]{R.id.variable});
+        adapter.setViewBinder(this); setListAdapter(adapter);
+	}
+
+	@Override
+	public boolean setViewValue(View view, Object data, String textRepresentation) {
+		// TODO Auto-generated method stub
+		Variable variable = (Variable) data; view.setId(Long.valueOf(variable.getId()).intValue());
+		((TextView) view.findViewById(R.id.variable_name)).setText(variable.getName()); return true;
 	}
 
 }

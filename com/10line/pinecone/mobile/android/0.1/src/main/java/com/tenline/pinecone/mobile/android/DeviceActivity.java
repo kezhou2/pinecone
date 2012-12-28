@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -80,6 +81,14 @@ public class DeviceActivity extends AbstractListActivity {
 			return new AddDeviceDialogBuilder(this).getDialog();
 		}
 		return super.onCreateDialog(id);
+	}
+
+	@Override
+	protected void buildListAdapter(ArrayList<?> result) {
+		// TODO Auto-generated method stub
+		String[] items = new String[result.size()];
+		for (int i=0; i<result.size(); i++) {items[i] = ((Device) result.get(i)).getName();}
+		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, items));	
 	}
 
 }

@@ -12,8 +12,6 @@ import com.tenline.pinecone.mobile.android.validation.DeviceCodeValidator;
 import com.tenline.pinecone.mobile.android.validation.DeviceNameValidator;
 import com.tenline.pinecone.platform.model.Device;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,10 +22,9 @@ import android.widget.Toast;
  * @author Bill
  *
  */
-public class AddDeviceDialogBuilder extends Builder {
+public class AddDeviceDialogBuilder extends AbstractBuilder {
 	
 	public static final int DIALOG_ID = 0;
-	private AlertDialog dialog;
 
 	/**
 	 * 
@@ -78,20 +75,6 @@ public class AddDeviceDialogBuilder extends Builder {
 		setTitle(R.string.device_add);
 		setIcon(android.R.drawable.ic_menu_add);
 		setDialog(create());
-	}
-
-	/**
-	 * @return the dialog
-	 */
-	public AlertDialog getDialog() {
-		return dialog;
-	}
-
-	/**
-	 * @param dialog the dialog to set
-	 */
-	public void setDialog(AlertDialog dialog) {
-		this.dialog = dialog;
 	}
 
 }

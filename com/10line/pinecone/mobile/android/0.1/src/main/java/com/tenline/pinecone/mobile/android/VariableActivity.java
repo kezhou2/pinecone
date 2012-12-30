@@ -12,8 +12,10 @@ import nl.justobjects.pushlet.core.Protocol;
 import com.tenline.pinecone.mobile.android.service.ChannelService;
 import com.tenline.pinecone.mobile.android.service.ChannelServiceListener;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
+import com.tenline.pinecone.mobile.android.view.VariableSettingDialogBuilder;
 import com.tenline.pinecone.platform.model.Variable;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,7 +24,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
@@ -40,6 +44,16 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 		Log.i(getClass().getSimpleName(), "onCreate");
 		initFetchTask("/device/" + getIntent().getStringExtra("deviceId") + "/variables");
 		initChannelTask(Protocol.MODE_STREAM, getIntent().getStringExtra("deviceId"));
+		getListView().setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			@SuppressWarnings("deprecation")
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				showDialog(VariableSettingDialogBuilder.DIALOG_ID);
+			}
+			
+		});
 	}
 	
 	@Override
@@ -60,6 +74,16 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 		case R.id.user_logout: logout(); break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public Dialog onCreateDialog(int id) {
+		switch(id) {
+		case VariableSettingDialogBuilder.DIALOG_ID:
+			return new VariableSettingDialogBuilder(this).getDialog();
+		}
+		return super.onCreateDialog(id);
 	}
 	
 	/**

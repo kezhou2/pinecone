@@ -33,6 +33,9 @@
     <!-- Device Operations -->
     <string name="device_add">Add device</string>
     
+    <!-- Variable Properties -->
+    <string name="variable_setting">Variable Setting</string>
+    
     <!-- Validation Properties -->
     <string name="error_only_numeric_digits_allowed">Only numeric digits are allowed.</string>
 	<string name="error_this_field_cannot_contain_special_character">This field cannot contain any special character</string>

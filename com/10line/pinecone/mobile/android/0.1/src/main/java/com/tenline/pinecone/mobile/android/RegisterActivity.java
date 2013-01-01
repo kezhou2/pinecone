@@ -29,7 +29,6 @@ public class RegisterActivity extends AbstractActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(getClass().getSimpleName(), "onCreate");
         setContentView(R.layout.register);
         final FormEditText userEmail = (FormEditText) findViewById(R.id.user_email_input);
         userEmail.addValidator(new UserEmailValidator(getString(R.string.error_user_email_is_existed), this));

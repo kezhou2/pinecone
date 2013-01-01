@@ -5,17 +5,17 @@ package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import nl.justobjects.pushlet.core.Event;
 import nl.justobjects.pushlet.core.Protocol;
+import nl.justobjects.pushlet.util.PushletException;
 
 import com.tenline.pinecone.mobile.android.service.ChannelService;
 import com.tenline.pinecone.mobile.android.service.ChannelServiceListener;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
-import com.tenline.pinecone.mobile.android.view.VariableSettingDialogBuilder;
 import com.tenline.pinecone.platform.model.Variable;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -38,28 +38,28 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.variable";
 	
+	private static VariableActivity instance;
+	
+	public static VariableActivity getInstance() {return instance;}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Log.i(getClass().getSimpleName(), "onCreate");
+		super.onCreate(savedInstanceState); instance = this;
 		initFetchTask("/device/" + getIntent().getStringExtra("deviceId") + "/variables");
+        if (!channel.isBound()) bindService(new Intent(this, ChannelService.class), channel, Context.BIND_AUTO_CREATE);
 		initChannelTask(Protocol.MODE_STREAM, getIntent().getStringExtra("deviceId"));
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			@SuppressWarnings("deprecation")
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				showDialog(VariableSettingDialogBuilder.DIALOG_ID);
+				Intent intent = new Intent(ItemActivity.ACTIVITY_ACTION);
+				intent.putExtra("variableId", String.valueOf(view.getId()));
+				intent.putExtra("variableName", ((TextView) view.findViewById(R.id.variable_name)).getText());
+				startActivity(intent);
 			}
 			
 		});
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.options, menu);
-	    return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override
@@ -76,16 +76,6 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
-	@SuppressWarnings("deprecation")
-	public Dialog onCreateDialog(int id) {
-		switch(id) {
-		case VariableSettingDialogBuilder.DIALOG_ID:
-			return new VariableSettingDialogBuilder(this).getDialog();
-		}
-		return super.onCreateDialog(id);
-	}
-	
 	/**
 	 * 
 	 * @author Bill
@@ -99,7 +89,6 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 			try {
 				while (!channel.isBound()) {Thread.sleep(100);}
 				ChannelService service = (ChannelService) channel.getService();
-				service.join();
 				service.listen(VariableActivity.this, params[0], params[1]);
 				return true;
 			} catch (Exception e) {
@@ -115,19 +104,33 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 		new ChannelTask().execute(mode, subject);
 	}
 	
+	private void clearChannelTask() {
+		try {
+			((ChannelService) channel.getService()).unsubscribe();
+		} catch (PushletException e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
+	}
+	
 	private ServiceConnectionHelper channel = new ServiceConnectionHelper();
 	
-	@Override
-    protected void onStart() {
-        super.onStart();
-        bindService(new Intent(this, ChannelService.class), channel, Context.BIND_AUTO_CREATE);
-    }
+	public void onPublish(Map<String, String> theAttributes) {
+		try {
+			ChannelService service = (ChannelService) channel.getService();
+			service.publish(getIntent().getStringExtra("deviceId"), theAttributes);
+		} catch (PushletException e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
+	}
 	
 	@Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if (channel.isBound()) {
             unbindService(channel);
+            clearChannelTask();
             channel.setBound(false);
         }
     }

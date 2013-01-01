@@ -12,7 +12,9 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 
 /**
  * @author Bill
@@ -30,9 +32,9 @@ public abstract class AbstractListActivity extends ListActivity {
 		try {
 			RESTService service = (RESTService) helper.getService();
 			service.get(RESTService.LOGOUT_URL);
-			Intent intent = new Intent();
-			intent.setClass(AbstractListActivity.this, LoginActivity.class);
-			startActivity(intent); finish();
+			Intent intent = new Intent(this, LoginActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Log.e(getClass().getSimpleName(), e.getMessage());
@@ -40,16 +42,22 @@ public abstract class AbstractListActivity extends ListActivity {
 	}
 	
 	@Override
-    protected void onStart() {
-        super.onStart();
-		Log.i(getClass().getSimpleName(), "onStart");
-        bindService(new Intent(this, RESTService.class), helper, Context.BIND_AUTO_CREATE);
+    protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Log.i(getClass().getSimpleName(), "onCreate");
+        if (!helper.isBound()) bindService(new Intent(this, RESTService.class), helper, Context.BIND_AUTO_CREATE);
     }
 	
 	@Override
-    protected void onStop() {
-        super.onStop();
-		Log.i(getClass().getSimpleName(), "onStop");
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.options, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+    protected void onDestroy() {
+        super.onDestroy();
+		Log.i(getClass().getSimpleName(), "onDestroy");
         if (helper.isBound()) {
             unbindService(helper);
             helper.setBound(false);

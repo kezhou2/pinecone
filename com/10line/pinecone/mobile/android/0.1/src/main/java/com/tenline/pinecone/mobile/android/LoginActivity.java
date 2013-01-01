@@ -26,7 +26,6 @@ public class LoginActivity extends AbstractActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		Log.i(getClass().getSimpleName(), "onCreate");
         setContentView(R.layout.login);
         final FormEditText userName = (FormEditText) findViewById(R.id.user_name_input);
         final FormEditText userPassword = (FormEditText) findViewById(R.id.user_password_input);
@@ -45,7 +44,7 @@ public class LoginActivity extends AbstractActivity {
 							User user = (User) ((ArrayList) service.get("/user/search/names?name=" + userName.getText().toString())).toArray()[0];
 							Intent intent = new Intent(DeviceActivity.ACTIVITY_ACTION);
 							intent.putExtra("userId", String.valueOf(user.getId()));
-							startActivity(intent); finish();
+							startActivity(intent);
 						} else {
 							Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_LONG).show();
 						}	

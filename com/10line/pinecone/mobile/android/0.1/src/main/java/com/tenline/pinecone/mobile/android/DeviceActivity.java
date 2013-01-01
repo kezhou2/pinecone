@@ -13,7 +13,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,7 +31,6 @@ public class DeviceActivity extends AbstractListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(getClass().getSimpleName(), "onCreate");
 		initFetchTask("/user/"+getIntent().getStringExtra("userId")+"/devices");
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		getListView().setOnItemClickListener(new OnItemClickListener() {
@@ -55,12 +53,6 @@ public class DeviceActivity extends AbstractListActivity {
 			}
 			
 		});
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.options, menu);
-	    return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

@@ -19,9 +19,6 @@ public class Item extends com.tenline.pinecone.platform.model.Entity {
 	@Column
 	private String value;
 	
-	@Column
-	private String text;
-	
 	@ManyToOne
 	private Variable variable;
 
@@ -44,20 +41,6 @@ public class Item extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public String getValue() {
 		return value;
-	}
-
-	/**
-	 * @param text the text to set
-	 */
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	/**
-	 * @return the text
-	 */
-	public String getText() {
-		return text;
 	}
 
 	/**

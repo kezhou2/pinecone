@@ -25,8 +25,6 @@ public class Variable extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public static final String READ = "read";
 	public static final String WRITE = "write";
-	public static final String DISCRETE = "discrete";
-	public static final String CONTINUOUS = "continuous";
 	
 	@Column
 	private String name;

@@ -30,6 +30,12 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>  
     </activity>
+    <activity android:name=".ItemActivity" android:exported="false">
+      <intent-filter>
+        <action android:name="com.tenline.pinecone.mobile.android.item" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>  
+    </activity>
     <service android:name=".service.RESTService" android:exported="false"/>
     <service android:name=".service.ChannelService" android:exported="false"/>
   </application>

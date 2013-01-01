@@ -33,8 +33,8 @@
     <!-- Device Operations -->
     <string name="device_add">添加设备</string>
     
-    <!-- Variable Properties -->
-    <string name="variable_setting">参数设置</string>
+    <!-- Item Properties -->
+    <string name="item_setting">确定设置为</string>
     
     <!-- Validation Properties -->
     <string name="error_only_numeric_digits_allowed">只允许填写数字</string>

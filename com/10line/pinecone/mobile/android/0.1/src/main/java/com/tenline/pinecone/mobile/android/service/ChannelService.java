@@ -14,6 +14,7 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import nl.justobjects.pushlet.core.Event;
 import nl.justobjects.pushlet.core.EventParser;
@@ -49,8 +50,27 @@ public class ChannelService extends AbstractService implements Protocol {
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
-		pushletURL = baseUrl + "/channel";
+		try {
+			Log.i(getClass().getSimpleName(), "onBind");
+			pushletURL = baseUrl + "/channel";
+			join();
+		} catch (PushletException e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
 		return super.onBind(intent);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		try {
+			Log.i(getClass().getSimpleName(), "onDestroy");
+			leave();
+		} catch (PushletException e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
 	}
 
 	/**
@@ -483,7 +503,6 @@ public class ChannelService extends AbstractService implements Protocol {
 		/**
 		 * Stop receiver receiveThread.
 		 */
-		@SuppressWarnings("deprecation")
 		public void stopThread() {
 			p("In stopThread()");
 
@@ -512,7 +531,7 @@ public class ChannelService extends AbstractService implements Protocol {
 
 					// Not preferred but may be needed
 					// to stop during a blocking read.
-					targetThread.stop();
+					targetThread.interrupt();
 
 					// Wait for it to die
 					try {

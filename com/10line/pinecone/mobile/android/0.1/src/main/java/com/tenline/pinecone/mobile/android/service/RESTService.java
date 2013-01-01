@@ -40,11 +40,20 @@ public class RESTService extends AbstractService {
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
+		Log.i(getClass().getSimpleName(), "onBind");
 		template = new RestTemplate();
 		template.getMessageConverters().add(new FormHttpMessageConverter());
 		template.getMessageConverters().add(new StringHttpMessageConverter());
 		template.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
 		return super.onBind(intent);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.i(getClass().getSimpleName(), "onDestroy");
+		template = null;
+		mapper = null;
 	}
 	
 	/**

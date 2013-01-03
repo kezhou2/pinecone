@@ -50,27 +50,43 @@ public class ChannelService extends AbstractService implements Protocol {
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
-		try {
-			Log.i(getClass().getSimpleName(), "onBind");
-			pushletURL = baseUrl + "/channel";
-			join();
-		} catch (PushletException e) {
-			// TODO Auto-generated catch block
-			Log.e(getClass().getSimpleName(), e.getMessage());
-		}
+		Log.i(getClass().getSimpleName(), "onBind");
+		pushletURL = baseUrl + "/channel";
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					join();
+				} catch (PushletException e) {
+					// TODO Auto-generated catch block
+					Log.e(getClass().getSimpleName(), e.getMessage());
+				}
+			}
+			
+		}).start();
 		return super.onBind(intent);
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		try {
-			Log.i(getClass().getSimpleName(), "onDestroy");
-			leave();
-		} catch (PushletException e) {
-			// TODO Auto-generated catch block
-			Log.e(getClass().getSimpleName(), e.getMessage());
-		}
+		Log.i(getClass().getSimpleName(), "onDestroy");
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					leave();
+				} catch (PushletException e) {
+					// TODO Auto-generated catch block
+					Log.e(getClass().getSimpleName(), e.getMessage());
+				}
+			}
+			
+		}).start();
 	}
 
 	/**
@@ -119,6 +135,14 @@ public class ChannelService extends AbstractService implements Protocol {
 
 		// Join Ack received
 		id = response.getField(P_ID);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isJoined() {
+		return id == null ? false : true;
 	}
 
 	/**

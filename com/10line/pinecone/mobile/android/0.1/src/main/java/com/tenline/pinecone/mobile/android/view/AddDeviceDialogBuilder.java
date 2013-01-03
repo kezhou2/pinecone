@@ -3,20 +3,13 @@
  */
 package com.tenline.pinecone.mobile.android.view;
 
-import java.util.ArrayList;
-
 import com.tenline.pinecone.mobile.android.DeviceActivity;
 import com.tenline.pinecone.mobile.android.R;
-import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.validation.DeviceCodeValidator;
-import com.tenline.pinecone.mobile.android.validation.DeviceNameValidator;
-import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.mobile.android.service.TaskFacade;
 
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * @author Bill
@@ -25,6 +18,17 @@ import android.widget.Toast;
 public class AddDeviceDialogBuilder extends AbstractBuilder {
 	
 	public static final int DIALOG_ID = 0;
+	
+	private FormEditText deviceCode;
+	private FormEditText deviceName;
+	
+	public FormEditText getDeviceCode() {
+		return deviceCode;
+	}
+	
+	public FormEditText getDeviceName() {
+		return deviceName;
+	}
 
 	/**
 	 * 
@@ -34,29 +38,15 @@ public class AddDeviceDialogBuilder extends AbstractBuilder {
 		super(activity);
 		// TODO Auto-generated constructor stub
 		View view = activity.getLayoutInflater().inflate(R.layout.add_device, null);
-		final FormEditText deviceCode = (FormEditText) view.findViewById(R.id.device_code_input);
-		deviceCode.addValidator(new DeviceCodeValidator(activity.getString(R.string.error_device_code_is_not_existed), activity));
-		final FormEditText deviceName = (FormEditText) view.findViewById(R.id.device_name_input);
-		deviceName.addValidator(new DeviceNameValidator(activity.getString(R.string.error_device_name_is_existed), activity));
+		deviceCode = (FormEditText) view.findViewById(R.id.device_code_input);
+		deviceName = (FormEditText) view.findViewById(R.id.device_name_input);
 		((Button) view.findViewById(R.id.app_ok)).setOnClickListener(new OnClickListener() {
 
 			@Override
-			@SuppressWarnings("unchecked")
 			public void onClick(View view) {
 				// TODO Auto-generated method stub
-				try {
-					if (deviceCode.testValidity() && deviceName.testValidity()) {
-						RESTService service = (RESTService) activity.getHelper().getService();
-						String filter = "/device/search/codes?code=" + deviceCode.getText().toString();
-						Device device = (Device) ((ArrayList<Device>)service.get(filter)).toArray()[0];
-						service.post("/device/" + device.getId() + "/user", "/user/" + activity.getIntent().getStringExtra("userId"));
-						device.setName(deviceName.getText().toString()); service.put("/device/" + device.getId(), device);
-						activity.initFetchTask("/user/" + activity.getIntent().getStringExtra("userId") + "/devices");
-						Toast.makeText(activity, R.string.device_add, Toast.LENGTH_LONG).show(); dialog.cancel();
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					Log.e(getClass().getSimpleName(), e.getMessage());
+				if (deviceCode.testValidity() && deviceName.testValidity()) { 
+					TaskFacade.initRESTTask(activity, DeviceActivity.VALIDATE_DEVICE_WITH_CODE, deviceCode.getText().toString(), "");
 				}
 			}
 			

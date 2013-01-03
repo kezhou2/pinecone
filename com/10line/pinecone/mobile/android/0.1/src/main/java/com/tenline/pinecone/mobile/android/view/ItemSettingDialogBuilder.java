@@ -3,8 +3,6 @@
  */
 package com.tenline.pinecone.mobile.android.view;
 
-import java.util.HashMap;
-
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
@@ -32,10 +30,10 @@ public class ItemSettingDialogBuilder extends AbstractBuilder {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				HashMap<String, String> attributes = new HashMap<String, String>();
-				attributes.put("var_id", activity.getIntent().getStringExtra("variableId"));
-				attributes.put("var_value", activity.getIntent().getStringExtra("itemValue"));
-				VariableActivity.getInstance().onPublish(attributes); dialog.cancel();
+				String variableId = activity.getIntent().getStringExtra("variableId");
+				String variableValue = activity.getIntent().getStringExtra("itemValue");
+				VariableActivity.getInstance().initChannelTask(VariableActivity.PUBLISH_TO_CHANNEL, variableId, variableValue); 
+				dialog.cancel();
 			}
 			
 		});

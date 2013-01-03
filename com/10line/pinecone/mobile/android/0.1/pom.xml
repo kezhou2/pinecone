@@ -74,6 +74,22 @@
           <undeployBeforeDeploy>true</undeployBeforeDeploy>
         </configuration>
         <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>proguardApk</id>
+    		<phase>install</phase>
+    		<goals>
+      		  <goal>proguard</goal>
+    		</goals>
+          </execution>
+          <execution>
+            <id>alignApk</id>
+    		<phase>install</phase>
+    		<goals>
+      		  <goal>zipalign</goal>
+    		</goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

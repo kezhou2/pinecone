@@ -4,11 +4,11 @@
 package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.validation.UserEmailValidator;
+import com.tenline.pinecone.mobile.android.service.TaskFacade;
 import com.tenline.pinecone.mobile.android.validation.EqualityValidator;
-import com.tenline.pinecone.mobile.android.validation.UserNameValidator;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
 import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.User;
@@ -26,49 +26,97 @@ public class RegisterActivity extends AbstractActivity {
 	
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.register";
 	
+	private static final String POST_USER = "postUser";
+	private static final String POST_AUTHORITY = "postAuthority";
+	private static final String POST_AUTHORITY_WITH_USER = "postAuthorityWithUser";
+	private static final String GET_USER = "getUser";
+	private static final String GET_AUTHORITY = "getAuthority";
+	private static final String VALIDATE_USER_WITH_NAME = "validateUserWithName";
+	private static final String VALIDATE_USER_WITH_EMAIL = "validateUserWithEmail";
+	
+	private FormEditText userEmail;
+	private FormEditText userName;
+	private FormEditText userPassword;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
-        final FormEditText userEmail = (FormEditText) findViewById(R.id.user_email_input);
-        userEmail.addValidator(new UserEmailValidator(getString(R.string.error_user_email_is_existed), this));
-        final FormEditText userName = (FormEditText) findViewById(R.id.user_name_input);
-        userName.addValidator(new UserNameValidator(getString(R.string.error_user_name_is_existed), this));
-        final FormEditText userPassword = (FormEditText) findViewById(R.id.user_password_input);
+        userEmail = (FormEditText) findViewById(R.id.user_email_input);
+        userName = (FormEditText) findViewById(R.id.user_name_input);
+        userPassword = (FormEditText) findViewById(R.id.user_password_input);
         final FormEditText userConfirm = (FormEditText) findViewById(R.id.user_confirm_input);
         userConfirm.addValidator(new EqualityValidator(getString(R.string.error_password_is_not_equal), userPassword));
         findViewById(R.id.user_submit).setOnClickListener(new OnClickListener() {
 
 			@Override
-			@SuppressWarnings("rawtypes")
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.i(getClass().getSimpleName(), "onClick");
-				if (userName.testValidity() && userEmail.testValidity() &&
-					userPassword.testValidity() && userConfirm.testValidity()) { 
-					try {
-						RESTService service = (RESTService) helper.getService();
-						User user = new User();
-						user.setName(userName.getText().toString());
-						user.setEmail(userEmail.getText().toString());
-						user.setPassword(userPassword.getText().toString());
-						service.post("/user", user);
-						user = (User) ((ArrayList) service.get("/user/search/names?name=" + user.getName())).toArray()[0];
-						Authority authority = new Authority();
-						authority.setAuthority("ROLE_USER");
-						authority.setUserName(userName.getText().toString());
-						service.post("/authority", authority);
-						authority = (Authority) ((ArrayList) service.get("/authority/search/userNames?userName=" + authority.getUserName())).toArray()[0];
-						service.post("/authority/" + authority.getId() + "/user", "/user/" + user.getId());
-						finish();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						Log.e(getClass().getSimpleName(), e.getMessage());
-					}
+				if (userName.testValidity() && userEmail.testValidity() && userPassword.testValidity() && userConfirm.testValidity()) { 
+					TaskFacade.initRESTTask(RegisterActivity.this, VALIDATE_USER_WITH_NAME, userName.getText().toString());
 				}
 			}
         	
         });
+	}
+
+	@Override
+	@SuppressWarnings("rawtypes")
+	public Object[] doInBackground(String... params) {
+		// TODO Auto-generated method stub
+		Object[] result = Arrays.asList(params).toArray();
+		try {
+			RESTService service = (RESTService) helper.getService();
+			if (result[0].equals(POST_USER)) {
+				User user = new User();
+				user.setName(result[1].toString());
+				user.setEmail(result[2].toString());
+				user.setPassword(result[3].toString());
+				service.post("/user", user);
+			} else if (result[0].equals(POST_AUTHORITY)) {
+				Authority authority = new Authority();
+				authority.setAuthority("ROLE_USER");
+				authority.setUserName(result[1].toString());
+				service.post("/authority", authority);
+			} else if (result[0].equals(POST_AUTHORITY_WITH_USER)) {
+				service.post("/authority/" + result[1] + "/user", "/user/" + result[2]);
+			} else if (result[0].equals(GET_USER)) {
+				result[2] = String.valueOf(((User) ((ArrayList) service.get("/user/search/names?name=" + result[1])).toArray()[0]).getId());
+			} else if (result[0].equals(GET_AUTHORITY)) {
+				result[1] = String.valueOf(((Authority) ((ArrayList) service.get("/authority/search/userNames?userName=" + result[1])).toArray()[0]).getId());
+			} else if (result[0].equals(VALIDATE_USER_WITH_NAME)) {
+				result[1] = String.valueOf(((ArrayList<?>) service.get("/user/search/names?name=" + result[1])).size());
+			} else if (result[0].equals(VALIDATE_USER_WITH_EMAIL)) {
+				result[1] = String.valueOf(((ArrayList<?>) service.get("/user/search/emails?email=" + result[1])).size());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
+		return result;
+	}
+
+	@Override
+	public void onPostExecute(Object[] result) {
+		// TODO Auto-generated method stub
+		try {
+			if (result[0].equals(POST_USER)) {TaskFacade.initRESTTask(this, GET_USER, result[1].toString(), "");}
+			else if (result[0].equals(POST_AUTHORITY)) {TaskFacade.initRESTTask(this, GET_AUTHORITY, result[1].toString(), result[2].toString());}
+			else if (result[0].equals(POST_AUTHORITY_WITH_USER)) {finish();}
+			else if (result[0].equals(GET_USER)) {TaskFacade.initRESTTask(this, POST_AUTHORITY, result[1].toString(), result[2].toString());}
+			else if (result[0].equals(GET_AUTHORITY)) {TaskFacade.initRESTTask(this, POST_AUTHORITY_WITH_USER, result[1].toString(), result[2].toString());}
+			else if (result[0].equals(VALIDATE_USER_WITH_NAME)) {
+				if (Integer.valueOf(result[1].toString()) > 0) {userName.setError(getString(R.string.error_user_name_is_existed));} 
+				else {TaskFacade.initRESTTask(this, VALIDATE_USER_WITH_EMAIL, userEmail.getText().toString());}
+			} else if (result[0].equals(VALIDATE_USER_WITH_EMAIL)) {
+				if (Integer.valueOf(result[1].toString()) > 0) {userEmail.setError(getString(R.string.error_user_email_is_existed));} 
+				else {TaskFacade.initRESTTask(this, POST_USER, userName.getText().toString(), userEmail.getText().toString(), userPassword.getText().toString());}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
 	}
 	 
 }

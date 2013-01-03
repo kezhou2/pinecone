@@ -4,8 +4,10 @@
 package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
+import com.tenline.pinecone.mobile.android.service.TaskFacade;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
 import com.tenline.pinecone.platform.model.User;
 
@@ -22,6 +24,9 @@ import android.widget.Toast;
  *
  */
 public class LoginActivity extends AbstractActivity {
+	
+	private static final String POST_TO_LOGIN = "postToLogin";
+	private static final String GET_USER = "getUser";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,25 +37,11 @@ public class LoginActivity extends AbstractActivity {
         findViewById(R.id.user_login).setOnClickListener(new OnClickListener() {
 
 			@Override
-			@SuppressWarnings("rawtypes")
 			public void onClick(View view) {
 				// TODO Auto-generated method stub
 				Log.i(getClass().getSimpleName(), "onClick");
 				if (userName.testValidity() && userPassword.testValidity()) {
-					try {
-						RESTService service = ((RESTService) helper.getService());
-						if (!service.post(RESTService.LOGIN_URL, userName.getText().toString(), userPassword.getText().toString())
-							.contains("Reason: Bad credentials")) {
-							User user = (User) ((ArrayList) service.get("/user/search/names?name=" + userName.getText().toString())).toArray()[0];
-							Intent intent = new Intent(DeviceActivity.ACTIVITY_ACTION);
-							intent.putExtra("userId", String.valueOf(user.getId()));
-							startActivity(intent);
-						} else {
-							Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_LONG).show();
-						}	
-					} catch (Exception e) {
-						Log.e(getClass().getSimpleName(), e.getMessage());
-					}
+					TaskFacade.initRESTTask(LoginActivity.this, POST_TO_LOGIN, userName.getText().toString(), userPassword.getText().toString());
 				}
 			}
         	
@@ -67,5 +58,41 @@ public class LoginActivity extends AbstractActivity {
         });
     }
 
-}
+	@Override
+	@SuppressWarnings("rawtypes")
+	public Object[] doInBackground(String... params) {
+		// TODO Auto-generated method stub
+		Object[] result = Arrays.asList(params).toArray();
+		try {
+			RESTService service = ((RESTService) helper.getService());
+			if (result[0].equals(POST_TO_LOGIN)) {
+				result[2] = service.post(RESTService.LOGIN_URL, result[1], result[2]);
+			} else if (result[0].equals(GET_USER)) {
+				result[1] = String.valueOf(((User) ((ArrayList) service.get("/user/search/names?name=" + result[1])).toArray()[0]).getId());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
+		return result;
+	}
 
+	@Override
+	public void onPostExecute(Object[] result) {
+		// TODO Auto-generated method stub
+		try {
+			if (result[0].equals(POST_TO_LOGIN)) {
+				if (!result[2].toString().contains("Reason: Bad credentials")) {TaskFacade.initRESTTask(this, GET_USER, result[1].toString());} 
+				else {Toast.makeText(this, R.string.error_login, Toast.LENGTH_LONG).show();}	
+			} else if (result[0].equals(GET_USER)) {
+				Intent intent = new Intent(DeviceActivity.ACTIVITY_ACTION);
+				intent.putExtra("userId", result[1].toString());
+				startActivity(intent);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
+	}
+
+}

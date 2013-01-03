@@ -4,22 +4,25 @@
 package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import nl.justobjects.pushlet.core.Event;
 import nl.justobjects.pushlet.core.Protocol;
-import nl.justobjects.pushlet.util.PushletException;
 
 import com.tenline.pinecone.mobile.android.service.ChannelService;
 import com.tenline.pinecone.mobile.android.service.ChannelServiceListener;
+import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
+import com.tenline.pinecone.mobile.android.service.TaskFacade;
 import com.tenline.pinecone.platform.model.Variable;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +41,11 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.variable";
 	
+	private static final String GET_VARIABLES_WITH_DEVICE = "getVariablesWithDevice";
+	private static final String LISTEN_TO_CHANNEL = "listenToChannel";
+	public static final String PUBLISH_TO_CHANNEL = "publishToChannel";
+	private static final String UNSUBSCRIBE_FROM_CHANNEL = "unsubscribeFromChannel";
+	
 	private static VariableActivity instance;
 	
 	public static VariableActivity getInstance() {return instance;}
@@ -45,9 +53,9 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); instance = this;
-		initFetchTask("/device/" + getIntent().getStringExtra("deviceId") + "/variables");
+		TaskFacade.initRESTTask(this, GET_VARIABLES_WITH_DEVICE, "/device/" + getIntent().getStringExtra("deviceId") + "/variables");
         if (!channel.isBound()) bindService(new Intent(this, ChannelService.class), channel, Context.BIND_AUTO_CREATE);
-		initChannelTask(Protocol.MODE_STREAM, getIntent().getStringExtra("deviceId"));
+		initChannelTask(LISTEN_TO_CHANNEL, Protocol.MODE_STREAM, getIntent().getStringExtra("deviceId"));
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -89,7 +97,16 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 			try {
 				while (!channel.isBound()) {Thread.sleep(100);}
 				ChannelService service = (ChannelService) channel.getService();
-				service.listen(VariableActivity.this, params[0], params[1]);
+				if (params[0].equals(LISTEN_TO_CHANNEL)) {
+					while (!service.isJoined()) {Thread.sleep(100);}
+					service.listen(VariableActivity.this, params[1], params[2]);
+				}
+				if (params[0].equals(UNSUBSCRIBE_FROM_CHANNEL)) {service.unsubscribe();}
+				if (params[0].equals(PUBLISH_TO_CHANNEL)) {
+					HashMap<String, String> attributes = new HashMap<String, String>();
+					attributes.put("var_id", params[1]); attributes.put("var_value", params[2]);
+					service.publish(getIntent().getStringExtra("deviceId"), attributes);
+				}
 				return true;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -100,38 +117,19 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 		
 	}
 	
-	private void initChannelTask(String mode, String subject) {
-		new ChannelTask().execute(mode, subject);
-	}
-	
-	private void clearChannelTask() {
-		try {
-			((ChannelService) channel.getService()).unsubscribe();
-		} catch (PushletException e) {
-			// TODO Auto-generated catch block
-			Log.e(getClass().getSimpleName(), e.getMessage());
-		}
+	public void initChannelTask(String... params) {
+		new ChannelTask().execute(params);
 	}
 	
 	private ServiceConnectionHelper channel = new ServiceConnectionHelper();
-	
-	public void onPublish(Map<String, String> theAttributes) {
-		try {
-			ChannelService service = (ChannelService) channel.getService();
-			service.publish(getIntent().getStringExtra("deviceId"), theAttributes);
-		} catch (PushletException e) {
-			// TODO Auto-generated catch block
-			Log.e(getClass().getSimpleName(), e.getMessage());
-		}
-	}
 	
 	@Override
     protected void onDestroy() {
         super.onDestroy();
         if (channel.isBound()) {
             unbindService(channel);
-            clearChannelTask();
             channel.setBound(false);
+            initChannelTask(UNSUBSCRIBE_FROM_CHANNEL);
         }
     }
 
@@ -145,15 +143,29 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 	public void onData(Event theEvent) {
 		// TODO Auto-generated method stub
 		Log.i(getClass().getSimpleName(), theEvent.toString());
-		for (int i=0; i<getListView().getCount(); i++) {
-			View view = getListView().getChildAt(i);
-			if (view.getId() == Long.valueOf(theEvent.getField("var_id"))) {
-				SimpleAdapter adapter = (SimpleAdapter) getListAdapter();
-				TextView variableValue = (TextView) view.findViewById(R.id.variable_value);
-				adapter.setViewText(variableValue, theEvent.getField("var_value")); break;
-			}
-		}
+		handler.sendMessage(handler.obtainMessage(SUBSCRIBE_DATA, theEvent));
 	}
+	
+	private static final int SUBSCRIBE_DATA = 0;
+	private Handler handler = new Handler() {
+		
+		@Override
+		public void handleMessage(Message msg) {
+            switch(msg.what) {
+            case SUBSCRIBE_DATA:
+            	Event theEvent = (Event) msg.obj;
+            	for (int i=0; i<getListView().getCount(); i++) {
+        			View view = getListView().getChildAt(i);
+        			if (view.getId() == Long.valueOf(theEvent.getField("var_id"))) {
+        				SimpleAdapter adapter = (SimpleAdapter) getListAdapter();
+        				TextView variableValue = (TextView) view.findViewById(R.id.variable_value);
+        				adapter.setViewText(variableValue, theEvent.getField("var_value")); break;
+        			}
+        		} break;
+            }
+        }
+		
+    };
 
 	@Override
 	public void onHeartbeat(Event theEvent) {
@@ -168,12 +180,12 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 	}
 	
 	@Override
-	protected void buildListAdapter(ArrayList<?> result) {
+	protected void buildListAdapter(Object[] result) {
 		// TODO Auto-generated method stub
 		ArrayList<HashMap<String, Variable>> items = new ArrayList<HashMap<String, Variable>>();      
-        for (int i=0; i<result.size(); i++) {
+        for (int i=0; i<result.length; i++) {
         	HashMap<String, Variable> item = new HashMap<String, Variable>();
-        	item.put("variable", (Variable) result.get(i)); items.add(item);
+        	item.put("variable", (Variable) result[i]); items.add(item);
         }
         SimpleAdapter adapter = new SimpleAdapter(this, items, R.layout.variable_item, new String[]{"variable"}, new int[]{R.id.variable});
         adapter.setViewBinder(this); setListAdapter(adapter);
@@ -184,6 +196,43 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 		// TODO Auto-generated method stub
 		Variable variable = (Variable) data; view.setId(Long.valueOf(variable.getId()).intValue());
 		((TextView) view.findViewById(R.id.variable_name)).setText(variable.getName()); return true;
+	}
+	
+	@Override
+	public Object[] doInBackground(String... params) {
+		// TODO Auto-generated method stub
+		Object[] result = Arrays.asList(params).toArray();
+		try {
+			while (!helper.isBound()) {Thread.sleep(100);}
+			RESTService service = (RESTService) helper.getService();
+			if (result[0].equals(GET_VARIABLES_WITH_DEVICE)) {
+				Object[] temp = ((ArrayList<?>) service.get(result[1].toString())).toArray();
+				Object[] flag = {result[0]}; result = new Object[temp.length + 1];
+				System.arraycopy(flag, 0, result, 0, 1); System.arraycopy(temp, 0, result, 1, temp.length);
+			} else {
+				result = super.doInBackground(params);	
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
+		return result;
+	}
+	
+	@Override
+	public void onPostExecute(Object[] result) {
+		// TODO Auto-generated method stub
+		try {
+			if (result[0].equals(GET_VARIABLES_WITH_DEVICE)) {
+				Object[] data = new Object[result.length - 1];
+				System.arraycopy(result, 1, data, 0, data.length); buildListAdapter(data);
+			} else {
+				super.onPostExecute(result);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
 	}
 
 }

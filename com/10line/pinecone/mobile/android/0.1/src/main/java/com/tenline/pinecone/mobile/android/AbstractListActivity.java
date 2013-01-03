@@ -3,15 +3,16 @@
  */
 package com.tenline.pinecone.mobile.android;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
+import com.tenline.pinecone.mobile.android.service.RESTTaskListener;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
+import com.tenline.pinecone.mobile.android.service.TaskFacade;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,7 +21,9 @@ import android.view.Menu;
  * @author Bill
  *
  */
-public abstract class AbstractListActivity extends ListActivity {
+public abstract class AbstractListActivity extends ListActivity implements RESTTaskListener {
+	
+	private static final String GET_TO_LOGOUT = "getToLogout";
 
 	protected ServiceConnectionHelper helper = new ServiceConnectionHelper();
 	
@@ -29,16 +32,7 @@ public abstract class AbstractListActivity extends ListActivity {
 	}
 	
 	protected void logout() {
-		try {
-			RESTService service = (RESTService) helper.getService();
-			service.get(RESTService.LOGOUT_URL);
-			Intent intent = new Intent(this, LoginActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Log.e(getClass().getSimpleName(), e.getMessage());
-		}
+		TaskFacade.initRESTTask(this, GET_TO_LOGOUT);
 	}
 	
 	@Override
@@ -64,39 +58,33 @@ public abstract class AbstractListActivity extends ListActivity {
         }
     }
 	
-	public void initFetchTask(String url) {
-		new FetchTask().execute(url);
+	protected abstract void buildListAdapter(Object[] result);
+	
+	public Object[] doInBackground(String... params) {
+		// TODO Auto-generated method stub
+		Object[] result = Arrays.asList(params).toArray();
+		try {
+			RESTService service = (RESTService) helper.getService();
+			if (result[0].equals(GET_TO_LOGOUT)) {service.get(RESTService.LOGOUT_URL);}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
+		}
+		return result;
 	}
 	
-	protected abstract void buildListAdapter(ArrayList<?> result);
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class FetchTask extends AsyncTask<String, Void, ArrayList<?>> {
-
-		@Override
-		protected ArrayList<?> doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			ArrayList<?> result = null; 
-			try {
-				while (!helper.isBound()) {Thread.sleep(100);}
-				RESTService service = (RESTService) helper.getService();
-				result = (ArrayList<?>) service.get(params[0]);			
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				Log.e(getClass().getSimpleName(), e.getMessage());
+	public void onPostExecute(Object[] result) {
+		// TODO Auto-generated method stub
+		try {
+			if (result[0].equals(GET_TO_LOGOUT)) {
+				Intent intent = new Intent(this, LoginActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
 			}
-			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), e.getMessage());
 		}
-		
-		@Override
-		protected void onPostExecute(ArrayList<?> result) {
-			buildListAdapter(result);
-	    }
-		
 	}
 
 }

@@ -4,6 +4,7 @@
 package com.tenline.pinecone.mobile.android;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
+import com.tenline.pinecone.mobile.android.service.RESTTaskListener;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 
 import android.app.Activity;
@@ -16,7 +17,7 @@ import android.util.Log;
  * @author Bill
  *
  */
-public abstract class AbstractActivity extends Activity {
+public abstract class AbstractActivity extends Activity implements RESTTaskListener {
 
 	protected ServiceConnectionHelper helper = new ServiceConnectionHelper();
 	

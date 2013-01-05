@@ -33,7 +33,7 @@ public class ItemSettingDialogBuilder extends AbstractBuilder {
 				String variableId = activity.getIntent().getStringExtra("variableId");
 				String variableValue = activity.getIntent().getStringExtra("itemValue");
 				VariableActivity.getInstance().initChannelTask(VariableActivity.PUBLISH_TO_CHANNEL, variableId, variableValue); 
-				dialog.cancel();
+				dialog.cancel(); activity.finish();
 			}
 			
 		});

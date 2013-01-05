@@ -195,6 +195,7 @@ public class VariableActivity extends AbstractListActivity implements ChannelSer
 	public boolean setViewValue(View view, Object data, String textRepresentation) {
 		// TODO Auto-generated method stub
 		Variable variable = (Variable) data; view.setId(Long.valueOf(variable.getId()).intValue());
+		if (variable.getType().contains(Variable.WRITE)) view.setClickable(false); else view.setClickable(true);
 		((TextView) view.findViewById(R.id.variable_name)).setText(variable.getName()); return true;
 	}
 	

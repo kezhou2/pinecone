@@ -82,6 +82,7 @@ public class DeviceActivity extends AbstractListActivity {
 	@Override
 	protected void buildListAdapter(Object[] result) {
 		// TODO Auto-generated method stub
+		if (result.length == 0) Toast.makeText(this, R.string.error_device_code_is_not_existed, Toast.LENGTH_LONG).show();
 		String[] items = new String[result.length];
 		for (int i=0; i<result.length; i++) {items[i] = ((Device) result[i]).getName();}
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, items));	
@@ -140,7 +141,7 @@ public class DeviceActivity extends AbstractListActivity {
 				TaskFacade.initRESTTask(this, PUT_DEVICE_WITH_NAME, result[1].toString(), result[2].toString());
 			} else if (result[0].equals(PUT_DEVICE_WITH_NAME)) {
 				TaskFacade.initRESTTask(this, GET_DEVICES_WITH_USER, "/user/" + getIntent().getStringExtra("userId") + "/devices");
-				Toast.makeText(this, R.string.device_add, Toast.LENGTH_LONG).show(); builder.getDialog().cancel();
+				Toast.makeText(this, R.string.error_device_has_been_activated, Toast.LENGTH_LONG).show(); builder.getDialog().cancel();
 			} else if (result[0].equals(GET_DEVICES_WITH_USER)) {
 				Object[] data = new Object[result.length - 1];
 				System.arraycopy(result, 1, data, 0, data.length); buildListAdapter(data);

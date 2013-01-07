@@ -56,7 +56,6 @@
 	<string name="error_device_name_is_existed">Device name is existed</string>
 	
 	<!-- Progress Properties -->
-	<string name="progress_title">Please wait</string>
-	<string name="progress_message">Loading data from remote server</string>
+	<string name="progress_message">Loading&#8230;</string>
     
 </resources>

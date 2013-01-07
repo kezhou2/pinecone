@@ -21,7 +21,7 @@ public class RESTTask extends AsyncTask<String, Void, Object[]> {
 	
 	public RESTTask(Context context) {
 		progress = new ProgressDialog(context);
-		progress.setTitle(R.string.progress_title);
+		progress.setCanceledOnTouchOutside(false);
 		progress.setMessage(context.getString(R.string.progress_message));
 		listener = (RESTTaskListener) context;
 	}

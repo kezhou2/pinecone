@@ -56,7 +56,6 @@
 	<string name="error_device_name_is_existed">设备名已经存在</string>
 	
 	<!-- Progress Properties -->
-	<string name="progress_title">请稍候</string>
-	<string name="progress_message">网络数据读取中</string>
+	<string name="progress_message">网络数据读取中&#8230;</string>
     
 </resources>

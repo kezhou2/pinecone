@@ -15,7 +15,7 @@ import android.widget.Button;
  * @author Bill
  *
  */
-public class AddDeviceDialogBuilder extends AbstractBuilder {
+public class ActivateDeviceDialogBuilder extends AbstractBuilder {
 	
 	public static final int DIALOG_ID = 0;
 	
@@ -34,10 +34,10 @@ public class AddDeviceDialogBuilder extends AbstractBuilder {
 	 * 
 	 * @param activity
 	 */
-	public AddDeviceDialogBuilder(final DeviceActivity activity) {
+	public ActivateDeviceDialogBuilder(final DeviceActivity activity) {
 		super(activity);
 		// TODO Auto-generated constructor stub
-		View view = activity.getLayoutInflater().inflate(R.layout.add_device, null);
+		View view = activity.getLayoutInflater().inflate(R.layout.activate_device, null);
 		deviceCode = (FormEditText) view.findViewById(R.id.device_code_input);
 		deviceName = (FormEditText) view.findViewById(R.id.device_name_input);
 		((Button) view.findViewById(R.id.app_ok)).setOnClickListener(new OnClickListener() {
@@ -62,8 +62,8 @@ public class AddDeviceDialogBuilder extends AbstractBuilder {
 		});
 		setView(view);
 		setCancelable(false);
-		setTitle(R.string.device_add);
-		setIcon(android.R.drawable.ic_menu_add);
+		setTitle(R.string.device_activate);
+		setIcon(android.R.drawable.ic_menu_rotate);
 		setDialog(create());
 	}
 

@@ -7,9 +7,9 @@
         	android:title="@string/user_logout"/>
     </group>
     <group android:id="@+id/device_items">
-        <item android:id="@+id/device_add" 
-        	android:icon="@android:drawable/ic_menu_add" 
+        <item android:id="@+id/device_activate" 
+        	android:icon="@android:drawable/ic_menu_rotate" 
         	android:orderInCategory="1" 
-        	android:title="@string/device_add"/>
+        	android:title="@string/device_activate"/>
     </group>
 </menu>

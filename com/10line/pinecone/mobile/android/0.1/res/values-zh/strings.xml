@@ -31,7 +31,7 @@
     <string name="device_name_tips">请输入设备名称</string>
     
     <!-- Device Operations -->
-    <string name="device_add">添加设备</string>
+    <string name="device_activate">激活设备</string>
     
     <!-- Item Properties -->
     <string name="item_setting">确定设置为</string>

@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.service.TaskFacade;
-import com.tenline.pinecone.mobile.android.view.AddDeviceDialogBuilder;
+import com.tenline.pinecone.mobile.android.view.ActivateDeviceDialogBuilder;
 import com.tenline.pinecone.platform.model.Device;
 
 import android.app.Dialog;
@@ -40,7 +40,7 @@ public class DeviceActivity extends AbstractListActivity {
 	private static final String VALIDATE_DEVICE_WITH_NAME = "validateDeviceWithName";
 	private static final String VALIDATE_DEVICE_WITH_USER = "validateDeviceWithUser";
 	
-	private AddDeviceDialogBuilder builder;
+	private ActivateDeviceDialogBuilder builder;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class DeviceActivity extends AbstractListActivity {
 	@SuppressWarnings("deprecation")
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
-		case R.id.device_add: showDialog(AddDeviceDialogBuilder.DIALOG_ID); break;
+		case R.id.device_activate: showDialog(ActivateDeviceDialogBuilder.DIALOG_ID); break;
 		case R.id.user_logout: logout(); break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -72,8 +72,8 @@ public class DeviceActivity extends AbstractListActivity {
 	@SuppressWarnings("deprecation")
 	public Dialog onCreateDialog(int id) {
 		switch(id) {
-		case AddDeviceDialogBuilder.DIALOG_ID:
-			builder = new AddDeviceDialogBuilder(this);
+		case ActivateDeviceDialogBuilder.DIALOG_ID:
+			builder = new ActivateDeviceDialogBuilder(this);
 			return builder.getDialog();
 		}
 		return super.onCreateDialog(id);

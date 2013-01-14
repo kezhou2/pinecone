@@ -11,7 +11,7 @@ import android.content.Context;
  * @author Bill
  *
  */
-public abstract class AbstractBuilder extends Builder {
+public abstract class AbstractDialogBuilder extends Builder {
 
 	protected AlertDialog dialog;
 	
@@ -19,9 +19,10 @@ public abstract class AbstractBuilder extends Builder {
 	 * 
 	 * @param context
 	 */
-	public AbstractBuilder(Context context) {
+	public AbstractDialogBuilder(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
+		setCancelable(false);
 	}
 	
 	/**

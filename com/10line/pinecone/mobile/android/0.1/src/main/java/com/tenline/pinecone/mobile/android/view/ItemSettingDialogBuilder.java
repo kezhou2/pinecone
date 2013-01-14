@@ -14,7 +14,7 @@ import com.tenline.pinecone.mobile.android.VariableActivity;
  * @author Bill
  *
  */
-public class ItemSettingDialogBuilder extends AbstractBuilder {
+public class ItemSettingDialogBuilder extends AbstractDialogBuilder {
 
 	public static final int DIALOG_ID = 1;
 	
@@ -32,7 +32,7 @@ public class ItemSettingDialogBuilder extends AbstractBuilder {
 				// TODO Auto-generated method stub
 				String variableId = activity.getIntent().getStringExtra("variableId");
 				String variableValue = activity.getIntent().getStringExtra("itemValue");
-				VariableActivity.getInstance().initChannelTask(VariableActivity.PUBLISH_TO_CHANNEL, variableId, variableValue); 
+				VariableActivity.getInstance().new PublishToChannelTask().execute(variableId, variableValue); 
 				dialog.cancel(); activity.finish();
 			}
 			
@@ -46,7 +46,6 @@ public class ItemSettingDialogBuilder extends AbstractBuilder {
 			}
 			
 		});
-		setCancelable(false);
 		setMessage(activity.getString(R.string.item_setting) + " " + activity.getIntent().getStringExtra("itemValue") + "?");
 		setTitle(activity.getIntent().getStringExtra("variableName"));
 		setIcon(android.R.drawable.ic_menu_manage);

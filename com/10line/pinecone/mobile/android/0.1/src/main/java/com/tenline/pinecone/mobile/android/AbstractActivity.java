@@ -4,7 +4,6 @@
 package com.tenline.pinecone.mobile.android;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.service.RESTTaskListener;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 
 import android.app.Activity;
@@ -17,29 +16,22 @@ import android.util.Log;
  * @author Bill
  *
  */
-public abstract class AbstractActivity extends Activity implements RESTTaskListener {
+public abstract class AbstractActivity extends Activity {
 
-	protected ServiceConnectionHelper helper = new ServiceConnectionHelper();
+	protected ServiceConnectionHelper restHelper = new ServiceConnectionHelper();
 	
-	public ServiceConnectionHelper getHelper() {
-		return helper;
-	}
+	protected RESTService getRESTService() {return (RESTService) restHelper.getService();}
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Log.i(getClass().getSimpleName(), "onCreate");
-        if (!helper.isBound()) bindService(new Intent(this, RESTService.class), helper, Context.BIND_AUTO_CREATE);
+		super.onCreate(savedInstanceState); Log.i(getClass().getSimpleName(), "onCreate");
+        if (!restHelper.isBound()) bindService(new Intent(this, RESTService.class), restHelper, Context.BIND_AUTO_CREATE);
     }
 	
 	@Override
     protected void onDestroy() {
-        super.onDestroy();
-        Log.i(getClass().getSimpleName(), "onDestroy");
-        if (helper.isBound()) {
-            unbindService(helper);
-            helper.setBound(false);
-        }
+        super.onDestroy(); Log.i(getClass().getSimpleName(), "onDestroy");
+        if (restHelper.isBound()) {unbindService(restHelper); restHelper.setBound(false);}
     }
 
 }

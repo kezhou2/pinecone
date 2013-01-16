@@ -82,7 +82,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				RESTService service = ((DeviceActivity) progress.getContext()).getRESTService(); 
+				RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService(); 
 				String deviceCode = ((FormEditText) params[0]).getText().toString();
 				ArrayList<?> devices = (ArrayList<?>) service.get("/device/search/codes?code=" + deviceCode); 
 				params[2] = devices.size(); if (devices.size() > 0) params[3] = ((Device) devices.toArray()[0]).getId();
@@ -119,7 +119,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				RESTService service = ((DeviceActivity) progress.getContext()).getRESTService();
+				RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService();
 				params[3] = ((ArrayList<?>) service.get("/device/" + params[2] + "/user")).size();
 			} catch (Exception e) {
 				if (e.getMessage().equals("404 Not Found")) {params[3] = 0;}
@@ -156,7 +156,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				RESTService service = ((DeviceActivity) progress.getContext()).getRESTService();
+				RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService();
 				String deviceName = ((FormEditText) params[0]).getText().toString();
 				params[2] = ((ArrayList<?>) service.get("/device/search/names?name=" + deviceName)).size();
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
@@ -191,18 +191,18 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				RESTService service = ((DeviceActivity) progress.getContext()).getRESTService();
-				String userId = ((DeviceActivity) progress.getContext()).getIntent().getStringExtra("userId");
-				service.post("/device/" + params[1] + "/user", "/user/" + userId); Device device = new Device();
-				device.setName(((FormEditText) params[0]).getText().toString());
-				service.put("/device/" + params[1], device); params[1] = userId;
+				DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
+				RESTService service = activity.getRESTService(); Device device = new Device();
+				device.setName(((FormEditText) params[0]).getText().toString()); service.put("/device/" + params[1], device);
+				service.post("/device/" + params[1] + "/user", "/user/" + activity.getIntent().getStringExtra("userId")); 
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
 		@Override
 		protected void onPostExecute(Object[] result) {
 			// TODO Auto-generated method stub
-			((DeviceActivity) progress.getContext()).doInitListViewTask("/user/" + result[1] + "/devices");
+			DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
+			activity.doInitListViewTask("/user/" + activity.getIntent().getStringExtra("userId") + "/devices");
 			Toast.makeText(progress.getContext(), R.string.error_device_has_been_activated, Toast.LENGTH_LONG).show(); 
 			getDialog().cancel(); super.onPostExecute(result);
 		}

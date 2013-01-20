@@ -52,8 +52,7 @@ public class RESTService extends AbstractService {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.i(getClass().getSimpleName(), "onDestroy");
-		template = null;
-		mapper = null;
+		template = null; mapper = null;
 	}
 	
 	/**
@@ -63,7 +62,7 @@ public class RESTService extends AbstractService {
 	 * @return
 	 * @throws Exception
 	 */
-	public String post(String path, Object... content) throws Exception {
+	public Object post(String path, Object... content) throws Exception {
 		List<Object> params = Arrays.asList(content);
 		if (path.contains(LOGIN_URL)) {
 			MultiValueMap<String, Object> form = new LinkedMultiValueMap<String, Object>();
@@ -72,7 +71,7 @@ public class RESTService extends AbstractService {
 			return get(template.postForLocation(baseUrl + path, form).toString().substring(baseUrl.length())).toString();
 		} else {
 			if (params.get(0) instanceof Entity) {
-				return template.postForObject(baseUrl + "/rest" + path, params.get(0), String.class);
+				return get(template.postForLocation(baseUrl + "/rest" + path, params.get(0)).toString().substring((baseUrl + "/rest").length()));
 			} else {
 				HttpHeaders headers = new HttpHeaders();
 				headers.set("Content-Type", "text/uri-list; charset=utf-8");

@@ -83,9 +83,19 @@ public class RESTService extends AbstractService {
 	/**
 	 * 
 	 * @param path
-	 * @param content
+	 * @throws Exception
 	 */
-	public void put(String path, Object content) {
+	public void delete(String path) throws Exception {
+		template.delete(baseUrl + "/rest" + path);
+	}
+	
+	/**
+	 * 
+	 * @param path
+	 * @param content
+	 * @throws Exception
+	 */
+	public void put(String path, Object content) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
 		if (content instanceof Entity) {
 			headers.set("Content-Type", "application/json; charset=utf-8");

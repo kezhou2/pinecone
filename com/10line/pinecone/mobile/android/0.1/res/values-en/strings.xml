@@ -3,7 +3,7 @@
     
     <!-- App Properties -->
     <string name="app_name">Pinecone</string>
-    <string name="app_slogan">IOT Application Platform-Smart Your Life!</string>
+    <string name="app_slogan">Smart Your Life!</string>
     <string name="app_url">http://www.pinecone.cc</string>
     
     <!-- App Operations -->
@@ -32,6 +32,11 @@
     
     <!-- Device Operations -->
     <string name="device_activate">Activate device</string>
+    <string name="device_delete">Delete device</string>
+    <string name="device_delete_tips">Device has been deleted</string>
+    <string name="device_delete_message">Are you sure to delete this device?</string>
+    <string name="device_modify">Modify device</string>
+    <string name="device_modify_tips">Device has been modified</string>
     
     <!-- Item Properties -->
     <string name="item_setting">Are you sure to set</string>

@@ -3,7 +3,7 @@
     
     <!-- App Properties -->
     <string name="app_name">松果网</string>
-    <string name="app_slogan">物联网应用平台-智能你的生活！</string>
+    <string name="app_slogan">智能你的生活！</string>
     <string name="app_url">http://www.pinecone.cc</string>
     
     <!-- App Operations -->
@@ -32,6 +32,11 @@
     
     <!-- Device Operations -->
     <string name="device_activate">激活设备</string>
+    <string name="device_delete">删除设备</string>
+    <string name="device_delete_tips">设备已经删除</string>
+    <string name="device_delete_message">确定删除该设备？</string>
+    <string name="device_modify">修改设备</string>
+    <string name="device_modify_tips">设备已经修改</string>
     
     <!-- Item Properties -->
     <string name="item_setting">确定设置为</string>

@@ -1,0 +1,135 @@
+/**
+ * 
+ */
+package com.tenline.pinecone.mobile.android.view;
+
+import java.util.ArrayList;
+
+import com.tenline.pinecone.mobile.android.DeviceActivity;
+import com.tenline.pinecone.mobile.android.R;
+import com.tenline.pinecone.mobile.android.service.RESTService;
+import com.tenline.pinecone.mobile.android.service.RESTTask;
+import com.tenline.pinecone.platform.model.Device;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.Toast;
+
+/**
+ * @author Bill
+ *
+ */
+public class ModifyDeviceDialogBuilder extends AbstractDialogBuilder {
+
+	public static final int DIALOG_ID = 2;
+	
+	/**
+	 * 
+	 * @param activity
+	 */
+	public ModifyDeviceDialogBuilder(final DeviceActivity activity) {
+		super(activity);
+		// TODO Auto-generated constructor stub
+		View view = activity.getLayoutInflater().inflate(R.layout.modify_device, null);
+		final FormEditText deviceName = (FormEditText) view.findViewById(R.id.device_name_input);
+		((Button) view.findViewById(R.id.app_ok)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				if (deviceName.testValidity()) {new DeviceNameValidationTask(activity).execute(deviceName, 0);}
+			}
+			
+		});
+		((Button) view.findViewById(R.id.app_cancel)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				dialog.cancel();
+			}
+			
+		});
+		setView(view);
+		setTitle(activity.getIntent().getStringExtra("deviceName"));
+		setIcon(android.R.drawable.ic_menu_edit);
+		setDialog(create());
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class DeviceNameValidationTask extends RESTTask {
+
+		/**
+		 * 
+		 * @param context
+		 */
+		private DeviceNameValidationTask(Context context) {
+			super(context);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+			// TODO Auto-generated method stub
+			try {
+				RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService();
+				String deviceName = ((FormEditText) params[0]).getText().toString();
+				params[1] = ((ArrayList<?>) service.get("/device/search/names?name=" + deviceName)).size();
+			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
+		}
+		
+		@Override
+		protected void onPostExecute(Object[] result) {
+			// TODO Auto-generated method stub
+			if ((Integer) result[1] > 0) {((FormEditText) result[0]).setError(progress.getContext().getString(R.string.error_device_name_is_existed));}
+			else {new ModifyDeviceTask(progress.getContext()).execute(result[0]);} super.onPostExecute(result);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class ModifyDeviceTask extends RESTTask {
+
+		/**
+		 * 
+		 * @param context
+		 */
+		private ModifyDeviceTask(Context context) {
+			super(context);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+			// TODO Auto-generated method stub
+			try {
+				DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
+				RESTService service = activity.getRESTService(); Device device = new Device();
+				device.setName(((FormEditText) params[0]).getText().toString()); 
+				service.put("/device/" + activity.getIntent().getStringExtra("deviceId"), device);
+			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
+		}
+		
+		@Override
+		protected void onPostExecute(Object[] result) {
+			// TODO Auto-generated method stub
+			DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
+			activity.doInitListViewTask("/user/" + activity.getIntent().getStringExtra("userId") + "/devices");
+			Toast.makeText(progress.getContext(), R.string.device_modify_tips, Toast.LENGTH_LONG).show(); 
+			getDialog().cancel(); super.onPostExecute(result);
+		}
+		
+	}
+
+}

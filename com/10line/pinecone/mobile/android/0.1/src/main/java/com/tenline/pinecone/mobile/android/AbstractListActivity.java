@@ -34,7 +34,7 @@ public abstract class AbstractListActivity extends ListActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.options, menu); return super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.options_menu, menu); return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override

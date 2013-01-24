@@ -3,6 +3,7 @@
  */
 package com.tenline.pinecone.mobile.android.service;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -43,7 +44,7 @@ public class RESTService extends AbstractService {
 		Log.i(getClass().getSimpleName(), "onBind");
 		template = new RestTemplate();
 		template.getMessageConverters().add(new FormHttpMessageConverter());
-		template.getMessageConverters().add(new StringHttpMessageConverter());
+		template.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
 		template.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
 		return super.onBind(intent);
 	}

@@ -60,6 +60,32 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jarsigner-plugin</artifactId>
+        <version>1.2</version>
+        <executions>
+          <execution>
+            <id>signing</id>
+            <goals>
+              <goal>sign</goal>
+              <goal>verify</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <archiveDirectory/>
+              <includes>
+                <include>target/*.apk</include>
+              </includes>
+              <keystore>project.keystore</keystore>
+              <keypass>pinecone</keypass>
+              <storepass>pinecone</storepass>
+              <alias>pinecone</alias>
+              <removeExistingSignatures>true</removeExistingSignatures>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
         <artifactId>android-maven-plugin</artifactId>
         <version>3.1.1</version>
@@ -71,20 +97,23 @@
           <sdk>
             <platform>17</platform>
           </sdk>
+          <sign>
+            <debug>false</debug>
+          </sign>
           <undeployBeforeDeploy>true</undeployBeforeDeploy>
         </configuration>
         <extensions>true</extensions>
         <executions>
           <execution>
-            <id>proguardApk</id>
-    		<phase>install</phase>
+            <id>proguard</id>
+    		<phase>process-classes</phase>
     		<goals>
       		  <goal>proguard</goal>
     		</goals>
           </execution>
           <execution>
-            <id>alignApk</id>
-    		<phase>install</phase>
+            <id>zipalign</id>
+    		<phase>package</phase>
     		<goals>
       		  <goal>zipalign</goal>
     		</goals>

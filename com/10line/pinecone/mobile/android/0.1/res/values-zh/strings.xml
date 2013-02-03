@@ -27,6 +27,7 @@
     <!-- Device Properties -->
     <string name="device_code">编号：</string>
     <string name="device_code_tips">请输入设备编号</string>
+    <string name="device_code_scan">扫描</string>
     <string name="device_name">名称：</string>
     <string name="device_name_tips">请输入设备名称</string>
     

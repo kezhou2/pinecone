@@ -5,6 +5,7 @@ package com.tenline.pinecone.mobile.android.view;
 
 import java.util.ArrayList;
 
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.tenline.pinecone.mobile.android.DeviceActivity;
 import com.tenline.pinecone.mobile.android.R;
 import com.tenline.pinecone.mobile.android.service.RESTService;
@@ -36,6 +37,15 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		View view = activity.getLayoutInflater().inflate(R.layout.activate_device, null);
 		final FormEditText deviceCode = (FormEditText) view.findViewById(R.id.device_code_input);
 		final FormEditText deviceName = (FormEditText) view.findViewById(R.id.device_name_input);
+		((Button) view.findViewById(R.id.device_code_scan)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				new IntentIntegrator(activity).initiateScan();
+			}
+			
+		});
 		((Button) view.findViewById(R.id.app_ok)).setOnClickListener(new OnClickListener() {
 
 			@Override

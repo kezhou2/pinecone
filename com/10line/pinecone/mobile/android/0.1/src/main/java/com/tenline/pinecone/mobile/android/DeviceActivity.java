@@ -6,8 +6,11 @@ package com.tenline.pinecone.mobile.android;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.tenline.pinecone.mobile.android.view.ActivateDeviceDialogBuilder;
 import com.tenline.pinecone.mobile.android.view.DeleteDeviceDialogBuilder;
+import com.tenline.pinecone.mobile.android.view.FormEditText;
 import com.tenline.pinecone.mobile.android.view.ModifyDeviceDialogBuilder;
 import com.tenline.pinecone.platform.model.Device;
 
@@ -73,12 +76,14 @@ public class DeviceActivity extends AbstractListActivity implements ViewBinder {
 		}
 	}
 	
+	private ActivateDeviceDialogBuilder builder;
+	
 	@Override
 	@SuppressWarnings("deprecation")
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
 		case ActivateDeviceDialogBuilder.DIALOG_ID:
-			return new ActivateDeviceDialogBuilder(this).getDialog();
+			builder = new ActivateDeviceDialogBuilder(this); return builder.getDialog();
 		case ModifyDeviceDialogBuilder.DIALOG_ID:
 			return new ModifyDeviceDialogBuilder(this).getDialog();
 		case DeleteDeviceDialogBuilder.DIALOG_ID:
@@ -122,6 +127,13 @@ public class DeviceActivity extends AbstractListActivity implements ViewBinder {
 		// TODO Auto-generated method stub
 		Device device = (Device) data; view.setTag(Long.valueOf(device.getId()).intValue());
 		((TextView) view).setText(device.getName()); return true;
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+		if (scanResult != null) {((FormEditText) builder.getDialog().findViewById(R.id.device_code_input)).setText(scanResult.getContents());}
 	}
 
 }

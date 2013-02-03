@@ -27,6 +27,7 @@
     <!-- Device Properties -->
     <string name="device_code">Code:</string>
     <string name="device_code_tips">Please input device code</string>
+    <string name="device_code_scan">Scan</string>
     <string name="device_name">Name:</string>
     <string name="device_name_tips">Please input device name</string>
     

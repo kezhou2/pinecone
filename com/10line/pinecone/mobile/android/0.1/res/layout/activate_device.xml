@@ -12,14 +12,29 @@
         android:text="@string/device_code"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <com.tenline.pinecone.mobile.android.view.FormEditText 
-        validation:testType="alphaNumeric"
-        android:id="@+id/device_code_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/device_code_tips" >
-        <requestFocus />
-    </com.tenline.pinecone.mobile.android.view.FormEditText>
+    <LinearLayout android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_gravity="center_vertical"
+    	android:gravity="center_vertical" >"
+    	
+        <com.tenline.pinecone.mobile.android.view.FormEditText 
+        	validation:testType="alphaNumeric"
+        	android:id="@+id/device_code_input"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="1"
+        	android:hint="@string/device_code_tips" >
+        	<requestFocus />
+    	</com.tenline.pinecone.mobile.android.view.FormEditText>
+
+    	<Button android:id="@+id/device_code_scan"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_weight="2"
+        	android:text="@string/device_code_scan"
+        	android:drawableLeft="@android:drawable/stat_notify_more" />
+        
+    </LinearLayout>
     
     <TextView android:id="@+id/device_name"
         android:layout_width="wrap_content"

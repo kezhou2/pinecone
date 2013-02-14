@@ -157,7 +157,7 @@
         <artifactId>cf-maven-plugin</artifactId>
         <version>1.0.0.M1</version>
         <configuration>           	
-          <target>http://api.cloudfoundry.com</target>
+          <target>https://api.cloudfoundry.com</target>
           <services>mysql-pinecone</services>
           <appname>pinecone-service</appname>           
         </configuration>           

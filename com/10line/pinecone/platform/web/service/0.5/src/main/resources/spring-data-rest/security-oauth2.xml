@@ -12,18 +12,12 @@
   
   <!-- Enables Spring Security Debugging --><sec:debug/>
   
-  <!-- Empty filter chain for the RESTful service -->
-  <sec:http pattern="/rest/**" create-session="stateless" security="none"/>
-
   <!-- Empty filter chain for the channel service -->
   <sec:http pattern="/channel*" security="none"/>
 
-  <!-- Additional filter chain for normal users, matching all other requests -->
-  <sec:http>
-    <sec:intercept-url pattern='/**' access='ROLE_USER' />
-    <sec:form-login default-target-url="/index.html" always-use-default-target="true"/>
-    <sec:remember-me/>
-    <sec:logout delete-cookies="JSESSIONID"/>
+  <!-- Spring filter chain for matching all other requests -->
+  <sec:http auto-config="true">
+    <sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
   </sec:http>
   
   <!-- JDBC-based Authentication Mananger -->

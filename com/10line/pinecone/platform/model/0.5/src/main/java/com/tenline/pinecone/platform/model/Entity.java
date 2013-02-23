@@ -3,6 +3,7 @@
  */
 package com.tenline.pinecone.platform.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.GeneratedValue;
@@ -16,10 +17,11 @@ import javax.persistence.Transient;
  * @author Bill
  *
  */
+@SuppressWarnings("serial")
 @javax.persistence.Entity
 @Table(name = "entities")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Entity {
+public abstract class Entity implements Serializable {
 
 	@Id
 	@GeneratedValue

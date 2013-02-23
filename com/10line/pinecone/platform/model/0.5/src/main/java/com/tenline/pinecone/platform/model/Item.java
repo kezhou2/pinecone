@@ -13,6 +13,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
+@SuppressWarnings("serial")
 @Table(name = "items")
 public class Item extends com.tenline.pinecone.platform.model.Entity {
 	

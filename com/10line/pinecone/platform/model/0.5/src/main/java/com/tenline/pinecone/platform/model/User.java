@@ -18,6 +18,7 @@ import org.springframework.data.rest.repository.annotation.RestResource;
  *
  */
 @Entity
+@SuppressWarnings("serial")
 @Table(name = "users")
 public class User extends com.tenline.pinecone.platform.model.Entity {
 	

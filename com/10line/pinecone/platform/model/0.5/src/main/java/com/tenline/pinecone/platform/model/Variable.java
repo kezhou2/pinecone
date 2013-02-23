@@ -17,6 +17,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
+@SuppressWarnings("serial")
 @Table(name = "variables")
 public class Variable extends com.tenline.pinecone.platform.model.Entity {
 

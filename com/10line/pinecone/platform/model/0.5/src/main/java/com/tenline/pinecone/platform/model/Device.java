@@ -17,6 +17,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
+@SuppressWarnings("serial")
 @Table(name = "devices")
 public class Device extends com.tenline.pinecone.platform.model.Entity {
 	

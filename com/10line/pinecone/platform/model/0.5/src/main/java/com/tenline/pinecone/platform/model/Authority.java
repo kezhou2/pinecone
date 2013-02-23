@@ -15,6 +15,7 @@ import org.springframework.data.rest.repository.annotation.RestResource;
  *
  */
 @Entity
+@SuppressWarnings("serial")
 @Table(name = "authorities")
 public class Authority extends com.tenline.pinecone.platform.model.Entity {
 	

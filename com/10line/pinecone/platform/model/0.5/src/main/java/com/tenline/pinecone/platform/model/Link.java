@@ -3,11 +3,14 @@
  */
 package com.tenline.pinecone.platform.model;
 
+import java.io.Serializable;
+
 /**
  * @author Bill
  *
  */
-public class Link {
+@SuppressWarnings("serial")
+public class Link implements Serializable {
 
 	private String rel;
 	

@@ -43,7 +43,6 @@ public class RESTClient {
 	 * @throws Exception
 	 */
 	public String post(String path, Object content) throws Exception {
-		String responseMessage;
 		connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
@@ -62,9 +61,14 @@ public class RESTClient {
 			connection.getOutputStream().flush();
 	        connection.getOutputStream().close();
 		}
-        responseMessage = connection.getResponseMessage();
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
+			if (content instanceof Entity) {
+				String location = connection.getHeaderField("Location");
+				return location.substring(location.lastIndexOf("/") + 1);
+			}
+		}
 		connection.disconnect();
-		return responseMessage;
+		return connection.getResponseMessage();
 	}
 	
 	/**
@@ -74,14 +78,12 @@ public class RESTClient {
 	 * @throws Exception
 	 */
 	public String delete(String path) throws Exception {
-		String responseMessage;
 		connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
-		responseMessage = connection.getResponseMessage();
 		connection.disconnect();
-		return responseMessage;
+		return connection.getResponseMessage();
 	}
 	
 	/**
@@ -92,7 +94,6 @@ public class RESTClient {
 	 * @throws Exception
 	 */
 	public String put(String path, Object content) throws Exception {
-		String responseMessage;
 		connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
@@ -111,9 +112,8 @@ public class RESTClient {
 			connection.getOutputStream().flush();
 	        connection.getOutputStream().close();
 		}
-        responseMessage = connection.getResponseMessage();
 		connection.disconnect();
-		return responseMessage;
+		return connection.getResponseMessage();
 	}
 	
 	/**

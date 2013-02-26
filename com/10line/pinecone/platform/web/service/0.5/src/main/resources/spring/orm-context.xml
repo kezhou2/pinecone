@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
-       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/jdbc
+       http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
  
   <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
     <property name="entityManagerFactory" ref="entityManagerFactory"/>
@@ -25,5 +28,10 @@
 	<property name="username" value="root" />
 	<property name="password" value="root" />
   </bean>
+  
+  <!-- Just for Testing and First Deployment with a blank database -->
+  <!--  <jdbc:initialize-database data-source="dataSource">
+    <jdbc:script location="classpath:initialize-database.sql" />
+  </jdbc:initialize-database> -->
     
 </beans>

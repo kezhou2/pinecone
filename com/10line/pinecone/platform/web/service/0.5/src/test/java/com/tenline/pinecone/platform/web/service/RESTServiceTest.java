@@ -56,11 +56,10 @@ public class RESTServiceTest extends AbstractServiceTest {
 	
 	@Test
 	public void test() throws Exception {
-		user.setId(Long.valueOf(client.post("/user", user)));
-		authority.setId(Long.valueOf(client.post("/authority", authority)));
-		device.setId(Long.valueOf(client.post("/device", device)));
+		user.setId(Long.valueOf(client.post("/user", "admin", "admin", user)));
+		authority.setId(Long.valueOf(client.post("/authority", "admin", "admin", authority)));
 		logger.log(Level.INFO, "---------- User Test Case ----------");
-		user = (User) client.get("/user/" + user.getId()).toArray()[0];
+		user = (User) client.get("/user/" + user.getId(), user.getName(), user.getPassword()).toArray()[0];
 		assertNotNull(user.getId());
 		logger.log(Level.INFO, user.getId().toString());
 		assertEquals("bill", user.getName());
@@ -76,25 +75,24 @@ public class RESTServiceTest extends AbstractServiceTest {
 			logger.log(Level.INFO, link.getHref());
 			logger.log(Level.INFO, "--------------------");
 		}
-		user.setName("Jack");
 		user.setEmail("bill_mse@163.com");
-		logger.log(Level.INFO, client.put("/user/" + user.getId(), user));
-		user = (User) client.get("/user/" + user.getId()).toArray()[0];
-		assertEquals("Jack", user.getName());
+		logger.log(Level.INFO, client.put("/user/" + user.getId(), "admin", "admin", user));
+		user = (User) client.get("/user/" + user.getId(), user.getName(), "19821027").toArray()[0];
+		assertEquals("bill", user.getName());
 		logger.log(Level.INFO, user.getName());
 		assertEquals("bill_mse@163.com", user.getEmail());
 		logger.log(Level.INFO, user.getEmail());
 		assertNull(user.getPassword());
 		user.setPassword("123456");
-		logger.log(Level.INFO, client.post("/user/" + user.getId(), user));// Password is updated (exported = false)
-		user = (User) client.get("/user/" + user.getId()).toArray()[0];
-		assertEquals("Jack", user.getName());
+		logger.log(Level.INFO, client.post("/user/" + user.getId(), "admin", "admin", user));// Password is updated (exported = false)
+		user = (User) client.get("/user/" + user.getId(), user.getName(), user.getPassword()).toArray()[0];
+		assertEquals("bill", user.getName());
 		logger.log(Level.INFO, user.getName());
 		assertEquals("bill_mse@163.com", user.getEmail());
 		logger.log(Level.INFO, user.getEmail());
 		assertNull(user.getPassword());
 		logger.log(Level.INFO, "----------- Authority Test Case ---------");
-		authority = (Authority) client.get("/authority/" + authority.getId()).toArray()[0];
+		authority = (Authority) client.get("/authority/" + authority.getId(), "admin", "admin").toArray()[0];
 		assertNotNull(authority.getId());
 		logger.log(Level.INFO, authority.getId().toString());
 		assertEquals("ROLE_USER", authority.getAuthority());
@@ -108,16 +106,18 @@ public class RESTServiceTest extends AbstractServiceTest {
 			logger.log(Level.INFO, link.getHref());
 			logger.log(Level.INFO, "--------------------");
 		}
-		authority.setUserName("Jack");
-		logger.log(Level.INFO, client.post("/authority/" + authority.getId(), authority));// UserName is updated (exported = false)
-		authority = (Authority) client.get("/authority/" + authority.getId()).toArray()[0];
+		authority.setUserName("bill");
+		authority.setAuthority("ROLE_ADMIN");
+		logger.log(Level.INFO, client.post("/authority/" + authority.getId(), "admin", "admin", authority));// UserName is updated (exported = false)
+		authority = (Authority) client.get("/authority/" + authority.getId(), "admin", "admin").toArray()[0];
 		logger.log(Level.INFO, authority.getId().toString());
-		assertEquals("ROLE_USER", authority.getAuthority());
+		assertEquals("ROLE_ADMIN", authority.getAuthority());
 		logger.log(Level.INFO, authority.getAuthority());
 		assertNull(authority.getUserName());
-		logger.log(Level.INFO, client.post("/authority/" + authority.getId() + "/user", "/user/" + user.getId()));	
+		logger.log(Level.INFO, client.post("/authority/" + authority.getId() + "/user", "admin", "admin", "/user/" + user.getId()));	
 		logger.log(Level.INFO, "---------- Device Test Case ----------");
-		device = (Device) client.get("/device/" + device.getId()).toArray()[0];
+		device.setId(Long.valueOf(client.post("/device", "admin", "admin", device)));
+		device = (Device) client.get("/device/" + device.getId(), user.getName(), "123456").toArray()[0];
 		assertNotNull(device.getId());
 		logger.log(Level.INFO, device.getId().toString());
 		assertEquals("ATM", device.getName());
@@ -133,22 +133,26 @@ public class RESTServiceTest extends AbstractServiceTest {
 			logger.log(Level.INFO, "--------------------");
 		}
 		device.setName("FM");
-		device.setCode("123456");
-		logger.log(Level.INFO, client.put("/device/" + device.getId(), device));
-		device = (Device) client.get("/device/" + device.getId()).toArray()[0];
+		logger.log(Level.INFO, client.put("/device/" + device.getId(), "admin", "admin", device));
+		device = (Device) client.get("/device/" + device.getId(), user.getName(), "123456").toArray()[0];
 		logger.log(Level.INFO, device.getId().toString());
 		assertEquals("FM", device.getName());
 		logger.log(Level.INFO, device.getName());
-		assertEquals("123456", device.getCode());
+		assertNotNull(device.getCode());
 		logger.log(Level.INFO, device.getCode());
-		logger.log(Level.INFO, client.post("/device/" + device.getId() + "/user", "/user/" + user.getId()));	
+		logger.log(Level.INFO, client.post("/device/" + device.getId() + "/user", "admin", "admin", "/user/" + user.getId()));	
 		logger.log(Level.INFO, "----------- Test Case End ---------");
-		assertEquals(1, client.get("/user/" + user.getId() + "/devices").size());
-		assertEquals(1, client.get("/user/" + user.getId() + "/authorities").size());
-		logger.log(Level.INFO, client.delete("/user/" + user.getId()));	
-		assertEquals(0, client.get("/user").size());
-		assertEquals(0, client.get("/authority").size());
-		assertEquals(0, client.get("/device").size());
+		assertEquals(1, client.get("/user/" + user.getId() + "/devices", user.getName(), "123456").size());
+		assertEquals(1, client.get("/user/" + user.getId() + "/authorities", user.getName(), "123456").size());
+		logger.log(Level.INFO, client.delete("/user/" + user.getId(), "admin", "admin"));	
+		// Authentication request for failed, because user has been deleted
+		assertEquals(0, client.get("/user", user.getName(), "123456").size());
+		assertEquals(0, client.get("/authority", user.getName(), "123456").size());
+		assertEquals(0, client.get("/device", user.getName(), "123456").size());
+		// The correct result
+		assertEquals(1, client.get("/user", "admin", "admin").size());
+		assertEquals(1, client.get("/authority", "admin", "admin").size());
+		assertEquals(0, client.get("/device", "admin", "admin").size());
 	}
 
 }

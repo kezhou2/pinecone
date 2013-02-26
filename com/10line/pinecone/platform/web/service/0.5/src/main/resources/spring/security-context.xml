@@ -14,7 +14,9 @@
   
   <!-- Spring Security Filter Chain for REST Service -->
   <sec:http pattern="/rest/**" create-session="stateless">
-    <sec:intercept-url pattern="/rest/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    <sec:intercept-url pattern="/rest/**" access="ROLE_USER, ROLE_ADMIN" method="GET" />
+    <sec:intercept-url pattern="/rest/**" access="ROLE_ADMIN" />
+    <sec:anonymous enabled="false" />
     <sec:http-basic/>
   </sec:http>
   

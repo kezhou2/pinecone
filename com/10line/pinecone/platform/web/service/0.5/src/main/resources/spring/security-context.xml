@@ -10,7 +10,11 @@
   <!-- Enables Spring Security Debugging --><sec:debug/>
   
   <!-- Spring Security Filter Chain for Channel Service -->
-  <sec:http pattern="/channel*" security="none"/>
+  <sec:http pattern="/channel*" create-session="stateless">
+    <sec:intercept-url pattern="/channel*" access="ROLE_USER, ROLE_ADMIN" />
+    <sec:anonymous enabled="false" />
+    <sec:http-basic/>
+  </sec:http>
   
   <!-- Spring Security Filter Chain for REST Service -->
   <sec:http pattern="/rest/**" create-session="stateless">

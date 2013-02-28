@@ -34,7 +34,7 @@ public class ChannelServiceTest extends AbstractServiceTest {
 		theAttributes.put("hello", "world");
 		client = new ChannelClient(URL);
 		client.setDebug(true);
-		client.join();
+		client.join("admin", "admin");
 		client.listen(new ChannelClientListener() {
 
 			@Override
@@ -62,7 +62,7 @@ public class ChannelServiceTest extends AbstractServiceTest {
 				logger.log(Level.SEVERE, message);
 			}
 			
-		}, Protocol.MODE_STREAM, subject);
+		}, Protocol.MODE_STREAM, subject, "admin", "admin");
 	}
 	
 	@After
@@ -70,13 +70,13 @@ public class ChannelServiceTest extends AbstractServiceTest {
 		subject = null;
 		theAttributes.clear();
 		theAttributes = null;
-		client.leave();
+		client.leave("admin", "admin");
 		client = null;	
 	}
 	
 	@Test
 	public void test() throws Exception {
-		client.publish(subject, theAttributes);
+		client.publish(subject, theAttributes, "admin", "admin");
 	}
 
 }

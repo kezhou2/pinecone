@@ -14,7 +14,7 @@ import android.os.IBinder;
  */
 public abstract class AbstractService extends Service {
 	
-	protected String baseUrl = "http://pinecone-service.cloudfoundry.com";
+	protected String baseUrl = "http://www.pinecone.cc";
 	
 	/**
 	 * 

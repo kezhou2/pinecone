@@ -6,6 +6,8 @@ package nl.justobjects.pushlet.core;
 import nl.justobjects.pushlet.util.Sys;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -113,7 +115,12 @@ public class Event implements Protocol, Serializable {
 		for (Iterator iter = getFieldNames(); iter.hasNext();) {
 			String nextAttrName = (String) iter.next();
 			String nextAttrValue = getField(nextAttrName);
-			queryString = queryString + amp + nextAttrName + "=" + nextAttrValue;
+			try {
+				queryString = queryString + amp + nextAttrName + "=" + URLEncoder.encode(nextAttrValue, "utf-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// After first add "&".
 			amp = "&";
 		}

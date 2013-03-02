@@ -42,15 +42,13 @@ public class RESTClient {
 	/**
 	 * 
 	 * @param path
-	 * @param username
-	 * @param password
 	 * @param content
 	 * @return
 	 * @throws Exception
 	 */
-	public String post(String path, String username, String password, Object content) throws Exception {
+	public String post(String path, Object content) throws Exception {
 		connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
-		connection.setRequestProperty("Authorization", "Basic " + encoder.encode((username + ":" + password).getBytes()));
+		connection.setRequestProperty("Authorization", "Basic " + encoder.encode("admin:admin".getBytes()));
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		if (content instanceof Entity) {
@@ -81,14 +79,12 @@ public class RESTClient {
 	/**
 	 * 
 	 * @param path
-	 * @param username
-	 * @param password
 	 * @return
 	 * @throws Exception
 	 */
-	public String delete(String path, String username, String password) throws Exception {
+	public String delete(String path) throws Exception {
 		connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
-		connection.setRequestProperty("Authorization", "Basic " + encoder.encode((username + ":" + password).getBytes()));
+		connection.setRequestProperty("Authorization", "Basic " + encoder.encode("admin:admin".getBytes()));
 		connection.setRequestMethod("DELETE");
 		connection.setConnectTimeout(TIMEOUT);
 		connection.connect();
@@ -99,15 +95,13 @@ public class RESTClient {
 	/**
 	 * 
 	 * @param path
-	 * @param username
-	 * @param password
 	 * @param content
 	 * @return
 	 * @throws Exception
 	 */
-	public String put(String path, String username, String password, Object content) throws Exception {
+	public String put(String path, Object content) throws Exception {
 		connection = (HttpURLConnection) new URL(baseUrl + path).openConnection();
-		connection.setRequestProperty("Authorization", "Basic " + encoder.encode((username + ":" + password).getBytes()));
+		connection.setRequestProperty("Authorization", "Basic " + encoder.encode("admin:admin".getBytes()));
 		connection.setDoOutput(true);
 		connection.setRequestMethod("PUT");
 		if (content instanceof Entity) {

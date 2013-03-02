@@ -47,6 +47,8 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Base64 Encoder
 	 */
+	private String username; public void setUsername(String username) {this.username = username;}
+	private String password; public void setPassword(String password) {this.password = password;}
 	private BASE64Encoder encoder = new BASE64Encoder();
 
 	/**
@@ -101,10 +103,10 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Join server, starts session.
 	 */
-	public void join(String username, String password) throws PushletException {
+	public void join() throws PushletException {
 		Event event = new Event(E_JOIN);
 		event.setField(P_FORMAT, FORMAT_XML);
-		Event response = doControl(event, username, password);
+		Event response = doControl(event);
 		throwOnNack(response);
 
 		// Join Ack received
@@ -114,12 +116,12 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Leave server, stops session.
 	 */
-	public void leave(String username, String password) throws PushletException {
-		stopListen(username, password);
+	public void leave() throws PushletException {
+		stopListen();
 		throwOnInvalidSession();
 		Event event = new Event(E_LEAVE);
 		event.setField(P_ID, id);
-		Event response = doControl(event, username, password);
+		Event response = doControl(event);
 
 		throwOnNack(response);
 		id = null;
@@ -128,23 +130,23 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Open data channel.
 	 */
-	public void listen(ChannelClientListener aListener, String username, String password) throws PushletException {
-		listen(aListener, MODE_STREAM, username, password);
+	public void listen(ChannelClientListener aListener) throws PushletException {
+		listen(aListener, MODE_STREAM);
 	}
 
 	/**
 	 * Open data channel in stream or push mode.
 	 */
-	public void listen(ChannelClientListener aListener, String aMode, String username, String password) throws PushletException {
-		listen(aListener, aMode, null, username, password);
+	public void listen(ChannelClientListener aListener, String aMode) throws PushletException {
+		listen(aListener, aMode, null);
 	}
 
 	/**
 	 * Open data channel in stream or push mode with a subject.
 	 */
-	public void listen(ChannelClientListener aListener, String aMode, String aSubject, String username, String password) throws PushletException {
+	public void listen(ChannelClientListener aListener, String aMode, String aSubject) throws PushletException {
 		throwOnInvalidSession();
-		stopListen(username, password);
+		stopListen();
 
 		String listenURL = pushletURL
 				+ "?" + P_EVENT + "=" + E_LISTEN
@@ -155,14 +157,14 @@ public class ChannelClient implements Protocol {
 		}
 
 		// Start listener thread (sync call).
-		startDataEventListener(aListener, listenURL, username, password);
+		startDataEventListener(aListener, listenURL);
 	}
 
 	/**
 	 * Immediate listener: joins/subscribes and listens in one action.
 	 */
-	public void joinListen(ChannelClientListener aListener, String aMode, String aSubject, String username, String password) throws PushletException {
-		stopListen(username, password);
+	public void joinListen(ChannelClientListener aListener, String aMode, String aSubject) throws PushletException {
+		stopListen();
 
 		String listenURL = pushletURL
 				+ "?" + P_EVENT + "=" + E_JOIN_LISTEN
@@ -171,26 +173,26 @@ public class ChannelClient implements Protocol {
 				+ "&" + P_SUBJECT + "=" + aSubject;
 
 		// Start listener thread (sync call).
-		startDataEventListener(aListener, listenURL, username, password);
+		startDataEventListener(aListener, listenURL);
 	}
 
 	/**
 	 * Publish an event through server.
 	 */
 	@SuppressWarnings("rawtypes")
-	public void publish(String aSubject, Map theAttributes, String username, String password) throws PushletException {
+	public void publish(String aSubject, Map theAttributes) throws PushletException {
 		throwOnInvalidSession();
 		Event event = new Event(E_PUBLISH, theAttributes);
 		event.setField(P_SUBJECT, aSubject);
 		event.setField(P_ID, id);
-		Event response = doControl(event, username, password);
+		Event response = doControl(event);
 		throwOnNack(response);
 	}
 
 	/**
 	 * Subscribes, returning subscription id.
 	 */
-	public String subscribe(String aSubject, String aLabel, String username, String password) throws PushletException {
+	public String subscribe(String aSubject, String aLabel) throws PushletException {
 		throwOnInvalidSession();
 		Event event = new Event(E_SUBSCRIBE);
 		event.setField(P_ID, id);
@@ -202,7 +204,7 @@ public class ChannelClient implements Protocol {
 		}
 
 		// Send request
-		Event response = doControl(event, username, password);
+		Event response = doControl(event);
 		throwOnNack(response);
 
 		return response.getField(P_SUBSCRIPTION_ID);
@@ -211,14 +213,14 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Subscribes, returning subscription id.
 	 */
-	public String subscribe(String aSubject, String username, String password) throws PushletException {
-		return subscribe(aSubject, null, username, password);
+	public String subscribe(String aSubject) throws PushletException {
+		return subscribe(aSubject, null);
 	}
 
 	/**
 	 * Unsubscribes with subscription id.
 	 */
-	public void unsubscribe(String aSubscriptionId, String username, String password) throws PushletException {
+	public void unsubscribe(String aSubscriptionId) throws PushletException {
 		throwOnInvalidSession();
 		Event event = new Event(E_UNSUBSCRIBE);
 		event.setField(P_ID, id);
@@ -228,23 +230,23 @@ public class ChannelClient implements Protocol {
 			event.setField(P_SUBSCRIPTION_ID, aSubscriptionId);
 		}
 
-		Event response = doControl(event, username, password);
+		Event response = doControl(event);
 		throwOnNack(response);
 	}
 
 	/**
 	 * Unsubscribes from all subjects.
 	 */
-	public void unsubscribe(String username, String password) throws PushletException {
-		unsubscribe(null, username, password);
+	public void unsubscribe() throws PushletException {
+		unsubscribe(null);
 	}
 
 	/**
 	 * Stop the listener.
 	 */
-	public void stopListen(String username, String password) throws PushletException {
+	public void stopListen() throws PushletException {
 		if (dataEventListener != null) {
-			unsubscribe(username, password);
+			unsubscribe();
 			dataEventListener.stop();
 			dataEventListener = null;
 		}
@@ -257,9 +259,9 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Starts default DataEventListener and waits for its thread to start.
 	 */
-	protected void startDataEventListener(ChannelClientListener aListener, String aListenURL, String username, String password) {
+	protected void startDataEventListener(ChannelClientListener aListener, String aListenURL) {
 		// Suggestion by Jeff Nowakowski 29.oct.2006
-		dataEventListener = new DataEventListener(aListener, aListenURL, username, password);
+		dataEventListener = new DataEventListener(aListener, aListenURL);
 
 		synchronized (dataEventListener) {
 			dataEventListener.start();
@@ -283,7 +285,7 @@ public class ChannelClient implements Protocol {
 		}
 	}
 
-	protected Reader openURL(String aURL, String username, String password) throws PushletException {
+	protected Reader openURL(String aURL) throws PushletException {
 		// Open URL connection with server
 		try {
 			p("Connecting to " + aURL);
@@ -324,13 +326,13 @@ public class ChannelClient implements Protocol {
 	/**
 	 * Send control events to server and return response.
 	 */
-	protected Event doControl(Event aControlEvent, String username, String password) throws PushletException {
+	protected Event doControl(Event aControlEvent) throws PushletException {
 		String controlURL = pushletURL + "?" + aControlEvent.toQueryString();
 
 		p("doControl to " + controlURL);
 
 		// Open URL connection with server
-		Reader reader = openURL(controlURL, username, password);
+		Reader reader = openURL(controlURL);
 
 		// Get Pushlet event from stream
 		Event event = null;
@@ -390,14 +392,10 @@ public class ChannelClient implements Protocol {
 		private Reader reader;
 		private String refreshURL;
 		private String listenURL;
-		private String username;
-		private String password;
 
-		public DataEventListener(ChannelClientListener aListener, String aListenURL, String username, String password) {
+		public DataEventListener(ChannelClientListener aListener, String aListenURL) {
 			listener = aListener;
 			listenURL = aListenURL;
-			this.username = username;
-			this.password = password;
 		}
 
 		public void start() {
@@ -423,7 +421,7 @@ public class ChannelClient implements Protocol {
 			try {
 				while (receiveThread != null && receiveThread.isAlive()) {
 					// Connect to server
-					reader = openURL(listenURL, username, password);
+					reader = openURL(listenURL);
 
 					synchronized (this) {
 						// Inform the calling thread we're ready to receive events.
@@ -586,7 +584,7 @@ public class ChannelClient implements Protocol {
 				reader = null;
 			}
 
-			reader = openURL(refreshURL, username, password);
+			reader = openURL(refreshURL);
 		}
 
 		/**

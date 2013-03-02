@@ -12,6 +12,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
+import org.springframework.util.support.Base64;
+
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -327,6 +329,10 @@ public class ChannelService extends AbstractService implements Protocol {
 			// Disable any kind of caching.
 			urlConnection.setUseCaches(false);
 			urlConnection.setDefaultUseCaches(false);
+
+			// HTTP Basic Authorization
+			String data = Base64.encodeBytes((RESTService.getUsername() + ":" + RESTService.getPassword()).getBytes());
+			urlConnection.setRequestProperty("Authorization", "Basic " + data);
 
 			// TODO: later version may use POST
 			// Enable HTTP POST

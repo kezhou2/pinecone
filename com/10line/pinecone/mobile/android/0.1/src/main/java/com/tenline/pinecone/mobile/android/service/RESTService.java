@@ -3,6 +3,7 @@
  */
 package com.tenline.pinecone.mobile.android.service;
 
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +14,14 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.support.Base64;
 import org.springframework.web.client.RestTemplate;
 
 import com.tenline.pinecone.platform.model.Entity;
@@ -37,6 +41,8 @@ public class RESTService extends AbstractService {
 	private ObjectMapper mapper = new ObjectMapper();
 	public static final String LOGIN_URL = "/j_spring_security_check";
 	public static final String LOGOUT_URL = "/j_spring_security_logout";
+	private static String username; public static String getUsername() {return username;}
+	private static String password; public static String getPassword() {return password;}
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -67,14 +73,18 @@ public class RESTService extends AbstractService {
 		List<Object> params = Arrays.asList(content);
 		if (path.contains(LOGIN_URL)) {
 			MultiValueMap<String, Object> form = new LinkedMultiValueMap<String, Object>();
-			form.add("j_username", params.get(0).toString());
-			form.add("j_password", params.get(1).toString());
-			return get(template.postForLocation(baseUrl + path, form).toString().substring(baseUrl.length())).toString();
+			username = params.get(0).toString(); form.add("j_username", username);
+			password = params.get(1).toString(); form.add("j_password", password);
+			path = template.postForLocation(baseUrl + path, form).toString().substring(baseUrl.length());
+			if (path.contains("spring_security")) {return get(path).toString();} return path;
 		} else {
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("Authorization", "Basic " + Base64.encodeBytes("admin:admin".getBytes()));
 			if (params.get(0) instanceof Entity) {
-				return get(template.postForLocation(baseUrl + "/rest" + path, params.get(0)).toString().substring((baseUrl + "/rest").length()));
+				headers.set("Content-Type", "application/json; charset=utf-8");
+				URI uri = template.postForLocation(baseUrl + "/rest" + path, new HttpEntity<Object>(params.get(0), headers));
+				return get(uri.toString().substring((baseUrl + "/rest").length()));
 			} else {
-				HttpHeaders headers = new HttpHeaders();
 				headers.set("Content-Type", "text/uri-list; charset=utf-8");
 				return template.postForObject(baseUrl + "/rest" + path, new HttpEntity<Object>(baseUrl + "/rest" + params.get(0), headers), String.class);
 			}
@@ -87,7 +97,9 @@ public class RESTService extends AbstractService {
 	 * @throws Exception
 	 */
 	public void delete(String path) throws Exception {
-		template.delete(baseUrl + "/rest" + path);
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Basic " + Base64.encodeBytes("admin:admin".getBytes()));
+		template.exchange(baseUrl + "/rest" + path, HttpMethod.DELETE, new HttpEntity<Object>(headers), String.class);
 	}
 	
 	/**
@@ -98,6 +110,7 @@ public class RESTService extends AbstractService {
 	 */
 	public void put(String path, Object content) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Basic " + Base64.encodeBytes("admin:admin".getBytes()));
 		if (content instanceof Entity) {
 			headers.set("Content-Type", "application/json; charset=utf-8");
 			template.put(baseUrl + "/rest" + path, new HttpEntity<Object>(content, headers));
@@ -116,11 +129,14 @@ public class RESTService extends AbstractService {
 	@SuppressWarnings("unchecked")
 	public Object get(String path) throws Exception {
 		Log.i(getClass().getSimpleName(), path);
-		if (path.contains("spring_security") || path.contains("index.html")) {
+		if (path.contains("spring_security")) {
+			if (path.contains(LOGOUT_URL)) {username = null; password = null;}
 			return template.getForObject(baseUrl + path, String.class);
 		} else {
-			ArrayList<Entity> entities = new ArrayList<Entity>();
-			JsonNode rootNode = mapper.readTree(template.getForObject(baseUrl + "/rest" + path, String.class));
+			HttpHeaders headers = new HttpHeaders(); if (username == null) {username = "admin";} if (password == null) {password = "admin";}
+			headers.set("Authorization", "Basic " + Base64.encodeBytes((username + ":" + password).getBytes()));
+			ResponseEntity<String> response = template.exchange(baseUrl + "/rest" + path, HttpMethod.GET, new HttpEntity<Object>(headers), String.class);
+			JsonNode rootNode = mapper.readTree(response.getBody()); ArrayList<Entity> entities = new ArrayList<Entity>();
 			if (path.substring(path.lastIndexOf("/") + 1).matches("^-?\\d+$")) {
 				entities.add(getEntity(rootNode));
 			} else {

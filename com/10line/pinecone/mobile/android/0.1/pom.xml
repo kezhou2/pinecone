@@ -86,7 +86,6 @@
               <keypass>pinecone</keypass>
               <storepass>pinecone</storepass>
               <alias>pinecone</alias>
-              <removeExistingSignatures>true</removeExistingSignatures>
             </configuration>
           </execution>
         </executions>

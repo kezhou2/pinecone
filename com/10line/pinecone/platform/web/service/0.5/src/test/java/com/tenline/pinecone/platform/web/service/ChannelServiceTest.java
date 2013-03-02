@@ -33,8 +33,10 @@ public class ChannelServiceTest extends AbstractServiceTest {
 	public void testSetup() throws Exception {
 		theAttributes.put("hello", "world");
 		client = new ChannelClient(URL);
+		client.setUsername("admin");
+		client.setPassword("admin");
 		client.setDebug(true);
-		client.join("admin", "admin");
+		client.join();
 		client.listen(new ChannelClientListener() {
 
 			@Override
@@ -62,7 +64,7 @@ public class ChannelServiceTest extends AbstractServiceTest {
 				logger.log(Level.SEVERE, message);
 			}
 			
-		}, Protocol.MODE_STREAM, subject, "admin", "admin");
+		}, Protocol.MODE_STREAM, subject);
 	}
 	
 	@After
@@ -70,13 +72,13 @@ public class ChannelServiceTest extends AbstractServiceTest {
 		subject = null;
 		theAttributes.clear();
 		theAttributes = null;
-		client.leave("admin", "admin");
+		client.leave();
 		client = null;	
 	}
 	
 	@Test
 	public void test() throws Exception {
-		client.publish(subject, theAttributes, "admin", "admin");
+		client.publish(subject, theAttributes);
 	}
 
 }

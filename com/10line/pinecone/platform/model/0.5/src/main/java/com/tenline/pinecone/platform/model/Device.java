@@ -11,12 +11,15 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Bill
  *
  */
 @Entity
+@XmlRootElement
 @SuppressWarnings("serial")
 @Table(name = "devices")
 public class Device extends com.tenline.pinecone.platform.model.Entity {
@@ -30,6 +33,7 @@ public class Device extends com.tenline.pinecone.platform.model.Entity {
 	@ManyToOne
 	private User user;
 	
+	@XmlTransient
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "device")
 	private Collection<Variable> variables;
 	

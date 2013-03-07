@@ -12,6 +12,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
  * @author Bill
@@ -20,6 +22,7 @@ import javax.persistence.Transient;
 @SuppressWarnings("serial")
 @javax.persistence.Entity
 @Table(name = "entities")
+@XmlAccessorType(XmlAccessType.FIELD)
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Entity implements Serializable {
 

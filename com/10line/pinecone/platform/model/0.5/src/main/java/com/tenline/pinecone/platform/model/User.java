@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.springframework.data.rest.repository.annotation.RestResource;
 
@@ -29,16 +30,20 @@ public class User extends com.tenline.pinecone.platform.model.Entity {
     private String email;
     
     @Column
+    @XmlTransient
     @RestResource(exported = false)
     private String password;
     
     @Column
+    @XmlTransient
     @RestResource(exported = false)
     private boolean enabled = true;
     
+    @XmlTransient
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
 	private Collection<Device> devices;
     
+    @XmlTransient
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     private Collection<Authority> authorities;
 

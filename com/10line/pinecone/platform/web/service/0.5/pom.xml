@@ -87,12 +87,6 @@
  	  <artifactId>spring-expression</artifactId>
  	  <version>3.1.2.RELEASE</version>
 	</dependency>
-	<!-- JAX-RS RESTEasy -->
-	<dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-spring</artifactId>
-      <version>2.2.0.GA</version>
-	</dependency>
 	<!-- Junit Testing -->
 	<dependency>
 	  <groupId>junit</groupId>

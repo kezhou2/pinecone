@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:validation="http://schemas.android.com/apk/res/com.tenline.pinecone.mobile.android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:orientation="vertical" >
+
+<TextView android:id="@+id/user_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="left"
+    android:text="@string/user_name"
+    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+<com.tenline.pinecone.mobile.android.view.FormEditText 
+    android:id="@+id/user_name_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/user_name_tips"
+    android:inputType="textPersonName" >
+    <requestFocus />
+</com.tenline.pinecone.mobile.android.view.FormEditText>
+
+<TextView android:id="@+id/user_email"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="left"
+	android:text="@string/user_email"
+	android:textAppearance="?android:attr/textAppearanceMedium" />
+
+<com.tenline.pinecone.mobile.android.view.FormEditText 
+    validation:testType="email"
+    android:id="@+id/user_email_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/user_email_tips"
+    android:inputType="textEmailAddress" />
+
+<TextView android:id="@+id/user_password"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="left"
+	android:text="@string/user_password"
+	android:textAppearance="?android:attr/textAppearanceMedium" />
+
+<com.tenline.pinecone.mobile.android.view.FormEditText
+    android:id="@+id/user_password_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="textPassword" />
+
+<TextView android:id="@+id/user_confirm"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="left"
+	android:text="@string/user_confirm"
+	android:textAppearance="?android:attr/textAppearanceMedium" />
+
+<com.tenline.pinecone.mobile.android.view.FormEditText 
+    android:id="@+id/user_confirm_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:inputType="textPassword" />
+
+<Button android:id="@+id/user_submit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/user_submit" />
+
+</LinearLayout>

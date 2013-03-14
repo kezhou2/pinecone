@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- App Properties -->
+    <string name="app_name">Pinecone</string>
+    <string name="app_slogan">Internet of Things App Platform</string>
+    <string name="app_url">http://www.pinecone.cc</string>
+    
+    <!-- App Operations -->
+    <string name="app_ok">OK</string>
+    <string name="app_cancel">Cancel</string>
+    
+    <!-- User Properties -->
+    <string name="user_email">Email:</string>
+    <string name="user_email_tips">Please input user email</string>
+    <string name="user_password">Password:</string>
+    <string name="user_confirm">Confirm:</string>
+    <string name="user_name">UserName:</string>
+    <string name="user_name_tips">Please input user name</string>
+    
+    <!-- User Operations -->
+    <string name="user_register">Register</string>
+    <string name="user_login">Login</string>
+    <string name="user_logout">Logout</string>
+    <string name="user_submit">Submit</string>
+    
+    <!-- Device Properties -->
+    <string name="device_code">Code:</string>
+    <string name="device_code_tips">Please input device code</string>
+    <string name="device_code_scan">Scan</string>
+    <string name="device_name">Name:</string>
+    <string name="device_name_tips">Please input device name</string>
+    
+    <!-- Device Operations -->
+    <string name="device_activate">Activate device</string>
+    <string name="device_delete">Delete device</string>
+    <string name="device_delete_tips">Device has been deleted</string>
+    <string name="device_delete_message">Are you sure to delete this device?</string>
+    <string name="device_modify">Modify device</string>
+    <string name="device_modify_tips">Device has been modified</string>
+    
+    <!-- Item Properties -->
+    <string name="item_setting">Are you sure to set</string>
+    
+    <!-- Validation Properties -->
+    <string name="error_only_numeric_digits_allowed">Only numeric digits are allowed.</string>
+	<string name="error_this_field_cannot_contain_special_character">This field cannot contain any special character</string>
+	<string name="error_only_standard_letters_are_allowed">Only standard letters are allowed</string>
+	<string name="error_field_must_not_be_empty">The field must not be empty</string>
+    <string name="error_email_address_not_valid">Email address not valid</string>
+    <string name="error_creditcard_number_not_valid">Credit card number is not valid</string>
+    <string name="error_phone_not_valid">Phone number not valid</string>
+    <string name="error_domain_not_valid">Domain name not valid</string>
+	<string name="error_ip_not_valid">IP Address not valid</string>
+	<string name="error_url_not_valid">Web Url is not valid</string>
+	<string name="error_password_is_not_equal">Password is not equal</string>
+	<string name="error_login">Invalid username or password!</string>
+	<string name="error_user_name_is_existed">User name is existed</string>
+	<string name="error_user_email_is_existed">Email is existed</string>
+	<string name="error_device_code_is_not_existed">Please accessing device first</string>
+	<string name="error_device_has_been_activated">Device has been activated</string>
+	<string name="error_device_name_is_existed">Device name is existed</string>
+	
+	<!-- Progress Properties -->
+	<string name="progress_message">Loading&#8230;</string>
+    
+</resources>

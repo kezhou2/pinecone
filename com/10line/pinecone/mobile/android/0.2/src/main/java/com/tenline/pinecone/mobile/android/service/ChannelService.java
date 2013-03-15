@@ -29,14 +29,22 @@ public class ChannelService extends AbstractService {
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		Log.i(getClass().getSimpleName(), "onBind");
-		try {
-			baseUrl = "tcp://m2m.eclipse.org:1883";
-			client = new MqttClient(baseUrl, UUID.randomUUID().toString(), new MemoryPersistence());
-			client.connect();
-		} catch (MqttException e) {
-			// TODO Auto-generated catch block
-			Log.e(getClass().getSimpleName(), e.getMessage());
-		}
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					baseUrl = "tcp://m2m.eclipse.org:1883";
+					client = new MqttClient(baseUrl, UUID.randomUUID().toString(), new MemoryPersistence());
+					client.connect();
+				} catch (MqttException e) {
+					// TODO Auto-generated catch block
+					Log.e(getClass().getSimpleName(), e.getMessage());
+				}
+			}
+			
+		}).start();
 		return super.onBind(intent);
 	}
 	
@@ -44,14 +52,22 @@ public class ChannelService extends AbstractService {
 	public void onDestroy() {
 		super.onDestroy();
 		Log.i(getClass().getSimpleName(), "onDestroy");
-		try {
-			client.unsubscribe(topic);
-			if (client.isConnected()) {client.disconnect();}
-			topic = null; client = null;
-		} catch (MqttException e) {
-			// TODO Auto-generated catch block
-			Log.e(getClass().getSimpleName(), e.getMessage());
-		}
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					client.unsubscribe(topic);
+					if (client.isConnected()) {client.disconnect();}
+					topic = null; client = null;
+				} catch (MqttException e) {
+					// TODO Auto-generated catch block
+					Log.e(getClass().getSimpleName(), e.getMessage());
+				}
+			}
+			
+		}).start();
 	}
 	
 	/**
@@ -61,7 +77,7 @@ public class ChannelService extends AbstractService {
 	 * @throws Exception
 	 */
 	public void listen(MqttCallback callback, String topic) throws Exception {
-		this.topic = "pinecone@device." + topic;
+		this.topic = topic;
 		client.setCallback(callback);
     	client.subscribe(this.topic);
 	}

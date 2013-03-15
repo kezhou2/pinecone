@@ -101,7 +101,7 @@ public class VariableActivity extends AbstractListActivity implements MqttCallba
 			// TODO Auto-generated method stub
 			try {
 				while (!channelHelper.isBound()) {Thread.sleep(100);} 
-				getChannelService().listen(VariableActivity.this, params[0]); return true;
+				getChannelService().listen(VariableActivity.this, "pinecone@device." + params[0]); return true;
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
 		}
 		

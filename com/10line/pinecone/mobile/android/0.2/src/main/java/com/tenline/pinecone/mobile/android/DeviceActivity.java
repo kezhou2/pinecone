@@ -6,6 +6,8 @@ package com.tenline.pinecone.mobile.android;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.codehaus.jackson.node.ObjectNode;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.tenline.pinecone.mobile.android.view.ActivateDeviceDialogBuilder;
@@ -17,7 +19,9 @@ import com.tenline.pinecone.platform.model.Device;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
@@ -35,7 +39,7 @@ import android.widget.ListView;
  * @author Bill
  *
  */
-public class DeviceActivity extends AbstractListActivity implements ViewBinder {
+public class DeviceActivity extends AbstractMessageActivity implements ViewBinder {
 	
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.device";
 
@@ -74,6 +78,24 @@ public class DeviceActivity extends AbstractListActivity implements ViewBinder {
 		case ModifyDeviceDialogBuilder.DIALOG_ID: ((AlertDialog) dialog).setTitle(getIntent().getStringExtra("deviceName")); break;
 		case DeleteDeviceDialogBuilder.DIALOG_ID: ((AlertDialog) dialog).setTitle(getIntent().getStringExtra("deviceName")); break;
 		}
+	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	public class PublishToChannelTask extends AsyncTask<String, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			try {
+				ObjectNode node = mapper.createObjectNode(); node.put("action", params[0]);
+				getChannelService().publish("pinecone@device." + params[1], mapper.writeValueAsString(node)); return true;
+			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
+		}
+		
 	}
 	
 	private ActivateDeviceDialogBuilder builder;

@@ -82,7 +82,7 @@ public class DeleteDeviceDialogBuilder extends AbstractDialogBuilder {
 			DeviceActivity activity = ((DeviceActivity) getDialog().getOwnerActivity());
 			activity.doInitListViewTask("/user/" + activity.getIntent().getStringExtra("userId") + "/devices");
 			Toast.makeText(progress.getContext(), R.string.device_delete_tips, Toast.LENGTH_LONG).show(); 
-			super.onPostExecute(result);
+			activity.new PublishToChannelTask().execute("delete", result[0].toString()); super.onPostExecute(result);
 		}
 		
 	}

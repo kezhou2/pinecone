@@ -1,0 +1,3 @@
+arduino uno r3
+I/OÀ©Õ¹°å 
+ledµÆÁ´½ÓÊý×Ö7

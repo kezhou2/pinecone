@@ -38,9 +38,14 @@
     <string name="device_delete_message">确定删除该设备？</string>
     <string name="device_modify">修改设备</string>
     <string name="device_modify_tips">设备已经修改</string>
+    <string name="device_icon">设备图标</string>
+    
+    <!-- Variable Properties -->
+    <string name="variable_icon">变量图标</string>
     
     <!-- Item Properties -->
     <string name="item_setting">确定设置为</string>
+    <string name="item_icon">项目图标</string>
     
     <!-- Validation Properties -->
     <string name="error_only_numeric_digits_allowed">只允许填写数字</string>

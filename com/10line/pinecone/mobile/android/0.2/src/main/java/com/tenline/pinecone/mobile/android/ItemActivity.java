@@ -3,6 +3,9 @@
  */
 package com.tenline.pinecone.mobile.android;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.tenline.pinecone.mobile.android.view.ItemSettingDialogBuilder;
 import com.tenline.pinecone.platform.model.Item;
 
@@ -13,16 +16,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
 /**
  * @author Bill
  *
  */
-public class ItemActivity extends AbstractListActivity {
+public class ItemActivity extends AbstractListActivity implements ViewBinder {
 
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.item";
 	
@@ -37,7 +41,7 @@ public class ItemActivity extends AbstractListActivity {
 			@SuppressWarnings("deprecation")
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				getIntent().putExtra("itemValue", ((TextView) view).getText());
+				getIntent().putExtra("itemValue", ((TextView) view.findViewById(R.id.item_value)).getText());
 				showDialog(ItemSettingDialogBuilder.DIALOG_ID);
 			}
 			
@@ -78,9 +82,19 @@ public class ItemActivity extends AbstractListActivity {
 	@Override
 	protected void buildListAdapter(Object[] result) {
 		// TODO Auto-generated method stub
-		String[] items = new String[result.length];   
-        for (int i=0; i<result.length; i++) {items[i] = ((Item) result[i]).getValue();}
-		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_checked, items));	
+		ArrayList<HashMap<String, Item>> items = new ArrayList<HashMap<String, Item>>();
+		for (int i=0; i<result.length; i++) {
+			HashMap<String, Item> item = new HashMap<String, Item>();
+			item.put("item", (Item) result[i]); items.add(item);
+		}	
+		SimpleAdapter adapter = new SimpleAdapter(this, items, R.layout.item_item, new String[]{"item"}, new int[]{R.id.item});
+        adapter.setViewBinder(this); setListAdapter(adapter);
+	}
+
+	@Override
+	public boolean setViewValue(View view, Object data, String textRepresentation) {
+		// TODO Auto-generated method stub
+		Item item = (Item) data; ((TextView) view.findViewById(R.id.item_value)).setText(item.getValue()); return true;
 	}
 
 }

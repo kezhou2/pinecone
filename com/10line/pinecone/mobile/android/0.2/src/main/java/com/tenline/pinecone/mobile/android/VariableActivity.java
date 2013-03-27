@@ -7,14 +7,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 
+import com.tenline.pinecone.mobile.android.service.ChannelService;
+import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 import com.tenline.pinecone.platform.model.Variable;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,9 +40,13 @@ import android.widget.TextView;
  * @author Bill
  *
  */
-public class VariableActivity extends AbstractMessageActivity implements MqttCallback, ViewBinder {
+public class VariableActivity extends AbstractListActivity implements MqttCallback, ViewBinder {
 
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.variable";
+	
+	private ServiceConnectionHelper channelHelper = new ServiceConnectionHelper();
+	
+	private ChannelService getChannelService() {return (ChannelService) channelHelper.getService();}
 	
 	private static VariableActivity instance; public static VariableActivity getInstance() {return instance;}
 	
@@ -45,9 +54,12 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); instance = this;
 		doInitListViewTask("/device/" + getIntent().getStringExtra("deviceId") + "/variables");
-        new ListenToChannelTask().execute(getIntent().getStringExtra("deviceId"));
+        if (!channelHelper.isBound()) {
+        	bindService(new Intent(this, ChannelService.class), channelHelper, Context.BIND_AUTO_CREATE);
+        	new ListenToChannelTask().execute(getIntent().getStringExtra("deviceId"));
+        }
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        getListView().setOnItemClickListener(new OnItemClickListener() {
+		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -63,8 +75,11 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 	
 	@Override
     protected void onDestroy() {
-        new UnsubscribeToChannelTask().execute(getIntent().getStringExtra("deviceId")); super.onDestroy();
-	}
+        super.onDestroy();
+        if (channelHelper.isBound()) {
+        	unbindService(channelHelper); channelHelper.setBound(false);
+        }
+    }
 	
 	@Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -89,25 +104,7 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 			// TODO Auto-generated method stub
 			try {
 				while (!channelHelper.isBound()) {Thread.sleep(100);} 
-				getChannelService().listen(VariableActivity.this); 
-				getChannelService().subscribe("pinecone@device." + params[0]); return true;
-			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
-		}
-		
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class UnsubscribeToChannelTask extends AsyncTask<String, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			try { 
-				getChannelService().unsubscribe("pinecone@device." + params[0]); return true;
+				getChannelService().listen(VariableActivity.this, "pinecone@device." + params[0]); return true;
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
 		}
 		
@@ -126,14 +123,14 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 			try {
 				ObjectNode node = mapper.createObjectNode();
 				node.put("id", params[0]); node.put("value", params[1]);
-				String topic = "pinecone@device." + getIntent().getStringExtra("deviceId");
-				getChannelService().publish(topic, mapper.writeValueAsString(node)); return true;
+				getChannelService().publish(mapper.writeValueAsString(node)); return true;
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
 		}
 		
 	}
 	
 	private static final int SUBSCRIBE_DATA = 0;
+	private ObjectMapper mapper = new ObjectMapper();
 	private Handler subscriber = new Handler() {
 		
 		@Override
@@ -175,8 +172,9 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 	public boolean setViewValue(View view, Object data, String textRepresentation) {
 		// TODO Auto-generated method stub
 		Variable variable = (Variable) data; view.setId(Long.valueOf(variable.getId()).intValue());
-		if (variable.getType().contains(Variable.WRITE)) view.setClickable(false); else view.setClickable(true);
-		((TextView) view.findViewById(R.id.variable_name)).setText(variable.getName()); return true;
+		if (variable.getType().contains(Variable.WRITE)) {
+			view.setClickable(false); ((ImageView) view.findViewById(R.id.variable_icon)).setImageResource(android.R.drawable.star_on);
+		} else view.setClickable(true); ((TextView) view.findViewById(R.id.variable_name)).setText(variable.getName()); return true;
 	}
 
 	@Override

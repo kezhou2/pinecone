@@ -214,7 +214,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 			DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
 			activity.doInitListViewTask("/user/" + activity.getIntent().getStringExtra("userId") + "/devices");
 			Toast.makeText(progress.getContext(), R.string.error_device_has_been_activated, Toast.LENGTH_LONG).show(); 
-			getDialog().cancel(); activity.new PublishToChannelTask().execute("create", result[1].toString()); super.onPostExecute(result);
+			getDialog().cancel(); super.onPostExecute(result);
 		}
 		
 	}

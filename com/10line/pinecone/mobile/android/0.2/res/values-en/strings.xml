@@ -38,9 +38,14 @@
     <string name="device_delete_message">Are you sure to delete this device?</string>
     <string name="device_modify">Modify device</string>
     <string name="device_modify_tips">Device has been modified</string>
+    <string name="device_icon">Device Icon</string>
+    
+    <!-- Variable Properties -->
+    <string name="variable_icon">Variable Icon</string>
     
     <!-- Item Properties -->
     <string name="item_setting">Are you sure to set</string>
+    <string name="item_icon">Item Icon</string>
     
     <!-- Validation Properties -->
     <string name="error_only_numeric_digits_allowed">Only numeric digits are allowed.</string>

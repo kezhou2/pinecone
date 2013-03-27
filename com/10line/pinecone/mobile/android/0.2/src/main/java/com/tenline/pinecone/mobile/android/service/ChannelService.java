@@ -21,7 +21,8 @@ import android.util.Log;
  */
 public class ChannelService extends AbstractService {
 	
-	// MQTT Client
+	// MQTT Client and Topic
+	private String topic;
 	private MqttClient client;
 	
 	@Override
@@ -57,7 +58,9 @@ public class ChannelService extends AbstractService {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					if (client.isConnected()) {client.disconnect(); client = null;}
+					client.unsubscribe(topic);
+					if (client.isConnected()) {client.disconnect();}
+					topic = null; client = null;
 				} catch (MqttException e) {
 					// TODO Auto-generated catch block
 					Log.e(getClass().getSimpleName(), e.getMessage());
@@ -70,37 +73,21 @@ public class ChannelService extends AbstractService {
 	/**
 	 * 
 	 * @param callback
+	 * @param topic
 	 * @throws Exception
 	 */
-	public void listen(MqttCallback callback) throws Exception {
+	public void listen(MqttCallback callback, String topic) throws Exception {
+		this.topic = topic;
 		client.setCallback(callback);
+    	client.subscribe(this.topic);
 	}
 	
 	/**
 	 * 
-	 * @param topic
-	 * @throws Exception
-	 */
-	public void subscribe(String topic) throws Exception {
-		client.subscribe(topic);
-	}
-	
-	/**
-	 * 
-	 * @param topic
-	 * @throws Exception
-	 */
-	public void unsubscribe(String topic) throws Exception {
-		client.unsubscribe(topic);
-	}
-	
-	/**
-	 * 
-	 * @param topic
 	 * @param payload
 	 * @throws Exception
 	 */
-	public void publish(String topic, String payload) throws Exception {
+	public void publish(String payload) throws Exception {
     	client.getTopic(topic).publish(new MqttMessage(payload.getBytes())).waitForCompletion();
     }
 	

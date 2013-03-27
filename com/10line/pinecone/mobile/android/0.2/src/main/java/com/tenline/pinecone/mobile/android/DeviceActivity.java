@@ -6,8 +6,6 @@ package com.tenline.pinecone.mobile.android;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.codehaus.jackson.node.ObjectNode;
-
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.tenline.pinecone.mobile.android.view.ActivateDeviceDialogBuilder;
@@ -19,9 +17,7 @@ import com.tenline.pinecone.platform.model.Device;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
@@ -39,7 +35,7 @@ import android.widget.ListView;
  * @author Bill
  *
  */
-public class DeviceActivity extends AbstractMessageActivity implements ViewBinder {
+public class DeviceActivity extends AbstractListActivity implements ViewBinder {
 	
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.device";
 
@@ -78,24 +74,6 @@ public class DeviceActivity extends AbstractMessageActivity implements ViewBinde
 		case ModifyDeviceDialogBuilder.DIALOG_ID: ((AlertDialog) dialog).setTitle(getIntent().getStringExtra("deviceName")); break;
 		case DeleteDeviceDialogBuilder.DIALOG_ID: ((AlertDialog) dialog).setTitle(getIntent().getStringExtra("deviceName")); break;
 		}
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	public class PublishToChannelTask extends AsyncTask<String, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			try {
-				ObjectNode node = mapper.createObjectNode(); node.put("action", params[0]);
-				getChannelService().publish("pinecone@device." + params[1], mapper.writeValueAsString(node)); return true;
-			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
-		}
-		
 	}
 	
 	private ActivateDeviceDialogBuilder builder;
@@ -140,7 +118,7 @@ public class DeviceActivity extends AbstractMessageActivity implements ViewBinde
 			HashMap<String, Device> item = new HashMap<String, Device>();
 			item.put("device", (Device) result[i]); items.add(item);
 		}	
-		SimpleAdapter adapter = new SimpleAdapter(this, items, android.R.layout.simple_list_item_checked, new String[]{"device"}, new int[]{android.R.id.text1});
+		SimpleAdapter adapter = new SimpleAdapter(this, items, R.layout.device_item, new String[]{"device"}, new int[]{R.id.device});
         adapter.setViewBinder(this); setListAdapter(adapter);
 	}
 	
@@ -148,7 +126,7 @@ public class DeviceActivity extends AbstractMessageActivity implements ViewBinde
 	public boolean setViewValue(View view, Object data, String textRepresentation) {
 		// TODO Auto-generated method stub
 		Device device = (Device) data; view.setTag(Long.valueOf(device.getId()).intValue());
-		((TextView) view).setText(device.getName()); return true;
+		((TextView) view.findViewById(R.id.device_name)).setText(device.getName()); return true;
 	}
 	
 	@Override

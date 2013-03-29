@@ -48,7 +48,7 @@ article:after { content: " "; display: block; clear: both }
 .title2 { height: 45px; line-height: 45px; clear: both; border-bottom: 1px #fff solid }
 .title2 h2 { color: #323232; font-size: 32px; height: 44px; border-bottom: 1px #bfbfbf solid }
 
-/*product*/
+/* Product */
 #product { width: 940px; margin: 0 auto; margin-top: 80px; }
 #product_list { padding-top: 10px;}
 #product_list li { width: 234px; height: 300px; float: left; margin-right: 1px;}
@@ -56,14 +56,9 @@ article:after { content: " "; display: block; clear: both }
 #product_list li a:hover { background: url(../images/product_bg.jpg) no-repeat ;}
 #product_list li a p { padding-top: 5px;}
 
-
-
-
-
-
 #download article h2 { color: #4a4a4a; font-size: 32px; text-align: center }
 
-/*一下是about部分使用的*/
+/* About */
 #about { width: 100%; padding-top: 88px }
 #AboutBox { height: auto; margin-top:40px; clear: both}
 .aboutBanner { background: url(../images/aboutbanner.jpg) no-repeat 0 0; height: 266px; width: 940px; margin: 0 auto }
@@ -93,7 +88,7 @@ article:after { content: " "; display: block; clear: both }
 .aboutboxR ul li a { color: #828282; font-size: 12px;  }
 
 	
-/*以下为帮助部分使用的*/
+/* Help */
 #help { padding-top: 100px }
 #help .helpheader { height: 82px; line-height: 50px; margin-bottom: 16px; text-align: center; clear: both; border-bottom: 1px #fff solid }
 #help .helpheader h2 { color: #4a4a4a; font-size: 50px; height: 81px; border-bottom: 1px #ddd solid }
@@ -182,21 +177,6 @@ article:after { content: " "; display: block; clear: both }
 .phoneBtns .symbianBtns .sisxBtn{background: url(../images/sisx.png) no-repeat; width: 180px; height: 50px;  margin-top:1px}
 .phoneBtns .symbianBtns .sisxBtn:hover { background: url(../images/sisx_s.png) no-repeat;  }
 
-/*20121212*/
-/*
-#phoneTab {width:940px; height: 46px; clear: both;  margin: 459px auto; margin-left:16px; position: absolute ;}
-#phoneTab .iphoneTab {width: 180px; height: 46px; display: inline-block}
-#phoneTab .androidTab {width: 180px; height: 46px; display: inline-block}
-#phoneTab .symbianTab {width: 180px; height: 46px; display: inline-block}
-#phoneTab .iphoneTab a {background: url(../images/iphone.png) no-repeat; width: 180px; height: 46px; display: inline-block}
-.iphoneTabShow {background: url(../images/iphone_s.png) no-repeat; width: 180px; height: 46px; display: inline-block}
-#phoneTab .androidTab a {background: url(../images/android.png) no-repeat; width: 180px; height: 46px; display: inline-block}
-.androidTabShow {background: url(../images/android_s.png) no-repeat; width: 180px; height: 46px; display: inline-block}
-#phoneTab .symbianTab a {background: url(../images/win.png) no-repeat; width: 180px; height: 46px; display: inline-block}
-.symbianTabShow {background: url(../images/wins.png) no-repeat; width: 180px; height: 46px; display: inline-block}
-.icoTapLine { background: url(../images/tap_line.png) no-repeat;  width: 1px; height: 46px; display: inline-block }
-*/
-
 #phoneTab {width:590px; height: 46px; clear: both;  margin: 459px auto; margin-left:16px; position: absolute ;}
 #phoneTab .iphoneTab {width: 180px; height: 46px; position:absolute; margin-left:0;}
 #phoneTab .androidTab {width: 180px; height: 46px; position:absolute; margin-left:190px;}
@@ -205,26 +185,15 @@ article:after { content: " "; display: block; clear: both }
 .iphoneTabShow {background: url(../images/iphone_s.png) no-repeat; width: 180px; height: 46px; margin-left:100px; position:absolute;}
 #phoneTab .androidTab a {background: url(../images/android.png) no-repeat; width: 180px; height: 46px; position:absolute;}
 .androidTabShow {background: url(../images/android_s.png) no-repeat; width: 180px; height: 46px; position:absolute;}
-#phoneTab .symbianTab a {background: url(../images/win.png) no-repeat; width: 180px; height: 46px; position:absolute;}
-.symbianTabShow {background: url(../images/wins.png) no-repeat; width: 180px; height: 46px; position:absolute;}
+#phoneTab .symbianTab a {background: url(../images/symbian.png) no-repeat; width: 180px; height: 46px; position:absolute;}
+.symbianTabShow {background: url(../images/symbian_s.png) no-repeat; width: 180px; height: 46px; position:absolute;}
 .icoTapLine1 { background: url(../images/tap_line.png) no-repeat;  width: 1px; height: 46px; position:absolute; margin-left:182px;}
 .icoTapLine2 { background: url(../images/tap_line.png) no-repeat;  width: 1px; height: 46px; position:absolute; margin-left:374px;}
-
-
-
-
-
-
-
 .icoIphoneBigPic { background: url(../images/ios_big.png) no-repeat;  width: 247px; height: 549px; position:absolute;}
 .icoAndroidBigPic { background: url(../images/and_big.png) no-repeat;  width: 265px; height: 549px; position:absolute;}
 .icoSymbianBigPic { background: url(../images/sym_big.png) no-repeat;  width: 247px; height: 549px; position:absolute;}
-/*20121212*/
-
 
 .middle{position:relative;width:100%;margin:0;overflow:visible;padding-top:100px;}
 .main {background: #fff; width: 940px; height:150px;margin:0 auto;  border: 1px solid #ddd;  border-radius: 4px; overflow: hidden;}
 
-.hide_b {
-    display:none;
-}
+.hide_b {display:none;}

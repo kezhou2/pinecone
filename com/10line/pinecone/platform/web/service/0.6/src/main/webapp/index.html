@@ -1,410 +1,310 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN   " "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="keywords" content="松果网移动客户端"> </meta>
-        <meta name="description" content="松果网"> </meta>
-		<meta name="chinaz-site-verification" content="09024194-50ba-493d-ac92-9d061a16c94c" />
-		<link rel="icon" href="gui/fulls/images/uplus.ico" mce_href="gui/fulls/images/uplus.ico" type="image/x-icon"> </link>
-		<link rel="shortcut icon" href="gui/fulls/images/uplus.ico" ce_href="gui/fulls/images/uplus.ico" type="image/x-icon"> </link>
-<title>松果网</title>
-<!--[if lt IE 9]>
-        <script src="gui/fulls/js/html5.js"></script>
-<![endif]-->
-
-<link rel="stylesheet" type="text/css" href="css/style.css">
-</link>
-<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/jquery-ui-draggable.js" type="text/javascript"charset="utf-8"></script>
-<script src="js/common.min.js" type="text/javascript" charset="utf-8"></script>
-
-<!--
-		 <link rel="stylesheet" type="text/css" href="gui/fulls/css/bootstrap.css"></link>
-		-->
-</head>
-
-<body>
-<a class="bshareDiv" href="http://www.bshare.cn/share">分享按钮</a>
-<script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#uuid=95fafea1-6f15-456c-b355-0953a95c79e6&amp;style=3&amp;fs=4&amp;textcolor=#fff&amp;bgcolor=#06C&amp;text=分享到"></script>
-<!--顶部Logo 及导航栏        -->
-<div id="home"></div>
-<div id="top">
-    <div class="mainWidth">
-        <div id="naver"> <img src="images/topbg.png" width="940px" height="100px" /> <a href="#" id="logo"><img src="images/logo.jpg" /></a>
-            <div id="nav"> <a class="active" href="#home">首页</a> <a href="#product">产品</a> <a href="#about">关于</a> <a href="#help">帮助</a> </div>
+  <head>
+    <title>松果网</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<link rel="icon" href="gui/fulls/images/uplus.ico" mce_href="gui/fulls/images/uplus.ico" type="image/x-icon"/>
+	<link rel="shortcut icon" href="gui/fulls/images/uplus.ico" ce_href="gui/fulls/images/uplus.ico" type="image/x-icon"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+	<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-ui-draggable.js" type="text/javascript"charset="utf-8"></script>
+	<script src="js/common.min.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    <!-- Share Button -->
+	<a class="bshareDiv" href="http://www.bshare.cn/share">分享按钮</a>
+	<script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#uuid=95fafea1-6f15-456c-b355-0953a95c79e6&amp;style=3&amp;fs=4&amp;textcolor=#fff&amp;bgcolor=#06C&amp;text=分享到"></script>
+	<!-- LOGO and Navigation -->
+	<div id="home"></div>
+	<div id="top">
+      <div class="mainWidth">
+        <div id="naver">
+          <img src="images/topbg.png" width="940px" height="100px" /><a href="#" id="logo"><img src="images/logo.jpg" /></a>
+          <div id="nav"><a class="active" href="#home">首页</a> <a href="#product">产品</a> <a href="#about">关于</a> <a href="#help">帮助</a></div>
         </div>
+      </div>
     </div>
-</div>
-
-<!--顶部banner        -->
-<div id="banner">
-    <div class="bannerBg">
+	<!-- Top Banner -->
+	<div id="banner">
+      <div class="bannerBg">
         <div class="mainWidth">
-            <div id="bannerBox">
-                <div class="bannerBoxL">
-                    <div id="phoneTab">
-                        <div class="iphoneTab iphoneTabShow"> <a id="dlios" onclick="_hmt.push(['_trackEvent', 'software', 'dlios', 'uplus']);" href="#" target="_blank" title="iphone下载"></a> </div>
-                        <a class="icoTapLine1"></a>
-                        <div class="androidTab"> <a id="dland" onclick="_hmt.push(['_trackEvent', 'software', 'dland', 'uplus']);" href="#" title="android下载"></a> </div>
-                        <a class="icoTapLine2"></a>
-                        <div class="symbianTab"> <a id="dlsym" onclick="_hmt.push(['_trackEvent', 'software', 'dlsym', 'uplus']);" href="#" title="window下载"></a> </div>
-                    </div>
-                    <div class="phoneBtns">
-                        <div class="iphoneBtns show"> <a id="dlappstore" onclick="_hmt.push(['_trackEvent', 'software', 'dlappstore', 'uplus']);" href="#" target="_blank" title="appstore下载">
-                            <div class="appstoreBtn"></div>
-                            </a> <a id="dlipa" onclick="_hmt.push(['_trackEvent', 'software', 'dlipa', 'uplus']);" href="#" title="ipa文件下载">
-                            <div class="ipaBtn"></div>
-                            </a> </div>
-                        <div class="androidBtns show"> <a id="dlgooglemarket" onclick="_hmt.push(['_trackEvent', 'software', 'dlgooglemarket', 'uplus']);" href="#" target="_blank" title="google市场下载">
-                            <div class="googlemarketBtn"></div>
-                            </a> <a id="dlapk" onclick="_hmt.push(['_trackEvent', 'software', 'dlapk', 'uplus']);" href="#" title="apk文件下载">
-                            <div class="apkBtn"></div>
-                            </a> </div>
-                        <div class="symbianBtns show"> <a id="dlovimarket" onclick="_hmt.push(['_trackEvent', 'software', 'dlovimarket', 'uplus']);" href="#" target="_blank" title="google市场下载">
-                            <div class="ovimarketBtn"></div>
-                            </a> <a id="dlsisx" onclick="_hmt.push(['_trackEvent', 'software', 'dlsisx', 'uplus']);" href="#" title="sisx文件下载">
-                            <div class="sisxBtn"></div>
-                            </a> </div>
-                    </div>
+          <div id="bannerBox">
+            <div class="bannerBoxL">
+              <div id="phoneTab">
+                <div class="iphoneTab iphoneTabShow"> 
+                  <a id="dlios" onclick="_hmt.push(['_trackEvent', 'software', 'dlios', 'uplus']);" href="#"></a> 
                 </div>
-                <div class="bannerBoxR">
-                    <div class="icoIphoneBigPic show"></div>
-                    <div class="icoAndroidBigPic hide"></div>
-                    <div class="icoSymbianBigPic hide"></div>
+                <a class="icoTapLine1"></a>
+                <div class="androidTab"> 
+                  <a id="dland" onclick="_hmt.push(['_trackEvent', 'software', 'dland', 'uplus']);" href="#"></a> 
                 </div>
+                <a class="icoTapLine2"></a>
+                <div class="symbianTab"> 
+                  <a id="dlsym" onclick="_hmt.push(['_trackEvent', 'software', 'dlsym', 'uplus']);" href="#"></a> 
+                </div>
+              </div>
+              <div class="phoneBtns">
+                <div class="iphoneBtns show"> 
+                  <a id="dlappstore" onclick="_hmt.push(['_trackEvent', 'software', 'dlappstore', 'uplus']);" href="#">
+                    <div class="appstoreBtn"></div>
+                  </a> 
+                  <a id="dlipa" onclick="_hmt.push(['_trackEvent', 'software', 'dlipa', 'uplus']);" href="#">
+                    <div class="ipaBtn"></div>
+                  </a> 
+                </div>
+                <div class="androidBtns show"> 
+                  <a id="dlgooglemarket" onclick="_hmt.push(['_trackEvent', 'software', 'dlgooglemarket', 'uplus']);" href="#">
+                    <div class="googlemarketBtn"></div>
+                  </a> 
+                  <a id="dlapk" onclick="_hmt.push(['_trackEvent', 'software', 'dlapk', 'uplus']);" href="http://eoemarket.com/index/dl/id/115833/orderId/2">
+                    <div class="apkBtn"></div>
+                  </a> 
+                </div>
+                <div class="symbianBtns show"> 
+                  <a id="dlovimarket" onclick="_hmt.push(['_trackEvent', 'software', 'dlovimarket', 'uplus']);" href="#">
+                    <div class="ovimarketBtn"></div>
+                  </a> 
+                  <a id="dlsisx" onclick="_hmt.push(['_trackEvent', 'software', 'dlsisx', 'uplus']);" href="#">
+                    <div class="sisxBtn"></div>
+                  </a> 
+                </div>
+              </div>
             </div>
+            <div class="bannerBoxR">
+              <div class="icoIphoneBigPic show"></div>
+              <div class="icoAndroidBigPic hide"></div>
+              <div class="icoSymbianBigPic hide"></div>
+            </div>
+          </div>
         </div>
-    </div>
-</div>
-<section id="wrapper"> 
-    <div id="product">
+      </div>
+	</div>
+	<section id="wrapper"> 
+      <div id="product">
         <div class="AboutTitle">
-            <h2>产品介绍</h2>
+          <h2>产品介绍</h2>
         </div>
         <ul id="product_list">
-            <li> <a href="#"> <img src="images/chanpin.jpg" />
-                <p>HEX BUG 电子机械感应感触宠物机器人声控螃蟹玩具 光棍节大促销</p>
-                </a> </li>
-            <li><a href="#"> <img src="images/chanpin.jpg" />
-                <p>HEX BUG 电子机械感应感触宠物机器人声控螃蟹玩具 光棍节大促销</p>
-                </a></li>
-            <li><a href="#"> <img src="images/chanpin.jpg" />
-                <p>HEX BUG 电子机械感应感触宠物机器人声控螃蟹玩具 光棍节大促销</p>
-                </a></li>
-            <li style=" margin-right: 0px;"><a href="#"> <img src="images/chanpin.jpg" />
-                <p>HEX BUG 电子机械感应感触宠物机器人声控螃蟹玩具 光棍节大促销</p>
-                </a></li>
-            <div style="clear: both;"></div>
+          <li> 
+            <a href="#"><img src="images/chanpin.jpg" /><p>HEX BUG 电子机械感应感触宠物机器人声控螃蟹玩具 光棍节大促销</p></a> 
+          </li>
+          <li>
+            <a href="#"><img src="images/chanpin.jpg" /><p>HEX BUG 电子机械感应感触宠物机器人声控螃蟹玩具 光棍节大促销</p></a>
+          </li>
+          <div style="clear: both;"></div>
         </ul>
-    </div>
-    ﻿
-    <div class="mainWidth">
+      </div>﻿
+      <div class="mainWidth">
         <div id="about">
-            <div class="aboutBanner" title="关于/About"></div>
-            <article id="AboutBox">
-                <div class="AboutBoxL">
-                    <div class="intro">
-                        <dl>
-                            <div class="AboutTitle">
-                                <h2>关于我们</h2>
-                            </div>
-                            <dd> 我们是一家新兴的无线互联网创业公司，成立于2011年2月。 </br>
-                                我们的创业团队都是来自于互联网和移动互联网的资深从业者，拥有多年的行业经验，创业经验和追求卓越的热情。 </br>
-                                我们致力于创造和发展最潮最IN的交友社区“松果网”，把令人惊艳难忘的交友体验带给每一个无线互联网用户。 </dd>
-                        </dl>
-                    </div>
-                    <img src="images/aboutmap.png" width="639px" height="250px" title="松果网" alt="松果网" /> </div>
-                <div class="aboutboxR">
-                    <div class="rBox">
-                        <h4>联系方式</h4>
-                        <dl>
-                            <dd>地址：上海市徐汇区漕溪路250号B510室</dd>
-                            <dd>邮编：200235</dd>
-                            <dd>Email：developer@dpocket.cn</dd>
-                            <dd>电话/传真：+86 021 33632557</dd>
-                        </dl>
-                    </div>
-                    <div class="rBox">
-                        <h4>商务合作</h4>
-                        <dl>
-                            <dd>Email：uplus@dpocket.cn</dd>
-                            <dd>联系电话：+86 021 33632557</dd>
-                        </dl>
-                    </div>
-                    <div class="rBox">
-                        <h4>合作伙伴</h4>
-                        <dl>
-                            <dd>Email：uplus@dpocket.cn</dd>
-                            <dd>联系电话：+86 021 33632557</dd>
-                        </dl>
-                    </div>
-                </div>
-            </article>
+          <div class="aboutBanner"></div>
+          <article id="AboutBox">
+            <div class="AboutBoxL">
+              <div class="intro">
+                <dl>
+                  <div class="AboutTitle">
+                    <h2>关于我们</h2>
+                  </div>
+                  <dd> 
+                                    我们是一家新兴的物联网创业公司，成立于2012年4月。 </br>
+                                    我们的创业团队都是来自于物联网和移动互联网的资深从业者，拥有多年的行业经验，创业经验和追求卓越的热情。 </br>
+                                    我们致力于创造和发展最潮最IN的物联网平台"松果网"，把令人惊艳难忘的智能体验带给每一个物联网用户。 
+                  </dd>
+                </dl>
+              </div>
+              <img src="images/aboutmap.png" width="639px" height="250px"/>
+            </div>
+            <div class="aboutboxR">
+              <div class="rBox">
+                <h4>联系方式</h4>
+                <dl>
+                  <dd>地址：北京市海淀区北三环西路31号</dd>
+                  <dd>邮编：100086</dd>
+                  <dd>Email：billmse@gmail.com</dd>
+                  <dd>联系电话：+86 18612753021</dd>
+                </dl>
+              </div>
+              <div class="rBox">
+                <h4>商务合作</h4>
+                <dl>
+                  <dd>Email：liugyang@gmail.com</dd>
+                  <dd>联系电话：+86 15910696951</dd>
+                </dl>
+              </div>
+            </div>
+          </article>
         </div>
-    </div>
-    ﻿
-    <div class="mainWidth">
+      </div>﻿
+      <div class="mainWidth">
         <article id="help">
-            <div class="helpheader">
-                <h2><img src="images/help.png" width="230px" height="53px" title="松果网" alt="松果网" /></h2>
+          <div class="helpheader">
+            <h2><img src="images/help.png" width="230px" height="53px" /></h2>
+          </div>
+          <div class="HelpBoxL helpC">
+            <dl>
+              <dt>
+                <h3><span class="icoHelp"></span>如何下载松果网手机移动客户端？</h3>
+              </dt>
+              <dd>
+                <P>访问松果网首页，点击手机移动客户端下载连接，即可实现手机移动客户端的下载。</P>
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <h3><span class="icoHelp"></span>如何注册成为松果网用户？</h3>
+              </dt>
+              <dd>
+                <P>请先下载松果网手机移动客户端，启动松果网手机移动客户端，点击注册按钮进入用户注册界面，输入相应信息完成</p>
+                <p>注册。</p>
+              </dd>
+            </dl>
+          </div>
+          <div class="boxR">
+            <div class="helpboxR">
+              <div class="rBox ">
+                <h4>意见反馈</h4>
+                <dl>
+                  <dd>使用过程中如有疑问，请联系松果网小秘。</dd>
+                  <dd>邮箱：apriliner@gmail.com</dd>
+                  <dd>联系电话：+86 15910742625</dd>
+                </dl>
+              </div>
+              <div class="rBox">
+                <h3><span><img src="images/qq.png" width="24px" height="24px" /></span>用户QQ群：152331905</h3>
+              </div>
             </div>
-            <div class="HelpBoxL helpC">
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>所在城市怎么修改？</h3>
-                    </dt>
-                    <dd>
-                        <P>所在城市是松果网通过手机的GPS功能或基站定位自动获取的，是不能手动更改的。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>定位不对怎么办？</h3>
-                    </dt>
-                    <dd>
-                        <P>各种不同的手机定位有一定的偏差。如果出现城市未知的情况，请先确定“手机设置”-“GPS定位及wifi定位功能”</p>
-                        <p>是否开启，请开启后再尝试。如果定位误差很大，请加入QQ群：217871401联系松果网工作人员解决。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>换了手机怎么办？</h3>
-                    </dt>
-                    <dd>
-                        <P>如果想用以前的松果网号，前提是您已经绑定过手机号码。在“设置”-“换号登录”里面按照提示操作。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>被封帐号了怎么办？</h3>
-                    </dt>
-                    <dd>
-                        <P>被封帐号一律不解封。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>头像为什么审核不通过？</h3>
-                    </dt>
-                    <dd>
-                        <P>头像审核通过的标准：符合大众审美，清晰质感好，真实头像最佳。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>性别填错了怎么办？</h3>
-                    </dt>
-                    <dd>
-                        <P>190之前版本性别填错后不可自更改。如想更改，请加QQ群：217871401 联系松果网工作人员。</P>
-                        <P>190及以后版本用户可以手动更改性别，但是性别更改后魅力值会被清零。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>怎么关掉通知？</h3>
-                    </dt>
-                    <dd>
-                        <P>iPhone：在设置的通知里面，找到松果网图标，将里面的选项全部关闭。</P>
-                        <P>安卓，塞班手机：在松果网的“设置”里面将“退出后接受离线消息”的勾选去掉。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>如何退出松果网？</h3>
-                    </dt>
-                    <dd>
-                        <P>iPhone：双击home键，长按松果网按钮，点击在松果网图标左上角出现的删除按钮。</P>
-                        <P>安卓手机：在松果网照片墙界面点击返回键退出。</P>
-                        <P>塞班手机：长按home键，把下面出现的松果网图标退出即可。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>松果网是否收费？</h3>
-                    </dt>
-                    <dd>
-                        <P>免费使用。部分虚拟礼物需要你通过付费购买U币来获取。</P>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <h3><span class="icoHelp"></span>如何免费获取U币？</h3>
-                    </dt>
-                    <ul>
-                        通过多种途径可以免费获取U币
-                        <li>邀请好友，被邀请好友上线并绑定手机号码成功，邀请人得1000U。</li>
-                        <li>首次完善资料，可获得1000U。</li>
-                        <li>分享图片到微博，第一次得200U。</li>
-                        <li>关注松果网官方微博，新浪2000U，腾讯2000U。（只一次）</li>
-                        <li>绑定手机号码得1000U。（只一次）</li>
-                        <li>每日签到得500U。</li>
-                        <li>参与QQ群：217871401的活动，可以获取数额不等的U币。</li>
-                    </ul>
-                </dl>
-            </div>
-            <div class="boxR">
-                <div class="helpboxR">
-                    <div class="rBox ">
-                        <h4>用户协议</h4>
-                        <dl>
-                            <p>你使用松果网软件即已默认你已同意用户协议的条例规则。</p>
-                            <div class="helpboxRbox">
-                                <dt><a href="javascript:void(0);" class="helpAgreement">点此查看用户协议</a></dt>
-                            </div>
-                        </dl>
-                    </div>
-                    <div class="rBox ">
-                        <h4>隐私条款</h4>
-                        <dl>
-                            <div class="helpboxRbox">
-                                <dt><a href="javascript:void(0);" class="helpPolicy">点此查看隐私条款</a></dt>
-                            </div>
-                        </dl>
-                    </div>
-                    <div class="rBox ">
-                        <h4>意见反馈</h4>
-                        <dl>
-                            <dd>使用过程中如有疑问，请联系松果网小秘。</dd>
-                            <dd>松果网号：10000</dd>
-                            <dd>邮箱：developer@dpocket.cn</dd>
-                            <dd>电话：+86 021 33632557</dd>
-                        </dl>
-                    </div>
-                    <div class="rBox">
-                        <h3><span><img src="images/qq.png" width="24px" height="24px" title="用户QQ群" alt="用户QQ群" /></span>用户QQ群：217871401</h3>
-                    </div>
-                </div>
-            </div>
+          </div>
         </article>
-    </div>
-    <div class="windows" style="display:none;"> <a href="javascript:void(0);" class="closeDiv" title="关闭">x</a>
-        <article id="popupwindow">
-            <header>
-                <div class="details">
-                    <div class="detail detailAgreement">
-                        <h1>松果网用户协议</h1>
-                    </div>
-                    <div class="detail detailPolicy">
-                        <h1>隐私条款</h1>
-                    </div>
-                </div>
-            </header>
-            <div class="details content">
-                <div class="detail detailPolicy">
-                    <h3>松果网 隐私政策</h3>
-                    <p>本隐私政策描述松果网对会员其注册时自愿提供给松果网的个人身份信息（“个人身份信息”也称为“注册个人身份信息”—本人全名，电邮地址，邮箱地址，电话号码，或者信用卡号码）的使用和分享。名词“用户”包括网站游客和会员。本隐私政策适用于由松果网提供的服务，包括任何使用松果网即时信息服务，松果网的应用和其他功能，松果网移动服务，以及其他由松果网随时提供的与松果网软件相关的功能、内容、或应用（总称为“松果网服务”）。</p>
-                    <p>松果网软件是一个大众追随者软件，且不会故意收集13岁以下儿童的个人身份信息。</p>
-                    <p>松果网可以随时对本隐私政策进行修订，以反映行业发展、法律变化、我们的个人身份信息收集和使用实践、松果网服务的功能、或者科技的发展，并且这种修订将在松果网网站上发布出来时立即生效。在松果网将修订过的隐私政策公布出来后，您还继续使用松果网的服务，即表明您接受了修订后的隐私政策。因此，定期审阅本隐私政策很重要，可以保证您了解任何修订。如果松果网对您的个人信息的收集和使用的实践有重大改变，除非在您已经收到该改变的通知，并且未反对该改变，否则您的个人身份信息将仍适用其被收集时适用的隐私政策。</p>
-                    <h3>从松果网上收集和提交个人身份信息和非个人身份信息</h3>
-                    <p>一般来说，松果网收集到您的个人身份信息是因为您为了注册成为松果网的会员而自愿提供给我们的注册个人身份信息。如果您因为想让我们提供产品、服务、简报或信息或与您为评论和打造简介或注册的目的而提交给松果网的内容或建议有关， 而选择参加松果网服务活动，如抽奖、竞赛 和调查，松果网也可能从其他方或者网站收集到您的个人身份信息。另外，松果网也收集其他非个人身份信息，包括IP地址，集合的用户数据及浏览器类型。这些数据被用来管理和提高松果网的服务，追踪使用习惯以及为安全的考虑。松果网的会员也可以选择在自己的简介中提供或贮存非个人身份信息，包括但不仅限于生日、兴趣、爱好、生活方式、所属群组（学校、公司）、视频和/或图片，私人信息，公告板或个人陈述（总称“简介信息”）。在用户简介中的简介信息是用户自己决定提供的。</p>
-                    <p>松果网的会员可以随时更改他们的注册个人身份信息和简介信息，并可以通过控制他们的账户设置功能，控制来访者、其他会员和松果网如何与其进行联系。</p>
-                    <p>Cookies是松果网放置在您电脑上或手机的少量信息。松果网使用cookies来验证您的互联网浏览器，贮存用户首选项，以及确定是否您已经安装了使用松果网服务上的某些资料所需的授权软件。Cookies中的数据可读，用来验证用户使用时间或提供服务。</p>
-                    <p>松果网服务上的第三方广告也可能包含由互联网广告公司或广告商设置的cookies（称为“第三方cookies）。松果网不能控制这些第三方cookies，松果网服务的用户应该通过查询互联网广告公司或广告商的隐私政策来确定它是否或如何使用cookies。查看以下“通知”项下得信息以了解有关在松果网上的定制广告宣传的更多信息。像素标签是植入网页的微小图像，用来记录查看该网页的次数和方式。松果网可以允许在松果网服务中存在以做广告、提供服务或数据以及收集统计资料为目的的第三方像素标签。</p>
-                    <p>您可以设置您的电脑或手机，当每次一个cookie发过来时对您进行警告，阻止第三方cookies或所有cookies。但是，如果阻止了所有cookies，您可能无法使用松果网服务的某些功能。</p>
-                    <h3>通知：松果网将向您提供一些关于松果网个人身份信息收集实践的预先通知。</h3>
-                    <p>当您自愿向松果网提供个人身份信息时，我们将确保，您被告知谁在收集该信息，如何及为何该信息被收集，以及松果网使用该信息的方式若该信息的使用方式与本隐私政策所允许的使用方式不同时。</p>
-                    <p>松果网服务可能会链接到其他公司运营的网站。松果网服务也可能带有其他公司的广告。松果网不对链接到或与松果网的服务集成在一起的第三方的网站及提供的服务的隐私实践或者第三方互联网广告公司的隐私实践负责。如果您通过一个链接离开了松果网服务，接入了一个第三方应用程序或点击了一个广告，您应该查询该第三方或广告商适用的隐私政策，来确定他们怎样处理从您那里收集的任何个人身份信息，和其他一些事项。</p>
-                    <p>一些出现在松果网服务上的广告也可以通过第三方互联网广告公司发送给您。这些公司使用特定技术来发送广告和营销信息，并且收集关于您访问或使用松果网服务的非个人身份信息，包括通过布置在您电脑上的cookie来读取您的IP地址而收集关于他们显示的广告的信息。第三方使用第三方开发的应用程序（如网络精灵）也可能在松果网服务中使用。第三方应用程序是一些小软件，通常是互动性的，可以被安装进入会员的简介或与其他用户共享区域。但是，松果网不控制这些第三方开发商，也不能支配他们的行为。当一个会员使用了一个第三方应用程序，该会员是与该第三方开发商互动，而不是和松果网互动。松果网鼓励会员们不要将个人身份信息提供给第三方应用程序，除非该会员了解与其进行互动的对方。</p>
-                    <h3>使用：松果网对个人身份信息的使用</h3>
-                    <p>松果网只以符合本隐私政策规定的方式来使用您提供的个人身份信息。如果松果网从第三方处获得个人身份信息，如一个商业伙伴，我们对该信息的使用也将受本隐私政策的约束。</p>
-                    <p>有可能会出现这种情况，为了：(i) 保护或为松果网、我们的关联公司或者他们的员工，代理人和订约人的合法权利或财产抗辩（包括对我们的协议的强制履行）；(ii) .保护使用松果网服务的用户或者公众的安全，包括在紧急情况下采取的行动；(iii) 防止不受诈欺或为了风险管理的目的；或者(iv) 遵守法律或法律程序，松果网可以未给您提供选择而使用或披露您的个人身份信息、简介信息或非个人身份信息 。另外，如果松果网卖掉全部或部分业务或卖掉或出售或转让其所有或重要部分资产，或以另外方式卷入并购或转让其全部或重要部分业务，松果网可以作为交易的一部分将您的个人身份信息转让给交易方。</p>
-                    <h3>安全：松果网保护个人身份信息的安全</h3>
-                    <p>松果网使用商业上合理的行政、技术、人员、物理措施来保护其占有的个人身份信息和信用卡信息，以防止丢失、盗窃和非授权的使用、披露或修改。另外，松果网运用合理的方法来保证个人身份信息是准确的，最新的且适当完整的。 </p>
-                </div>
-                <div class="detail detailAgreement">
-                    <P>上海掌颐网络科技有限公司（“松果网”或“我们”）运营松果网软件，该软件提供在线服务，允许会员在线创立自己独特的个人资料以找寻新朋友并与之交流。松果网提供的服务包括任何以松果网命名的URL（“松果网网页”）， 松果网即时通信服务，松果网应用程序，松果网移动服务和任何其它松果网根据其经营业务不时提供的功能、内容或应用程序（统称为“松果网服务”）。</P>
-                    </br>
-                    <p>本用户协议（“协议”）列明了您使用松果网服务时应遵守的具有法律约束的条款。一旦使用松果网服务，您即同意受本协议约束，成为我们的用户（“游客”或“会员”）。不论您是以“游客”（是指您仅仅浏览松果网网站，包括通过移动设备，或未经注册而使用松果网服务）身份或“会员”（是指您已在松果网注册）。 只有您在同意遵守本协议条款相关规定，您方被授权使用松果网服务（不论您的进入或使用是否为有意为之）。请仔细阅读本协议并将其保存。如您不同意受本协议约束且不愿遵守所有适用的法律，您应当离开松果网网站和/或松果网软件并立即停止使用松果网服务。如果您希望成为会员，与其他会员交流和/或使用松果网服务，您必须阅读本协议，并在注册过程中明确表示接受本协议。</p>
-                    </br>
-                    <p>本协议包括合理使用松果网服务的政策，在松果网服务上发表或通过松果网服务发表的内容（见下文6.1款的定义）的政策，以及有关您使用松果网服务上发布或通过松果网服务发布的内容的权利、义务和限制。为参加某项松果网服务，可能会通知并要求您下载软件或内容和/或接受松果网提供的补充条款或条件。除非您选择参加的松果网服务所适用的补充条款或条件另有规定，该补充条款为本协议的一部分。</p>
-                    </br>
-                    <p>松果网可随时修改本协议，该修改内容发布在在松果网网站上后即生效。您在松果网发布修改后的协议后继续使用松果网服务即意味着您接受该修改后的协议。因此经常阅读本协议以了解我们作出的任何修改对您很重要。</p>
-                    </br>
-                    <p>请仔细筛选您发布在松果网服务或通过松果网服务发布的其他用户的信息。您本人的松果网资料不得含有任何法律、法规禁止性内容。如果其他松果网会员提供的信息、材料、产品或服务（如在他们的简介中）可能全部或部分未经授权、未经许可或以其它方式违反本协议，我们对该等材料不承担义务或责任。</p>
-                    </br>
-                    <p>松果网保留自行决定退回、拒绝发布或删除任何您发布的内容（包括私人信息）的权利，或在任何时候、以任何理由拒绝、限制、中止或终止您进入全部或部分松果网服务。不论是否给予提前通知或解释，也无需承担责任。如果您违反本协议或对松果网和/或其用户造成威胁，松果网明确保留删除您资料或拒绝、限制、中止或终止您进入全部或部分松果网服务的权利。</p>
-                    </br>
-                    <ul>
-                        <li>适格。 我们有拒绝您使用我们服务或者成为我们会员的权利。而且，您在使用松果网服务和成为会员时，您声明并保证（a）您提交的所有注册信息是真实的、准确的；（b）您应维持该信息的准确性。（C）您承担信息不实所导致的所有后果。</li>
-                        <li>期限。只要您使用松果网服务或为松果网会员，本协议及发布的任何对本协议的修改将继续完全有效。您按照松果网网站或软件上的指示，即可以任何理由在任何时间终止您的会员身份。松果网也可以在任何时间，以任何理由或无需提供理由，不论是否给予提前通知或解释，终止您的会员身份，且不承担任何责任。</li>
-                        <li>费用。您已知晓并理解我们保留对松果网服务的任何部分收费，或随时自行决定变更其费用（如有）的权利。如果松果网因您违反本协议而终止您的会员身份，您无权要求退还任何未使用的费用或款项（如有）。</li>
-                        <li>密码。当您进行会员注册时，您将会被要求选择一个密码。您本人对保持该密码的秘密性负全部责任。您允诺在任何时候均不使用其他会员的账户、用户名或密码。如果您怀疑存在任何非法使用您的账户或密码，您应立即通知松果网。</li>
-                        <li>会员的使用。松果网服务仅供会员为个人目的使用，也可用于促销目的，但直接的商业行为只有经松果网特别批准或授权后方可进行。否则，我们可以自行决定删除会员发布的商业内容。包括用户简介中的商业广告、关联链接或其它形式的未经许可的推销。我们的删除行为可以不经通知或解释，而且终止用户的会员资格。</li>
-                        <li> 上传内容的许可
-                            <p>松果网就您发布在松果网服务上的或通过松果网服务发布的文本、文件、图像/肖像、图片、视频、声音、音乐作品、原创作品、应用程序或其它任何材料（统称“内容”）不主张任何所有权。您将内容发布在松果网服务上后，您将继续保留您在该内容上原有的任何权利，但受制于本协议项下的有限许可。您在松果网服务上或通过松果网服务发布或公开任何内容，即表示您许可我们拥有您发布内容的使用权，包括但不限于编辑、修改、删除、添加、公开表演、展示、复制和传播该内容，该许可包含了松果网以及其附属公司、关联公司以及合作方进行与松果网相关业务时候使用您发布的内容。而且不需要向您支付任何许可费用。</p>
-                        </li>
-                        <li>您声明并保证如下：（i）您对发布在松果网服务或通过松果网发布的内容拥有所有权，或者相应的授权；和（ii）您在松果网服务上或通过松果网服务发布的内容不违反法律法规的规定以及侵犯他人的合法权益。</li>
-                        <li>松果网服务包含用户内容和其他松果网许可权人的内容。除本协议另有约定外，您不得复制、修改、翻译、出版、广播、传输、传播、表演、展示或销售松果网服务上或通过松果网服务显示的任何内容。</li>
-                        <li> 禁止的内容/活动。
-                            <p>下列为非法或禁止在松果网服务上或通过松果网服务发布的内容的例子。松果网保留针对任何违反本条规定的人（松果网自行决定）进行调查采取适当的法律行动的权利，包括但不限于删除松果网服务上的违法内容和终止该违规者的会员身份。经松果网自行决定，禁止的内容包括但不限于如下内容：</p>
-                            <ul>
-                                <li>可能的犯罪并推行对任何团体或个人的种族主义，偏见，仇恨或任何身体损害；</li>
-                                <li>对他人进行骚扰或鼓动骚扰；</li>
-                                <li>以色情或暴力的方式利用他人；</li>
-                                <li>含有色情、过度暴力或其它不良内容或含有成人网站链接等；</li>
-                                <li>公开发布给他人造成或产生隐私或安全隐患的信息；</li>
-                                <li>构成或推广您知道为虚假或误导性的信息，或推广违法活动或进行辱骂、威胁、淫秽、诽谤或中伤的行为；</li>
-                                <li>构成或推广非法或未经授权的对他人享有著作权的作品的复制，如提供盗版电脑程序或提供连接到该程序的链接，提供能规避生产者安装的受著作权保护的设施的信息，或提供盗版音乐或提供盗版音乐文件的链接；</li>
-                                <li>卷入发送“垃圾邮件”、“连锁信”或大规模发送未经请求的邮件、即时通信、“垃圾即时信息”或“垃圾邮件”</li>
-                                <li>含有限制或需要密码才能进入的网页或隐藏网页或图片（未与另一个可进入的网页链接）；</li>
-                                <li>助长或推动任何犯罪活动或事业，提供违法行为的指导性信息，包括但不限于制造或购买非法武器、违反他人的隐私或提供或制造电脑病毒；</li>
-                                <li>引诱其他用户的密码或个人身份信息用于商业或其他非法目的；</li>
-                                <li>含有商业行为和/或未经松果网事先书面同意而进行销售，比如有奖竞销，彩票、或物交换、广告或传销；</li>
-                                <li>未经他人同意而发布含有他人的图片或视频；</li>
-                                <li>为乐队、喜剧、电影制作者和其他简介吸引浏览量的意图，使用性暗示形象或任何其他不公平、有误导性或欺骗性的内容；或违反任何他人的隐私权、公开权、著作权、商标权、合同权或任何其他权利。</li>
-                            </ul>
-                            </br>
-                            <p>以下为在松果网网站/手机上或通过您使用松果网服务非法从事或受禁止的活动的实例。松果网保留对违反本条款的任何人（松果网自行决定）进行调查、采取适当的法律行动的权利，包括但不限于向法律执行部门举报您。禁止的行为包括但不限于：</p>
-                            <ul>
-                                <li>犯罪或侵权行为：包括儿童色情作品、诈骗、淫秽作品交易、毒品交易、赌博、骚扰、跟踪、发送垃圾邮件、发送垃圾讯息、发送病毒或其他有害文件、著作权侵权、专利侵权或窃取商业秘密。</li>
-                                <li>未经授权或许可使用松果网服务向任何会员推广或诱导其购买或销售任何产品或服务。您不得向其他会员发送任何连锁信或垃圾邮件。为保护我们的会员免受广告或诱购的影响，松果网有权将一会员在任何24小时时间段内向其他用户的发送电子邮件或垃圾短信的数量控制在松果网认为合适的范围内，该数量由松果网自行决定。</li>
-                                <li>规避或修改、试图规避或修改、鼓动或协助任何他人规避或修改任何属于松果网服务的一部分的安全技术或软件；</li>
-                                <li>具有使用病毒、僵尸漏洞、蠕虫病毒或任何其他电脑代码、文件或程序行为，其能中断、破坏或影响任何电脑/手机软件或硬件的功能，或以其他方式许可未经授权的使用或进入电脑或电脑网络或手机；</li>
-                                <li>通过HTML/CSS或任何其他方式覆盖置于您个人简介页面或任何松果网页面上的任何横幅广告或使其变模糊；</li>
-                                <li>任何对系统的自动化使用，包括但不限于使用scripts添加好友、发表评论或发送信息；</li>
-                                <li>干扰、中断松果网服务或与松果网服务有关的网络或服务或给其制造不当负担；</li>
-                                <li>假冒或试图假冒另一位会员、个人或单位；</li>
-                                <li>为乐队、喜剧、电影制作者或其他简介植入松果网播放器，为您的松果网播放器复制源代码并将其植入（或指导他人植入）除了您在松果网上的乐队简介之外的任何区域；</li>
-                                <li>在任何时间使用其他会员的账户、用户名或密码，或向任何第三方披露您的密码，或允许任何第三方进入您的账户；</li>
-                                <li>销售或以其他方式转让您的简介；</li>
-                                <li>使用从松果网服务中获得的信息来骚扰、辱骂或伤害他人或单位，或试图这样做；</li>
-                                <li>在您的个人简介页面上播放未经许可的商业广告，或从第三方接受钱款或任何有价值的东西以换取您代表该人未经授权或许可使用松果网服务从事商业活动，如在您的个人主页上放置商业内容，为商业目的发布博客或公告，选择具有商业目的的个人主页作为常用列表的成员，或发送具有商业目的的私人信息；或以任何和所有违反适用的法律和法规的方式使用松果网服务；</li>
-                            </ul>
-                        </li>
-                        <li>著作权和其他知识产权保护。松果网尊重他人的知识产权并要求我们的用户也这么做。您不得上传、植入、发布、利用电子邮件发送、传输或以其它方式提供侵犯任何个人或单位的任何著作权、专利权、商标权、商业秘密或其他专有权利的任何资料。松果网有权终止侵权人的会员身份； 如果您认为您的作品被他人复制或发布在松果网服务上，并在以某种方式构成著作权侵权，请您就主张的侵权向松果网版权代理人发送含有如下信息的通知：（a）确定被侵犯的享有著作权的作品，或如果单个通知包含多个受著作权法保护的作品，确定这些作品的名单； （b）确定所主张的侵权材料和信息，该材料和信息应适当充分地使我们确定其在松果网服务上的位置（提供所主张的侵权材料的URL符合本要求）； （c）提供适当合理的信息以使我们联系到您，如地址、电话号码和电子邮件地址（如可能）； （d）提供您的声明，您善意地相信有争议的使用未得到著作权所有人、其代理人或法律的授权； （e）出具做伪证便受惩罚的声明，表明您通知中所述的上述信息是准确的，您为著作权的所有人或代表著作权所有人采取行动；和 （f）您的自然或电子签名。</li>
-                        <li>会员争议。您对您与其他松果网会员的交往行为独立承担责任。松果网有权但并无义务以任何方式参与您与其它会员间的争议。</li>
-                        <li>免责声明。松果网对发布在松果网服务上或通过松果网服务发布的用户内容或用户内容的准确性和可靠性不承担责任，也不做任何明示或暗示的保证，不论是松果网服务用户造成的，或者任何与松果网服务有关或松果网服务使用的设备或程序，且该用户内容并非当然反映松果网的意见或政策。 会员在松果网网站或软件上创建和发布的简介和第三方应用可能含有连接到其他网站的链接。松果网对该网站或软件上发布的内容、其准确性和意见不承担责任，且松果网也无必要对其准确性和完整性进行调查、监管或核查。在松果网服务上含有某网站或软件的链接并不意味着松果网对该网站或软件的许可或赞同。当您进入这些第三方网站或软件时，您应对此自行承担风险，松果网对发布在松果网服务上或通过松果网服务发布的第三方广告或第三方应用程序不承担责任，对其广告所描述的产品和服务也不承担任何责任。松果网对松果网服务中的任何用户的行为（不论是在线还是离线）不承担责任。松果网对任何用户或会员的交流中的任何错误、遗漏、中断、删除、瑕疵、操作或传输的迟延、通信线路故障、盗窃、破会或非法侵入或改变不承担责任。松果网对任何电话网络或线路、电脑在线系统、服务器或提供商、电脑设备、软件，因网络或松果网服务上的技术问题或信号拥挤而产生的任何电子邮件和播放器的故障，包括因参与松果网服务或从其下载材料中产生的或与之有关的用户的任何损失或损害不承担责任。在任何情况下松果网对用户在使用松果网服务、参加松果网活动、通过松果网服务发布的任何用户内容或松果网服务的任何用户的行为（不论是在线还是离线）而产生任何损失或损害，包括人身伤害或死亡，均不承担任何责任。</li>
-                        <li>责任限制。在任何情况下松果网对您和任何第三方不承担任何间接的、后续的、惩戒性的、附带的、特别的或惩罚性的损害赔偿责任，包括您使用松果网服务中产生的利润损失赔偿，尽管曾向松果网咨询该损害的可能性。尽管存在与本协议相反的规定，不论何种原因，也不论采取行动的方式如何，松果网的对您承担的责任在任何时候均不超过您在会员期间为使用松果网服务而向松果网支付的数额，如存在。</li>
-                        <li>争议解决。本协议使用中华人民共和国大陆地区的法律并依其解释，但不适用其冲突法律条款。您和松果网同意将产生于本协议或松果网服务的任何争议提交位于上海的人民法院专属管辖。</li>
-                        <li>赔偿。因您使用松果网服务而违反本协议和/或违反本协议和/或任何违反本协议中约定的声明和保证条款和/或您发布在松果网服务上的任何内容而产生的第三方诉求，您同意赔偿并确保松果网、其子公司和关联公司及其各自官员、代理人、合伙人和员工免受任何损失、责任、诉求或要求，包括合理的律师费用。</li>
-                        <li>其他条款。您一旦使用松果网网站或松果网软件或任何松果网服务即被视为接受本协议，成为会员是对接受的进一步确认。本协议构成您和松果网就使用松果网服务的全部协议。松果网未行使或执行本协议的任何权利或条款不得视为其已放弃该权利或条款。本协议的条款标题仅为方便而设，其不具有任何法律或合同效力。 如果本协议的某项条款非法、无效或不可执行，该条款将被视为从本协议中分割开来，且不影响其他条款的效力和可执行性。</li>
-                    </ul>
-                    </br>
-                    <p>我已阅读本协议，并同意以上所有条款。</p>
-                </div>
-            </div>
-        </article>
-    </div>
-    <div class="mainfooter"> 
+      </div>
+      <div class="mainfooter"> 
     	<!-- Duoshuo Comment BEGIN -->
-	<div class="ds-thread"></div>
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"pinecone"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = 'http://static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		|| document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- Duoshuo Comment END -->
-    	<img src="images/footer1.png" width="939px" height="51px" title="松果网版权所有" alt="松果网版权所有" /> <a href="#">关于我们</a> <a href="#">隐私条款</a> <a href="#">联系方式</a>
-        <p>Copyright © 2013 Pinecone.cc Inc. All Rights Reserved.</p>
-    </div>
-</section>
-</body>
+		<div class="ds-thread"></div>
+		<script type="text/javascript">
+			var duoshuoQuery = {short_name:"pinecone"};
+			(function() {
+				var ds = document.createElement('script');
+				ds.type = 'text/javascript';ds.async = true;
+				ds.src = 'http://static.duoshuo.com/embed.js';
+				ds.charset = 'UTF-8';
+				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+			})();
+		</script>
+		<!-- Duoshuo Comment END -->
+    	<img src="images/footer1.png" width="939px" height="51px" />
+    	<a href="javascript:void(0);" class="helpAgreement">用户协议</a>
+    	<a href="javascript:void(0);" class="helpPolicy">隐私条款</a>
+        <p>Copyright © 2012 Pinecone.cc Inc. All Rights Reserved.</p>
+      </div>
+      <div class="windows" style="display:none;"> 
+        <a href="javascript:void(0);" class="closeDiv" title="关闭">x</a>
+        <article id="popupwindow">
+          <header>
+            <div class="details">
+              <div class="detail detailAgreement">
+                <h1>松果网用户协议</h1>
+              </div>
+              <div class="detail detailPolicy">
+                <h1>松果网隐私条款</h1>
+              </div>
+            </div>
+          </header>
+          <div class="details content">
+            <div class="detail detailPolicy">
+              <h3>松果网 隐私政策</h3>
+              <p>本隐私政策描述松果网对会员其注册时自愿提供给松果网的个人身份信息（“个人身份信息”也称为“注册个人身份信息”—本人全名，电邮地址，邮箱地址，电话号码，或者信用卡号码）的使用和分享。名词“用户”包括网站游客和会员。本隐私政策适用于由松果网提供的服务，包括任何使用松果网即时信息服务，松果网的应用和其他功能，松果网移动服务，以及其他由松果网随时提供的与松果网软件相关的功能、内容、或应用（总称为“松果网服务”）。</p>
+              <p>松果网软件是一个大众追随者软件，且不会故意收集13岁以下儿童的个人身份信息。</p>
+              <p>松果网可以随时对本隐私政策进行修订，以反映行业发展、法律变化、我们的个人身份信息收集和使用实践、松果网服务的功能、或者科技的发展，并且这种修订将在松果网网站上发布出来时立即生效。在松果网将修订过的隐私政策公布出来后，您还继续使用松果网的服务，即表明您接受了修订后的隐私政策。因此，定期审阅本隐私政策很重要，可以保证您了解任何修订。如果松果网对您的个人信息的收集和使用的实践有重大改变，除非在您已经收到该改变的通知，并且未反对该改变，否则您的个人身份信息将仍适用其被收集时适用的隐私政策。</p>
+              <h3>从松果网上收集和提交个人身份信息和非个人身份信息</h3>
+              <p>一般来说，松果网收集到您的个人身份信息是因为您为了注册成为松果网的会员而自愿提供给我们的注册个人身份信息。如果您因为想让我们提供产品、服务、简报或信息或与您为评论和打造简介或注册的目的而提交给松果网的内容或建议有关， 而选择参加松果网服务活动，如抽奖、竞赛 和调查，松果网也可能从其他方或者网站收集到您的个人身份信息。另外，松果网也收集其他非个人身份信息，包括IP地址，集合的用户数据及浏览器类型。这些数据被用来管理和提高松果网的服务，追踪使用习惯以及为安全的考虑。松果网的会员也可以选择在自己的简介中提供或贮存非个人身份信息，包括但不仅限于生日、兴趣、爱好、生活方式、所属群组（学校、公司）、视频和/或图片，私人信息，公告板或个人陈述（总称“简介信息”）。在用户简介中的简介信息是用户自己决定提供的。</p>
+              <p>松果网的会员可以随时更改他们的注册个人身份信息和简介信息，并可以通过控制他们的账户设置功能，控制来访者、其他会员和松果网如何与其进行联系。</p>
+              <p>Cookies是松果网放置在您电脑上或手机的少量信息。松果网使用cookies来验证您的互联网浏览器，贮存用户首选项，以及确定是否您已经安装了使用松果网服务上的某些资料所需的授权软件。Cookies中的数据可读，用来验证用户使用时间或提供服务。</p>
+              <p>松果网服务上的第三方广告也可能包含由互联网广告公司或广告商设置的cookies（称为“第三方cookies）。松果网不能控制这些第三方cookies，松果网服务的用户应该通过查询互联网广告公司或广告商的隐私政策来确定它是否或如何使用cookies。查看以下“通知”项下得信息以了解有关在松果网上的定制广告宣传的更多信息。像素标签是植入网页的微小图像，用来记录查看该网页的次数和方式。松果网可以允许在松果网服务中存在以做广告、提供服务或数据以及收集统计资料为目的的第三方像素标签。</p>
+              <p>您可以设置您的电脑或手机，当每次一个cookie发过来时对您进行警告，阻止第三方cookies或所有cookies。但是，如果阻止了所有cookies，您可能无法使用松果网服务的某些功能。</p>
+              <h3>通知：松果网将向您提供一些关于松果网个人身份信息收集实践的预先通知。</h3>
+              <p>当您自愿向松果网提供个人身份信息时，我们将确保，您被告知谁在收集该信息，如何及为何该信息被收集，以及松果网使用该信息的方式若该信息的使用方式与本隐私政策所允许的使用方式不同时。</p>
+              <p>松果网服务可能会链接到其他公司运营的网站。松果网服务也可能带有其他公司的广告。松果网不对链接到或与松果网的服务集成在一起的第三方的网站及提供的服务的隐私实践或者第三方互联网广告公司的隐私实践负责。如果您通过一个链接离开了松果网服务，接入了一个第三方应用程序或点击了一个广告，您应该查询该第三方或广告商适用的隐私政策，来确定他们怎样处理从您那里收集的任何个人身份信息，和其他一些事项。</p>
+              <p>一些出现在松果网服务上的广告也可以通过第三方互联网广告公司发送给您。这些公司使用特定技术来发送广告和营销信息，并且收集关于您访问或使用松果网服务的非个人身份信息，包括通过布置在您电脑上的cookie来读取您的IP地址而收集关于他们显示的广告的信息。第三方使用第三方开发的应用程序（如网络精灵）也可能在松果网服务中使用。第三方应用程序是一些小软件，通常是互动性的，可以被安装进入会员的简介或与其他用户共享区域。但是，松果网不控制这些第三方开发商，也不能支配他们的行为。当一个会员使用了一个第三方应用程序，该会员是与该第三方开发商互动，而不是和松果网互动。松果网鼓励会员们不要将个人身份信息提供给第三方应用程序，除非该会员了解与其进行互动的对方。</p>
+              <h3>使用：松果网对个人身份信息的使用</h3>
+              <p>松果网只以符合本隐私政策规定的方式来使用您提供的个人身份信息。如果松果网从第三方处获得个人身份信息，如一个商业伙伴，我们对该信息的使用也将受本隐私政策的约束。</p>
+              <p>有可能会出现这种情况，为了：(i) 保护或为松果网、我们的关联公司或者他们的员工，代理人和订约人的合法权利或财产抗辩（包括对我们的协议的强制履行）；(ii) .保护使用松果网服务的用户或者公众的安全，包括在紧急情况下采取的行动；(iii) 防止不受诈欺或为了风险管理的目的；或者(iv) 遵守法律或法律程序，松果网可以未给您提供选择而使用或披露您的个人身份信息、简介信息或非个人身份信息 。另外，如果松果网卖掉全部或部分业务或卖掉或出售或转让其所有或重要部分资产，或以另外方式卷入并购或转让其全部或重要部分业务，松果网可以作为交易的一部分将您的个人身份信息转让给交易方。</p>
+              <h3>安全：松果网保护个人身份信息的安全</h3>
+              <p>松果网使用商业上合理的行政、技术、人员、物理措施来保护其占有的个人身份信息和信用卡信息，以防止丢失、盗窃和非授权的使用、披露或修改。另外，松果网运用合理的方法来保证个人身份信息是准确的，最新的且适当完整的。 </p>
+            </div>
+            <div class="detail detailAgreement">
+              <P>北京松果科技有限责任公司（“松果网”或“我们”）运营松果网软件，该软件提供在线服务，允许会员在线创立自己独特的个人资料，下载移动客户端以管理和监控其所属的设备。松果网提供的服务包括任何以松果网命名的URL（“松果网网页”）， 松果网即时通信服务，松果网应用程序，松果网移动服务和任何其它松果网根据其经营业务不时提供的功能、内容或应用程序（统称为“松果网服务”）。</P>
+              </br>
+              <p>本用户协议（“协议”）列明了您使用松果网服务时应遵守的具有法律约束的条款。一旦使用松果网服务，您即同意受本协议约束，成为我们的用户（“游客”或“会员”）。不论您是以“游客”（是指您仅仅浏览松果网网站，包括通过移动设备，或未经注册而使用松果网服务）身份或“会员”（是指您已在松果网注册）。 只有您在同意遵守本协议条款相关规定，您方被授权使用松果网服务（不论您的进入或使用是否为有意为之）。请仔细阅读本协议并将其保存。如您不同意受本协议约束且不愿遵守所有适用的法律，您应当离开松果网网站和/或松果网软件并立即停止使用松果网服务。如果您希望成为会员，与其他会员交流和/或使用松果网服务，您必须阅读本协议，并在注册过程中明确表示接受本协议。</p>
+              </br>
+              <p>本协议包括合理使用松果网服务的政策，在松果网服务上发表或通过松果网服务发表的内容（见下文6.1款的定义）的政策，以及有关您使用松果网服务上发布或通过松果网服务发布的内容的权利、义务和限制。为参加某项松果网服务，可能会通知并要求您下载软件或内容和/或接受松果网提供的补充条款或条件。除非您选择参加的松果网服务所适用的补充条款或条件另有规定，该补充条款为本协议的一部分。</p>
+              </br>
+              <p>松果网可随时修改本协议，该修改内容发布在在松果网网站上后即生效。您在松果网发布修改后的协议后继续使用松果网服务即意味着您接受该修改后的协议。因此经常阅读本协议以了解我们作出的任何修改对您很重要。</p>
+              </br>
+              <p>请仔细筛选您发布在松果网服务或通过松果网服务发布的其他用户的信息。您本人的松果网资料不得含有任何法律、法规禁止性内容。如果其他松果网会员提供的信息、材料、产品或服务（如在他们的简介中）可能全部或部分未经授权、未经许可或以其它方式违反本协议，我们对该等材料不承担义务或责任。</p>
+              </br>
+              <p>松果网保留自行决定退回、拒绝发布或删除任何您发布的内容（包括私人信息）的权利，或在任何时候、以任何理由拒绝、限制、中止或终止您进入全部或部分松果网服务。不论是否给予提前通知或解释，也无需承担责任。如果您违反本协议或对松果网和/或其用户造成威胁，松果网明确保留删除您资料或拒绝、限制、中止或终止您进入全部或部分松果网服务的权利。</p>
+              </br>
+              <ul>
+                <li>适格。 我们有拒绝您使用我们服务或者成为我们会员的权利。而且，您在使用松果网服务和成为会员时，您声明并保证（a）您提交的所有注册信息是真实的、准确的；（b）您应维持该信息的准确性。（C）您承担信息不实所导致的所有后果。</li>
+                <li>期限。只要您使用松果网服务或为松果网会员，本协议及发布的任何对本协议的修改将继续完全有效。您按照松果网网站或软件上的指示，即可以任何理由在任何时间终止您的会员身份。松果网也可以在任何时间，以任何理由或无需提供理由，不论是否给予提前通知或解释，终止您的会员身份，且不承担任何责任。</li>
+                <li>费用。您已知晓并理解我们保留对松果网服务的任何部分收费，或随时自行决定变更其费用（如有）的权利。如果松果网因您违反本协议而终止您的会员身份，您无权要求退还任何未使用的费用或款项（如有）。</li>
+                <li>密码。当您进行会员注册时，您将会被要求选择一个密码。您本人对保持该密码的秘密性负全部责任。您允诺在任何时候均不使用其他会员的账户、用户名或密码。如果您怀疑存在任何非法使用您的账户或密码，您应立即通知松果网。</li>
+                <li>会员的使用。松果网服务仅供会员为个人目的使用，也可用于促销目的，但直接的商业行为只有经松果网特别批准或授权后方可进行。否则，我们可以自行决定删除会员发布的商业内容。包括用户简介中的商业广告、关联链接或其它形式的未经许可的推销。我们的删除行为可以不经通知或解释，而且终止用户的会员资格。</li>
+                <li> 上传内容的许可
+                  <p>松果网就您发布在松果网服务上的或通过松果网服务发布的文本、文件、图像/肖像、图片、视频、声音、音乐作品、原创作品、应用程序或其它任何材料（统称“内容”）不主张任何所有权。您将内容发布在松果网服务上后，您将继续保留您在该内容上原有的任何权利，但受制于本协议项下的有限许可。您在松果网服务上或通过松果网服务发布或公开任何内容，即表示您许可我们拥有您发布内容的使用权，包括但不限于编辑、修改、删除、添加、公开表演、展示、复制和传播该内容，该许可包含了松果网以及其附属公司、关联公司以及合作方进行与松果网相关业务时候使用您发布的内容。而且不需要向您支付任何许可费用。</p>
+                </li>
+                <li>您声明并保证如下：（i）您对发布在松果网服务或通过松果网发布的内容拥有所有权，或者相应的授权；和（ii）您在松果网服务上或通过松果网服务发布的内容不违反法律法规的规定以及侵犯他人的合法权益。</li>
+                <li>松果网服务包含用户内容和其他松果网许可权人的内容。除本协议另有约定外，您不得复制、修改、翻译、出版、广播、传输、传播、表演、展示或销售松果网服务上或通过松果网服务显示的任何内容。</li>
+                <li> 禁止的内容/活动。
+                  <p>下列为非法或禁止在松果网服务上或通过松果网服务发布的内容的例子。松果网保留针对任何违反本条规定的人（松果网自行决定）进行调查采取适当的法律行动的权利，包括但不限于删除松果网服务上的违法内容和终止该违规者的会员身份。经松果网自行决定，禁止的内容包括但不限于如下内容：</p>
+                  <ul>
+                    <li>可能的犯罪并推行对任何团体或个人的种族主义，偏见，仇恨或任何身体损害；</li>
+                    <li>对他人进行骚扰或鼓动骚扰；</li>
+                    <li>以色情或暴力的方式利用他人；</li>
+                    <li>含有色情、过度暴力或其它不良内容或含有成人网站链接等；</li>
+                    <li>公开发布给他人造成或产生隐私或安全隐患的信息；</li>
+                    <li>构成或推广您知道为虚假或误导性的信息，或推广违法活动或进行辱骂、威胁、淫秽、诽谤或中伤的行为；</li>
+                    <li>构成或推广非法或未经授权的对他人享有著作权的作品的复制，如提供盗版电脑程序或提供连接到该程序的链接，提供能规避生产者安装的受著作权保护的设施的信息，或提供盗版音乐或提供盗版音乐文件的链接；</li>
+                    <li>卷入发送“垃圾邮件”、“连锁信”或大规模发送未经请求的邮件、即时通信、“垃圾即时信息”或“垃圾邮件”</li>
+                    <li>含有限制或需要密码才能进入的网页或隐藏网页或图片（未与另一个可进入的网页链接）；</li>
+                    <li>助长或推动任何犯罪活动或事业，提供违法行为的指导性信息，包括但不限于制造或购买非法武器、违反他人的隐私或提供或制造电脑病毒；</li>
+                    <li>引诱其他用户的密码或个人身份信息用于商业或其他非法目的；</li>
+                    <li>含有商业行为和/或未经松果网事先书面同意而进行销售，比如有奖竞销，彩票、或物交换、广告或传销；</li>
+                    <li>未经他人同意而发布含有他人的图片或视频；</li>
+                    <li>为乐队、喜剧、电影制作者和其他简介吸引浏览量的意图，使用性暗示形象或任何其他不公平、有误导性或欺骗性的内容；或违反任何他人的隐私权、公开权、著作权、商标权、合同权或任何其他权利。</li>
+                  </ul>
+                  </br>
+                  <p>以下为在松果网网站/手机上或通过您使用松果网服务非法从事或受禁止的活动的实例。松果网保留对违反本条款的任何人（松果网自行决定）进行调查、采取适当的法律行动的权利，包括但不限于向法律执行部门举报您。禁止的行为包括但不限于：</p>
+                  <ul>
+                    <li>犯罪或侵权行为：包括儿童色情作品、诈骗、淫秽作品交易、毒品交易、赌博、骚扰、跟踪、发送垃圾邮件、发送垃圾讯息、发送病毒或其他有害文件、著作权侵权、专利侵权或窃取商业秘密。</li>
+                    <li>未经授权或许可使用松果网服务向任何会员推广或诱导其购买或销售任何产品或服务。您不得向其他会员发送任何连锁信或垃圾邮件。为保护我们的会员免受广告或诱购的影响，松果网有权将一会员在任何24小时时间段内向其他用户的发送电子邮件或垃圾短信的数量控制在松果网认为合适的范围内，该数量由松果网自行决定。</li>
+                    <li>规避或修改、试图规避或修改、鼓动或协助任何他人规避或修改任何属于松果网服务的一部分的安全技术或软件；</li>
+                    <li>具有使用病毒、僵尸漏洞、蠕虫病毒或任何其他电脑代码、文件或程序行为，其能中断、破坏或影响任何电脑/手机软件或硬件的功能，或以其他方式许可未经授权的使用或进入电脑或电脑网络或手机；</li>
+                    <li>通过HTML/CSS或任何其他方式覆盖置于您个人简介页面或任何松果网页面上的任何横幅广告或使其变模糊；</li>
+                    <li>任何对系统的自动化使用，包括但不限于使用scripts添加好友、发表评论或发送信息；</li>
+                    <li>干扰、中断松果网服务或与松果网服务有关的网络或服务或给其制造不当负担；</li>
+                    <li>假冒或试图假冒另一位会员、个人或单位；</li>
+                    <li>为乐队、喜剧、电影制作者或其他简介植入松果网播放器，为您的松果网播放器复制源代码并将其植入（或指导他人植入）除了您在松果网上的乐队简介之外的任何区域；</li>
+                    <li>在任何时间使用其他会员的账户、用户名或密码，或向任何第三方披露您的密码，或允许任何第三方进入您的账户；</li>
+                    <li>销售或以其他方式转让您的简介；</li>
+                    <li>使用从松果网服务中获得的信息来骚扰、辱骂或伤害他人或单位，或试图这样做；</li>
+                    <li>在您的个人简介页面上播放未经许可的商业广告，或从第三方接受钱款或任何有价值的东西以换取您代表该人未经授权或许可使用松果网服务从事商业活动，如在您的个人主页上放置商业内容，为商业目的发布博客或公告，选择具有商业目的的个人主页作为常用列表的成员，或发送具有商业目的的私人信息；或以任何和所有违反适用的法律和法规的方式使用松果网服务；</li>
+                  </ul>
+                </li>
+                <li>著作权和其他知识产权保护。松果网尊重他人的知识产权并要求我们的用户也这么做。您不得上传、植入、发布、利用电子邮件发送、传输或以其它方式提供侵犯任何个人或单位的任何著作权、专利权、商标权、商业秘密或其他专有权利的任何资料。松果网有权终止侵权人的会员身份； 如果您认为您的作品被他人复制或发布在松果网服务上，并在以某种方式构成著作权侵权，请您就主张的侵权向松果网版权代理人发送含有如下信息的通知：（a）确定被侵犯的享有著作权的作品，或如果单个通知包含多个受著作权法保护的作品，确定这些作品的名单； （b）确定所主张的侵权材料和信息，该材料和信息应适当充分地使我们确定其在松果网服务上的位置（提供所主张的侵权材料的URL符合本要求）； （c）提供适当合理的信息以使我们联系到您，如地址、电话号码和电子邮件地址（如可能）； （d）提供您的声明，您善意地相信有争议的使用未得到著作权所有人、其代理人或法律的授权； （e）出具做伪证便受惩罚的声明，表明您通知中所述的上述信息是准确的，您为著作权的所有人或代表著作权所有人采取行动；和 （f）您的自然或电子签名。</li>
+                <li>会员争议。您对您与其他松果网会员的交往行为独立承担责任。松果网有权但并无义务以任何方式参与您与其它会员间的争议。</li>
+                <li>免责声明。松果网对发布在松果网服务上或通过松果网服务发布的用户内容或用户内容的准确性和可靠性不承担责任，也不做任何明示或暗示的保证，不论是松果网服务用户造成的，或者任何与松果网服务有关或松果网服务使用的设备或程序，且该用户内容并非当然反映松果网的意见或政策。 会员在松果网网站或软件上创建和发布的简介和第三方应用可能含有连接到其他网站的链接。松果网对该网站或软件上发布的内容、其准确性和意见不承担责任，且松果网也无必要对其准确性和完整性进行调查、监管或核查。在松果网服务上含有某网站或软件的链接并不意味着松果网对该网站或软件的许可或赞同。当您进入这些第三方网站或软件时，您应对此自行承担风险，松果网对发布在松果网服务上或通过松果网服务发布的第三方广告或第三方应用程序不承担责任，对其广告所描述的产品和服务也不承担任何责任。松果网对松果网服务中的任何用户的行为（不论是在线还是离线）不承担责任。松果网对任何用户或会员的交流中的任何错误、遗漏、中断、删除、瑕疵、操作或传输的迟延、通信线路故障、盗窃、破会或非法侵入或改变不承担责任。松果网对任何电话网络或线路、电脑在线系统、服务器或提供商、电脑设备、软件，因网络或松果网服务上的技术问题或信号拥挤而产生的任何电子邮件和播放器的故障，包括因参与松果网服务或从其下载材料中产生的或与之有关的用户的任何损失或损害不承担责任。在任何情况下松果网对用户在使用松果网服务、参加松果网活动、通过松果网服务发布的任何用户内容或松果网服务的任何用户的行为（不论是在线还是离线）而产生任何损失或损害，包括人身伤害或死亡，均不承担任何责任。</li>
+                <li>责任限制。在任何情况下松果网对您和任何第三方不承担任何间接的、后续的、惩戒性的、附带的、特别的或惩罚性的损害赔偿责任，包括您使用松果网服务中产生的利润损失赔偿，尽管曾向松果网咨询该损害的可能性。尽管存在与本协议相反的规定，不论何种原因，也不论采取行动的方式如何，松果网的对您承担的责任在任何时候均不超过您在会员期间为使用松果网服务而向松果网支付的数额，如存在。</li>
+                <li>争议解决。本协议使用中华人民共和国大陆地区的法律并依其解释，但不适用其冲突法律条款。您和松果网同意将产生于本协议或松果网服务的任何争议提交位于北京的人民法院专属管辖。</li>
+                <li>赔偿。因您使用松果网服务而违反本协议和/或违反本协议和/或任何违反本协议中约定的声明和保证条款和/或您发布在松果网服务上的任何内容而产生的第三方诉求，您同意赔偿并确保松果网、其子公司和关联公司及其各自官员、代理人、合伙人和员工免受任何损失、责任、诉求或要求，包括合理的律师费用。</li>
+                <li>其他条款。您一旦使用松果网网站或松果网软件或任何松果网服务即被视为接受本协议，成为会员是对接受的进一步确认。本协议构成您和松果网就使用松果网服务的全部协议。松果网未行使或执行本协议的任何权利或条款不得视为其已放弃该权利或条款。本协议的条款标题仅为方便而设，其不具有任何法律或合同效力。 如果本协议的某项条款非法、无效或不可执行，该条款将被视为从本协议中分割开来，且不影响其他条款的效力和可执行性。</li>
+              </ul>
+              </br>
+              <p>我已阅读本协议，并同意以上所有条款。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+	</section>
+  </body>
 </html>

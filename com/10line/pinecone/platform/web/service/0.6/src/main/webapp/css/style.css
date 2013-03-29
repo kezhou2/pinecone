@@ -1,0 +1,230 @@
+@charset "UTF-8";
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, images, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,img { margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit }
+body { font: 14px Microsoft YaHei, Lucida Sans Unicode, Myriad Pro, Hiragino Sans GB, Heiti SC, Verdana, SimHei; background: url(../images/bg.jpg) repeat 0 0; background-attachment:fixed; color: #5A5A5A; height: 100% }
+a { color: #000; -moz-transition: color 0.3s linear 0s; -webkit-transition: color 0.3s linear 0s; -o-transition: color 0.3s linear 0s; transition: color 0.3s linear 0s }
+a:link, a:visited { text-decoration: none }
+a:hover { color: #f82; text-decoration: underline }
+:focus { outline: 0 }
+h1, h2, h3, h4, h5, h6 { font-weight: normal }
+.gray { color: #666 }
+.red { color: #FC0101 }
+.orange { color: #f60 }
+strong { font-weight: bold; color: #5d6866 }
+table { border-collapse: collapse; border-spacing: 0 }
+caption, th, td { text-align: left; font-weight: normal }
+form legend { display: none }
+ol, ul { list-style: none }
+select, input, images, select { vertical-align: middle }
+hr { display: none; visibility: hidden }
+.hide { display: none }
+.show {display:block;}
+.vhide { visibility: hidden }
+.clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0 }
+.clearfix { display: block }
+html[xmlns] .clearfix { display: block }
+*html .clearfix { height: 1% }
+*+html .clearfix { height: 1% }
+article { width: 940px; margin: 0 auto; zoom: 1 }
+article:after { content: " "; display: block; clear: both }
+
+.mainWidth { width: 940px; margin: 0 auto; }
+
+#top { position: relative; z-index: 9999999999; height: 89px; width: 100%; position: fixed; }
+#naver { width: 940px; height: 89px; margin: 0 auto; position: relative }
+#logo { position: absolute; top: 0; left: 0 }
+#nav { position: absolute; top: 32px; right: 0 }
+#nav a { color: #000; font-size: 18px; text-align: center; text-decoration: none; height: 32px; line-height: 30px; width: 64px; margin: 0 16px; display: block; float: left; -moz-transition: color 0s linear 0s; -webkit-transition: color 0s linear 0s; -o-transition: color 0s linear 0s; transition: color 0s linear 0s }
+#nav a.active { color: #f80 }
+
+#banner {width:100%; height:600px;  clear: both}
+.bannerBg {background: url(../images/banner.jpg) no-repeat 50% 50%; height: 443px; width: 100%; position: absolute; top: 90px;}
+#bannerBox { height: auto;  clear: both}
+.bannerBoxL { width: 590px; float: left }
+.bannerBoxR { width: 300px; float: right ; margin-top:20px;}
+
+#wrapper { position: absolute;  width: 100% }
+#box { clear: both }
+.boxL { height: 550px; width: 638px; float: left }
+.title2 { height: 45px; line-height: 45px; clear: both; border-bottom: 1px #fff solid }
+.title2 h2 { color: #323232; font-size: 32px; height: 44px; border-bottom: 1px #bfbfbf solid }
+
+/*product*/
+#product { width: 940px; margin: 0 auto; margin-top: 80px; }
+#product_list { padding-top: 10px;}
+#product_list li { width: 234px; height: 300px; float: left; margin-right: 1px;}
+#product_list li a { display: block; width: 224px; height: 295px; background: url(../images/product_bg.jpg) no-repeat -235px; padding: 5px 3px 5px 6px;}
+#product_list li a:hover { background: url(../images/product_bg.jpg) no-repeat ;}
+#product_list li a p { padding-top: 5px;}
+
+
+
+
+
+
+#download article h2 { color: #4a4a4a; font-size: 32px; text-align: center }
+
+/*一下是about部分使用的*/
+#about { width: 100%; padding-top: 88px }
+#AboutBox { height: auto; margin-top:40px; clear: both}
+.aboutBanner { background: url(../images/aboutbanner.jpg) no-repeat 0 0; height: 266px; width: 940px; margin: 0 auto }
+.AboutBoxL { width: 638px; float: left }/*height为(610+16*10)*/
+.AboutTitle { height: 45px; line-height: 45px; clear: both; border-bottom: 1px #fff solid }
+.AboutTitle h2 { color: #333; font-size: 24px; height: 44px; border-bottom: 1px #ddd solid }
+
+
+.intro dl { clear: both; display: block; width: 638px;  line-height: 1.6em }
+.intro dl dd { color: #666; font-size: 12px; width: 630px; padding-top: 16px; padding-bottom: 16px; float: left }
+
+.job dl { clear: both; display: block; width: 638px;  margin: 25px 0; line-height: 1.6em }
+.job dl dt { color: #333; font-size: 12px; width: 606px; padding-top: 16px;  }
+.job dl dd { color: #f80; font-size: 12px; width: 500px;  font-weight: bold; margin-top: 16px;}
+.job dl dd h2 { color: #333; font-size: 14px; font-weight:bold; margin-top: 16px; margin-bottom: 5px; clear: both;display:inline }
+.job dl dd h3 { color: #333; font-size: 14px; font-weight:bold; padding-top: 16px; margin-left:16px; margin-bottom: 5px; clear: both;display:inline }
+.job dl dd h3 a{ color: #333; }
+
+.jobtitle1 { color: #333; font-size: 12px; width: 606px; padding-top: 16px;  display:inline}
+.jobemail { color: #f80; font-size: 12px; width: 500px;  font-weight: bold; margin-bottom: 16px; display:inline}
+
+.aboutboxR { width: 266px; padding-top: 45px; float: right }
+
+.aboutboxR h4 { color: #333; font-size: 18px; height: 20px; line-height: 20px; padding: 16px 0 0 16px }
+.aboutboxR dl { width: 300px; padding: 16px 16px 16px 16px ; padding-top:5px; font-size: 12px; color: #828282}
+.aboutboxR dl dd { margin: 2px 2px; clear: both }
+.aboutboxR ul li a { color: #828282; font-size: 12px;  }
+
+	
+/*以下为帮助部分使用的*/
+#help { padding-top: 100px }
+#help .helpheader { height: 82px; line-height: 50px; margin-bottom: 16px; text-align: center; clear: both; border-bottom: 1px #fff solid }
+#help .helpheader h2 { color: #4a4a4a; font-size: 50px; height: 81px; border-bottom: 1px #ddd solid }
+.HelpBoxL { height: auto; width: 638px; float: left }
+.helpC { height: auto;}
+.helpC dl { margin-bottom: 16px }
+#help .share {padding-left:16px; padding-top:16px; padding-bottom:16px;}
+
+#help .sharetitle { color: #333; font-size: 16px; }
+.helpC dl dt {  height: 40px; padding-left: 10px }
+.helpC dl dt h3 { font-size: 12px; color: #333 ; font-weight: bold; line-height: 30px;  border-bottom: 1px #ddd dashed }
+.helpC dl dd { color: #666; font-size: 12px; padding-left: 15px; line-height: 1.0em }
+.helpC dl dd p {  margin-bottom: 10px }
+.helpC ul { color: #666; font-size: 12px; margin-left: 15px;}
+.helpC ul li {  margin-left: 15px;list-style-type:disc; line-height: 1.6em }
+
+.rBox {background: #fff; width: 264px; clear: both; margin-bottom: 16px; border: 1px solid #ddd; padding-right: 0; border-radius: 4px; overflow: hidden;}
+
+.helpC dl dd p a { color: #65a3de; text-decoration: underline; white-space: nowrap }
+.helpC dl dd p a:hover { color: #0884CD; text-decoration: underline }
+.icoHelp { background: url(../images/ico-questions.png) no-repeat; width: 20px; height: 20px; display: inline-block; float: left; margin-top: 5px; margin-right: 10px }
+.helpboxR { width: 266px; padding-top: 25px; float: right }
+.helpboxR h4 { color: #333; font-size: 18px; height: 20px; line-height: 20px; padding: 16px 0 0 16px }
+.helpboxR h3 { color: #333; font-size: 16px; height: 20px; line-height: 20px; padding: 16px 16px 16px 16px; }
+.helpboxR h3 span{ padding-right:10px}
+
+.helpboxR dl { width: 240px; padding: 16px 16px 16px 16px ; padding-top:5px; font-size: 12px; color: #828282}
+.helpboxR dl p { margin: 2px 2px; clear: both }
+.helpboxR ul li a { color: #828282; font-size: 12px;  }
+
+.helpboxRbox {background: #faf9f8; width: 234px; height:32px; clear: both; margin-bottom: 0; border: 1px solid #ddd; padding-right: 0; border-radius: 4px; overflow: hidden;}
+.helpboxRbox dt {color: #f80; font-size: 14px; line-height: 20px;text-align: center; padding-top:5px; padding-bottom:5px;  }
+.helpboxRbox dt a{color: #666;  }
+.icoqq { background: url(../images/qq.png) no-repeat; width: 24px; height: 24px; display: inline-block; float: left; margin-top: -2px; margin-right: 10px }
+
+.windows { background: #fff; position: absolute; position: fixed; _position: absolute; z-index: 999999999999; width: 760px; height: 520px; left: 50%; top: 50%; margin: -250px 0 0 -380px; padding: 0px; -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; -moz-box-shadow: 0px 0px 10px #828282; -webkit-box-shadow: 0px 0px 10px #828282; box-shadow: 0px 0px 10px #828282 }
+
+.closeDiv { background: url(../images/close.png) no-repeat; font-size: 0; width: 37px; height: 37px; text-indent: -999999px; position: absolute; right: 22px; top: 30px }
+.closeDiv:hover { background: url(../images/close_s.png) no-repeat; width: 37px; height: 37px;}
+
+.downloadWindows { width: 600px; height: 220px; margin: -110px 0 0 -300px }
+.downloadWindowsH { height: 250px; margin: -125px 0 0 -300px }
+
+
+#popupwindow { color: #333; width: 760px }
+#popupwindow header h1 { float:right; color: #333; font-size: 18px; font-weight:bold; margin-left:32px; padding-top:32px; text-align: left; height: 47px; line-height: 47px; width: 710px;  border-bottom: 1px #ccc solid; }
+
+#popupwindow  .content {  margin-top:-268px }
+#popupwindow .details {  color: #666; width: 736px; float: left }
+#popupwindow .details div { height: 368px; overflow-y: auto; overflow-x:hidden }
+#popupwindow .details h3 { color: #333; font-size: 12px; font-weight:bold; padding-left: 26px; padding-top:16px; }
+#popupwindow .details p {  color: #666; font-size: 12px; line-height: 1.5em; padding-left: 26px; padding-right:26px; }
+#popupwindow .details .detail { display: none }
+#popupwindow .details .detailJava {  }
+#popupwindow .details .detailWeb {  }
+#popupwindow .details .detailLinux {  }
+#popupwindow .details .detailAgreement {  }
+#popupwindow .details .detailAgreement ul{list-style:disc; color: #666; font-size: 12px; line-height: 1.5em;padding-left:42px; padding-right:26px; }
+#popupwindow .details .detailAgreement ul li ul{list-style:circle; color: #666; font-size: 12px; line-height: 1.5em;padding-left:42px; }
+#popupwindow .details .detailPolicy {  }
+#popupwindow .details .detail.active { display: block }
+
+.mainfooter { width: 940px; height: 100px; margin: 0 auto;  font-size: 12px; padding-top: 20px ; }
+.mainfooter p { float: right;}
+.mainfooter a { color:#666; float: left; margin-right: 5px; }
+.mainfooter a:hover { color: #666; text-decoration: underline }
+
+.phoneBtns{height:125px; width:590px; margin-left:0; margin-top:300px; position:absolute }
+
+.phoneBtns .iphoneBtns{width:180px;  float:left; position: absolute; left:16px;}
+.phoneBtns .androidBtns{width:180px;  float:left; position: absolute; left:206px;}
+.phoneBtns .symbianBtns{width:180px;  float:left; position: absolute; left:396px;}
+
+.phoneBtns .iphoneBtns .appstoreBtn{background: url(../images/appstore.png) no-repeat; width: 180px; height: 74px; }
+.phoneBtns .iphoneBtns .appstoreBtn:hover { background: url(../images/appstore_s.png) no-repeat; }
+.phoneBtns .iphoneBtns .ipaBtn{background: url(../images/ipa.png) no-repeat; width: 180px; height: 50px;  margin-top:1px}
+.phoneBtns .iphoneBtns .ipaBtn:hover { background: url(../images/ipa_s.png) no-repeat;  }
+
+.phoneBtns .androidBtns .googlemarketBtn{background: url(../images/googleplay.png) no-repeat; width: 180px; height: 74px; }
+.phoneBtns .androidBtns .googlemarketBtn:hover { background: url(../images/googleplay_s.png) no-repeat;  }
+.phoneBtns .androidBtns .apkBtn{background: url(../images/apk.png) no-repeat; width: 180px; height: 50px;  margin-top:1px}
+.phoneBtns .androidBtns .apkBtn:hover { background: url(../images/apk_s.png) no-repeat;  }
+
+.phoneBtns .symbianBtns .ovimarketBtn{background: url(../images/OVIstore.png) no-repeat; width: 180px; height: 74px; }
+.phoneBtns .symbianBtns .ovimarketBtn:hover { background: url(../images/OVIstore_s.png) no-repeat;  }
+.phoneBtns .symbianBtns .sisxBtn{background: url(../images/sisx.png) no-repeat; width: 180px; height: 50px;  margin-top:1px}
+.phoneBtns .symbianBtns .sisxBtn:hover { background: url(../images/sisx_s.png) no-repeat;  }
+
+/*20121212*/
+/*
+#phoneTab {width:940px; height: 46px; clear: both;  margin: 459px auto; margin-left:16px; position: absolute ;}
+#phoneTab .iphoneTab {width: 180px; height: 46px; display: inline-block}
+#phoneTab .androidTab {width: 180px; height: 46px; display: inline-block}
+#phoneTab .symbianTab {width: 180px; height: 46px; display: inline-block}
+#phoneTab .iphoneTab a {background: url(../images/iphone.png) no-repeat; width: 180px; height: 46px; display: inline-block}
+.iphoneTabShow {background: url(../images/iphone_s.png) no-repeat; width: 180px; height: 46px; display: inline-block}
+#phoneTab .androidTab a {background: url(../images/android.png) no-repeat; width: 180px; height: 46px; display: inline-block}
+.androidTabShow {background: url(../images/android_s.png) no-repeat; width: 180px; height: 46px; display: inline-block}
+#phoneTab .symbianTab a {background: url(../images/win.png) no-repeat; width: 180px; height: 46px; display: inline-block}
+.symbianTabShow {background: url(../images/wins.png) no-repeat; width: 180px; height: 46px; display: inline-block}
+.icoTapLine { background: url(../images/tap_line.png) no-repeat;  width: 1px; height: 46px; display: inline-block }
+*/
+
+#phoneTab {width:590px; height: 46px; clear: both;  margin: 459px auto; margin-left:16px; position: absolute ;}
+#phoneTab .iphoneTab {width: 180px; height: 46px; position:absolute; margin-left:0;}
+#phoneTab .androidTab {width: 180px; height: 46px; position:absolute; margin-left:190px;}
+#phoneTab .symbianTab {width: 180px; height: 46px; position:absolute; margin-left:375px;}
+#phoneTab .iphoneTab a {background: url(../images/iphone.png) no-repeat; width: 180px; height: 46px; position:absolute;}
+.iphoneTabShow {background: url(../images/iphone_s.png) no-repeat; width: 180px; height: 46px; margin-left:100px; position:absolute;}
+#phoneTab .androidTab a {background: url(../images/android.png) no-repeat; width: 180px; height: 46px; position:absolute;}
+.androidTabShow {background: url(../images/android_s.png) no-repeat; width: 180px; height: 46px; position:absolute;}
+#phoneTab .symbianTab a {background: url(../images/win.png) no-repeat; width: 180px; height: 46px; position:absolute;}
+.symbianTabShow {background: url(../images/wins.png) no-repeat; width: 180px; height: 46px; position:absolute;}
+.icoTapLine1 { background: url(../images/tap_line.png) no-repeat;  width: 1px; height: 46px; position:absolute; margin-left:182px;}
+.icoTapLine2 { background: url(../images/tap_line.png) no-repeat;  width: 1px; height: 46px; position:absolute; margin-left:374px;}
+
+
+
+
+
+
+
+.icoIphoneBigPic { background: url(../images/ios_big.png) no-repeat;  width: 247px; height: 549px; position:absolute;}
+.icoAndroidBigPic { background: url(../images/and_big.png) no-repeat;  width: 265px; height: 549px; position:absolute;}
+.icoSymbianBigPic { background: url(../images/sym_big.png) no-repeat;  width: 247px; height: 549px; position:absolute;}
+/*20121212*/
+
+
+.middle{position:relative;width:100%;margin:0;overflow:visible;padding-top:100px;}
+.main {background: #fff; width: 940px; height:150px;margin:0 auto;  border: 1px solid #ddd;  border-radius: 4px; overflow: hidden;}
+
+.hide_b {
+    display:none;
+}

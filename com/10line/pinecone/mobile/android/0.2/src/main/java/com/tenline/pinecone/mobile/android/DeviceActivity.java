@@ -102,7 +102,7 @@ public class DeviceActivity extends AbstractListActivity implements ViewBinder {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		getIntent().putExtra("deviceId", info.targetView.getTag().toString());
-		getIntent().putExtra("deviceName", ((TextView) info.targetView).getText().toString());
+		getIntent().putExtra("deviceName", ((TextView) info.targetView.findViewById(R.id.device_name)).getText().toString());
 		switch(item.getItemId()) {
 		case R.id.device_delete: showDialog(DeleteDeviceDialogBuilder.DIALOG_ID); break;
 		case R.id.device_modify: showDialog(ModifyDeviceDialogBuilder.DIALOG_ID); break;

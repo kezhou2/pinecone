@@ -12,6 +12,7 @@ import com.tenline.pinecone.platform.model.User;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +53,9 @@ public class LoginActivity extends AbstractActivity {
 			}
         	
         });
+    	if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null) {
+    		Toast.makeText(this, R.string.error_network_unavailable, Toast.LENGTH_LONG).show();
+    	}
     }
     
     /**

@@ -77,9 +77,8 @@ public class ChannelService extends AbstractService {
 	 * @throws Exception
 	 */
 	public void listen(MqttCallback callback, String topic) throws Exception {
-		this.topic = topic;
-		client.setCallback(callback);
-    	client.subscribe(this.topic);
+		while (!client.isConnected()) {Thread.sleep(100);} this.topic = topic;
+		client.setCallback(callback); client.subscribe(this.topic);
 	}
 	
 	/**

@@ -64,7 +64,6 @@
 	<string name="error_user_email_is_existed">电子邮箱已经存在</string>
 	<string name="error_device_code_is_not_existed">请先接入设备</string>
 	<string name="error_device_has_been_activated">设备已经激活</string>
-	<string name="error_device_name_is_existed">设备名已经存在</string>
 	
 	<!-- Progress Properties -->
 	<string name="progress_message">网络数据读取中&#8230;</string>

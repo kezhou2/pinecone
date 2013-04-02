@@ -141,42 +141,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		protected void onPostExecute(Object[] result) {
 			// TODO Auto-generated method stub
 			if ((Integer) result[3] > 0) {((FormEditText) result[0]).setError(progress.getContext().getString(R.string.error_device_has_been_activated));}
-			else {new DeviceNameValidationTask(progress.getContext()).execute(result[1], result[2], 0);} super.onPostExecute(result);
-		}
-		
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class DeviceNameValidationTask extends RESTTask {
-
-		/**
-		 * 
-		 * @param context
-		 */
-		private DeviceNameValidationTask(Context context) {
-			super(context);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		protected Object[] doInBackground(Object... params) {
-			// TODO Auto-generated method stub
-			try {
-				RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService();
-				String deviceName = ((FormEditText) params[0]).getText().toString();
-				params[2] = ((ArrayList<?>) service.get("/device/search/names?name=" + deviceName)).size();
-			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
-		}
-		
-		@Override
-		protected void onPostExecute(Object[] result) {
-			// TODO Auto-generated method stub
-			if ((Integer) result[2] > 0) {((FormEditText) result[0]).setError(progress.getContext().getString(R.string.error_device_name_is_existed));}
-			else {new ActivateDeviceTask(progress.getContext()).execute(result[0], result[1]);} super.onPostExecute(result);
+			else {new ActivateDeviceTask(progress.getContext()).execute(result[1], result[2]);} super.onPostExecute(result);
 		}
 		
 	}

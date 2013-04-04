@@ -67,9 +67,11 @@ public class RegisterActivity extends AbstractActivity {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				FormEditText userName = (FormEditText) params[0];
-				ArrayList<?> users = (ArrayList<?>) getRESTService().get("/user/search/names?name=" + userName.getText().toString()); 
-				params[3] = users.size();
+				if (!isCancelled()) {
+					FormEditText userName = (FormEditText) params[0];
+					ArrayList<?> users = (ArrayList<?>) getRESTService().get("/user/search/names?name=" + userName.getText().toString()); 
+					params[3] = users.size();
+				}
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
@@ -102,9 +104,11 @@ public class RegisterActivity extends AbstractActivity {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				FormEditText userEmail = (FormEditText) params[1];
-				ArrayList<?> users = (ArrayList<?>) getRESTService().get("/user/search/emails?email=" + userEmail.getText().toString()); 
-				params[3] = users.size();
+				if (!isCancelled()) {
+					FormEditText userEmail = (FormEditText) params[1];
+					ArrayList<?> users = (ArrayList<?>) getRESTService().get("/user/search/emails?email=" + userEmail.getText().toString()); 
+					params[3] = users.size();
+				}
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
@@ -137,16 +141,18 @@ public class RegisterActivity extends AbstractActivity {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				String userName = ((FormEditText) params[0]).getText().toString();
-				String userEmail = ((FormEditText) params[1]).getText().toString();
-				String userPassword = ((FormEditText) params[2]).getText().toString();
-				User user = new User(); user.setName(userName); user.setEmail(userEmail);
-				user.setPassword(userPassword); getRESTService().post("/user", user);
-				user = (User) ((ArrayList<?>) getRESTService().get("/user/search/names?name=" + userName)).toArray()[0];
-				Authority authority = new Authority(); authority.setAuthority("ROLE_USER");
-				authority.setUserName(userName); getRESTService().post("/authority", authority);
-				authority = (Authority) ((ArrayList<?>) getRESTService().get("/authority/search/userNames?userName=" + userName)).toArray()[0];
-				getRESTService().post("/authority/" + authority.getId() + "/user", "/user/" + user.getId());
+				if (!isCancelled()) {
+					String userName = ((FormEditText) params[0]).getText().toString();
+					String userEmail = ((FormEditText) params[1]).getText().toString();
+					String userPassword = ((FormEditText) params[2]).getText().toString();
+					User user = new User(); user.setName(userName); user.setEmail(userEmail);
+					user.setPassword(userPassword); getRESTService().post("/user", user);
+					user = (User) ((ArrayList<?>) getRESTService().get("/user/search/names?name=" + userName)).toArray()[0];
+					Authority authority = new Authority(); authority.setAuthority("ROLE_USER");
+					authority.setUserName(userName); getRESTService().post("/authority", authority);
+					authority = (Authority) ((ArrayList<?>) getRESTService().get("/authority/search/userNames?userName=" + userName)).toArray()[0];
+					getRESTService().post("/authority/" + authority.getId() + "/user", "/user/" + user.getId());
+				}
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		

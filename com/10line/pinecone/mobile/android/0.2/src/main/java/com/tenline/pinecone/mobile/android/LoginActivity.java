@@ -12,7 +12,6 @@ import com.tenline.pinecone.platform.model.User;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -53,9 +52,6 @@ public class LoginActivity extends AbstractActivity {
 			}
         	
         });
-    	if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null) {
-    		Toast.makeText(this, R.string.error_network_unavailable, Toast.LENGTH_LONG).show();
-    	}
     }
     
     /**
@@ -77,7 +73,7 @@ public class LoginActivity extends AbstractActivity {
 		@Override
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
-			try {params[1] = getRESTService().post(RESTService.LOGIN_URL, params[0], params[1]);} 
+			try {if(!isCancelled()) {params[1] = getRESTService().post(RESTService.LOGIN_URL, params[0], params[1]);}} 
 			catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
@@ -109,8 +105,11 @@ public class LoginActivity extends AbstractActivity {
 		@Override
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
-			try {params[0] = ((User) ((ArrayList<?>) getRESTService().get("/user/search/names?name=" + params[0])).toArray()[0]).getId();} 
-			catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
+			try {
+				if (!isCancelled()) {
+					params[0] = ((User) ((ArrayList<?>) getRESTService().get("/user/search/names?name=" + params[0])).toArray()[0]).getId();
+				}
+			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
 		@Override

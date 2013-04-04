@@ -16,7 +16,9 @@ import com.tenline.pinecone.platform.model.Device;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -49,9 +51,13 @@ public class DeviceActivity extends AbstractListActivity implements ViewBinder {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(VariableActivity.ACTIVITY_ACTION);
-				intent.putExtra("deviceId", String.valueOf(view.getTag()));
-				startActivity(intent);
+				if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null) {
+					Toast.makeText(getApplicationContext(), R.string.network_turn_off, Toast.LENGTH_LONG).show();
+				} else {
+					Intent intent = new Intent(VariableActivity.ACTIVITY_ACTION);
+					intent.putExtra("deviceId", String.valueOf(view.getTag()));
+					startActivity(intent);
+				}
 			}
 			
 		});

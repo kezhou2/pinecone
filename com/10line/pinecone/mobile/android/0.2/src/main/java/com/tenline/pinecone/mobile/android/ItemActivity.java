@@ -11,6 +11,8 @@ import com.tenline.pinecone.platform.model.Item;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
@@ -41,8 +44,12 @@ public class ItemActivity extends AbstractListActivity implements ViewBinder {
 			@SuppressWarnings("deprecation")
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				getIntent().putExtra("itemValue", ((TextView) view.findViewById(R.id.item_value)).getText());
-				showDialog(ItemSettingDialogBuilder.DIALOG_ID);
+				if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null) {
+					Toast.makeText(getApplicationContext(), R.string.network_turn_off, Toast.LENGTH_LONG).show();
+				} else {
+					getIntent().putExtra("itemValue", ((TextView) view.findViewById(R.id.item_value)).getText());
+					showDialog(ItemSettingDialogBuilder.DIALOG_ID);
+				}
 			}
 			
 		});

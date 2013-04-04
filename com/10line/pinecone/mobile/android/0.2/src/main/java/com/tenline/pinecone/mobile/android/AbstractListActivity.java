@@ -5,6 +5,7 @@ package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
 
+import com.tenline.pinecone.mobile.android.receiver.NetworkReceiver;
 import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.service.RESTTask;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
@@ -12,6 +13,8 @@ import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +25,8 @@ import android.view.Menu;
  */
 public abstract class AbstractListActivity extends ListActivity {
 
+	private NetworkReceiver receiver = new NetworkReceiver();
+	
 	protected ServiceConnectionHelper restHelper = new ServiceConnectionHelper();
 	
 	public RESTService getRESTService() {return (RESTService) restHelper.getService();}
@@ -30,6 +35,7 @@ public abstract class AbstractListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); Log.i(getClass().getSimpleName(), "onCreate");
         if (!restHelper.isBound()) bindService(new Intent(this, RESTService.class), restHelper, Context.BIND_AUTO_CREATE);
+        IntentFilter filter = new IntentFilter(); filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION); registerReceiver(receiver, filter);
     }
 	
 	@Override
@@ -40,7 +46,7 @@ public abstract class AbstractListActivity extends ListActivity {
 	@Override
     protected void onDestroy() {
         super.onDestroy(); Log.i(getClass().getSimpleName(), "onDestroy");
-        if (restHelper.isBound()) {unbindService(restHelper); restHelper.setBound(false);}
+        if (restHelper.isBound()) {unbindService(restHelper); restHelper.setBound(false);} unregisterReceiver(receiver);
     }
 	
 	/**
@@ -68,7 +74,7 @@ public abstract class AbstractListActivity extends ListActivity {
 		@Override
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
-			try {getRESTService().get(RESTService.LOGOUT_URL);} 
+			try {if(!isCancelled()) {getRESTService().get(RESTService.LOGOUT_URL);}} 
 			catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
@@ -106,8 +112,10 @@ public abstract class AbstractListActivity extends ListActivity {
 		protected Object[] doInBackground(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				while (!restHelper.isBound()) {Thread.sleep(100);} 
-				params = ((ArrayList<?>) getRESTService().get(params[0].toString())).toArray();
+				if (!isCancelled()) {
+					while (!restHelper.isBound()) {Thread.sleep(100);} 
+					params = ((ArrayList<?>) getRESTService().get(params[0].toString())).toArray();
+				}
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		

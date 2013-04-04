@@ -20,6 +20,7 @@ import com.tenline.pinecone.platform.model.Variable;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
@@ -64,10 +66,14 @@ public class VariableActivity extends AbstractListActivity implements MqttCallba
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(ItemActivity.ACTIVITY_ACTION);
-				intent.putExtra("variableId", String.valueOf(view.getId()));
-				intent.putExtra("variableName", ((TextView) view.findViewById(R.id.variable_name)).getText());
-				startActivity(intent);
+				if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null) {
+					Toast.makeText(getApplicationContext(), R.string.network_turn_off, Toast.LENGTH_LONG).show();
+				} else {
+					Intent intent = new Intent(ItemActivity.ACTIVITY_ACTION);
+					intent.putExtra("variableId", String.valueOf(view.getId()));
+					intent.putExtra("variableName", ((TextView) view.findViewById(R.id.variable_name)).getText());
+					startActivity(intent);
+				}
 			}
 			
 		});

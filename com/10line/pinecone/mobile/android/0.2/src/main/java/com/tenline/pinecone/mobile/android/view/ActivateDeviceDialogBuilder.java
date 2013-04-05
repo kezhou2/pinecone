@@ -89,15 +89,13 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				if (!isCancelled()) {
-					RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService(); 
-					String deviceCode = ((FormEditText) params[0]).getText().toString();
-					ArrayList<?> devices = (ArrayList<?>) service.get("/device/search/codes?code=" + deviceCode); 
-					params[2] = devices.size(); if (devices.size() > 0) params[3] = ((Device) devices.toArray()[0]).getId();
-				}
+				RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService(); 
+				String deviceCode = ((FormEditText) params[0]).getText().toString();
+				ArrayList<?> devices = (ArrayList<?>) service.get("/device/search/codes?code=" + deviceCode); 
+				params[2] = devices.size(); if (devices.size() > 0) params[3] = ((Device) devices.toArray()[0]).getId();
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
@@ -128,13 +126,11 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				if (!isCancelled()) {
-					RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService();
-					params[3] = ((ArrayList<?>) service.get("/device/" + params[2] + "/user")).size();
-				}
+				RESTService service = ((DeviceActivity) getDialog().getOwnerActivity()).getRESTService();
+				params[3] = ((ArrayList<?>) service.get("/device/" + params[2] + "/user")).size();
 			} catch (Exception e) {
 				if (e.getMessage().equals("404 Not Found")) {params[3] = 0;}
 				else Log.e(getClass().getSimpleName(), e.getMessage());
@@ -167,15 +163,13 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				if (!isCancelled()) {
-					DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
-					RESTService service = activity.getRESTService(); Device device = new Device();
-					device.setName(((FormEditText) params[0]).getText().toString()); service.put("/device/" + params[1], device);
-					service.post("/device/" + params[1] + "/user", "/user/" + activity.getIntent().getStringExtra("userId")); 	
-				}
+				DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
+				RESTService service = activity.getRESTService(); Device device = new Device();
+				device.setName(((FormEditText) params[0]).getText().toString()); service.put("/device/" + params[1], device);
+				service.post("/device/" + params[1] + "/user", "/user/" + activity.getIntent().getStringExtra("userId")); 	
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		

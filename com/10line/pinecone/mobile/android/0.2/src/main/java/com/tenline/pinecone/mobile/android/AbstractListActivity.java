@@ -72,9 +72,9 @@ public abstract class AbstractListActivity extends ListActivity {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
-			try {if(!isCancelled()) {getRESTService().get(RESTService.LOGOUT_URL);}} 
+			try {getRESTService().get(RESTService.LOGOUT_URL);}
 			catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
@@ -109,13 +109,11 @@ public abstract class AbstractListActivity extends ListActivity {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				if (!isCancelled()) {
-					while (!restHelper.isBound()) {Thread.sleep(100);} 
-					params = ((ArrayList<?>) getRESTService().get(params[0].toString())).toArray();
-				}
+				while (!restHelper.isBound()) {Thread.sleep(100);} 
+				params = ((ArrayList<?>) getRESTService().get(params[0].toString())).toArray();
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		

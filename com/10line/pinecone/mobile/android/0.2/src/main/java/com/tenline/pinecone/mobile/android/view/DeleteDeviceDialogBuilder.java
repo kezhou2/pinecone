@@ -69,11 +69,10 @@ public class DeleteDeviceDialogBuilder extends AbstractDialogBuilder {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
-			try {
-				if (!isCancelled()) {((DeviceActivity) getDialog().getOwnerActivity()).getRESTService().delete("/device/" + params[0]);}
-			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
+			try {((DeviceActivity) getDialog().getOwnerActivity()).getRESTService().delete("/device/" + params[0]);} 
+			catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
 		@Override

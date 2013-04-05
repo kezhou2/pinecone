@@ -71,9 +71,9 @@ public class LoginActivity extends AbstractActivity {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
-			try {if(!isCancelled()) {params[1] = getRESTService().post(RESTService.LOGIN_URL, params[0], params[1]);}} 
+			try {params[1] = getRESTService().post(RESTService.LOGIN_URL, params[0], params[1]);}
 			catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
@@ -103,13 +103,10 @@ public class LoginActivity extends AbstractActivity {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
-			try {
-				if (!isCancelled()) {
-					params[0] = ((User) ((ArrayList<?>) getRESTService().get("/user/search/names?name=" + params[0])).toArray()[0]).getId();
-				}
-			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
+			try {params[0] = ((User) ((ArrayList<?>) getRESTService().get("/user/search/names?name=" + params[0])).toArray()[0]).getId();} 
+			catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		
 		@Override

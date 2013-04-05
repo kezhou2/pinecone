@@ -35,7 +35,14 @@ public abstract class RESTTask extends AsyncTask<Object, Object, Object[]> {
 		if (((ConnectivityManager) progress.getContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null) {
 			if (cancel(true)) {progress.dismiss(); Toast.makeText(progress.getContext(), R.string.network_turn_off, Toast.LENGTH_LONG).show();};
 		}
-    }  
+    }
+	
+	@Override
+	protected Object[] doInBackground(Object... params) {
+		if (!isCancelled()) {params = doTaskAction(params);} return params;
+	}
+	
+	protected abstract Object[] doTaskAction(Object... params);
 	
 	@Override
 	protected void onPostExecute(Object[] result) {

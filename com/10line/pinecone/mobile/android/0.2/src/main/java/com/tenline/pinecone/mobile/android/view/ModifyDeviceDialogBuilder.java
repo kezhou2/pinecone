@@ -74,15 +74,13 @@ public class ModifyDeviceDialogBuilder extends AbstractDialogBuilder {
 		}
 
 		@Override
-		protected Object[] doInBackground(Object... params) {
+		protected Object[] doTaskAction(Object... params) {
 			// TODO Auto-generated method stub
 			try {
-				if (!isCancelled()) {
-					DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
-					RESTService service = activity.getRESTService(); Device device = new Device();
-					device.setName(((FormEditText) params[0]).getText().toString()); 
-					service.put("/device/" + activity.getIntent().getStringExtra("deviceId"), device);
-				}
+				DeviceActivity activity = (DeviceActivity) getDialog().getOwnerActivity();
+				RESTService service = activity.getRESTService(); Device device = new Device();
+				device.setName(((FormEditText) params[0]).getText().toString()); 
+				service.put("/device/" + activity.getIntent().getStringExtra("deviceId"), device);
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
 		}
 		

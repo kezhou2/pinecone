@@ -80,7 +80,7 @@ public class LoginActivity extends AbstractActivity {
 		@Override
 		protected void onPostExecute(Object[] result) {
 			// TODO Auto-generated method stub
-			if (!result[1].toString().contains("Reason: Bad credentials")) {new LoginTask(progress.getContext()).execute(result[0]);} 
+			if (!result[1].toString().contains("not successful")) {new LoginTask(progress.getContext()).execute(result[0]);} 
 			else {Toast.makeText(progress.getContext(), R.string.error_login, Toast.LENGTH_LONG).show();} super.onPostExecute(result);
 		}
     	

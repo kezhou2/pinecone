@@ -41,8 +41,7 @@ public class RESTService extends AbstractService {
 	private ObjectMapper mapper = new ObjectMapper();
 	public static final String LOGIN_URL = "/j_spring_security_check";
 	public static final String LOGOUT_URL = "/j_spring_security_logout";
-	private static String username; public static String getUsername() {return username;}
-	private static String password; public static String getPassword() {return password;}
+	private static String username; private static String password;
 
 	@Override
 	public IBinder onBind(Intent intent) {

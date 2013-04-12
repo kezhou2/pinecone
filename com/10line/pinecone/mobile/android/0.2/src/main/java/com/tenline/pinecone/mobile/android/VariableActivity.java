@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -60,7 +59,6 @@ public class VariableActivity extends AbstractListActivity implements MqttCallba
         	bindService(new Intent(this, ChannelService.class), channelHelper, Context.BIND_AUTO_CREATE);
         	new ListenToChannelTask().execute(getIntent().getStringExtra("deviceId"));
         }
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

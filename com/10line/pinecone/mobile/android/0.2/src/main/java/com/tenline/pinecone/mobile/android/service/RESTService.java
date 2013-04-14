@@ -44,7 +44,7 @@ public class RESTService extends AbstractService {
 
 	private RestTemplate template;
 	private ObjectMapper mapper = new ObjectMapper();
-	private static final int TIMEOUT = 30 * 1000;
+	private static final int TIMEOUT = 60 * 1000;
 	public static final String LOGIN_URL = "/j_spring_security_check";
 	public static final String LOGOUT_URL = "/j_spring_security_logout";
 	private static String username; private static String password;

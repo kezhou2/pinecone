@@ -32,8 +32,7 @@ public class NetworkReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
-		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		boolean turnOff = manager.getActiveNetworkInfo() == null ? true : false;
+		boolean turnOff = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
 		if (turnOff != isTurnOff) {
 			if (turnOff) {Toast.makeText(context, R.string.network_turn_off, Toast.LENGTH_LONG).show();}
 			else {Toast.makeText(context, R.string.network_turn_on, Toast.LENGTH_LONG).show();}

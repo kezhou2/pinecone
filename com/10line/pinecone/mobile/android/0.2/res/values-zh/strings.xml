@@ -49,7 +49,7 @@
     
     <!-- Validation Properties -->
     <string name="error_only_numeric_digits_allowed">只允许填写数字</string>
-	<string name="error_this_field_cannot_contain_special_character">不能包含特殊字符</string>
+	<string name="error_this_field_cannot_contain_special_character">只允许填写数字或字母</string>
 	<string name="error_only_standard_letters_are_allowed">只允许填写字母</string>
 	<string name="error_field_must_not_be_empty">不能为空</string>
     <string name="error_email_address_not_valid">不是有效邮件地址</string>

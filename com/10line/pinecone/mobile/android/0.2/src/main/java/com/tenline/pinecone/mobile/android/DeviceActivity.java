@@ -27,17 +27,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 /**
  * @author Bill
  *
  */
-public class DeviceActivity extends AbstractListActivity implements ViewBinder {
+public class DeviceActivity extends AbstractListActivity {
 	
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.device";
 
@@ -45,7 +43,6 @@ public class DeviceActivity extends AbstractListActivity implements ViewBinder {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); registerForContextMenu(getListView());
 		doInitListViewTask("/user/" + getIntent().getStringExtra("userId") + "/devices");
-		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

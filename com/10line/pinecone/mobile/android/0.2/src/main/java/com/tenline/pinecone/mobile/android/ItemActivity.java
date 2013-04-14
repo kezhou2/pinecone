@@ -6,6 +6,8 @@ package com.tenline.pinecone.mobile.android;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.codehaus.jackson.node.ObjectNode;
+
 import com.tenline.pinecone.mobile.android.view.ItemSettingDialogBuilder;
 import com.tenline.pinecone.platform.model.Item;
 
@@ -13,23 +15,21 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
 /**
  * @author Bill
  *
  */
-public class ItemActivity extends AbstractListActivity implements ViewBinder {
+public class ItemActivity extends AbstractMessageActivity {
 
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.item";
 	
@@ -37,7 +37,6 @@ public class ItemActivity extends AbstractListActivity implements ViewBinder {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		doInitListViewTask("/variable/" + getIntent().getStringExtra("variableId") + "/items");
-		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -55,15 +54,23 @@ public class ItemActivity extends AbstractListActivity implements ViewBinder {
 		});
 	}
 	
-	@Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-    	menu.setGroupVisible(R.id.device_items, false); return super.onPrepareOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {case R.id.user_logout: new LogoutTask(this).execute(); break;}
-		return super.onOptionsItemSelected(item);
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	public class PublishToChannelTask extends AsyncTask<String, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			try {
+				ObjectNode node = mapper.createObjectNode();
+				node.put("id", params[0]); node.put("value", params[1]);
+				getChannelService().publish(mapper.writeValueAsString(node)); return true;
+			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
+		}
+		
 	}
 	
 	@Override

@@ -8,7 +8,6 @@ import android.content.DialogInterface.OnClickListener;
 
 import com.tenline.pinecone.mobile.android.ItemActivity;
 import com.tenline.pinecone.mobile.android.R;
-import com.tenline.pinecone.mobile.android.VariableActivity;
 
 /**
  * @author Bill
@@ -32,8 +31,8 @@ public class ItemSettingDialogBuilder extends AbstractDialogBuilder {
 				// TODO Auto-generated method stub
 				String variableId = activity.getIntent().getStringExtra("variableId");
 				String variableValue = activity.getIntent().getStringExtra("itemValue");
-				VariableActivity.getInstance().new PublishToChannelTask().execute(variableId, variableValue); 
 				dialog.cancel(); activity.finish();
+				if (activity.isFinishing()) {activity.new PublishToChannelTask().execute(variableId, variableValue);}
 			}
 			
 		});

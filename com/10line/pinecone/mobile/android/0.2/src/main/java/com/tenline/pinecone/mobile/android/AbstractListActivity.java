@@ -18,12 +18,13 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.SimpleAdapter.ViewBinder;
 
 /**
  * @author Bill
  *
  */
-public abstract class AbstractListActivity extends ListActivity {
+public abstract class AbstractListActivity extends ListActivity implements ViewBinder {
 
 	private NetworkReceiver receiver = new NetworkReceiver();
 	

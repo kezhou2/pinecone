@@ -22,8 +22,8 @@ byte mac[ ] = {  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02 };
 const char code[ ] = "33445566";
 
 // Define user name and password for server authorization
-const char username[ ] = "admin";
-const char password[ ] = "admin";
+char username[ ] = "admin";
+char password[ ] = "admin";
 
 // Define REST server host we want to connect to
 const char host[ ] = "pinecone-service.cloudfoundry.com";
@@ -32,9 +32,12 @@ const char host[ ] = "pinecone-service.cloudfoundry.com";
 EthernetClient httpClient;
 HttpClient http( httpClient );
 
+// Define MQTT server IP we want to connect to
+byte ip[ ] = { 198, 41, 30, 241 };
+
 // Define MQTT client for connecting to MQTT server
 EthernetClient mqttClient;
-PubSubClient mqtt( mqttClient );
+PubSubClient mqtt( ip, 1883, callback, mqttClient );
 
 void setup( ) {
   // Open serial communications and wait for port to open
@@ -61,7 +64,22 @@ void setup( ) {
 }
 
 void loop( ) {
-  
+  if ( mqtt.loop( ) ) {
+    if ( mqtt.publish( "pinecone@device.", "hello world" ) ) {
+      Serial.println( "Message is published" );
+    }
+  } else {
+    if ( mqtt.connect( "pinecone@device.", username, password ) ) {
+      if ( mqtt.subscribe( "pinecone@device." ) ) {
+        Serial.println( "Topic is subscribed" );
+      }
+    }
+  }
+}
+
+// Handle MQTT message arrived from server
+void callback( char* topic, byte* payload, unsigned int length ) {
+  Serial.println( "Message is arrived" );
 }
 
 // Make HTTP GET request to find device by code

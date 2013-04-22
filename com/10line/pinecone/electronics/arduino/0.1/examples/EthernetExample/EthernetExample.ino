@@ -13,19 +13,28 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <HttpClient.h>
+#include <PubSubClient.h>
 
 // Enter a MAC address for your controller below
 byte mac[ ] = {  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02 };
 
-// Enter server host we want to connect to
+// Define unique code of this arduino device
+const char code[ ] = "33445566";
+
+// Define user name and password for server authorization
+const char username[ ] = "admin";
+const char password[ ] = "admin";
+
+// Define REST server host we want to connect to
 const char host[ ] = "pinecone-service.cloudfoundry.com";
 
-// Define unique code of this arduino device
-const char code[ ] = "123456";
+// Define HTTP client for connecting to REST server
+EthernetClient httpClient;
+HttpClient http( httpClient );
 
-// Define HTTP client for connecting to server
-EthernetClient client;
-HttpClient http( client );
+// Define MQTT client for connecting to MQTT server
+EthernetClient mqttClient;
+PubSubClient mqtt( mqttClient );
 
 void setup( ) {
   // Open serial communications and wait for port to open
@@ -38,7 +47,17 @@ void setup( ) {
   // Give the Ethernet shield a second to initialize
   delay( 1000 );
   // Check device whether existing or not
-  findDeviceByCode( );
+  if ( findDeviceByCode( ) != NULL ) {
+    Serial.println( "Device is existed" );
+  } else {
+    String device = createDevice( );
+    String variable = createVariable( "Light Switch", "write", device );
+    createItem( "On", variable );
+    createItem( "Off", variable );
+    createVariable( "Temperature", "read", device );
+    createVariable( "Humidity", "read", device );
+    Serial.println( "Device is created" );
+  }
 }
 
 void loop( ) {
@@ -46,71 +65,123 @@ void loop( ) {
 }
 
 // Make HTTP GET request to find device by code
-void findDeviceByCode( ) {
+String findDeviceByCode( ) {
   char path[ 33 + String( code ).length( ) ];
   strcpy( path, "/rest/m/device/search/codes?code=" );
   strcat( path, code ); 
-  String id = makeGetRequest( path );
-  if ( id != NULL ) {
-    Serial.println(id);
-  } else {
-    createDevice( );
-  }
+  return makeGetRequest( path );
 }
 
 // Make HTTP POST request to create device
-void createDevice( ) {
+String createDevice( ) {
   char content[ 15 + String( code ).length( ) ];
   strcpy( content, "{\"code\":\"" );
   strcat( content, code );
   strcat( content, "\"}" );
-  String id = makePostRequest( "/rest/device", "application/json", content );
+  return makePostRequest( "/rest/m/device", "application/json", content );
 }
 
 // Make HTTP POST request to create variable
-void createVariable( ) {
-  char content[ 15 ];
-  makePostRequest( "/rest/variable", "application/json", content );
+String createVariable( char* name, char* type, String device ) {
+  char content[ 29 + String( name ).length( ) + String( type ).length( ) ];
+  strcpy( content, "{\"name\":\"" );
+  strcat( content, name );
+  strcat( content, "\",\"type\":\"" );
+  strcat( content, type );
+  strcat( content, "\"}" );
+  String response = makePostRequest( "/rest/m/variable", "application/json", content );
+  Serial.print( "Variable is created -> " );
+  Serial.println( response );
+  char variableId[ response.length( ) + 1 ];
+  response.toCharArray( variableId, response.length( ) + 1 );
+  char path[ 22 + response.length( ) ];
+  strcpy( path, "/rest/variable/" );
+  strcat( path, variableId );
+  strcat( path, "/device" );
+  Serial.print( "Path ->" );
+  Serial.println( path );
+  char deviceId[ device.length( ) + 1 ];
+  device.toCharArray( deviceId, device.length( ) + 1 );
+  char uri[ 20 + String( host ).length( ) + device.length( ) ];
+  strcpy( uri, "http://" );
+  strcat( uri, host );
+  strcat( uri, "/rest/device/" );
+  strcat( uri, deviceId );
+  Serial.print( "URI ->" );
+  Serial.println( uri );
+  makePostRequest( path, "text/uri-list", uri );
+  Serial.println( "Variable is updated" );
+  return response;
+}
+
+// Make HTTP POST request to create item
+void createItem( char* value, String variable ) {
+  char content[ 16 + String( value ).length( ) ];
+  strcpy( content, "{\"value\":\"" );
+  strcat( content, value );
+  strcat( content, "\"}" );
+  String response = makePostRequest( "/rest/m/item", "application/json", content );
+  Serial.print( "Item is created -> " );
+  Serial.println( response );
+  char itemId[ response.length( ) + 1 ];
+  response.toCharArray( itemId, response.length( ) + 1 );
+  char path[ 20 + response.length( ) ];
+  strcpy( path, "/rest/item/" );
+  strcat( path, itemId );
+  strcat( path, "/variable" );
+  Serial.print( "Path ->" );
+  Serial.println( path );
+  char variableId[ variable.length( ) + 1 ];
+  variable.toCharArray( variableId, variable.length( ) + 1 );
+  char uri[ 22 + String( host ).length( ) + variable.length( ) ];
+  strcpy( uri, "http://" );
+  strcat( uri, host );
+  strcat( uri, "/rest/variable/" );
+  strcat( uri, variableId );
+  Serial.print( "URI ->" );
+  Serial.println( uri );
+  makePostRequest( path, "text/uri-list", uri );
+  Serial.println( "Item is updated" );
 }
 
 // Make HTTP GET request to REST service
 String makeGetRequest( char* path ) {
   http.beginRequest( );
   http.startRequest( host, 80, path, "GET", NULL );
-  http.sendBasicAuth( "admin", "admin" );
+  http.sendBasicAuth( username, password );
   http.endRequest( );
   http.skipResponseHeaders( );
-  String id = fetchDataFromResponse( );
+  String response = fetchDataFromResponse( );
   http.stop( );
-  return id;
+  return response;
 }
 
 // Make HTTP POST request to REST service
 String makePostRequest( char* path, char* type, char* content ) {
   http.beginRequest( );
   http.startRequest( host, 80, path, "POST", NULL );
-  http.sendBasicAuth( "admin", "admin" );
+  http.sendBasicAuth( username, password );
   http.sendHeader( "Content-Type", type );
   http.sendHeader( "Content-Length", String( content ).length( ) );
   http.endRequest( );
   http.print( content );
   http.println( );
   http.skipResponseHeaders( );
-  String id = fetchDataFromResponse( );
+  String response = fetchDataFromResponse( );
   http.stop( );
-  return id;
+  return response;
 }
 
 // Fetch data from HTTP response
 String fetchDataFromResponse( ) {
-  String id = NULL;
+  String response = NULL;
   if ( http.contentLength() > 0 ) {
     while ( http.available( ) ) {
       byte data = http.read( );
       if ( data >= 48 && data <= 57 ) {
-        id += ( char ) data;
+        response += ( char ) data;
       }
     }
   }
-  return id;
+  return response;
 }

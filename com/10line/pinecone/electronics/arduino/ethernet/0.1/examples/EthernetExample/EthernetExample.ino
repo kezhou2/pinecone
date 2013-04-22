@@ -1,6 +1,6 @@
 /*
 
- Pinecone Web Client
+ Pinecone Ethernet Example
  
  This sketch connects to pinecone platform (http://www.pinecone.cc)
  using an Arduino Wiznet Ethernet shield.
@@ -14,8 +14,7 @@
 #include <Ethernet.h>
 #include <HttpClient.h>
 
-// Enter a MAC address for your controller below.
-// Newer Ethernet shields have a MAC address printed on a sticker on the shield
+// Enter a MAC address for your controller below
 byte mac[ ] = {  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02 };
 
 // Enter server host we want to connect to
@@ -44,20 +43,6 @@ void setup( ) {
 
 void loop( ) {
   
-}
-
-// Get Id from HTTP response
-String getId( ) {
-  String id = NULL;
-  if ( http.contentLength() > 0 ) {
-    while ( http.available( ) ) {
-      byte data = http.read( );
-      if ( data >= 48 && data <= 57 ) {
-        id += ( char ) data;
-      }
-    }
-  }
-  return id;
 }
 
 // Make HTTP GET request to find device by code
@@ -95,7 +80,7 @@ String makeGetRequest( char* path ) {
   http.sendBasicAuth( "admin", "admin" );
   http.endRequest( );
   http.skipResponseHeaders( );
-  String id = getId( );
+  String id = fetchDataFromResponse( );
   http.stop( );
   return id;
 }
@@ -111,7 +96,21 @@ String makePostRequest( char* path, char* type, char* content ) {
   http.print( content );
   http.println( );
   http.skipResponseHeaders( );
-  String id = getId( );
+  String id = fetchDataFromResponse( );
   http.stop( );
+  return id;
+}
+
+// Fetch data from HTTP response
+String fetchDataFromResponse( ) {
+  String id = NULL;
+  if ( http.contentLength() > 0 ) {
+    while ( http.available( ) ) {
+      byte data = http.read( );
+      if ( data >= 48 && data <= 57 ) {
+        id += ( char ) data;
+      }
+    }
+  }
   return id;
 }

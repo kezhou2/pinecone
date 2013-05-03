@@ -23,13 +23,12 @@ import com.tenline.pinecone.platform.sdk.ChannelClient;
  */
 public class ChannelServiceTest extends AbstractServiceTest implements MqttCallback {
 	
-	private boolean isRunning = true;
 	private String topic = "pinecone@device.test";
 	private ChannelClient client;
 	
 	@Before
 	public void testSetup() throws Exception {
-		client = new ChannelClient("tcp://m2m.eclipse.org:1883");
+		client = new ChannelClient("tcp://" + HOST + ":" + MQTT_PORT);
 		client.listen(this, topic);
 	}
 	
@@ -43,7 +42,6 @@ public class ChannelServiceTest extends AbstractServiceTest implements MqttCallb
 	@Test
 	public void test() throws Exception {
 		client.publish("Hello World");
-		while (isRunning) {Thread.sleep(1000);}
 	}
 
 	@Override
@@ -62,7 +60,6 @@ public class ChannelServiceTest extends AbstractServiceTest implements MqttCallb
 	public void messageArrived(MqttTopic topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
 		assertEquals("Hello World", new String(message.getPayload()));
-		isRunning = false;
 	}
 
 }

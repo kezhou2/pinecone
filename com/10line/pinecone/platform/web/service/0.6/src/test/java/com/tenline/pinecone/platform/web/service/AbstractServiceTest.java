@@ -12,7 +12,10 @@ import java.util.logging.Logger;
 public abstract class AbstractServiceTest {
 
 	protected Logger logger = Logger.getLogger(getClass().getName());
-	
-	protected static final String URL = "http://localhost:8099/service";
+
+	protected static final String HOST = "localhost";
+	protected static final String REST_PORT = "8099";
+	protected static final String MQTT_PORT = "1883";
+	protected static final String CONTEXT = "service";
 
 }

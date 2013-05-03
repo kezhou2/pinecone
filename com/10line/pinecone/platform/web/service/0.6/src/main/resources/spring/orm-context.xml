@@ -30,8 +30,8 @@
   </bean>
   
   <!-- Just for Testing and First Deployment with a blank database -->
-  <jdbc:initialize-database data-source="dataSource">
+  <!-- <jdbc:initialize-database data-source="dataSource">
     <jdbc:script location="classpath:initialize-database.sql" />
-  </jdbc:initialize-database> 
+  </jdbc:initialize-database> --> 
     
 </beans>

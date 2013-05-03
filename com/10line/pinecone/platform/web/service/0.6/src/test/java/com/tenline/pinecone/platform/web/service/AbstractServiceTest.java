@@ -13,6 +13,6 @@ public abstract class AbstractServiceTest {
 
 	protected Logger logger = Logger.getLogger(getClass().getName());
 	
-	protected static final String URL = "http://localhost:8080/service";
+	protected static final String URL = "http://localhost:8099/service";
 
 }

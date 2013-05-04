@@ -149,7 +149,6 @@
        	  </execution>
     	</executions>
   	  </plugin>
-  	  <!-- Consider to deploy to remote container -->
 	  <plugin>
   		<groupId>org.codehaus.cargo</groupId>
   		<artifactId>cargo-maven2-plugin</artifactId>
@@ -164,7 +163,7 @@
       	  <deployables>
     		<deployable>
       		  <properties>
-        		<context>service</context>
+        		<context>${project.artifactId}</context>
       		  </properties>
     	  	</deployable>
     	  </deployables>
@@ -186,6 +185,26 @@
     	  </execution>
   		</executions>
 	  </plugin>
+	  <!-- <plugin>
+		<groupId>org.codehaus.mojo</groupId>
+		<artifactId>tomcat-maven-plugin</artifactId>
+		<version>1.1</version>
+		<configuration>
+		  <url>http://42.96.188.79/manager</url>
+		  <username>admin</username>
+　　　　　 <password>admin</password>
+		  <path>/</path>
+		</configuration>
+		<executions>
+		  <execution>
+      		<id>redeploy-war</id>
+      		<phase>install</phase>
+      		<goals>
+        	  <goal>redeploy</goal>
+      		</goals>
+    	  </execution>
+		</executions>
+	  </plugin> -->
   	  <plugin>
         <groupId>org.cloudfoundry</groupId>
         <artifactId>cf-maven-plugin</artifactId>

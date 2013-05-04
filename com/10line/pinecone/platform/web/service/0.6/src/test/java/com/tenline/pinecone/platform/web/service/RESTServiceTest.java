@@ -43,7 +43,7 @@ public class RESTServiceTest extends AbstractServiceTest {
 		device = new Device();
 		device.setName("ATM");
 		device.setCode(UUID.randomUUID().toString());
-		client = new RESTClient("http://" + HOST + ":" + REST_PORT + "/" + CONTEXT);
+		client = new RESTClient("http://localhost:8080/service");
 	}
 	
 	@After

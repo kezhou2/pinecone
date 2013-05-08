@@ -19,32 +19,31 @@
 byte mac[ ] = {  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02 };
 
 // Define unique code of this arduino device
-const char code[ ] = "33445566";
+char code[ ] = "33445566";
 
 // Define user name and password for server authorization
 char username[ ] = "admin";
 char password[ ] = "admin";
 
-// Define REST server host we want to connect to
+// Define REST server we want to connect to
 const char host[ ] = "pinecone-service.cloudfoundry.com";
+const byte port = 80;
 
-// Define HTTP client for connecting to REST server
-EthernetClient httpClient;
-HttpClient http( httpClient );
+// Define REST client for connecting to REST server
+EthernetClient client;
+HttpClient http( client );
 
 // Define MQTT server IP we want to connect to
 byte ip[ ] = { 198, 41, 30, 241 };
 
 // Define MQTT client for connecting to MQTT server
-EthernetClient mqttClient;
-PubSubClient mqtt( ip, 1883, callback, mqttClient );
+PubSubClient mqtt( ip, 1883, callback, client );
 
 void setup( ) {
   // Open serial communications and wait for port to open
   Serial.begin( 9600 ); 
   // Start the Ethernet connection
   while ( Ethernet.begin( mac ) != 1 ) {
-    Serial.println( "Error getting IP address, trying again..." );
     delay( 15000 );
   }
   // Give the Ethernet shield a second to initialize
@@ -65,12 +64,12 @@ void setup( ) {
 
 void loop( ) {
   if ( mqtt.loop( ) ) {
-    if ( mqtt.publish( "pinecone@device.", "hello world" ) ) {
+    if ( mqtt.publish( code, "hello world" ) ) {
       Serial.println( "Message is published" );
     }
   } else {
-    if ( mqtt.connect( "pinecone@device.", username, password ) ) {
-      if ( mqtt.subscribe( "pinecone@device." ) ) {
+    if ( mqtt.connect( code, username, password ) ) {
+      if ( mqtt.subscribe( code ) ) {
         Serial.println( "Topic is subscribed" );
       }
     }
@@ -165,7 +164,7 @@ void createItem( char* value, String variable ) {
 // Make HTTP GET request to REST service
 String makeGetRequest( char* path ) {
   http.beginRequest( );
-  http.startRequest( host, 80, path, "GET", NULL );
+  http.startRequest( host, port, path, "GET", NULL );
   http.sendBasicAuth( username, password );
   http.endRequest( );
   http.skipResponseHeaders( );
@@ -177,7 +176,7 @@ String makeGetRequest( char* path ) {
 // Make HTTP POST request to REST service
 String makePostRequest( char* path, char* type, char* content ) {
   http.beginRequest( );
-  http.startRequest( host, 80, path, "POST", NULL );
+  http.startRequest( host, port, path, "POST", NULL );
   http.sendBasicAuth( username, password );
   http.sendHeader( "Content-Type", type );
   http.sendHeader( "Content-Length", String( content ).length( ) );

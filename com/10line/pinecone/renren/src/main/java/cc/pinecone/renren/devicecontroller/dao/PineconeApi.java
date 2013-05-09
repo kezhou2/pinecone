@@ -65,7 +65,7 @@ public class PineconeApi {
 		return list;
 	}
 
-	public List<Variable> getDeviceVariables(Device device) {
+	public ArrayList<Variable> getDeviceVariables(Device device) {
 
 		System.out.println("getDeviceVariables");
 		ArrayList<Variable> list = new ArrayList<Variable>();
@@ -83,7 +83,7 @@ public class PineconeApi {
 		return list;
 	}
 
-	public List<Item> getVariableItems(Variable variable) {
+	public ArrayList<Item> getVariableItems(Variable variable) {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
 			ArrayList<Entity> items = (ArrayList<Entity>) client.get(
@@ -237,6 +237,10 @@ public class PineconeApi {
 
 	public User register(String id, String pwd, String mail) {
 		try {
+			if(id == null || pwd == null){
+				return null;
+			}
+			
 			ArrayList<Entity> users = (ArrayList<Entity>) client.get(
 					"/user/search/names?name=" + id, "admin", "admin");
 			if (users.size() == 0) {
@@ -249,7 +253,9 @@ public class PineconeApi {
 				Authority authority = new Authority();
 				authority.setAuthority("ROLE_USER");
 				authority.setUserName(user.getName());
-				client.post("/authority", authority);
+				authority.setId(Long.getLong(client.post("/authority", authority)));
+				
+				client.post("/authority/" + authority.getId() + "/user", "/user/" + user.getId());
 
 				return user;
 			}
@@ -258,25 +264,6 @@ public class PineconeApi {
 		}
 
 		return null;
-	}
-
-	public User getRenrenUser(String id, String access_token) {
-		RenrenApiClient api = RenrenApiClient.getInstance();
-		String fields = "name,email_hash, sex,star,birthday,tinyurl,headurl,mainurl,hometown_location,hs_history,university_history,work_history,contact_info";
-		JSONArray users = api.getUserService().getInfo("251760162", fields,
-				new AccessToken(access_token));
-		if (users.size() > 0) {
-			JSONObject u = JsonUtils.getIndexJSONObject(users, 0);
-			String name = JsonUtils.getValue(u, "name", String.class);
-			String email_hash = JsonUtils.getValue(u, "email_hash",
-					String.class);
-			User user = new User();
-			user.setName(name);
-			user.setEmail(email_hash);
-			return user;
-		} else {
-			return null;
-		}
 	}
 
 	public boolean activeDevice(String deviceCode, String devicename, User user) {

@@ -95,12 +95,6 @@ public class PageController {
 		return new ModelAndView("home");
 	}
 
-	@RequestMapping(value = "/developer.html")
-	public String developer(Model model) {
-		logger.info("developer.html");
-		System.out.println("developer.html");
-		return "developer";
-	}
 
 	@RequestMapping(value = "/login.html")
 	public String login(Model model) {
@@ -109,25 +103,25 @@ public class PageController {
 		return "login";
 	}
 
-	@RequestMapping(value = "/products.html")
-	public String products(Model model) {
-		logger.info("products.html");
-		System.out.println("products.html");
-		return "products";
+	@RequestMapping(value = "/devices.html")
+	public String devices(Model model) {
+		logger.info("devices.html");
+		System.out.println("devices.html");
+		return "devices";
 	}
 
-	@RequestMapping(value = "/registry.html")
+	@RequestMapping(value = "/setting.html")
 	public String registry(Model model) {
-		logger.info("registry.html");
-		System.out.println("registry.html");
-		return "registry";
+		logger.info("setting.html");
+		System.out.println("setting.html");
+		return "setting";
 	}
 
-	@RequestMapping(value = "/sensation.html")
+	@RequestMapping(value = "/user.html")
 	public String sensation(Model model) {
-		logger.info("sensation.html");
-		System.out.println("sensation.html");
-		return "sensation";
+		logger.info("user.html");
+		System.out.println("user.html");
+		return "user";
 	}
 
 }

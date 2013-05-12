@@ -11,7 +11,7 @@
 <body>
   <script type="text/javascript">
   		alert(<%=appId%>);
-      top.location="http://graph.renren.com/oauth/authorize?client_id=<%=appId%>&response_type=token&display=page&redirect_uri=" +encodeURIComponent('http://apps.renren.com/devicecontroller/home.html');
+      top.location="http://graph.renren.com/oauth/authorize?client_id=<%=appId%>&response_type=token&display=page&redirect_uri=" +encodeURIComponent('http://apps.renren.com/devicecontroller/login.html');
   </script>
   Hi, Welcome!
 </body>

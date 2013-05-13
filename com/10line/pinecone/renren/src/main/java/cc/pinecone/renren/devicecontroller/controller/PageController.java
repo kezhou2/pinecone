@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
+
 import com.tenline.pinecone.platform.model.User;
 
 /**
@@ -22,11 +24,13 @@ import com.tenline.pinecone.platform.model.User;
 @Controller
 public class PageController {
 
-	private MessageSource msgSrc;
-
 	@Autowired
-	public void AccountsController(MessageSource msgSrc) {
-		this.msgSrc = msgSrc;
+	private MessageSource msgSrc;
+	
+	private PineconeApi pApi;
+
+	public void PageController() {
+		pApi = new PineconeApi();
 	}
 
 	private static final Logger logger = LoggerFactory
@@ -104,9 +108,15 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/devices.html")
-	public String devices(Model model) {
+	public String devices(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("devices.html");
 		System.out.println("devices.html");
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		System.out.println("username:"+username+"\npassword:"+password);
+		
+		User user = pApi.login(username, password);
 		return "devices";
 	}
 

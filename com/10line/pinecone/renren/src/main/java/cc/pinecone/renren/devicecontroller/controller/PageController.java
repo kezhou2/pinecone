@@ -100,11 +100,24 @@ public class PageController {
 	}
 
 
+	@RequestMapping(value = "/gotologin.html")
+	public String gotologin(Model model) {
+		logger.info("gotlogin.html");
+		System.out.println("gotologin.html");
+		return "login";
+	}
+	
 	@RequestMapping(value = "/login.html")
-	public String login(Model model) {
+	public String login(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("login.html");
 		System.out.println("login.html");
-		return "login";
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		System.out.println("username:"+username+"\npassword:"+password);
+		
+		User user = pApi.login(username, password);
+		return "devices";
 	}
 
 	@RequestMapping(value = "/devices.html")

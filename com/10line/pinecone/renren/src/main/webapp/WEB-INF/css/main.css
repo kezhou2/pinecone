@@ -256,7 +256,13 @@ pre code { padding: 0; color: inherit; white-space: pre; white-space: pre-wrap; 
 .login .control-group input[type=text] { padding-right: 28px; background: #fff url(../img/elements/interface/login_username.png) no-repeat 228px 8px; }
 .login .control-group input[type=password] { padding-right: 28px; background: #fff url(../img/elements/interface/login_password.png) no-repeat 228px 8px; }
 
-    
+/* # Register page
+================================================== */
+.register { width: 350px; margin: -142px 0 0 -142px; position: absolute; left: 50%; top: 50%; }
+.register .control-group { padding: 16px 16px 0 16px; border: none; }
+.register-btn { margin: 16px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; -ms-box-sizing: border-box; }
+.register .control-group input[type=text] { padding-right: 28px; background: #fff url(../img/elements/interface/login_username.png) no-repeat 228px 8px; }
+.register .control-group input[type=password] { padding-right: 28px; background: #fff url(../img/elements/interface/login_password.png) no-repeat 228px 8px; }    
 
 
 /* # Invoice 

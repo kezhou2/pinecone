@@ -25,7 +25,7 @@
 	<!-- Fixed top -->
 	<div id="top">
 		<div class="fixed">
-			<a href="index.html" title="" class="logo"><img src="img/logo.png" alt="" /></a>
+			<a href="login.html" title="" class="logo"><img src="img/logo.png" alt="" /></a>
 		</div>
 	</div>
 	<!-- /fixed top -->

@@ -29,8 +29,11 @@ public class PageController {
 	
 	private PineconeApi pApi;
 
-	public void PageController() {
-		pApi = new PineconeApi();
+	public PineconeApi getPineconeAPI(){
+		if(pApi == null){
+			pApi = new PineconeApi();
+		}
+		return pApi;
 	}
 
 	private static final Logger logger = LoggerFactory
@@ -107,17 +110,26 @@ public class PageController {
 		return "login";
 	}
 	
-	@RequestMapping(value = "/login.html")
-	public String login(HttpServletRequest request,HttpServletResponse response) {
-		logger.info("login.html");
-		System.out.println("login.html");
+	@RequestMapping(value = "/index.html")
+	public ModelAndView index(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("index.html");
+		System.out.println("index.html");
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		System.out.println("username:"+username+"\npassword:"+password);
 		
-		User user = pApi.login(username, password);
-		return "devices";
+		User user = this.getPineconeAPI().login(username, password);
+		if(user != null){
+			System.out.println("login success");
+			ModelAndView mav = new ModelAndView("devices");
+			mav.addObject("user", user);
+			return mav;
+		}else{
+			System.out.println("login fail");
+			ModelAndView mav = new ModelAndView("login");
+			return mav;
+		}
 	}
 
 	@RequestMapping(value = "/devices.html")

@@ -12,6 +12,7 @@
 
 #include <SPI.h>
 #include <Ethernet.h>
+#include <EEPROM.h>
 #include <HttpClient.h>
 #include <PubSubClient.h>
 
@@ -19,7 +20,7 @@
 byte mac[ ] = {  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02 };
 
 // Define unique code of this arduino device
-char code[ ] = "33445566";
+char code[ ] = "99001122";
 
 // Define user name and password for server authorization
 char username[ ] = "admin";
@@ -52,12 +53,12 @@ void setup( ) {
   if ( findDeviceByCode( ) != NULL ) {
     Serial.println( "Device is existed" );
   } else {
+    cleanAll( );
     String device = createDevice( );
     String variable = createVariable( "Light Switch", "write", device );
     createItem( "On", variable );
     createItem( "Off", variable );
     createVariable( "Temperature", "read", device );
-    createVariable( "Humidity", "read", device );
     Serial.println( "Device is created" );
   }
 }
@@ -107,6 +108,7 @@ String createVariable( char* name, char* type, String device ) {
   strcat( content, type );
   strcat( content, "\"}" );
   String response = makePostRequest( "/rest/m/variable", "application/json", content );
+  put( response.toInt( ) );
   Serial.print( "Variable is created -> " );
   Serial.println( response );
   char variableId[ response.length( ) + 1 ];
@@ -201,4 +203,61 @@ String fetchDataFromResponse( ) {
     }
   }
   return response;
+}
+
+// Put data to EEPROM
+void put( long data ) {
+  byte index = 0; long result = get( index );
+  while( result != -1 ) { result = get( ++index ); }
+  set( index, data );
+}
+
+// Set data to EEPROM
+void set( byte index, long data ) {
+  int buffer[ 4 ] = { 0, 0, 0, 0 };
+  buffer[ 0 ] = ( unsigned char ) ( ( 0xff000000 & data ) >> 24 );
+  buffer[ 1 ] = ( unsigned char ) ( ( 0xff0000 & data ) >> 16 );
+  buffer[ 2 ] = ( unsigned char ) ( ( 0xff00 & data ) >> 8 );
+  buffer[ 3 ] = ( unsigned char ) ( 0xff & data );
+  EEPROM.write( index * 4 + 0, buffer[ 0 ] );
+  EEPROM.write( index * 4 + 1, buffer[ 1 ] );
+  EEPROM.write( index * 4 + 2, buffer[ 2 ] );
+  EEPROM.write( index * 4 + 3, buffer[ 3 ] );
+}
+
+// Index of data in EEPROM
+byte indexOf( long data ) {
+  byte index = 0;
+  long result = get( index );
+  while( result != -1 ) {
+    if ( result == data ) return index;
+    else result = get( ++index );
+  }
+  return -1;
+}
+
+// Clean all data from EEPROM
+void cleanAll( ) {
+  byte index = 0;
+  while( get( index ) != -1 ) {
+    clean( index ); index++;
+  }
+}
+
+// Clean data from EEPROM
+void clean( byte index ) {
+  set( index, -1 );
+}
+
+// Get data from EEPROM
+long get( byte index ) {
+  byte data[ 4 ];
+  data[ 0 ] = EEPROM.read( index * 4 );
+  data[ 1 ] = EEPROM.read( index * 4 + 1 );
+  data[ 2 ] = EEPROM.read( index * 4 + 2 );
+  data[ 3 ] = EEPROM.read( index * 4 + 3 );
+  return ( ( long ) ( data[ 0 ] ) << 24 ) + 
+         ( ( long ) ( data[ 1 ] ) << 16 ) + 
+         ( ( long ) ( data[ 2 ] ) << 8 ) + 
+         ( ( long ) ( data[ 3 ] ) );
 }

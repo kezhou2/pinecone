@@ -5,7 +5,7 @@ public final class AppConfig {
 	public static final String API_KEY = "24f4342504db4e2f855ea33cffb2385e";
 	public static final String APP_SECRET = "8fd5683ba94041c7b373438a73f17a8b";
 	
-	public static final String BASE_URL = "http://pinecone.rs.af.cm";
+	public static final String BASE_URL = "http://pinecone-service.cloudfoundry.com";
 	private static String userid = "";
 	private static String access_token = "";
 	private static String sessionkey = "";

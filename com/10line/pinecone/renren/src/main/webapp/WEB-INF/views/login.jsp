@@ -18,6 +18,24 @@
 
 <script type="text/javascript" src="js/files/login.js"></script>
 
+<script type="text/javascript">
+window.onload = function(){
+	var reject = <%=request.getAttribute("reject")%>;
+	if(reject){
+		//$("#name_input").before(
+		//	"<div class='control-group info'>"+
+		//		"<span class='help-block'>Welcome!</span>"+
+		//	"</div>"
+		//);
+		$("#name_input").before(
+			"<div class='control-group warning'>"+
+				"<span class='help-block'>Authentication failed, please enter again.</span>"+
+			"</div>"
+		);
+	}
+}
+</script>
+
 </head>
 
 <body class="no-background">
@@ -39,7 +57,7 @@
                 <div class="nav pull-right">
                     <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="#"><i class="icon-plus"></i>Register</a></li>
+                        <li><a href="register.html"><i class="icon-plus"></i>Register</a></li>
                         <li><a href="#"><i class="icon-refresh"></i>Recover password</a></li>
                         <li><a href="#"><i class="icon-cog"></i>Settings</a></li>
                     </ul>
@@ -47,18 +65,18 @@
             </div>
         </div>
         <div class="well">
-            <form action="index.html" class="row-fluid">
-                <div class="control-group">
+            <form action="index.html" class="row-fluid" method="post">
+                <div id="name_input" class="control-group">
                     <label class="control-label">Username</label>
-                    <div class="controls"><input class="span12" type="text" name="regular" placeholder="username" /></div>
+                    <div class="controls"><input class="span12" type="text" name="username" placeholder="username" /></div>
                 </div>
                 
-                <div class="control-group">
+                <div id="password_input" class="control-group">
                     <label class="control-label">Password:</label>
-                    <div class="controls"><input class="span12" type="password" name="pass" placeholder="password" /></div>
+                    <div class="controls"><input class="span12" type="password" name="password" placeholder="password" /></div>
                 </div>
 
-                <div class="control-group">
+                <div id="remember_input" class="control-group">
                     <div class="controls"><label class="checkbox inline"><input type="checkbox" name="checkbox1" class="styled" value="" checked="checked">Remember me</label></div>
                 </div>
 
@@ -71,10 +89,10 @@
 
 	<!-- Footer -->
 	<div id="footer">
-		<div class="copyrights">&copy;  Brought to you by Eugene Kopyov.</div>
+		<div class="copyrights">&copy;  Pinecone Tech.</div>
 		<ul class="footer-links">
 			<li><a href="" title=""><i class="icon-cogs"></i>Contact admin</a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i>Report bug</a></li>
+			<li><a href="" title=""><i class="icon-screenshot"></i>Home page</a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

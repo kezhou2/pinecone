@@ -103,11 +103,19 @@ public class PageController {
 	}
 
 
-	@RequestMapping(value = "/gotologin.html")
-	public String gotologin(Model model) {
-		logger.info("gotlogin.html");
-		System.out.println("gotologin.html");
+	@RequestMapping(value = "/login.html")
+	public String login(Model model) {
+		logger.info("login.html");
+		System.out.println("login.html");
+		model.addAttribute("reject", false);
 		return "login";
+	}
+	
+	@RequestMapping(value = "/register.html")
+	public String register(Model model) {
+		logger.info("register.html");
+		System.out.println("register.html");
+		return "register";
 	}
 	
 	@RequestMapping(value = "/index.html")
@@ -122,12 +130,14 @@ public class PageController {
 		User user = this.getPineconeAPI().login(username, password);
 		if(user != null){
 			System.out.println("login success");
-			ModelAndView mav = new ModelAndView("devices");
+			ModelAndView mav = new ModelAndView("index");
+			mav.addObject("reject", false);
 			mav.addObject("user", user);
 			return mav;
 		}else{
 			System.out.println("login fail");
 			ModelAndView mav = new ModelAndView("login");
+			mav.addObject("reject",true);
 			return mav;
 		}
 	}

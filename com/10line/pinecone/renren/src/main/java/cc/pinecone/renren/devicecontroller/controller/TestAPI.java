@@ -13,7 +13,7 @@ import com.tenline.pinecone.platform.sdk.RESTClient;
 
 public class TestAPI {
 
-	public static final String baseUrl = "http://pinecone.rs.af.cm";
+	public static final String baseUrl = "http://pinecone-service.cloudfoundry.com";
 	
 	private User user;
 	private Authority authority;
@@ -34,6 +34,7 @@ public class TestAPI {
 //			api.getUserData("test");
 //			api.getAllDevice();
 //			api.getAllUser();
+			api.getAllUser();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -31,14 +31,31 @@ public class PineconeApi {
 	private final String ADMIN_NAME = "admin";
 	private final String ADMIN_PWD = "admin";
 
-	public User login(String id, String pwd) {
+	public User getUserByUsername(String username){
 		try {
 			ArrayList<Entity> users = (ArrayList<Entity>) client.get(
-					"/user/search/names?name=" + id, ADMIN_NAME, ADMIN_PWD);
+					"/user/search/names?name=" + username, ADMIN_NAME, ADMIN_PWD);
 			for (Entity en : users) {
 				if (en instanceof User) {
 					User user = (User) en;
-					User u = (User) client.get("/user/" + user.getId(), id, pwd).toArray()[0];
+					User u = (User) client.get("/user/" + user.getId(), ADMIN_NAME, ADMIN_PWD).toArray()[0];
+					return u;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public User login(String username, String password) {
+		try {
+			ArrayList<Entity> users = (ArrayList<Entity>) client.get(
+					"/user/search/names?name=" + username, ADMIN_NAME, ADMIN_PWD);
+			for (Entity en : users) {
+				if (en instanceof User) {
+					User user = (User) en;
+					User u = (User) client.get("/user/" + user.getId(), username, password).toArray()[0];
 					return u;
 				}
 			}

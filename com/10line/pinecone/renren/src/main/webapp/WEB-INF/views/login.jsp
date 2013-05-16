@@ -65,22 +65,22 @@ window.onload = function(){
             </div>
         </div>
         <div class="well">
-            <form action="index.html" class="row-fluid" method="post">
+            <form action="${pageContext.request.contextPath}/j_spring_security_check" class="row-fluid" method="post">
                 <div id="name_input" class="control-group">
                     <label class="control-label">Username</label>
-                    <div class="controls"><input class="span12" type="text" name="username" placeholder="username" /></div>
+                    <div class="controls"><input class="span12" type="text" name="j_username" placeholder="username" /></div>
                 </div>
                 
                 <div id="password_input" class="control-group">
                     <label class="control-label">Password:</label>
-                    <div class="controls"><input class="span12" type="password" name="password" placeholder="password" /></div>
+                    <div class="controls"><input class="span12" type="password" name="j_password" placeholder="password" /></div>
                 </div>
 
                 <div id="remember_input" class="control-group">
                     <div class="controls"><label class="checkbox inline"><input type="checkbox" name="checkbox1" class="styled" value="" checked="checked">Remember me</label></div>
                 </div>
 
-                <div class="login-btn"><input type="submit" value="Log me in" class="btn btn-danger btn-block" /></div>
+                <div class="login-btn"><input name="submit" type="submit" value="Log me in" class="btn btn-danger btn-block" /></div>
             </form>
         </div>
     </div>

@@ -15,6 +15,7 @@
 		<slf4j.version>1.5.10</slf4j.version>
 		<java.version>1.6</java.version>
 		<junit.version>4.8.2</junit.version>
+		<spring.version>3.1.1.RELEASE</spring.version>
 	</properties>
 
 
@@ -99,27 +100,17 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>3.0.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-			<version>3.0.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-acl</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<!-- DB Dependencies -->

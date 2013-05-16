@@ -123,23 +123,25 @@ public class PageController {
 		logger.info("index.html");
 		System.out.println("index.html");
 		
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		System.out.println("username:"+username+"\npassword:"+password);
-		
-		User user = this.getPineconeAPI().login(username, password);
-		if(user != null){
-			System.out.println("login success");
-			ModelAndView mav = new ModelAndView("index");
-			mav.addObject("reject", false);
-			mav.addObject("user", user);
-			return mav;
-		}else{
-			System.out.println("login fail");
-			ModelAndView mav = new ModelAndView("login");
-			mav.addObject("reject",true);
-			return mav;
-		}
+//		String username = request.getParameter("username");
+//		String password = request.getParameter("password");
+//		System.out.println("username:"+username+"\npassword:"+password);
+//		
+//		User user = this.getPineconeAPI().login(username, password);
+//		if(user != null){
+//			System.out.println("login success");
+//			ModelAndView mav = new ModelAndView("index");
+//			mav.addObject("reject", false);
+//			mav.addObject("user", user);
+//			return mav;
+//		}else{
+//			System.out.println("login fail");
+//			ModelAndView mav = new ModelAndView("login");
+//			mav.addObject("reject",true);
+//			return mav;
+//		}
+		ModelAndView mav = new ModelAndView("index");
+		return mav;
 	}
 
 	@RequestMapping(value = "/devices.html")

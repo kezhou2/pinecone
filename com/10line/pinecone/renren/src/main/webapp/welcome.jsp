@@ -4,7 +4,7 @@
 <html>
 <head>
 <!-- <meta http-equiv="Refresh" content="0; URL=redirect.html"> -->
-<meta http-equiv="Refresh" content="0; URL=gotologin.html">
+<meta http-equiv="Refresh" content="0; URL=login.html">
 </head>
 <body>
 <!-- <a href="home.html">click</a> -->

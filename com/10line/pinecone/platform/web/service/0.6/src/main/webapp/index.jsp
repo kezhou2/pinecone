@@ -99,7 +99,7 @@
         </ul>
         <div class="qrcode">
           <% String code = UUID.randomUUID().toString(); %>
-          <img src="http://qr.liantu.com/api.php?text=<%=code%>&w=200" />
+          <img src="http://qr.liantu.com/api.php?text=<%=code%>&w=200&logo=http://<%=request.getServerName()%>/images/qrcode_logo.png" />
           <p>设备编码：<%=code%></p>
         </div>
         <div style="clear: both;"></div>
@@ -200,7 +200,7 @@
 		</script>
 		<!-- Duoshuo Comment END -->
     	<img src="images/footer1.png" width="939px" height="51px" />
-    	Copyright © 2012 Pinecone.cc Inc. All Rights Reserved.&nbsp;&nbsp;(京ICP备09023225号)
+    	Copyright © 2012 Pinecone.cc Inc. All Rights Reserved.&nbsp;&nbsp;(京ICP备XXXXXXX号)
     	<p>
     	  <a href="javascript:void(0);" class="helpAgreement">用户协议</a>
     	  <a href="javascript:void(0);" class="helpPolicy">隐私条款</a>

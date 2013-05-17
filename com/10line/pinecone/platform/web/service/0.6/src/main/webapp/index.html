@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN   " "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page import="java.util.UUID" language="java"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>松果网</title>
@@ -22,7 +23,7 @@
       <div class="mainWidth">
         <div id="naver">
           <img src="images/topbg.png" width="940px" height="100px" /><a href="#" id="logo"><img src="images/logo.jpg" /></a>
-          <div id="nav"><a class="active" href="#home">首页</a> <a href="#product">开发</a> <a href="#about">关于</a> <a href="#help">帮助</a></div>
+          <div id="nav"><a class="active" href="#home">首页</a><a href="#product">开发</a><a href="#about">关于</a><a href="#help">帮助</a><a href="#">商店</a></div>
         </div>
       </div>
     </div>
@@ -83,18 +84,25 @@
 	</div>
 	<section id="wrapper"> 
       <div id="product">
-        <div class="AboutTitle">
-          <h2>开发工具</h2>
-        </div>
+        <img src="images/development.png" />
         <ul id="product_list">
           <li> 
-            <a href="#"><img src="images/arduino.jpg" /><p>下载Arduino松果网网关代码，马上接入你的Arduino设备吧！</p></a> 
+            <a href="#"><img src="images/arduino.png" align="left" /></a>
+            <h3>Arduino</h3>
+            <p>Arduino是一款便捷灵活的开源电子原型平台。</p>
           </li>
           <li>
-            <a href="#"><img src="images/raspberry_pi.png" /><p>下载树莓派松果网网关代码，马上接入你的树莓派设备吧！</p></a> 
+            <a href="#"><img src="images/raspberry_pi.jpg" align="left" /></a>
+            <h3>Raspberry Pi</h3>
+            <p>Raspberry Pi是一款基于ARM的微型电脑主板。</p>
           </li>
-          <div style="clear: both;"></div>
         </ul>
+        <div class="qrcode">
+          <% String code = UUID.randomUUID().toString(); %>
+          <img src="http://qr.liantu.com/api.php?text=<%=code%>&w=200" />
+          <p>设备编码：<%=code%></p>
+        </div>
+        <div style="clear: both;"></div>
       </div>﻿
       <div class="mainWidth">
         <div id="about">
@@ -171,7 +179,7 @@
                 </dl>
               </div>
               <div class="rBox">
-                <h3><span><img src="images/qq.png" width="24px" height="24px" /></span>用户QQ群：152331905</h3>
+                <h3><span><img src="images/qq.png" width="24px" height="24px" align="left" /></span>用户QQ群：152331905</h3>
               </div>
             </div>
           </div>
@@ -192,10 +200,12 @@
 		</script>
 		<!-- Duoshuo Comment END -->
     	<img src="images/footer1.png" width="939px" height="51px" />
-    	<a href="javascript:void(0);" class="helpAgreement">用户协议</a>
-    	<a href="javascript:void(0);" class="helpPolicy">隐私条款</a>
-        <p>Copyright © 2012 Pinecone.cc Inc. All Rights Reserved.</p>
-        <!-- <script type="text/javascript" src="http://tajs.qq.com/stats?sId=24120170" charset="UTF-8"></script> -->
+    	Copyright © 2012 Pinecone.cc Inc. All Rights Reserved.&nbsp;&nbsp;(京ICP备09023225号)
+    	<p>
+    	  <a href="javascript:void(0);" class="helpAgreement">用户协议</a>
+    	  <a href="javascript:void(0);" class="helpPolicy">隐私条款</a>
+    	  <script type="text/javascript" src="http://tajs.qq.com/stats?sId=24120170" charset="UTF-8"></script>
+    	</p>
       </div>
       <div class="windows" style="display:none;"> 
         <a href="javascript:void(0);" class="closeDiv" title="关闭">x</a>

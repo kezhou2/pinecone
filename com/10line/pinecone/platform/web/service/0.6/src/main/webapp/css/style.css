@@ -50,16 +50,17 @@ article:after { content: " "; display: block; clear: both }
 
 /* Product */
 #product { width: 940px; margin: 0 auto; margin-top: 80px; }
-#product_list { padding-top: 10px;}
-#product_list li { width: 234px; height: 300px; float: left; margin-right: 1px;}
-#product_list li a { display: block; width: 224px; height: 295px; background: url(../images/product_bg.jpg) no-repeat -235px; padding: 5px 3px 5px 6px;}
-#product_list li a:hover { background: url(../images/product_bg.jpg) no-repeat ;}
-#product_list li a p { padding-top: 5px;}
+#product_list { padding-top: 10px; float: left;}
+#product_list li { margin-top: 20px; width: 473px; height: 100px; }
+#product_list li a { display: block; height: 100px; float: left;}
+#product_list li p { padding-top: 10px; float: left;}
+.qrcode { float: right; margin-top: 20px; text-align:center;}
+.qrcode p { margin-top: 5px; text-align: left;}
 
 #download article h2 { color: #4a4a4a; font-size: 32px; text-align: center }
 
 /* About */
-#about { width: 100%; padding-top: 88px }
+#about { width: 100%; }
 #AboutBox { height: auto; margin-top:40px; clear: both}
 .aboutBanner { background: url(../images/aboutbanner.jpg) no-repeat 0 0; height: 266px; width: 940px; margin: 0 auto }
 .AboutBoxL { width: 638px; float: left }/*height为(610+16*10)*/
@@ -89,7 +90,7 @@ article:after { content: " "; display: block; clear: both }
 
 	
 /* Help */
-#help { padding-top: 100px }
+#help { padding-top: 50px }
 #help .helpheader { height: 82px; line-height: 50px; margin-bottom: 16px; text-align: center; clear: both; border-bottom: 1px #fff solid }
 #help .helpheader h2 { color: #4a4a4a; font-size: 50px; height: 81px; border-bottom: 1px #ddd solid }
 .HelpBoxL { height: auto; width: 638px; float: left }
@@ -106,6 +107,7 @@ article:after { content: " "; display: block; clear: both }
 .helpC ul li {  margin-left: 15px;list-style-type:disc; line-height: 1.6em }
 
 .rBox {background: #fff; width: 264px; clear: both; margin-bottom: 16px; border: 1px solid #ddd; padding-right: 0; border-radius: 4px; overflow: hidden;}
+.rBox img { margin-right: 10px;}
 
 .helpC dl dd p a { color: #65a3de; text-decoration: underline; white-space: nowrap }
 .helpC dl dd p a:hover { color: #0884CD; text-decoration: underline }

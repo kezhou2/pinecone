@@ -32,9 +32,9 @@ public class TestAPI {
 //			api.test();
 //			api.activeDevice("26", "19");
 //			api.getUserData("test");
-//			api.getAllDevice();
+			api.getAllDevice();
 //			api.getAllUser();
-			api.getAllUser();
+//			api.getAllUser();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -127,6 +127,23 @@ public class TestAPI {
 			System.out.println("user name:"+u.getName());
 			System.out.println("user mail:"+u.getEmail());
 		}
+	}
+	
+	public ArrayList<Device> getAllDevice1(){
+		ArrayList<Device> list = new ArrayList<Device>();
+		ArrayList<Entity> devs;
+		try {
+			devs = (ArrayList<Entity>) client.get("/device/","admin","admin");
+			for(Entity e:devs){
+				Device dev = (Device) e;
+				list.add(dev);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		
+		return list;
 	}
 	
 	public void getAllDevice() throws Exception{

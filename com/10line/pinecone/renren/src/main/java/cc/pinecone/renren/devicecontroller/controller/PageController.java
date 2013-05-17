@@ -1,5 +1,6 @@
 package cc.pinecone.renren.devicecontroller.controller;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 
+import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Entity;
 import com.tenline.pinecone.platform.model.User;
 
 /**
@@ -119,10 +122,14 @@ public class PageController {
 	}
 	
 	@RequestMapping(value = "/index.html")
-	public ModelAndView index(HttpServletRequest request,HttpServletResponse response) {
+	public String index(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("index.html");
 		System.out.println("index.html");
 		
+		//TODO test
+		TestAPI t = new TestAPI();
+		ArrayList<Device> list = t.getAllDevice1();
+		System.out.println("list size:"+list.size());
 //		String username = request.getParameter("username");
 //		String password = request.getParameter("password");
 //		System.out.println("username:"+username+"\npassword:"+password);
@@ -140,8 +147,10 @@ public class PageController {
 //			mav.addObject("reject",true);
 //			return mav;
 //		}
-		ModelAndView mav = new ModelAndView("index");
-		return mav;
+//		ModelAndView mav = new ModelAndView("index");
+//		mav.addObject("list", list);
+		request.setAttribute("list", list);
+		return "index";
 	}
 
 	@RequestMapping(value = "/devices.html")

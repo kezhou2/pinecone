@@ -48,8 +48,7 @@ public class LoginAuthenticationProvider extends
 		try {
 			String password = (String) authentication.getCredentials();
 			loadedUser = getUserDetailsService().loadUserByUsername(username,
-					password);// 区别在这里
-			System.out.println("username:"+username+" password:"+password);
+					password);
 		} catch (UsernameNotFoundException notFound) {
 			throw notFound;
 		} catch (Exception repositoryProblem) {

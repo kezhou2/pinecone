@@ -475,7 +475,7 @@ span.green { background-color: #41CA83; }
 #top { height: 48px; display: block; }
 .fixed { position: fixed; height: 48px; width: 100%; z-index: 1039; background: url(../img/backgrounds/dark.png); padding: 0 20px; border-bottom: 4px solid #ef705b; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; }
 #top:after { content: ""; display: block; clear: both; }
-.logo { display: block; padding: 11px 0; float: left; }
+.logo { display: block; padding: 5px 0; float: left; }
 
 .top-menu { border-left: 1px solid #464646; border-right: 1px solid #464646; float: right; margin-right: -1px; }
 .top-menu > li { list-style: none; float: left; border-right: 1px solid #252525; position: relative; }

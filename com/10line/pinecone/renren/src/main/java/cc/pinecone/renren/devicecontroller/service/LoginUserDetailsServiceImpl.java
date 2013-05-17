@@ -25,7 +25,6 @@ public class LoginUserDetailsServiceImpl implements LoginUserDetailsService {
 		System.out.println("loadUserByUsername");
 		com.tenline.pinecone.platform.model.User user = api.login(username,
 				password);
-		System.out.println("loadUserByUsername");
 		if (user != null) {
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			GrantedAuthorityImpl grantedAuthorityImpl = new GrantedAuthorityImpl();

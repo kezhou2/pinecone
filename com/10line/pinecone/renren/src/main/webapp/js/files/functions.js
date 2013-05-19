@@ -743,7 +743,9 @@ $(function() {
 		},
 		"aoColumnDefs": [
 	      { "bSortable": false, "aTargets": [ 0, 4 ] }
-	    ]
+	    ],
+		"bServerSide": true,
+		"sAjaxSource": "/devicecontroller/querypinecone"
     });
 
 

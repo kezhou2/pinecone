@@ -44,6 +44,16 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>queryPineconeData</servlet-name>
+		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.QueryPineconeServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>queryPineconeData</servlet-name>
+		<url-pattern>/querypinecone</url-pattern>
+	</servlet-mapping>
 
 	<session-config>
 		<session-timeout>30</session-timeout>

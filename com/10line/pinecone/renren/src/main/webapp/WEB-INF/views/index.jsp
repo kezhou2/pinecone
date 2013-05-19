@@ -46,11 +46,8 @@
 <script type="text/javascript" src="js/plugins/forms/jquery.form.js"></script>
 
 <script type="text/javascript" src="js/plugins/tables/jquery.dataTables.min.js"></script>
-
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
-
 <script type="text/javascript" src="js/files/functions.js"></script>
-
 </head>
 
 <body>
@@ -159,13 +156,14 @@
                             <thead>
                                 <tr>
                                     <th>Icon</th>
-                                    <th>Description</th>
+                                    <th>Name</th>
                                     <th>Date</th>
                                     <th>Code</th>
                                     <th class="actions-column">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
+                            <!-- 
 								<c:forEach var="device" items="${list}">
 									<tr>
 										<td><a href="img/demo/big.jpg" title="" class="lightbox"><img src="http://placehold.it/37x37" alt="" /></a></td>
@@ -181,6 +179,7 @@
 										</td>
 									</tr>
 								</c:forEach>
+								-->
                             </tbody>
                         </table>
                     </div>
@@ -199,10 +198,10 @@
 
 	<!-- Footer -->
 	<div id="footer">
-		<div class="copyrights">&copy;  Brought to you by Eugene Kopyov.</div>
+		<div class="copyrights">&copy;  Pinecone Tech.</div>
 		<ul class="footer-links">
 			<li><a href="" title=""><i class="icon-cogs"></i>Contact admin</a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i>Report bug</a></li>
+			<li><a href="" title=""><i class="icon-screenshot"></i>Home page</a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

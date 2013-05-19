@@ -127,9 +127,10 @@ public class PageController {
 		System.out.println("index.html");
 		
 		//TODO test
-		TestAPI t = new TestAPI();
-		ArrayList<Device> list = t.getAllDevice1();
-		System.out.println("list size:"+list.size());
+//		TestAPI t = new TestAPI();
+//		ArrayList<Device> list = t.getAllDevice1();
+//		System.out.println("list size:"+list.size());
+		
 //		String username = request.getParameter("username");
 //		String password = request.getParameter("password");
 //		System.out.println("username:"+username+"\npassword:"+password);
@@ -149,7 +150,7 @@ public class PageController {
 //		}
 //		ModelAndView mav = new ModelAndView("index");
 //		mav.addObject("list", list);
-		request.setAttribute("list", list);
+//		request.setAttribute("list", list);
 		return "index";
 	}
 

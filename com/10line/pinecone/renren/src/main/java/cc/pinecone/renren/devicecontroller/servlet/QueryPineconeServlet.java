@@ -54,6 +54,7 @@ public class QueryPineconeServlet extends HttpServlet {
 				devices.add(d);
 				continue;
 			}
+			devices.add(d);
 		}
 		iTotalDisplayRecords = devices.size();//Number of companies that matches search criterion should be returned
 		
@@ -91,10 +92,9 @@ public class QueryPineconeServlet extends HttpServlet {
 			row.add(c.getName());
 			row.add("Feb 12, 2012. 12:28");
 			row.add(c.getCode());
-			row.add("<ul class='navbar-icons'>"+
-						"<li><a href='#' class='tip' title='Add new option'><i class='icon-plus'></i></a></li>"+
-						"<li><a href='#' class='tip' title='View statistics'><i class='icon-reorder'></i></a></li>"+
-						"<li><a href='#' class='tip' title='Parameters'><i class='icon-cogs'></i></a></li>"+
+			row.add("<ul class='table-controls'>"+
+						"<li><a href='#' onclick='showDeviceView()' class='btn tip' title='View'><i class='ico-eye-open'></i></a></li>"+
+						"<li><a href='#' class='btn tip' title='Share'><i class='ico-share'></i></a></li>"+
 					"</ul>");
 			data.add(row);
 		}

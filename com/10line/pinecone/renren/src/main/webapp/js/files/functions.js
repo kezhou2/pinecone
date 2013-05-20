@@ -731,7 +731,7 @@ $(function() {
     });
 
 
-	oTable = $(".media-table").dataTable({
+	oTable = $("#devicelist").dataTable({
 		"bJQueryUI": false,
 		"bAutoWidth": false,
 		"sPaginationType": "full_numbers",

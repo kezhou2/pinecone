@@ -23,7 +23,8 @@
       <div class="mainWidth">
         <div id="naver">
           <img src="images/topbg.png" width="940px" height="100px" /><a href="#" id="logo"><img src="images/logo.jpg" /></a>
-          <div id="nav"><a class="active" href="#home">首页</a><a href="#product">开发</a><a href="#about">关于</a><a href="#help">帮助</a><a href="#">商店</a></div>
+          <div id="nav"><a class="active" href="#home">首页</a><a href="#product">开发</a><a href="#about">关于</a><a href="#help">帮助</a>
+          <a href="http://shop104216716.taobao.com/shop/view_shop.htm?spm=a1z0e.1.10010.3.VJnmPM">商店</a></div>
         </div>
       </div>
     </div>
@@ -200,7 +201,8 @@
 		</script>
 		<!-- Duoshuo Comment END -->
     	<img src="images/footer1.png" width="939px" height="51px" />
-    	Copyright © 2012 Pinecone.cc Inc. All Rights Reserved.&nbsp;&nbsp;(京ICP备XXXXXXX号)
+    	<a href="http://www.miitbeian.gov.cn/">(京ICP备13022507号)</a>
+    	Copyright © 2012 Pinecone.cc Inc. All Rights Reserved.
     	<p>
     	  <a href="javascript:void(0);" class="helpAgreement">用户协议</a>
     	  <a href="javascript:void(0);" class="helpPolicy">隐私条款</a>

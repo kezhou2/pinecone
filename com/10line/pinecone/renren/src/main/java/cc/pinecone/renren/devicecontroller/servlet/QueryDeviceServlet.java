@@ -19,7 +19,7 @@ import cc.pinecone.renren.devicecontroller.controller.TestAPI;
 
 import com.tenline.pinecone.platform.model.Device;
 
-public class QueryPineconeServlet extends HttpServlet {
+public class QueryDeviceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8711776634122256591L;
 
@@ -36,6 +36,7 @@ public class QueryPineconeServlet extends HttpServlet {
 
 		TestAPI t = new TestAPI();
 		ArrayList<Device> list = t.getAllDevice1();
+		System.out.println("size:"+list.size());
 		iTotalRecords = list.size();
 		List<Device> devices = new LinkedList<Device>();
 		for(Device d : list){
@@ -93,7 +94,7 @@ public class QueryPineconeServlet extends HttpServlet {
 			row.add("Feb 12, 2012. 12:28");
 			row.add(c.getCode());
 			row.add("<ul class='table-controls'>"+
-						"<li><a href='#' onclick='showDeviceView()' class='btn tip' title='View'><i class='ico-eye-open'></i></a></li>"+
+						"<li><a href='queryvariable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='ico-eye-open'></i></a></li>"+
 						"<li><a href='#' class='btn tip' title='Share'><i class='ico-share'></i></a></li>"+
 					"</ul>");
 			data.add(row);

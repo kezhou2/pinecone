@@ -30,63 +30,63 @@
 //		rapi = new RenrenApi();
 //		
 //		//init data
-////		User user = new User();
-////		user.setName("liugy");
-////		user.setEmail("liugy503@gmail.com");
-////		user.setPassword("198297");
-////		Authority authority = new Authority();
-////		authority.setAuthority("ROLE_USER");
-////		authority.setUserName("liugy");
-////		Device device = new Device();
-////		device.setName("ATM");
-////		device.setCode(UUID.randomUUID().toString());
-////		
-////		RESTClient client = new RESTClient(AppConfig.BASE_URL);
-////		user.setId(Long.valueOf(client.post("/user", user)));
-////		authority.setId(Long.valueOf(client.post("/authority", authority)));
-////		
-////		device.setId(Long.valueOf(client.post("/device", device)));
-////		System.out.println(client.post("/device/"+device.getId()+"/user", "/user/"+user.getId()));
-////		
-////		{
-////			Variable var = new Variable();
-////			var.setName("param1");
-////			var.setType(Variable.WRITE);
-////			var.setId(Long.valueOf(client.post("/variable", var)));
-////			System.out.println(client.post("/variable/"+var.getId()+"/device", "/device/"+device.getId()));
-////			{
-////				Item it1 = new Item();
-////				it1.setValue("item_value_1");
-////				it1.setId(Long.valueOf(client.post("/item/", it1)));
-////				System.out.println(client.post("/item/"+it1.getId()+"/variable", "/variable/"+var.getId()));
-////			}
-////			{
-////				Item it2 = new Item();
-////				it2.setValue("item_value_2");
-////				it2.setId(Long.valueOf(client.post("/item/", it2)));
-////				System.out.println(client.post("/item/"+it2.getId()+"/variable", "/variable/"+var.getId()));
-////			}
-////		}
-////		
-////		{
-////			Variable var = new Variable();
-////			var.setName("param1");
-////			var.setType(Variable.READ);
-////			var.setId(Long.valueOf(client.post("/variable", var)));
-////			System.out.println(client.post("/variable/"+var.getId()+"/device", "/device/"+device.getId()));
-////			{
-////				Item it = new Item();
-////				it.setValue("item_value_3");
-////				it.setId(Long.valueOf(client.post("/item/", it)));
-////				System.out.println(client.post("/item/"+it.getId()+"/variable", "/variable/"+var.getId()));
-////			}
-////			{
-////				Item it = new Item();
-////				it.setValue("item_value_4");
-////				it.setId(Long.valueOf(client.post("/item/", it)));
-////				System.out.println(client.post("/item/"+it.getId()+"/variable", "/variable/"+var.getId()));
-////			}
-////		}
+//		User user = new User();
+//		user.setName("liugy");
+//		user.setEmail("liugy503@gmail.com");
+//		user.setPassword("198297");
+//		Authority authority = new Authority();
+//		authority.setAuthority("ROLE_USER");
+//		authority.setUserName("liugy");
+//		Device device = new Device();
+//		device.setName("ATM");
+//		device.setCode(UUID.randomUUID().toString());
+//		
+//		RESTClient client = new RESTClient(AppConfig.BASE_URL);
+//		user.setId(Long.valueOf(client.post("/user", user)));
+//		authority.setId(Long.valueOf(client.post("/authority", authority)));
+//		
+//		device.setId(Long.valueOf(client.post("/device", device)));
+//		System.out.println(client.post("/device/"+device.getId()+"/user", "/user/"+user.getId()));
+//		
+//		{
+//			Variable var = new Variable();
+//			var.setName("param1");
+//			var.setType(Variable.WRITE);
+//			var.setId(Long.valueOf(client.post("/variable", var)));
+//			System.out.println(client.post("/variable/"+var.getId()+"/device", "/device/"+device.getId()));
+//			{
+//				Item it1 = new Item();
+//				it1.setValue("item_value_1");
+//				it1.setId(Long.valueOf(client.post("/item/", it1)));
+//				System.out.println(client.post("/item/"+it1.getId()+"/variable", "/variable/"+var.getId()));
+//			}
+//			{
+//				Item it2 = new Item();
+//				it2.setValue("item_value_2");
+//				it2.setId(Long.valueOf(client.post("/item/", it2)));
+//				System.out.println(client.post("/item/"+it2.getId()+"/variable", "/variable/"+var.getId()));
+//			}
+//		}
+//		
+//		{
+//			Variable var = new Variable();
+//			var.setName("param1");
+//			var.setType(Variable.READ);
+//			var.setId(Long.valueOf(client.post("/variable", var)));
+//			System.out.println(client.post("/variable/"+var.getId()+"/device", "/device/"+device.getId()));
+//			{
+//				Item it = new Item();
+//				it.setValue("item_value_3");
+//				it.setId(Long.valueOf(client.post("/item/", it)));
+//				System.out.println(client.post("/item/"+it.getId()+"/variable", "/variable/"+var.getId()));
+//			}
+//			{
+//				Item it = new Item();
+//				it.setValue("item_value_4");
+//				it.setId(Long.valueOf(client.post("/item/", it)));
+//				System.out.println(client.post("/item/"+it.getId()+"/variable", "/variable/"+var.getId()));
+//			}
+//		}
 //	}
 //
 //	@Test

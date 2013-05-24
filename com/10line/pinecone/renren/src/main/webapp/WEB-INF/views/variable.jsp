@@ -49,20 +49,6 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
-function showDeviceView(){
-	$(".crumbs").after(
-		"<div id='user-stats' style='display: block;' class='active'>"+
-			"<ul class='round-buttons'>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Add new post'><i class='icon-plus'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='View statement'><i class='icon-signal'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Media posts'><i class='icon-reorder'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='RSS feed'><i class='icon-rss'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Create new task'><i class='icon-tasks'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Layout settings'><i class='icon-cogs'></i></a></div></li>"+
-			"</ul>"+
-		"</div>"
-	);
-}
 </script>
 </head>
 
@@ -156,7 +142,7 @@ function showDeviceView(){
                 <div class="widget">
                 	<div class="navbar">
                     	<div class="navbar-inner">
-                        	<h6>Devices table</h6>
+                        	<h6>Variable table</h6>
                             <div class="nav pull-right">
                                 <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
                                 <ul class="dropdown-menu pull-right">
@@ -168,24 +154,21 @@ function showDeviceView(){
                         </div>
                     </div>
                     <div class="table-overflow">
-                        <table id='devicelist' class="table table-striped table-bordered table-checks media-table">
+                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table">
                             <thead>
                                 <tr>
-                                    <th>Icon</th>
+                                    <th>Type</th>
                                     <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Code</th>
+                                    <th>Value</th>
                                     <th class="actions-column">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            <!-- 
-								<c:forEach var="device" items="${list}">
+                            <tbody> 
+								<c:forEach var="variable" items="${list}">
 									<tr>
-										<td><a href="img/demo/big.jpg" title="" class="lightbox"><img src="http://placehold.it/37x37" alt="" /></a></td>
-										<td>${device.name}</td>
-										<td>Feb 12, 2012. 12:28</td>
-										<td>${device.code}</td>
+										<td>${variable.type}</td>
+										<td>${variable.name}</td>
+										<td>value</td>
 										<td>
 											<ul class="navbar-icons">
 												<li><a href="#" class="tip" title="Add new option"><i class="icon-plus"></i></a></li>
@@ -195,7 +178,6 @@ function showDeviceView(){
 										</td>
 									</tr>
 								</c:forEach>
-								-->
                             </tbody>
                         </table>
                     </div>

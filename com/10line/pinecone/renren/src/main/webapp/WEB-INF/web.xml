@@ -46,13 +46,13 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>queryPineconeData</servlet-name>
-		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.QueryPineconeServlet</servlet-class>
+		<servlet-name>queryDeviceData</servlet-name>
+		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.QueryDeviceServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>queryPineconeData</servlet-name>
-		<url-pattern>/querypinecone</url-pattern>
+		<servlet-name>queryDeviceData</servlet-name>
+		<url-pattern>/querydevice</url-pattern>
 	</servlet-mapping>
 
 	<session-config>

@@ -717,8 +717,7 @@ $(function() {
 
 
 	//===== Datatables =====//
-
-	oTable = $('#data-table').dataTable({
+	oTable = $("#variablelist").dataTable({
 		"bJQueryUI": false,
 		"bAutoWidth": false,
 		"sPaginationType": "full_numbers",
@@ -727,9 +726,11 @@ $(function() {
 			"sSearch": "<span>Filter records:</span> _INPUT_",
 			"sLengthMenu": "<span>Show entries:</span> _MENU_",
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
-		}
+		},
+		"aoColumnDefs": [
+	      { "bSortable": false, "aTargets": [ 0, 3 ] }
+	    ]
     });
-
 
 	oTable = $("#devicelist").dataTable({
 		"bJQueryUI": false,
@@ -745,7 +746,7 @@ $(function() {
 	      { "bSortable": false, "aTargets": [ 0, 4 ] }
 	    ],
 		"bServerSide": true,
-		"sAjaxSource": "/devicecontroller/querypinecone"
+		"sAjaxSource": "/devicecontroller/querydevice"
     });
 
 

@@ -143,14 +143,6 @@
                 	<div class="navbar">
                     	<div class="navbar-inner">
                         	<h6>Variable table</h6>
-                            <div class="nav pull-right">
-                                <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="#"><i class="icon-plus"></i>Add new option</a></li>
-                                    <li><a href="#"><i class="icon-reorder"></i>View statement</a></li>
-                                    <li><a href="#"><i class="icon-cogs"></i>Parameters</a></li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                     <div class="table-overflow">
@@ -170,10 +162,17 @@
 										<td>${variable.name}</td>
 										<td>value</td>
 										<td>
-											<ul class="navbar-icons">
-												<li><a href="#" class="tip" title="Add new option"><i class="icon-plus"></i></a></li>
-												<li><a href="#" class="tip" title="View statistics"><i class="icon-reorder"></i></a></li>
-												<li><a href="#" class="tip" title="Parameters"><i class="icon-cogs"></i></a></li>
+											<ul class="table-controls">
+												<li>
+													<div class="btn-group">
+														<button class="btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
+															<ul class="dropdown-menu">
+																<c:forEach var="item" items="${variable.items}">
+																<li><a href="#">${item.value}</a></li>
+																</c:forEach>
+															</ul>
+													</div>
+												</li>
 											</ul>
 										</td>
 									</tr>

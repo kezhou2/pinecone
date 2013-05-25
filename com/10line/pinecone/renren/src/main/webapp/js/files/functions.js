@@ -453,7 +453,23 @@ $(function() {
 		}]);
 	});
 
-
+	$("#active-device-dialog").click(function(e){
+		e.preventDefault();
+		bootbox.prompt("Please input device code:", function(code) {
+			if(code == null || code.length == ""){
+				$.jGrowl('Please enter device code.', { sticky: true, theme: 'growl-error', life:5000});
+			}else{
+				bootbox.prompt("Enter device name you like:",function(name){
+					if(name == null || name.length == ""){
+						$.jGrowl('Please enter device name you like!', { sticky: true, theme: 'growl-error', life:5000});
+					}else{
+						//TODO
+						$.jGrowl('Actived the device!', { sticky: true, theme: 'growl-success', life:10000});
+					}
+				});
+			}
+		});
+	});
 
 	//===== Autocomplete =====//
 	
@@ -681,7 +697,7 @@ $(function() {
 	    minimumInputLength: 2
 	});
 
-
+	
 
 	//===== Tags =====//	
 		
@@ -720,6 +736,8 @@ $(function() {
 	oTable = $("#variablelist").dataTable({
 		"bJQueryUI": false,
 		"bAutoWidth": false,
+		"bFilter": false,
+		"bPaginate": false,
 		"sPaginationType": "full_numbers",
 		"sDom": '<"datatable-header"fl>t<"datatable-footer"ip>',
 		"oLanguage": {
@@ -747,6 +765,7 @@ $(function() {
 	    ],
 		"bServerSide": true,
 		"sAjaxSource": "/devicecontroller/querydevice"
+			
     });
 
 

@@ -21,6 +21,7 @@ import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
+import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.RESTClient;
@@ -166,29 +167,36 @@ public class PageController {
 		return "index";
 	}
 	
-	@RequestMapping(value = "/queryvariable.html", method=RequestMethod.GET)
-	public String queryVariable(HttpServletRequest request,HttpServletResponse response){
-		logger.info("devices.html");
-		System.out.println("queryVariable");
-		String id = request.getParameter("id");
-		System.out.println(id);
-		
-		List<Variable> list = new ArrayList<Variable>();
-		try {
-			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient().get("/device/"+id+"/variables","admin","admin");
-			for(Entity ent:vars){
-				Variable var = (Variable)ent;
-				list.add(var);
-			}
-					
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		request.setAttribute("list", list);
-		
-		return "variable";
-	}
+//	@RequestMapping(value = "/queryvariable.html", method=RequestMethod.GET)
+//	public String queryVariable(HttpServletRequest request,HttpServletResponse response){
+//		logger.info("devices.html");
+//		System.out.println("queryVariable");
+//		String id = request.getParameter("id");
+//		System.out.println(id);
+//		
+//		List<Variable> list = new ArrayList<Variable>();
+//		try {
+//			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient().get("/device/"+id+"/variables","admin","admin");
+//			for(Entity ent:vars){
+//				Variable var = (Variable)ent;
+//				ArrayList<Item> itemlist = new ArrayList<Item>();
+//				ArrayList<Entity> items = (ArrayList<Entity>) client.get("/variable/"+var.getId()+"/items","admin","admin");
+//				for(Entity ee:items){
+//					Item item = (Item)ee;
+//					itemlist.add(item);
+//				}
+//				var.setItems(itemlist);
+//				list.add(var);
+//			}
+//					
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		request.setAttribute("list", list);
+//		
+//		return "variable";
+//	}
 
 	@RequestMapping(value = "/devices.html")
 	public String devices(HttpServletRequest request,HttpServletResponse response) {

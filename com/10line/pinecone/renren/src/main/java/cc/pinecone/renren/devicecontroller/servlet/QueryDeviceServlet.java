@@ -95,6 +95,7 @@ public class QueryDeviceServlet extends HttpServlet {
 			row.add(c.getCode());
 			row.add("<ul class='table-controls'>"+
 						"<li><a href='queryvariable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='ico-eye-open'></i></a></li>"+
+						"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' ico-minus'></i></a></li>"+
 						"<li><a href='#' class='btn tip' title='Share'><i class='ico-share'></i></a></li>"+
 					"</ul>");
 			data.add(row);

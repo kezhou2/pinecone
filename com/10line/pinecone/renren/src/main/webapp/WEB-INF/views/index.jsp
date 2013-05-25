@@ -49,19 +49,20 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
-function showDeviceView(){
-	$(".crumbs").after(
-		"<div id='user-stats' style='display: block;' class='active'>"+
-			"<ul class='round-buttons'>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Add new post'><i class='icon-plus'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='View statement'><i class='icon-signal'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Media posts'><i class='icon-reorder'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='RSS feed'><i class='icon-rss'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Create new task'><i class='icon-tasks'></i></a></div></li>"+
-				"<li><div class='depth'><a href='' title='' class='tip' data-original-title='Layout settings'><i class='icon-cogs'></i></a></div></li>"+
-			"</ul>"+
-		"</div>"
-	);
+function disconnect(id){
+	bootbox.confirm("Are you sure?", function(result) {
+		if(result == true){
+			$.get("disconnectdevice.html",function(result){
+				if(result == 'true'){
+					$.jGrowl('Disconnected the device!', { sticky: true, theme: 'growl-success', life:5000});
+				}else{
+					$.jGrowl('Failure in disconnecting the device!', { sticky: true, theme: 'growl-error', life:5000});
+				}
+			});	
+	  
+			
+	  }
+	});
 }
 </script>
 </head>
@@ -141,7 +142,7 @@ function showDeviceView(){
 		            </ul>
 			        
 		            <ul class="alt-buttons">
-						<li><a href="#" title=""><i class="icon-plus"></i><span>Active Device</span></a></li>
+						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus"></i><span>Active Device</span></a></li>
 						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="#" title=""><i class="icon-tasks"></i>Devices</a></li>
@@ -157,14 +158,6 @@ function showDeviceView(){
                 	<div class="navbar">
                     	<div class="navbar-inner">
                         	<h6>Devices table</h6>
-                            <div class="nav pull-right">
-                                <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="#"><i class="icon-plus"></i>Add new option</a></li>
-                                    <li><a href="#"><i class="icon-reorder"></i>View statement</a></li>
-                                    <li><a href="#"><i class="icon-cogs"></i>Parameters</a></li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                     <div class="table-overflow">

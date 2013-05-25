@@ -1,0 +1,11 @@
+1.short code size for uno
+2.fix pineconeMegaClass 
+3.fix bug 
+
+ device 440
+ variableSwi 441
+ itemOn 442
+ itemOff 4431040022
+ variableTem 444
+ variableHum 445
+

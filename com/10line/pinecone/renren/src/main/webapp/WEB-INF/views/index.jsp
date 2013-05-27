@@ -52,15 +52,14 @@
 function disconnect(id){
 	bootbox.confirm("Are you sure?", function(result) {
 		if(result == true){
-			$.get("disconnectdevice.html",function(result){
+			$.get("disconnectdevice.html?id="+id,function(result){
 				if(result == 'true'){
 					$.jGrowl('Disconnected the device!', { sticky: true, theme: 'growl-success', life:5000});
+					window.location.reload();
 				}else{
 					$.jGrowl('Failure in disconnecting the device!', { sticky: true, theme: 'growl-error', life:5000});
 				}
 			});	
-	  
-			
 	  }
 	});
 }

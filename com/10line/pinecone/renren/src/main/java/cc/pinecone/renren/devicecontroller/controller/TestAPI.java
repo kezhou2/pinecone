@@ -25,14 +25,14 @@ public class TestAPI {
 	public static void main(String[] args) {
 		TestAPI api = new TestAPI();
 //		api.testCreateData();
-//		api.getData();
 		try {
 //			api.getAllDevice();
 //			api.createUser();
 //			api.test();
 //			api.activeDevice("26", "19");
 //			api.getUserData("test");
-			api.getAllDevice();
+//			api.createDevice();
+//			api.getAllDevice();
 //			api.getAllUser();
 //			api.getAllUser();
 		} catch (Exception e) {
@@ -49,7 +49,7 @@ public class TestAPI {
 		authority.setAuthority("ROLE_USER");
 		authority.setUserName("liugy");
 		device = new Device();
-		device.setName("ATM");
+		device.setName("Device for Test");
 		device.setCode(UUID.randomUUID().toString());
 		client = new RESTClient(baseUrl);
 	}
@@ -109,15 +109,50 @@ public class TestAPI {
 		System.out.println(msg);
 	}
 	
-//	public void test() throws Exception{
-//		ArrayList<Entity> devs = (ArrayList<Entity>)client.get("/device/19", "admin", "admin");
-//		Device d = (Device)devs.get(0);
-//		
-//		d.setUser(null);
-//		String msg = client.post("/device/19", d);
-//		System.out.println(msg);
-//		
-//	}
+	public void createDevice() throws Exception{
+		device.setId(Long.valueOf(client.post("/device", device)));
+		System.out.println(client.post("/device/"+device.getId()+"/user", "/user/"+user.getId()));
+		
+		{
+			Variable var = new Variable();
+			var.setName("param1");
+			var.setType(Variable.WRITE);
+			var.setId(Long.valueOf(client.post("/variable", var)));
+			System.out.println(client.post("/variable/"+var.getId()+"/device", "/device/"+device.getId()));
+			{
+				Item it1 = new Item();
+				it1.setValue("item_value_1");
+				it1.setId(Long.valueOf(client.post("/item/", it1)));
+				System.out.println(client.post("/item/"+it1.getId()+"/variable", "/variable/"+var.getId()));
+			}
+			{
+				Item it2 = new Item();
+				it2.setValue("item_value_2");
+				it2.setId(Long.valueOf(client.post("/item/", it2)));
+				System.out.println(client.post("/item/"+it2.getId()+"/variable", "/variable/"+var.getId()));
+			}
+		}
+		
+		{
+			Variable var = new Variable();
+			var.setName("param1");
+			var.setType(Variable.READ);
+			var.setId(Long.valueOf(client.post("/variable", var)));
+			System.out.println(client.post("/variable/"+var.getId()+"/device", "/device/"+device.getId()));
+			{
+				Item it = new Item();
+				it.setValue("item_value_3");
+				it.setId(Long.valueOf(client.post("/item/", it)));
+				System.out.println(client.post("/item/"+it.getId()+"/variable", "/variable/"+var.getId()));
+			}
+			{
+				Item it = new Item();
+				it.setValue("item_value_4");
+				it.setId(Long.valueOf(client.post("/item/", it)));
+				System.out.println(client.post("/item/"+it.getId()+"/variable", "/variable/"+var.getId()));
+			}
+		}
+	}
 	
 	public void getAllUser() throws Exception{
 		ArrayList<Entity> users = (ArrayList<Entity>) client.get("/user/","admin","admin");
@@ -133,7 +168,7 @@ public class TestAPI {
 		ArrayList<Device> list = new ArrayList<Device>();
 		ArrayList<Entity> devs;
 		try {
-			devs = (ArrayList<Entity>) client.get("/device/","admin","admin");
+			devs = (ArrayList<Entity>) client.get("/device/","liugy","liugy");
 			for(Entity e:devs){
 				Device dev = (Device) e;
 				list.add(dev);
@@ -326,21 +361,6 @@ public class TestAPI {
 //			}
 			
 			System.out.println(client.post("/authority", authority));
-			
-			
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-	}
-	
-	public void createDevice(){
-		
-		Device device = new Device();
-		device.setName("TestDevice");
-		device.setCode("");
-
-		try{
-			
 			
 			
 		}catch(Exception ex){

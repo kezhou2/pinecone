@@ -463,7 +463,14 @@ $(function() {
 					if(name == null || name.length == ""){
 						$.jGrowl('Please enter device name you like!', { sticky: true, theme: 'growl-error', life:5000});
 					}else{
-						//TODO
+						$.get("disconnectdevice.html?id="+id,function(result){
+							if(result == 'true'){
+								$.jGrowl('Disconnected the device!', { sticky: true, theme: 'growl-success', life:5000});
+								window.location.reload();
+							}else{
+								$.jGrowl('Failure in disconnecting the device!', { sticky: true, theme: 'growl-error', life:5000});
+							}
+						});	 
 						$.jGrowl('Actived the device!', { sticky: true, theme: 'growl-success', life:10000});
 					}
 				});

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,6 +74,9 @@ public class PineconeController {
 	@RequestMapping(value = "/activedevice.html", method = RequestMethod.GET)
 	public void activeDevice(HttpServletRequest request,
 			HttpServletResponse response) {
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		logger.info("activeDevice.html");
 		System.out.println("activeDevice");
 		String code = request.getParameter("code");
@@ -83,7 +87,7 @@ public class PineconeController {
 
 		try {
 			Device dev = (Device) (client.get("/device/search/codes?code=" + code,
-					"admin", "admin")).toArray()[0];
+					username, password)).toArray()[0];
 
 			String msg = client.post("/device/" + dev.getId() + "/user",
 					"/user/" + userid);
@@ -105,6 +109,10 @@ public class PineconeController {
 	@RequestMapping(value = "/queryvariable.html", method = RequestMethod.GET)
 	public String queryVariable(HttpServletRequest request,
 			HttpServletResponse response) {
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		
 		logger.info("queryVariable.html");
 		System.out.println("queryVariable");
 		String id = request.getParameter("id");
@@ -113,13 +121,13 @@ public class PineconeController {
 		List<Variable> list = new ArrayList<Variable>();
 		try {
 			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
-					.get("/device/" + id + "/variables", "admin", "admin");
+					.get("/device/" + id + "/variables", username, password);
 			for (Entity ent : vars) {
 				Variable var = (Variable) ent;
 				ArrayList<Item> itemlist = new ArrayList<Item>();
 				ArrayList<Entity> items = (ArrayList<Entity>) client
-						.get("/variable/" + var.getId() + "/items", "admin",
-								"admin");
+						.get("/variable/" + var.getId() + "/items", username,
+								password);
 				for (Entity ee : items) {
 					Item item = (Item) ee;
 					itemlist.add(item);

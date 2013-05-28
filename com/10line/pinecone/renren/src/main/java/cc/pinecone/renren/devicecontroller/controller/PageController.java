@@ -1,8 +1,6 @@
 package cc.pinecone.renren.devicecontroller.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,19 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
+import cc.pinecone.renren.devicecontroller.service.GrantedAuthorityImpl;
+import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
-import com.tenline.pinecone.platform.model.Device;
-import com.tenline.pinecone.platform.model.Entity;
-import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
-import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
 /**
@@ -120,10 +118,10 @@ public class PageController {
 
 
 	@RequestMapping(value = "/login.html")
-	public String login(Model model) {
+	public String login(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("login.html");
 		System.out.println("login.html");
-		model.addAttribute("reject", false);
+		request.setAttribute("reject", false);
 		return "login";
 	}
 	
@@ -136,6 +134,28 @@ public class PageController {
 	
 	@RequestMapping(value = "/index.html")
 	public String index(HttpServletRequest request,HttpServletResponse response) {
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		//登录名  
+		System.out.println("Username:" + securityContextImpl.getAuthentication().getName());  
+		//登录密码，未加密的  
+		System.out.println("Credentials:" + securityContextImpl.getAuthentication().getCredentials());
+		securityContextImpl.getAuthentication().getPrincipal();
+		WebAuthenticationDetails details = (WebAuthenticationDetails)securityContextImpl.getAuthentication().getDetails();     
+		  
+		//获得访问地址     
+		System.out.println("RemoteAddress" + details.getRemoteAddress());     
+		//获得sessionid     
+		System.out.println("SessionId" + details.getSessionId());     
+		//获得当前用户所拥有的权限     
+		List<GrantedAuthority> authorities = (List<GrantedAuthority>)securityContextImpl.getAuthentication().getAuthorities();     
+		for (GrantedAuthority grantedAuthority : authorities) {     
+		    System.out.println("Authority" + grantedAuthority.getAuthority());
+		    if(grantedAuthority instanceof GrantedAuthorityImpl){
+		    	System.out.println("password:"+((GrantedAuthorityImpl)grantedAuthority).getDelegate().getPassword());
+		    	
+		    }
+		}  
+		
 		logger.info("index.html");
 		System.out.println("index.html");
 		

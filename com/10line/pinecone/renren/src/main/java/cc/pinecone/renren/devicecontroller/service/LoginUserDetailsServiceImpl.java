@@ -29,7 +29,7 @@ public class LoginUserDetailsServiceImpl implements LoginUserDetailsService {
 			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 			GrantedAuthorityImpl grantedAuthorityImpl = new GrantedAuthorityImpl();
 			authorities.add(grantedAuthorityImpl);
-			LoginUserDetailsImpl u = new LoginUserDetailsImpl(username,
+			LoginUserDetailsImpl u = new LoginUserDetailsImpl(""+user.getId(),username,
 					password, authorities);
 			grantedAuthorityImpl.setDelegate(u);
 			return u;

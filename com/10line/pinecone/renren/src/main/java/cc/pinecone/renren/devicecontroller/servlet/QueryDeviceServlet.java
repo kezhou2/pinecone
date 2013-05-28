@@ -14,19 +14,31 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.security.core.context.SecurityContextImpl;
 
+import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 import cc.pinecone.renren.devicecontroller.controller.TestAPI;
 
 import com.tenline.pinecone.platform.model.Device;
+import com.tenline.pinecone.platform.model.Entity;
+import com.tenline.pinecone.platform.sdk.RESTClient;
 
 public class QueryDeviceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8711776634122256591L;
+	
+	private RESTClient client = new RESTClient(AppConfig.BASE_URL);
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) req.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		System.out.println("Username:" + username);  
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		System.out.println("Credentials:" + password);
+		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(req);
 		
 		String sEcho = param.sEcho;
@@ -34,8 +46,17 @@ public class QueryDeviceServlet extends HttpServlet {
 		int iTotalDisplayRecords;//value will be set when code filters companies by keyword
 		JSONArray data = new JSONArray(); //data that will be shown in the table
 
-		TestAPI t = new TestAPI();
-		ArrayList<Device> list = t.getAllDevice1();
+		ArrayList<Device> list = new ArrayList<Device>();
+		try {
+			ArrayList<Entity> devs = (ArrayList<Entity>) client.get("/device/",username,password);
+			for(Entity e:devs){
+				Device dev = (Device) e;
+				list.add(dev);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	
 		System.out.println("size:"+list.size());
 		iTotalRecords = list.size();
 		List<Device> devices = new LinkedList<Device>();

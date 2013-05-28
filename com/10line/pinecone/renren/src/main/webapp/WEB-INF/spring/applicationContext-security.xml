@@ -8,21 +8,21 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd'>
 
 
 	<!-- 保护应用程序的所有URL，只有拥有ROLE_USER才可以访问 -->
-	<!-- <http auto-config="true">
+	<http auto-config="true">
 		<intercept-url pattern="/j_spring_security_check" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 		<intercept-url pattern='/login.html' access='IS_AUTHENTICATED_ANONYMOUSLY' />
 		<intercept-url pattern='/*' access='ROLE_USER' />
-		<form-login login-page="/login.jsp" authentication-failure-url="/login.html?error=true"
+		<form-login login-page="/login.html" authentication-failure-url="/login.html?error=true"
 			default-target-url="/index.html" />
 	</http>
-	-->
-	<http auto-config="true">
-		<intercept-url pattern="/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-	</http>
+	
+<!-- 	<http auto-config="true"> -->
+<!-- 		<intercept-url pattern="/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/> -->
+<!-- 	</http> -->
 
 
 	<!--配置认证管理器,只有用户名为user，密码为user的用户，角色为ROLE_USER可访问指定的资源 -->
-	<authentication-manager alias="authenticationManager">
+	<authentication-manager alias="authenticationManager" erase-credentials="false">
 		<authentication-provider ref="loginAuthenticationProvider">
 		</authentication-provider>
 	</authentication-manager>

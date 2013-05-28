@@ -12,7 +12,17 @@ public class LoginUserDetailsImpl extends User implements UserDetails {
     *
     */
    private static final long serialVersionUID = -5424897749887458053L;
+   
+   private String userid;
 
+   public LoginUserDetailsImpl(String userid, String username, String password, boolean enabled, boolean accountNonExpired,
+           boolean credentialsNonExpired, boolean accountNonLocked,
+           Collection<? extends GrantedAuthority> authorities)
+	{
+	   super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+	   this.userid = userid;
+	}
+   
    /**
     * @param username
     * @param password
@@ -38,6 +48,12 @@ public class LoginUserDetailsImpl extends User implements UserDetails {
    {
        super(username, password, authorities);
    }
+   
+   public LoginUserDetailsImpl(String userid, String username, String password, Collection<? extends GrantedAuthority> authorities)
+   {
+       super(username, password, authorities);
+       this.userid = userid;
+   }
 
    /**
     * @param username
@@ -48,4 +64,14 @@ public class LoginUserDetailsImpl extends User implements UserDetails {
    {
        super(username, password, new ArrayList<GrantedAuthority>());
    }
+   
+   public LoginUserDetailsImpl(String userid, String username, String password)
+   {
+       super(username, password, new ArrayList<GrantedAuthority>());
+       this.userid = userid;
+	}
+
+	public String getUserid() {
+		return userid;
+	}
 }

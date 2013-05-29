@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -134,56 +135,22 @@ public class PageController {
 	
 	@RequestMapping(value = "/index.html")
 	public String index(HttpServletRequest request,HttpServletResponse response) {
+		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		//登录名  
 		System.out.println("Username:" + securityContextImpl.getAuthentication().getName());  
 		//登录密码，未加密的  
 		System.out.println("Credentials:" + securityContextImpl.getAuthentication().getCredentials());
 		securityContextImpl.getAuthentication().getPrincipal();
-		WebAuthenticationDetails details = (WebAuthenticationDetails)securityContextImpl.getAuthentication().getDetails();     
-		  
-		//获得访问地址     
-		System.out.println("RemoteAddress" + details.getRemoteAddress());     
-		//获得sessionid     
-		System.out.println("SessionId" + details.getSessionId());     
-		//获得当前用户所拥有的权限     
-		List<GrantedAuthority> authorities = (List<GrantedAuthority>)securityContextImpl.getAuthentication().getAuthorities();     
-		for (GrantedAuthority grantedAuthority : authorities) {     
-		    System.out.println("Authority" + grantedAuthority.getAuthority());
-		    if(grantedAuthority instanceof GrantedAuthorityImpl){
-		    	System.out.println("password:"+((GrantedAuthorityImpl)grantedAuthority).getDelegate().getPassword());
-		    	
-		    }
-		}  
+		
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			System.out.println("user id:"+lud.getUserid());
+		}
 		
 		logger.info("index.html");
 		System.out.println("index.html");
-		
-		//TODO test
-//		TestAPI t = new TestAPI();
-//		ArrayList<Device> list = t.getAllDevice1();
-//		System.out.println("list size:"+list.size());
-		
-//		String username = request.getParameter("username");
-//		String password = request.getParameter("password");
-//		System.out.println("username:"+username+"\npassword:"+password);
-//		
-//		User user = this.getPineconeAPI().login(username, password);
-//		if(user != null){
-//			System.out.println("login success");
-//			ModelAndView mav = new ModelAndView("index");
-//			mav.addObject("reject", false);
-//			mav.addObject("user", user);
-//			return mav;
-//		}else{
-//			System.out.println("login fail");
-//			ModelAndView mav = new ModelAndView("login");
-//			mav.addObject("reject",true);
-//			return mav;
-//		}
-//		ModelAndView mav = new ModelAndView("index");
-//		mav.addObject("list", list);
-//		request.setAttribute("list", list);
 		return "index";
 	}
 	

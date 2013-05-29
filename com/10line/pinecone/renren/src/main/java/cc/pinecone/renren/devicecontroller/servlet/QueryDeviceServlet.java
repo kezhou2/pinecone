@@ -48,7 +48,7 @@ public class QueryDeviceServlet extends HttpServlet {
 
 		ArrayList<Device> list = new ArrayList<Device>();
 		try {
-			ArrayList<Entity> devs = (ArrayList<Entity>) client.get("/device/",username,password);
+			ArrayList<Entity> devs = (ArrayList<Entity>) client.get("/device",username,password);
 			for(Entity e:devs){
 				Device dev = (Device) e;
 				list.add(dev);

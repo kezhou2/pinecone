@@ -12,12 +12,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
+import cc.pinecone.renren.devicecontroller.service.GrantedAuthorityImpl;
+import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
@@ -55,8 +60,8 @@ public class PineconeController {
 	@RequestMapping(value = "/disconnectdevice.html", method = RequestMethod.GET)
 	public void disconnectDevice(HttpServletRequest request,
 			HttpServletResponse response) {
-		logger.info("queryVariable.html");
-		System.out.println("queryVariable");
+		logger.info("disconnectdevice.html");
+		System.out.println("disconnectdevice");
 		String id = request.getParameter("id");
 		System.out.println("id:" + id);
 
@@ -81,21 +86,25 @@ public class PineconeController {
 		System.out.println("activeDevice");
 		String code = request.getParameter("code");
 		String name = request.getParameter("name");
-		//TODO need to get userid
-		String userid = request.getParameter("userid");
-		System.out.println("code:" + code + "name:" + name);
+		System.out.println("code:" + code + " name:" + name);
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
 
 		try {
-			Device dev = (Device) (client.get("/device/search/codes?code=" + code,
+			Device dev = (Device) (this.getRESTClient().get("/device/search/codes?code=" + code,
 					username, password)).toArray()[0];
 
 			String msg = client.post("/device/" + dev.getId() + "/user",
 					"/user/" + userid);
-			System.out.println("executed: post:" + msg);
+			System.out.println("adding device to user:" + msg);
 			Device device = new Device();
 			device.setName(name);
 			msg = client.put("/device/" + dev.getId(), device);
-			System.out.println("executed: post:" + msg);
+			System.out.println("changing device name:" + msg);
 
 			PrintWriter out = response.getWriter();
 			out.print("true");

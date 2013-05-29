@@ -1,3 +1,0 @@
-1.short code size for uno
-2.fix pineconeMegaClass 
-3.add time control 

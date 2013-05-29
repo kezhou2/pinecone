@@ -29,7 +29,7 @@ boolean PubSubClient::connect(char *id) {
    return connect(id,NULL,NULL,0,0,0,0);
 }
 
-boolean PubSubClient::connect(char *id, char *user, char *pass) {
+boolean PubSubClient::connectTo(char *id, char *user, char *pass) {
    return connect(id,user,pass,0,0,0,0);
 }
 

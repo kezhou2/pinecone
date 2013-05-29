@@ -1,21 +1,39 @@
-#######################################
-# Syntax Coloring Map For aJson
-#######################################
+##########################################
+# Syntax Coloring Map For PineconeClient 
+##########################################
 
-#######################################
+##########################################
 # Datatypes (KEYWORD1)
-#######################################
+##########################################
 
-EEPROMPinecone	KEYWORD1
+PineconeClient	KEYWORD1
 
-
-#######################################
+##########################################
 # Methods and Functions (KEYWORD2)
-#######################################
+##########################################
 
-savePinecone KEYWORD2
-readPinecone KEYWORD2
+initialize KEYWORD2
+findDeviceByCode KEYWORD2
+createDevice KEYWORD2
+createVariable KEYWORD2
+createItem KEYWORD2
+makeGetRequest KEYWORD2
+makePostRequest KEYWORD2
+fetchDataFromResponse KEYWORD2
+doLoop KEYWORD2
+sendMessage KEYWORD2
+receiveVariableId KEYWORD2
+receiveVariableValue KEYWORD2
+getTopic KEYWORD2
+subscribeTopic KEYWORD2
+publishToTopic KEYWORD2
+get KEYWORD2
+indexOf KEYWORD2
+put KEYWORD2
+set KEYWORD2
+cleanAll KEYWORD2
+clean KEYWORD2
 
-#######################################
+##########################################
 # Constants (LITERAL1)
-#######################################
+##########################################

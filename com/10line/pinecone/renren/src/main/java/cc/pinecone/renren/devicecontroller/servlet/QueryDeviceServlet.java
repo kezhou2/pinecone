@@ -15,9 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 import cc.pinecone.renren.devicecontroller.controller.TestAPI;
+import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
@@ -38,6 +40,13 @@ public class QueryDeviceServlet extends HttpServlet {
 		System.out.println("Username:" + username);  
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		System.out.println("Credentials:" + password);
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		
 		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(req);
 		
@@ -48,7 +57,7 @@ public class QueryDeviceServlet extends HttpServlet {
 
 		ArrayList<Device> list = new ArrayList<Device>();
 		try {
-			ArrayList<Entity> devs = (ArrayList<Entity>) client.get("/device",username,password);
+			ArrayList<Entity> devs = (ArrayList<Entity>) client.get("/user/"+userid+"/devices",username,password);
 			for(Entity e:devs){
 				Device dev = (Device) e;
 				list.add(dev);

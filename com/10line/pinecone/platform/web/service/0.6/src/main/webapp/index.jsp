@@ -23,8 +23,8 @@
       <div class="mainWidth">
         <div id="naver">
           <img src="images/topbg.png" width="940px" height="100px" /><a href="#" id="logo"><img src="images/logo.jpg" /></a>
-          <div id="nav"><a class="active" href="#home">首页</a><a href="#product">开发</a><a href="#about">关于</a><a href="#help">帮助</a>
-          <a href="http://shop104216716.taobao.com/shop/view_shop.htm?spm=a1z0e.1.10010.3.VJnmPM">商店</a></div>
+          <div id="nav"><a class="active" href="#home">应用</a><a href="#product">开发</a><a href="#about">关于</a><a href="#help">帮助</a>
+          <a href="http://shop104362768.taobao.com">商店</a><a href="#">微博</a></div>
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
                   <a id="dlgooglemarket" onclick="_hmt.push(['_trackEvent', 'software', 'dlgooglemarket', 'uplus']);" href="#">
                     <div class="googlemarketBtn"></div>
                   </a> 
-                  <a id="dlapk" onclick="_hmt.push(['_trackEvent', 'software', 'dlapk', 'uplus']);" href="http://eoemarket.com/index/dl/id/115833/orderId/2">
+                  <a id="dlapk" onclick="_hmt.push(['_trackEvent', 'software', 'dlapk', 'uplus']);" href="http://<%=request.getServerName()%>/download/pinecone.apk">
                     <div class="apkBtn"></div>
                   </a> 
                 </div>
@@ -88,7 +88,7 @@
         <img src="images/development.png" />
         <ul id="product_list">
           <li> 
-            <a href="#"><img src="images/arduino.png" align="left" /></a>
+            <a href="http://<%=request.getServerName()%>/download/pinecone.zip"><img src="images/arduino.png" align="left" /></a>
             <h3>Arduino</h3>
             <p>Arduino是一款便捷灵活的开源电子原型平台。</p>
           </li>

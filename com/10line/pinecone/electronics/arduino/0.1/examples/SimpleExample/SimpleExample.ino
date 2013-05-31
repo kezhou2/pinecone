@@ -15,7 +15,8 @@
 #include <EEPROM.h>
 #include <PineconeClient.h>
 
-PineconeClient client( "7f234c91-c113-417c-aa92-62ec6d91dcc0", "admin", "admin", receiveMessage );
+// Input device code, user name, and password
+PineconeClient client( "XXXXXX", "XXXXX", "XXXXX", receiveMessage );
 
 void setup( ) {
   // LED Module is connected to digital pin 13

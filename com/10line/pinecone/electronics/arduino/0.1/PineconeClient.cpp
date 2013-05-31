@@ -16,7 +16,7 @@
 PineconeClient::PineconeClient( char* code, char* username, char* password,
 	void ( *receiveMessage ) ( char*, uint8_t*, unsigned int ) ) :
 	HttpClient( client ), PubSubClient( host, 1883, receiveMessage, client ) {
-	this->host = "pinecone-service.cloudfoundry.com";
+	this->host = "www.pinecone.cc";
 	this->code = code;
 	this->username = username;
 	this->password = password;

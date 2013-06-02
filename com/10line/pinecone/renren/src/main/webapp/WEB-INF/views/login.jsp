@@ -3,7 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-<title>Pannonia - premium responsive admin template by Eugene Kopyov</title>
+<title>Pinecone - device controller</title>
+<link rel="icon" href="img/favicon.ico" mce_href="img/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="img/favicon.ico" ce_href="img/favicon.ico" type="image/x-icon">
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <!--[if IE 8]><link href="css/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
 <!--[if IE 9]><link href="css/ie9.css" rel="stylesheet" type="text/css" /><![endif]-->
@@ -20,8 +22,8 @@
 
 <script type="text/javascript">
 window.onload = function(){
-	var reject = <%=request.getAttribute("reject")%>;
-	if(reject){
+	var error = <%=request.getParameter("error")%>;
+	if(error){
 		//$("#name_input").before(
 		//	"<div class='control-group info'>"+
 		//		"<span class='help-block'>Welcome!</span>"+
@@ -30,6 +32,15 @@ window.onload = function(){
 		$("#name_input").before(
 			"<div class='control-group warning'>"+
 				"<span class='help-block'>Authentication failed, please enter again.</span>"+
+			"</div>"
+		);
+	}
+	
+	var isregister = <%=(String)request.getAttribute("isregister")%>;
+	if(isregister){
+		$("#name_input").before(
+			"<div class='control-group warning'>"+
+				"<span class='help-block'>Registry successed, congratulation!</span>"+
 			"</div>"
 		);
 	}
@@ -58,8 +69,6 @@ window.onload = function(){
                     <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
                     <ul class="dropdown-menu pull-right">
                         <li><a href="register.html"><i class="icon-plus"></i>Register</a></li>
-                        <li><a href="#"><i class="icon-refresh"></i>Recover password</a></li>
-                        <li><a href="#"><i class="icon-cog"></i>Settings</a></li>
                     </ul>
                 </div>
             </div>
@@ -77,10 +86,13 @@ window.onload = function(){
                 </div>
 
                 <div id="remember_input" class="control-group">
-                    <div class="controls"><label class="checkbox inline"><input type="checkbox" name="checkbox1" class="styled" value="" checked="checked">Remember me</label></div>
+                    <div class="controls"><label class="checkbox inline"><input type="checkbox" name="_spring_security_remember_me" class="styled" value="" checked="checked">Remember me</label></div>
                 </div>
 
-                <div class="login-btn"><input name="submit" type="submit" value="Log me in" class="btn btn-danger btn-block" /></div>
+                <div class="login-btn">
+                	<input name="submit" type="submit" value="Log me in" class="btn btn-danger btn-block" />
+                	<div class="controls"><a href="#">Register to be user→</a></div>
+                </div>
             </form>
         </div>
     </div>

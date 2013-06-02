@@ -32,8 +32,8 @@ public class TestAPI {
 //			api.activeDevice("26", "19");
 //			api.getUserData("test");
 //			api.createDevice();
-			api.getAllDevice();
-//			api.getAllUser();
+//			api.getAllDevice();
+			api.getAllUser();
 //			api.getAllUser();
 			
 //			api.test();

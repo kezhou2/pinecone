@@ -122,7 +122,6 @@ public class PageController {
 	public String login(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("login.html");
 		System.out.println("login.html");
-		request.setAttribute("reject", false);
 		return "login";
 	}
 	
@@ -136,19 +135,18 @@ public class PageController {
 	@RequestMapping(value = "/index.html")
 	public String index(HttpServletRequest request,HttpServletResponse response) {
 		
-		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
-		//登录名  
-		System.out.println("Username:" + securityContextImpl.getAuthentication().getName());  
-		//登录密码，未加密的  
-		System.out.println("Credentials:" + securityContextImpl.getAuthentication().getCredentials());
-		securityContextImpl.getAuthentication().getPrincipal();
-		
-		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
-		if(ud instanceof LoginUserDetailsImpl){
-			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
-			System.out.println("user id:"+lud.getUserid());
-		}
-		
+//		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+//		//登录名  
+//		System.out.println("Username:" + securityContextImpl.getAuthentication().getName());  
+//		//登录密码，未加密的  
+//		System.out.println("Credentials:" + securityContextImpl.getAuthentication().getCredentials());
+//		securityContextImpl.getAuthentication().getPrincipal();
+//		
+//		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+//		if(ud instanceof LoginUserDetailsImpl){
+//			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+//			System.out.println("user id:"+lud.getUserid());
+//		}
 		logger.info("index.html");
 		System.out.println("index.html");
 		return "index";
@@ -205,11 +203,11 @@ public class PageController {
 		return "setting";
 	}
 
-	@RequestMapping(value = "/user.html")
-	public String sensation(Model model) {
-		logger.info("user.html");
-		System.out.println("user.html");
-		return "user";
+	@RequestMapping(value = "/friends.html")
+	public String friends(Model model) {
+		logger.info("friends.html");
+		System.out.println("friends.html");
+		return "friends";
 	}
 
 }

@@ -120,8 +120,8 @@ public class QueryDeviceServlet extends HttpServlet {
 		for(Device c : devices){
 			JSONArray row = new JSONArray();
 			row.add("<a href='img/demo/big.jpg' title='' class='lightbox'><img src='http://placehold.it/37x37' alt='' /></a>");
+			row.add(c.getId());
 			row.add(c.getName());
-			row.add("Feb 12, 2012. 12:28");
 			row.add(c.getCode());
 			row.add("<ul class='table-controls'>"+
 						"<li><a href='queryvariable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='ico-eye-open'></i></a></li>"+

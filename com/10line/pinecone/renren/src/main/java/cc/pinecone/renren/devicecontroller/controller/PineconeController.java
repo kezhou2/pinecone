@@ -24,9 +24,11 @@ import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 import cc.pinecone.renren.devicecontroller.service.GrantedAuthorityImpl;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
+import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
 import com.tenline.pinecone.platform.model.Item;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
@@ -39,6 +41,11 @@ public class PineconeController {
 	private static PineconeApi pApi;
 
 	private static RESTClient client;
+	
+	private final int OVERTIME = 20000;
+	private final int BEAT_TIME = 2000;
+	private final String ADMIN_NAME = "admin";
+	private final String ADMIN_PWD = "admin";
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(PageController.class);
@@ -114,7 +121,46 @@ public class PineconeController {
 			e.printStackTrace();
 		}
 	}
+	
+	@RequestMapping(value = "/registeruser.html")
+	public String registerUser(HttpServletRequest request,	HttpServletResponse response) {
+		System.out.println("registeruser.html");
+		String username = (String)request.getParameter("username");
+		String password = (String)request.getParameter("password1");
+		String email = (String)request.getParameter("emailValid");
+		System.out.println("username:"+username+"\npassword:"+password+"\nemail:"+email);
+		
+		try {
+			if(username == null || password == null){
+				request.setAttribute("isregister", "false");
+				return "register";
+			}
+			
+			ArrayList<Entity> users = (ArrayList<Entity>) this.getRESTClient().get(
+					"/user/search/names?name=" + username, ADMIN_NAME, ADMIN_PWD);
+			if (users.size() == 0) {
+				User u = new User();
+				u.setName(username);
+				u.setPassword(password);
+				u.setEmail(email);
+				u.setId(Long.getLong(client.post("/user", u)));
 
+				Authority authority = new Authority();
+				authority.setAuthority("ROLE_USER");
+				authority.setUserName(u.getName());
+				authority.setId(Long.getLong(client.post("/authority", authority)));
+				
+				client.post("/authority/" + authority.getId() + "/user", "/user/" + u.getId());
+
+				request.setAttribute("isregister", "true");
+				return "login";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "register";
+	}
+	
 	@RequestMapping(value = "/queryvariable.html", method = RequestMethod.GET)
 	public String queryVariable(HttpServletRequest request,
 			HttpServletResponse response) {

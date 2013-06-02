@@ -79,8 +79,7 @@ function disconnect(id){
 					<ul class="dropdown-menu">
 						<li><a href="#" title=""><i class="icon-user"></i>Profile</a></li>
 						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>
-						<li><a href="#" title=""><i class="icon-cog"></i>Settings</a></li>
-						<li><a href="#" title=""><i class="icon-remove"></i>Logout</a></li>
+						<li><a href="j_spring_security_logout" title=""><i class="icon-signout"></i>Logout</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -164,8 +163,8 @@ function disconnect(id){
                             <thead>
                                 <tr>
                                     <th>Icon</th>
+                                    <th>ID</th>
                                     <th>Name</th>
-                                    <th>Date</th>
                                     <th>Code</th>
                                     <th class="actions-column">Actions</th>
                                 </tr>

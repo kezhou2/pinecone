@@ -88,14 +88,16 @@
         <img src="images/development.png" />
         <ul id="product_list">
           <li> 
-            <a href="http://<%=request.getServerName()%>/download/pinecone.zip"><img src="images/arduino.png" align="left" /></a>
+            <a href="#"><img src="images/arduino.png" align="left" /></a>
             <h3>Arduino</h3>
-            <p>Arduino是一款便捷灵活的开源电子原型平台。</p>
+            <p>Arduino是一款便捷灵活的开源电子原型平台 -> </p>
+            <p><a href="http://<%=request.getServerName()%>/download/pinecone.zip">点击下载</a></p>
           </li>
           <li>
             <a href="#"><img src="images/raspberry_pi.jpg" align="left" /></a>
             <h3>Raspberry Pi</h3>
-            <p>Raspberry Pi是一款基于ARM的微型电脑主板。</p>
+            <p>Raspberry Pi是一款基于ARM的微型电脑主板 -> </p>
+            <p><a href="#">点击下载</a></p>
           </li>
         </ul>
         <div class="qrcode">

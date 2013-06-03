@@ -23,6 +23,7 @@ public class LoginUserDetailsServiceImpl implements LoginUserDetailsService {
 	public UserDetails loadUserByUsername(String username, String password)
 			throws UsernameNotFoundException {
 		System.out.println("loadUserByUsername");
+		System.out.println("username:"+username+"|password:"+password);
 		com.tenline.pinecone.platform.model.User user = api.login(username,
 				password);
 		if (user != null) {

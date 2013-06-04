@@ -61,7 +61,7 @@
 			<ul class="top-menu">
 				
 				<li class="dropdown">
-					<a class="user-menu" data-toggle="dropdown"><img src="img/userpic.png" alt="" /><span id="greeting_word_1">Howdy, Eugene! <b class="caret"></b></span></a>
+					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Howdy, Eugene! <b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#" title=""><i class="icon-user"></i>Profile</a></li>
 						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>

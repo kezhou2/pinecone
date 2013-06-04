@@ -3,6 +3,8 @@ package cc.pinecone.renren.devicecontroller.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 
+import com.renren.api.client.RenrenApiClient;
+import com.renren.api.client.param.impl.AccessToken;
+import com.renren.api.client.utils.JsonUtils;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
@@ -64,9 +69,25 @@ public class PageController {
 		logger.info("index.html");
 		System.out.println("index.html");
 		
+		String access_token = (String)request.getSession().getAttribute("access_token");
+		String xn_sig_user = (String)request.getSession().getAttribute("xn_sig_user");
+		String xn_sig_session_key = (String)request.getSession().getAttribute("xn_sig_session_key");
+		
 		System.out.println(request.getSession().getAttribute("access_token"));
 		System.out.println(request.getSession().getAttribute("xn_sig_user"));
 		System.out.println(request.getSession().getAttribute("xn_sig_session_key"));
+		
+		RenrenApiClient api = RenrenApiClient.getInstance();
+		String fields = "name,email_hash, sex,star,birthday,tinyurl,headurl,mainurl,hometown_location,hs_history,university_history,work_history,contact_info";
+		JSONArray users = api.getUserService().getInfo(xn_sig_user, fields,new AccessToken(access_token));
+		JSONObject u = JsonUtils.getIndexJSONObject(users, 0);
+		String name = JsonUtils.getValue(u, "name", String.class);
+		String email_hash = JsonUtils.getValue(u, "email_hash", String.class);
+		request.getSession().setAttribute("username", name);
+		request.getSession().setAttribute("email", email_hash);
+		response.setCharacterEncoding("UTF-8");
+		
+		System.out.println(name);
 		return "index";
 	}
 

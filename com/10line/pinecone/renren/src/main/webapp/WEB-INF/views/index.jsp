@@ -64,9 +64,9 @@ function disconnect(id){
 	});
 }
 </script>
-<%
+<%-- <%
 String username = (String)request.getSession().getAttribute("username");
-%>
+%> --%>
 </head>
 
 <body>
@@ -77,7 +77,7 @@ String username = (String)request.getSession().getAttribute("username");
 			<ul class="top-menu">
 				
 				<li class="dropdown">
-					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1"><%=username %><b class="caret"></b></span></a>
+					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Welcome back, ${username}<b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#" title=""><i class="icon-user"></i>Profile</a></li>
 						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>
@@ -106,7 +106,7 @@ String username = (String)request.getSession().getAttribute("username");
 
 			        <!-- Sidebar user -->
 			        <div class="sidebar-user widget">
-						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Wazzup, Eugene!</h6></div></div>
+						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Welcome back, ${username}</h6></div></div>
 			            <a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
 			        </div>
 			        <!-- /sidebar user -->

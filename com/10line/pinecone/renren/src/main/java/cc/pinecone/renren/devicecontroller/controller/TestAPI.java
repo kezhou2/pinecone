@@ -3,12 +3,18 @@ package cc.pinecone.renren.devicecontroller.controller;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttTopic;
+
 import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
 import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
+import com.tenline.pinecone.platform.sdk.ChannelClient;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
 public class TestAPI {
@@ -33,9 +39,10 @@ public class TestAPI {
 //			api.getUserData("test");
 //			api.createDevice();
 //			api.getAllDevice();
-			api.getAllUser();
+//			api.getAllUser();
 //			api.getAllUser();
 			
+			api.testChannel();
 //			api.test();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -367,6 +374,30 @@ public class TestAPI {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+	}
+	
+	public void testChannel() throws Exception{
+		ChannelClient client = new ChannelClient("tcp://m2m.eclipse.org:1883");
+		client.listen(new MqttCallback(){
+				@Override
+				public void connectionLost(Throwable arg0) {
+					System.out.println(arg0.getMessage());
+					
+				}
+	
+				@Override
+				public void deliveryComplete(MqttDeliveryToken arg0) {
+					System.out.println("deliveryComplete");
+				}
+	
+				@Override
+				public void messageArrived(MqttTopic arg0, MqttMessage message)
+						throws Exception {
+					System.out.println(new String(message.getPayload()));
+				}
+				
+			}
+			, "15");
 	}
 	
 	public void deleteData(){

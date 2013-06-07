@@ -61,7 +61,7 @@
 			<ul class="top-menu">
 				
 				<li class="dropdown">
-					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Howdy, Eugene! <b class="caret"></b></span></a>
+					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Welcome back, ${username} <b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#" title=""><i class="icon-user"></i>Profile</a></li>
 						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>
@@ -90,7 +90,7 @@
 
 			        <!-- Sidebar user -->
 			        <div class="sidebar-user widget">
-						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Wazzup, Eugene!</h6></div></div>
+						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Welcome back, ${username}</h6></div></div>
 			            <a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
 			        </div>
 			        <!-- /sidebar user -->
@@ -122,12 +122,13 @@
 			    <div class="crumbs">
 		            <ul id="breadcrumbs" class="breadcrumb"> 
 		                <li><a href="index.html">Dashboard</a></li>
-		                <li class="active"><a href="index.html" title="">Devices</a></li>
+		                <li><a href="index.html">Devices</a></li>
+		                <li class="active"><a href="#" title="">${device.name }</a></li>
 		            </ul>
 			        
 		            <ul class="alt-buttons">
 						<li><a href="#" title=""><i class="icon-plus"></i><span>Active Device</span></a></li>
-						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
+						<li class ="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="#" title=""><i class="icon-tasks"></i>Devices</a></li>
 		                        <li><a href="#" title=""><i class="icon-group"></i>Friends</a></li>
@@ -164,12 +165,19 @@
 											<ul class="table-controls">
 												<li>
 													<div class="btn-group">
-														<button class="btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
-															<ul class="dropdown-menu">
-																<c:forEach var="item" items="${variable.items}">
-																<li><a href="#">${item.value}</a></li>
-																</c:forEach>
-															</ul>
+														<c:choose>
+														    <c:when test="${variable.type == 'read'}">
+														      	<button class="disabled btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
+														    </c:when>
+														    <c:when test="${variable.type == 'write'}">
+														      	<button class="btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
+																<ul class="dropdown-menu">
+																	<c:forEach var="item" items="${variable.items}">
+																	<li><a href="#">${item.value}</a></li>
+																	</c:forEach>
+																</ul>
+														    </c:when>
+														</c:choose>
 													</div>
 												</li>
 											</ul>

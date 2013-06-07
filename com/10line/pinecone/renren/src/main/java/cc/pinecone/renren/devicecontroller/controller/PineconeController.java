@@ -174,6 +174,7 @@ public class PineconeController {
 		System.out.println(id);
 
 		List<Variable> list = new ArrayList<Variable>();
+		Device dev = null;
 		try {
 			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
 					.get("/device/" + id + "/variables", username, password);
@@ -190,13 +191,16 @@ public class PineconeController {
 				var.setItems(itemlist);
 				list.add(var);
 			}
-
+			
+			ArrayList<Entity> devs = (ArrayList<Entity>) this.getRESTClient().get("/device/"+id,username,password);
+			dev = (Device) devs.get(0);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		request.setAttribute("list", list);
-
+		request.setAttribute("device", dev);
 		return "variable";
 	}
 

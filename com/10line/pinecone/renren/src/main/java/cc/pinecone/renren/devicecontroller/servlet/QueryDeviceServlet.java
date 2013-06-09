@@ -29,7 +29,7 @@ public class QueryDeviceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8711776634122256591L;
 	
-	private RESTClient client = new RESTClient(AppConfig.BASE_URL);
+	private RESTClient client = new RESTClient(AppConfig.REST_URL);
 
 	@SuppressWarnings("unchecked")
 	@Override

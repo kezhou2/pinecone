@@ -107,7 +107,9 @@ String username = (String)request.getSession().getAttribute("username");
 			        <!-- Sidebar user -->
 			        <div class="sidebar-user widget">
 						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Welcome back, ${username}</h6></div></div>
-			            <a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
+						<div>
+			            	<a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
+			            </div>
 			        </div>
 			        <!-- /sidebar user -->
 

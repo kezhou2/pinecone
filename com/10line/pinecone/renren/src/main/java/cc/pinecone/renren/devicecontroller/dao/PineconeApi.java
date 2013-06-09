@@ -25,7 +25,7 @@ import com.tenline.pinecone.platform.sdk.ChannelClient;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
 public class PineconeApi {
-	private RESTClient client = new RESTClient(AppConfig.BASE_URL);
+	private RESTClient client = new RESTClient(AppConfig.REST_URL);
 	private final int OVERTIME = 20000;
 	private final int BEAT_TIME = 2000;
 	private final String ADMIN_NAME = "admin";
@@ -119,7 +119,7 @@ public class PineconeApi {
 
 	public boolean publish(String subject, String payload) throws Exception {
 
-		ChannelClient cclient = new ChannelClient(AppConfig.BASE_URL);
+		ChannelClient cclient = new ChannelClient(AppConfig.CHANNEL_URL);
 		cclient.listen(new MqttCallback() {
 
 			@Override
@@ -150,7 +150,7 @@ public class PineconeApi {
 		final String value = null;
 		try {
 
-			ChannelClient cclient = new ChannelClient(AppConfig.BASE_URL);
+			ChannelClient cclient = new ChannelClient(AppConfig.CHANNEL_URL);
 			cclient.listen(new MqttCallback() {
 
 				@Override

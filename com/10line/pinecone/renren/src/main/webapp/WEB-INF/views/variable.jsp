@@ -49,6 +49,112 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
+var varids = [];
+var devid;
+var jsonData;
+var isRefreshing = false;
+var isAlert = false;
+var refreshid;
+var isConnected = false;
+window.onload = function(){
+	//get all variable ids;
+    $('table td').each(function(){
+    	var id = $(this).attr('varid');
+    	
+     	if(id != null){
+     		varids.push(id);
+     	}
+	})
+	
+	devid = $('#variablelist').attr('deviceid');
+    //alert("device id:"+devid);
+	
+	//generate request json
+ 	jsonData = "[";
+ 	for(var i=0;i<varids.length;i++){
+ 		if(i<varids.length-1){
+ 			jsonData += varids[i]+",";
+ 		}else{
+ 			jsonData += varids[i]+"]";
+ 		}
+ 	}
+ 	//alert(jsonData);
+ 	
+ 	refreshid = setInterval('refresh()',2000);
+}
+
+function refresh(){
+	isRefreshing = true;
+	$.ajax({
+ 		url:'subscribedata', 
+ 		type: 'POST',
+ 		data: {ids:jsonData,deviceid:devid}, 
+		timeout: 1000,
+ 		error: function(){
+ 			if(!isAlert){
+ 				isAlert = true;
+	 			bootbox.confirm("Lost connection. Connect device again?", function(result) {
+	 				if(result =='false'){
+	 					clearInterval(refreshid);
+	 					isRefreshing = false;
+	 					isAlert = false;
+	 				}
+	 			});
+ 			}
+ 		}, 
+ 		success: function(result){
+ 			isConnected = true;
+ 			var splits = result.split(",");
+ 			if(splits.length > 1){
+ 				for(var n=1;n<splits.length;n++){
+ 					var tmp = splits[n].split(":");
+ 					var id = tmp[0];
+ 					var value = tmp[1];
+ 					$("td[varid='"+id+"']>strong").text(value);
+ 				}
+ 			}
+ 		} 
+ 	});
+}
+
+window.onunload = function(){
+	alert("onUnload");
+	if(isRefreshing){
+		clearInterval(refreshid);
+	}
+	
+	
+	$.ajax({
+ 		url:'subscribedata', 
+ 		type: 'POST',
+ 		data: {isDisconnect:'true'},
+ 		async:false,
+		timeout: 500,
+ 		error: function(){}, 
+ 		success: function(result){
+ 			isConnect = false;
+ 		} 
+ 	});
+}
+
+function publish(varid, value){
+	$.ajax({
+ 		url:'publishdata', 
+ 		type: 'POST',
+ 		data: {deviceid:devid,variableid:varid,vvalue:value}, 
+		timeout: 1000,
+ 		error: function(){
+ 			$.jGrowl('There is something wrong with channel!', { sticky: true, theme: 'growl-error', life:1000});
+ 		}, 
+ 		success: function(result){
+ 			if(result == "true"){
+ 				$.jGrowl('Setting finished!', { sticky: true, theme: 'growl-success', life:1000});
+ 			}else if(result == "false"){
+ 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+ 			}
+ 		} 
+ 	});
+}
 </script>
 </head>
 
@@ -91,7 +197,9 @@
 			        <!-- Sidebar user -->
 			        <div class="sidebar-user widget">
 						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Welcome back, ${username}</h6></div></div>
-			            <a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
+						<div>
+			            	<a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
+			            </div>
 			        </div>
 			        <!-- /sidebar user -->
 
@@ -146,9 +254,10 @@
                         </div>
                     </div>
                     <div class="table-overflow">
-                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table">
+                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" deviceid="${device.code }">
                             <thead>
                                 <tr>
+                                	<th>ID</th>
                                     <th>Type</th>
                                     <th>Name</th>
                                     <th>Value</th>
@@ -158,9 +267,18 @@
                             <tbody> 
 								<c:forEach var="variable" items="${list}">
 									<tr>
+										<td>${variable.id}</td>
 										<td>${variable.type}</td>
 										<td>${variable.name}</td>
-										<td>value</td>
+										<c:choose>
+											<c:when test="${variable.type == 'read'}">
+												<td varid="${variable.id }" class="vvalue"><strong>loading...</strong></td>
+											</c:when>
+											<c:when test="${variable.type == 'write'}">
+												<td varid="${variable.id }" class="vvalue"><strong>--</strong></td>
+											</c:when>
+										</c:choose>
+										
 										<td>
 											<ul class="table-controls">
 												<li>
@@ -173,7 +291,7 @@
 														      	<button class="btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
 																<ul class="dropdown-menu">
 																	<c:forEach var="item" items="${variable.items}">
-																	<li><a href="#">${item.value}</a></li>
+																	<li><a href="#" onclick="publish('${variable.id }','${item.value}')" >${item.value}</a></li>
 																	</c:forEach>
 																</ul>
 														    </c:when>

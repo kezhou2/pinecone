@@ -12,16 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
-import cc.pinecone.renren.devicecontroller.service.GrantedAuthorityImpl;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.model.Authority;
@@ -52,7 +49,7 @@ public class PineconeController {
 
 	public RESTClient getRESTClient() {
 		if (client == null) {
-			client = new RESTClient(AppConfig.BASE_URL);
+			client = new RESTClient(AppConfig.REST_URL);
 		}
 		return client;
 	}
@@ -161,6 +158,8 @@ public class PineconeController {
 		return "register";
 	}
 	
+	
+	
 	@RequestMapping(value = "/queryvariable.html", method = RequestMethod.GET)
 	public String queryVariable(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -203,5 +202,6 @@ public class PineconeController {
 		request.setAttribute("device", dev);
 		return "variable";
 	}
-
+	
+	
 }

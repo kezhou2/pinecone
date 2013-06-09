@@ -9,13 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cc.pinecone.renren.devicecontroller.controller.AppConfig;
+
 import com.tenline.pinecone.platform.model.Entity;
-import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.RESTClient;
-
-import cc.pinecone.renren.devicecontroller.controller.AppConfig;
-import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 
 public class QueryVariableServlet extends HttpServlet {
 
@@ -24,7 +22,7 @@ public class QueryVariableServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		client = new RESTClient(AppConfig.BASE_URL);
+		client = new RESTClient(AppConfig.REST_URL);
 	}
 
 	@Override

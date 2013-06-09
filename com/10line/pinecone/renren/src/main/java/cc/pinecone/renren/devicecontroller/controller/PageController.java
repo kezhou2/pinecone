@@ -36,7 +36,7 @@ public class PageController {
 	private static RESTClient client;
 	public RESTClient getRESTClient() {
 		if(client == null){
-			client = new RESTClient(AppConfig.BASE_URL);
+			client = new RESTClient(AppConfig.REST_URL);
 		}
 		return client;
 	}

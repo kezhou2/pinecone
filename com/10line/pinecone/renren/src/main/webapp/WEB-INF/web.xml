@@ -54,6 +54,26 @@
 		<servlet-name>queryDeviceData</servlet-name>
 		<url-pattern>/querydevice</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>subscribeData</servlet-name>
+		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.ChannelSubscribeServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>subscribeData</servlet-name>
+		<url-pattern>/subscribedata</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>publishData</servlet-name>
+		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.ChannelPublishServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>publishData</servlet-name>
+		<url-pattern>/publishdata</url-pattern>
+	</servlet-mapping>
 
 	<session-config>
 		<session-timeout>30</session-timeout>

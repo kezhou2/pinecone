@@ -90,7 +90,9 @@
 			        <!-- Sidebar user -->
 			        <div class="sidebar-user widget">
 						<div class="navbar"><div class="navbar-inner"><h6>Wazzup, Eugene!</h6></div></div>
-			            <a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
+						<div>
+			            	<a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
+			            <div>
 			        </div>
 			        <!-- /sidebar user -->
 

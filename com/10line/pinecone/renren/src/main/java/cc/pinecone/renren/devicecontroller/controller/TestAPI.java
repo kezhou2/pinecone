@@ -7,6 +7,9 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.Device;
@@ -44,6 +47,7 @@ public class TestAPI {
 			
 			api.testChannel();
 //			api.test();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -397,7 +401,11 @@ public class TestAPI {
 				}
 				
 			}
-			, "15");
+			, "pinecone@device.1234");
+		
+		Thread.sleep(10000);
+		
+		client.disconnect();
 	}
 	
 	public void deleteData(){

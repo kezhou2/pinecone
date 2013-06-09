@@ -24,7 +24,7 @@
         <div id="naver">
           <img src="images/topbg.png" width="940px" height="100px" /><a href="#" id="logo"><img src="images/logo.jpg" /></a>
           <div id="nav"><a class="active" href="#home">应用</a><a href="#product">开发</a><a href="#about">关于</a><a href="#help">帮助</a>
-          <a href="http://shop104362768.taobao.com">商店</a><a href="#">微博</a></div>
+          <a href="http://shop104362768.taobao.com">商店</a><a href="http://e.weibo.com/pinecone201204">微博</a></div>
         </div>
       </div>
     </div>

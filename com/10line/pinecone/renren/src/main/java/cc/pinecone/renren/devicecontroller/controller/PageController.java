@@ -74,26 +74,26 @@ public class PageController {
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
 		
-//		String access_token = (String)request.getSession().getAttribute("access_token");
-//		String xn_sig_user = (String)request.getSession().getAttribute("xn_sig_user");
-//		String xn_sig_session_key = (String)request.getSession().getAttribute("xn_sig_session_key");
-//		
-//		System.out.println(request.getSession().getAttribute("access_token"));
-//		System.out.println(request.getSession().getAttribute("xn_sig_user"));
-//		System.out.println(request.getSession().getAttribute("xn_sig_session_key"));
-//		
-//		RenrenApiClient api = RenrenApiClient.getInstance();
-//		String fields = "name,email_hash, sex,star,birthday,tinyurl,headurl,mainurl,hometown_location,hs_history,university_history,work_history,contact_info";
-//		JSONArray users = api.getUserService().getInfo(xn_sig_user, fields,new AccessToken(access_token));
-//		JSONObject u = JsonUtils.getIndexJSONObject(users, 0);
-//		String name = JsonUtils.getValue(u, "name", String.class);
-//		String email_hash = JsonUtils.getValue(u, "email_hash", String.class);
-//		request.getSession().setAttribute("username", name);
-//		request.getSession().setAttribute("email", email_hash);
-//		response.setCharacterEncoding("UTF-8");
-//		System.out.println(name);
+		String access_token = (String)request.getSession().getAttribute("access_token");
+		String xn_sig_user = (String)request.getSession().getAttribute("xn_sig_user");
+		String xn_sig_session_key = (String)request.getSession().getAttribute("xn_sig_session_key");
 		
-		request.getSession().setAttribute("username", username);
+		System.out.println(request.getSession().getAttribute("access_token"));
+		System.out.println(request.getSession().getAttribute("xn_sig_user"));
+		System.out.println(request.getSession().getAttribute("xn_sig_session_key"));
+		
+		RenrenApiClient api = RenrenApiClient.getInstance();
+		String fields = "name,email_hash, sex,star,birthday,tinyurl,headurl,mainurl,hometown_location,hs_history,university_history,work_history,contact_info";
+		JSONArray users = api.getUserService().getInfo(xn_sig_user, fields,new AccessToken(access_token));
+		JSONObject u = JsonUtils.getIndexJSONObject(users, 0);
+		String name = JsonUtils.getValue(u, "name", String.class);
+		String email_hash = JsonUtils.getValue(u, "email_hash", String.class);
+		request.getSession().setAttribute("username", name);
+		request.getSession().setAttribute("email", email_hash);
+		response.setCharacterEncoding("UTF-8");
+		System.out.println(name);
+		
+//		request.getSession().setAttribute("username", username);
 		response.setCharacterEncoding("UTF-8");
 		return "index";
 	}
@@ -112,16 +112,18 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/setting.html")
-	public String registry(Model model) {
+	public String registry(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("setting.html");
 		System.out.println("setting.html");
+		response.setCharacterEncoding("UTF-8");
 		return "setting";
 	}
 
 	@RequestMapping(value = "/friends.html")
-	public String friends(Model model) {
+	public String friends(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("friends.html");
 		System.out.println("friends.html");
+		response.setCharacterEncoding("UTF-8");
 		return "friends";
 	}
 

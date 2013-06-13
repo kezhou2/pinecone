@@ -147,8 +147,8 @@ String username = (String)request.getSession().getAttribute("username");
 						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus"></i><span>Active Device</span></a></li>
 						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
-		                        <li><a href="#" title=""><i class="icon-tasks"></i>Devices</a></li>
-		                        <li><a href="#" title=""><i class="icon-group"></i>Friends</a></li>
+		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
+		                        <li><a href="friends.html" title=""><i class="icon-group"></i>Friends</a></li>
 		                	</ul>
 		                </li>
 		            </ul>

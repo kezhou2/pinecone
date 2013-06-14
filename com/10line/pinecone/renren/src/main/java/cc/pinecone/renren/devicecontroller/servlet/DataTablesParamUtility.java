@@ -15,17 +15,41 @@ public class DataTablesParamUtility {
 //			System.out.println("sSearch:"+param.sSearch);
 			param.sColumns = request.getParameter("sColumns");
 //			System.out.println("sColumns:"+param.sColumns);
-			param.iDisplayStart = Integer.parseInt( request.getParameter("iDisplayStart") );
+			try{
+				param.iDisplayStart = Integer.parseInt( request.getParameter("iDisplayStart") );
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+			}
 //			System.out.println("iDisplayStart:"+param.iDisplayStart);
-			param.iDisplayLength = Integer.parseInt( request.getParameter("iDisplayLength") );
+			try{
+				param.iDisplayLength = Integer.parseInt( request.getParameter("iDisplayLength") );
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+			}
 //			System.out.println("iDisplayLength:"+param.iDisplayLength);
-			param.iColumns = Integer.parseInt( request.getParameter("iColumns") );
+			try{
+				param.iColumns = Integer.parseInt( request.getParameter("iColumns") );
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+			}
 //			System.out.println("iColumns:"+param.iColumns);
-			param.iSortingCols = Integer.parseInt( request.getParameter("iSortingCols") );
+			try{
+				param.iSortingCols = Integer.parseInt( request.getParameter("iSortingCols") );
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+			}
 //			System.out.println("iSortingCols:"+param.iSortingCols);
-			param.iSortColumnIndex = Integer.parseInt(request.getParameter("iSortCol_0"));
+			try{
+				param.iSortColumnIndex = Integer.parseInt(request.getParameter("iSortCol_0"));
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+			}
 //			System.out.println("iSortColumnIndex:"+param.iSortColumnIndex);
-			param.sSortDirection = request.getParameter("sSortDir_0");
+			try{
+				param.sSortDirection = request.getParameter("sSortDir_0");
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+			}
 //			System.out.println("sSortDirection:"+param.sSortDirection);
 			return param;
 		}else

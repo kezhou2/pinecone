@@ -94,8 +94,22 @@ public class PageController {
 		System.out.println(name);
 		
 //		request.getSession().setAttribute("username", username);
-		response.setCharacterEncoding("UTF-8");
+//		response.setCharacterEncoding("UTF-8");
 		return "index";
+	}
+	
+	@RequestMapping(value = "/test1.html")
+	public String test1(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("test1.html");
+		System.out.println("test1.html");
+		
+		//base process flow
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		
+		request.getSession().setAttribute("username", username);
+		response.setCharacterEncoding("UTF-8");
+		return "test1";
 	}
 
 	@RequestMapping(value = "/devices.html")

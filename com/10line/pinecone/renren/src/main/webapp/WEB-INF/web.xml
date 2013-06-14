@@ -56,6 +56,16 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>queryFriendsData</servlet-name>
+		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.QueryFriendsServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>queryFriendsData</servlet-name>
+		<url-pattern>/queryfriends</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>subscribeData</servlet-name>
 		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.ChannelSubscribeServlet</servlet-class>
 	</servlet>

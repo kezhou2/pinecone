@@ -1,13 +1,11 @@
-package cc.pinecone.renren.devicecontroller.controller;
+package cc.pinecone.renren.devicecontroller.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,37 +15,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
+import cc.pinecone.renren.devicecontroller.controller.AppConfig;
+import cc.pinecone.renren.devicecontroller.controller.PageController;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
-import cc.pinecone.renren.devicecontroller.servlet.DataTablesParamUtility;
-import cc.pinecone.renren.devicecontroller.servlet.JQueryDataTableParamModel;
 
 import com.renren.api.client.RenrenApiClient;
 import com.renren.api.client.param.impl.AccessToken;
-import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
+import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
-@Controller
-public class RenrenController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+public class QueryFriendsServlet extends HttpServlet {
+
+private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 	
 	private static RenrenApiClient api;
-
-	public RenrenApiClient getRenrenAPI(){
-		if(api == null){
-			api = RenrenApiClient.getInstance();
-		}
-		return api;
-	}
 	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		api = RenrenApiClient.getInstance();
+	}
+
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/getfriends.html", method = RequestMethod.GET)
-	public void getFriends(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String access_token = (String)request.getSession().getAttribute("access_token");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
@@ -69,10 +63,10 @@ public class RenrenController {
 		int iTotalRecords; // total number of records (unfiltered)
 		int iTotalDisplayRecords;//value will be set when code filters companies by keyword
 		
-		JSONArray friendIds = getRenrenAPI().getFriendsService().getFriends(0, 10000, new AccessToken(access_token));
+		JSONArray friendIds = api.getFriendsService().getFriends(0, 10000, new AccessToken(access_token));
 		int size = friendIds.size();
 		iTotalRecords = size;
-		JSONArray friends = getRenrenAPI().getFriendsService().getFriends(0, 20, new AccessToken(access_token) );
+		JSONArray friends = api.getFriendsService().getFriends(0, 20, new AccessToken(access_token) );
 		iTotalDisplayRecords = friends.size();
 		
 		JSONArray data = new JSONArray();
@@ -85,31 +79,18 @@ public class RenrenController {
 		for(int i=0;i<friends.size();i++){
 			JSONObject f = (JSONObject)friends.get(i);
 			JSONArray row = new JSONArray();
-			row.add("<a href='"+(String)f.get("headurl")+"' title='' class='lightbox'><img src='"+(String)f.get("tinyurl")+"' alt='' /></a>");
+			row.add("<a href='img/demo/big.jpg' title='' class='lightbox'><img src='"+(String)f.get("tinyurl")+"' alt='' /></a>");
 			row.add((String)f.get("name"));
-			if(((String)f.get("sex")).equals("0")){
-				row.add("female");
-			}else if(((String)f.get("sex")).equals("1")){
-				row.add("male");
-			}else{
-				row.add("");
-			}
+			row.add((String)f.get("sex"));
 			row.add("<ul class='table-controls'>"+
-						"<li><a href='#' class='btn tip' title='Invite'><i class=' ico-thumbs-up'></i></a></li>"+
-						"<li><a href='#' class='btn tip' title='Message'><i class='icon-envelope-alt'></i></a></li>"+
+						"<li><a href='#' class='btn tip' title='Share'><i class='ico-share'></i></a></li>"+
 					"</ul>");
 			data.add(row);
 		}
 		jsonResponse.put("aaData", data);
 			
 		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
 		response.getWriter().print(jsonResponse.toString());
-	}
-	
-	
-	@RequestMapping(value = "/invite.html", method = RequestMethod.GET)
-	public void invite(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 	}
 

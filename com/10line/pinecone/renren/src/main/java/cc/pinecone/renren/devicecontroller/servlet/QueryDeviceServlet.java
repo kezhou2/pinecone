@@ -131,7 +131,7 @@ public class QueryDeviceServlet extends HttpServlet {
 			data.add(row);
 		}
 		jsonResponse.put("aaData", data);
-			
+		System.out.println(jsonResponse.toJSONString());
 		resp.setContentType("application/json");
 		resp.getWriter().print(jsonResponse.toString());
 	}

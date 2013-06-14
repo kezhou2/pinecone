@@ -117,6 +117,7 @@ public class PineconeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		response.setCharacterEncoding("UTF-8");
 	}
 	
 	@RequestMapping(value = "/registeruser.html")
@@ -200,6 +201,7 @@ public class PineconeController {
 
 		request.setAttribute("list", list);
 		request.setAttribute("device", dev);
+		response.setCharacterEncoding("UTF-8");
 		return "variable";
 	}
 	

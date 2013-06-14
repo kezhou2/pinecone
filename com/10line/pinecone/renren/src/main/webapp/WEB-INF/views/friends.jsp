@@ -49,8 +49,9 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
-function disconnect(id){
-	bootbox.confirm("Are you sure?", function(result) {
+
+function invite(id){
+	bootbox.confirm("Send invitation to your friend?", function(result) {
 		if(result == true){
 			$.get("disconnectdevice.html?id="+id,function(result){
 				if(result == 'true'){
@@ -164,51 +165,17 @@ String username = (String)request.getSession().getAttribute("username");
                     <div class="table-overflow">
                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper" role="grid">
                         	<table id='friendslist' class="table table-striped table-bordered table-checks media-table dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                            <thead>
-                                <tr role="row">
-                                	<th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="Image">Icon</th>
-                                	<th class="sorting" role="columnheader" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending">Name</th>
-                                	<th class="sorting" role="columnheader" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Group</th>
-                                	<th class="sorting" role="columnheader" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="File info: activate to sort column ascending">Email</th>
-                                	<th class="actions-column sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="Actions">Actions</th>
-                                </tr>
-                            </thead>
-                            
-                        <tbody role="alert" aria-live="polite" aria-relevant="all">
-                        	<tr class="odd">
-			                        <td class="  sorting_1"><a href="img/demo/big.jpg" title="" class="lightbox"><img src="http://placehold.it/37x37" alt=""></a></td>
-			                        <td class=" "><a href="#" title="">Image2 description</a></td>
-			                        <td class=" ">Feb 12, 2012. 12:28</td>
-			                        <td class="file-info ">
-			                        	<span><strong>Size:</strong> 215 Kb</span>
-			                        	<span><strong>Format:</strong> .jpg</span>
-			                        	<span><strong>Dimensions:</strong> 120 x 120</span>
-			                        </td>
-			                        <td class=" ">
-		                                <ul class="navbar-icons">
-		                                    <li><a href="#" class="tip" title="" data-original-title="Add new option"><i class="icon-plus"></i></a></li>
-		                                    <li><a href="#" class="tip" title="" data-original-title="View statistics"><i class="icon-reorder"></i></a></li>
-		                                    <li><a href="#" class="tip" title="" data-original-title="Parameters"><i class="icon-cogs"></i></a></li>
-		                                </ul>
-			                        </td>
-                               </tr><tr class="even">
-			                        <td class="  sorting_1"><a href="img/demo/big.jpg" title="" class="lightbox"><img src="http://placehold.it/37x37" alt=""></a></td>
-			                        <td class=" "><a href="#" title="">Image1 description</a></td>
-			                        <td class=" ">Feb 12, 2012. 12:28</td>
-			                        <td class="file-info ">
-			                        	<span><strong>Size:</strong> 215 Kb</span>
-			                        	<span><strong>Format:</strong> .jpg</span>
-			                        	<span><strong>Dimensions:</strong> 120 x 120</span>
-			                        </td>
-			                        <td class=" ">
-		                                <ul class="navbar-icons">
-		                                    <li><a href="#" class="tip" title="" data-original-title="Add new option"><i class="icon-plus"></i></a></li>
-		                                    <li><a href="#" class="tip" title="" data-original-title="View statistics"><i class="icon-reorder"></i></a></li>
-		                                    <li><a href="#" class="tip" title="" data-original-title="Parameters"><i class="icon-cogs"></i></a></li>
-		                                </ul>
-			                        </td>
-                                </tr>
-                          </tbody></table><div class="datatable-footer"><div class="dataTables_info" id="DataTables_Table_0_info">Showing 1 to 10 of 12 entries</div><div class="dataTables_paginate paging_full_numbers" id="DataTables_Table_0_paginate"><a tabindex="0" class="first paginate_button paginate_button_disabled" id="DataTables_Table_0_first">First</a><a tabindex="0" class="previous paginate_button paginate_button_disabled" id="DataTables_Table_0_previous">&lt;</a><span><a tabindex="0" class="paginate_active">1</a><a tabindex="0" class="paginate_button">2</a></span><a tabindex="0" class="next paginate_button" id="DataTables_Table_0_next">&gt;</a><a tabindex="0" class="last paginate_button" id="DataTables_Table_0_last">Last</a></div></div></div>
+	                            <thead>
+	                                <tr role="row">
+	                                	<th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="Image">Icon</th>
+	                                	<th class="sorting" role="columnheader" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending">Name</th>
+	                                	<th class="sorting" role="columnheader" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Sex</th>
+	                                	<th class="actions-column sorting_disabled" role="columnheader" rowspan="1" colspan="1" aria-label="Actions">Actions</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+		                        </tbody>
+                          	</table>
                     </div>
                 </div>
                 <!-- /media datatable -->

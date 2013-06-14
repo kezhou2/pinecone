@@ -775,26 +775,23 @@ $(function() {
 		"sAjaxSource": "/devicecontroller/querydevice"
 			
     });
-
-	oTable = $("#devicelist").dataTable({
+	
+	oTable = $("#friendslist").dataTable({
 		"bJQueryUI": false,
 		"bAutoWidth": false,
+		"bSort": false,
 		"sPaginationType": "full_numbers",
 		"sDom": '<"datatable-header"fl>t<"datatable-footer"ip>',
 		"oLanguage": {
-			"sProcessing": "Loading...",
 			"sSearch": "<span>Filter records:</span> _INPUT_",
 			"sLengthMenu": "<span>Show entries:</span> _MENU_",
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
 		},
-		"aoColumnDefs": [
-	      { "bSortable": false, "aTargets": [ 0, 4 ] }
-	    ],
 		"bServerSide": true,
-		"bProcessing": false,
-		"sAjaxSource": "/devicecontroller/querydevice"
+		"sAjaxSource": "/devicecontroller/getfriends.html"
 			
     });
+	
 
 	//===== Fancybox =====//
 	

@@ -132,75 +132,82 @@ String username = (String)request.getSession().getAttribute("username");
 
 		<!-- Content -->
 		<div id="content">
-
-		    <!-- Content wrapper -->
-		    <div class="wrapper">
-
-			    <!-- Breadcrumbs line -->
-			    <div class="crumbs">
-		            <ul id="breadcrumbs" class="breadcrumb"> 
-		                <li><a href="index.html">Dashboard</a></li>
-		                <li class="active"><a href="index.html" title="">Devices</a></li>
-		            </ul>
-			        
-		            <ul class="alt-buttons">
-						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus"></i><span>Active Device</span></a></li>
-						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
-		                	<ul class="dropdown-menu pull-right">
-		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-		                        <li><a href="friends.html" title=""><i class="icon-group"></i>Friends</a></li>
-		                	</ul>
-		                </li>
-		            </ul>
-			    </div>
-			    <!-- /breadcrumbs line -->
-				
-                <!-- Media datatable -->
-                <div class="widget">
-                	<div class="navbar">
-                    	<div class="navbar-inner">
-                        	<h6>Devices table</h6>
-                        </div>
-                    </div>
-                    <div class="table-overflow">
-                        <table id='devicelist' class="table table-striped table-bordered table-checks media-table">
-                            <thead>
-                                <tr>
-                                    <th>Icon</th>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Code</th>
-                                    <th class="actions-column">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <!-- 
-								<c:forEach var="device" items="${list}">
-									<tr>
-										<td><a href="img/demo/big.jpg" title="" class="lightbox"><img src="http://placehold.it/37x37" alt="" /></a></td>
-										<td>${device.name}</td>
-										<td>Feb 12, 2012. 12:28</td>
-										<td>${device.code}</td>
-										<td>
-											<ul class="navbar-icons">
-												<li><a href="#" class="tip" title="Add new option"><i class="icon-plus"></i></a></li>
-												<li><a href="#" class="tip" title="View statistics"><i class="icon-reorder"></i></a></li>
-												<li><a href="#" class="tip" title="Parameters"><i class="icon-cogs"></i></a></li>
-											</ul>
-										</td>
-									</tr>
-								</c:forEach>
-								-->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- /media datatable -->
-
-            </div>
-            <!-- /content wrapper -->
-
-		</div>
+			<div class="profile">
+			<div class="row-fluid">
+			<div class = "span10 offset1">
+    			<div class="widget navbar-tabs">
+	            	<div class="navbar">
+	                	<div class="navbar-inner">
+	                    	<h6>User Profile Editor</h6>
+	                        <ul class="nav nav-tabs pull-right">
+		                        <li class="active"><a href="#tab5" data-toggle="tab">Password</a></li>
+		                        <li class=""><a href="#tab6" data-toggle="tab">Profile</a></li>
+	                        </ul>
+	                	</div>
+	              	</div>
+	                <div class="tabbable">
+	                    <div class="tab-content">
+	                    	<div class="tab-pane fade active in" id="tab5">
+	                       		<form id="validate" class="form-horizontal" action="#" method="post">
+			                        <fieldset>
+			                            <div class="step-title">
+			                            	<i>1</i>
+								    		<h5>Password Change</h5>
+								    		<span>&nbsp</span>
+								    	</div>
+								    	<div>
+				                            <div class="control-group">
+				                                <label class="control-label">old password:</label>
+				                                <div class="controls"><input type="password" name="oldpassword" class="validate[required] span12"></div>
+				                            </div>
+				                            <div class="control-group">
+				                                <label class="control-label">new password:</label>
+				                                <div class="controls"><input type="password" name="newpassword" class="validate[required] span12 ui-wizard-content"></div>
+				                            </div>
+				                            <div class="control-group">
+				                                <label class="control-label">confirm new password:</label>
+				                                <div class="controls"><input type="password" name="confirmpassword" class="validate[required,equals[newpassword]] span12 ui-wizard-content"></div>
+				                            </div>
+				                        </div>
+			                        </fieldset>
+			                        <div class="form-actions align-right">
+		                                <input type="submit" class="btn btn-info" value="submit">
+		                                <input type="reset" class="btn" value="reset">
+	                            	</div>
+			                    </form>
+							</div>
+	                   	    <div class="tab-pane fade" id="tab6">
+	                   	    	<form id="validate" class="form-horizontal" action="#" method="post">
+			                        <fieldset>
+			                            <div class="step-title">
+			                            	<i>1</i>
+								    		<h5>Enter your basic information</h5>
+								    		<span>&nbsp</span>
+								    	</div>
+								    	<div>
+				                            <div class="control-group">
+				                                <label class="control-label">Username:</label>
+				                                <div class="controls"><input type="text" name="username" class="span12 ui-wizard-content"></div>
+				                            </div>
+				                            <div class="control-group">
+				                                <label class="control-label">Email:</label>
+				                                <div class="controls"><input type="text" class="span12 ui-wizard-content"></div>
+				                            </div>
+				                        </div>
+			                        </fieldset>
+			                        <div class="form-actions align-right">
+		                                <input type="submit" class="btn btn-info" value="submit">
+		                                <input type="reset" class="btn" value="reset">
+	                            	</div>
+			                    </form>
+	                   	    </div>
+	                       	
+	                    </div>
+	                </div>
+	        	</div>
+        	</div>
+        	</div>
+    	</div>
 		<!-- /content -->
 
 	</div>

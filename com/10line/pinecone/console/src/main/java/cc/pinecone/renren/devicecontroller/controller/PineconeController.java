@@ -181,12 +181,13 @@ public class PineconeController {
 			for (Entity ent : vars) {
 				Variable var = (Variable) ent;
 				ArrayList<Item> itemlist = new ArrayList<Item>();
-				ArrayList<Entity> items = (ArrayList<Entity>) client
-						.get("/variable/" + var.getId() + "/items", username,
-								password);
-				for (Entity ee : items) {
-					Item item = (Item) ee;
-					itemlist.add(item);
+				if(var.getType().equals(Variable.WRITE)){
+					ArrayList<Entity> items = (ArrayList<Entity>) client
+							.get("/variable/" + var.getId() + "/items", username,password);
+					for (Entity ee : items) {
+						Item item = (Item) ee;
+						itemlist.add(item);
+					}
 				}
 				var.setItems(itemlist);
 				list.add(var);

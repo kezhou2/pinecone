@@ -29,6 +29,8 @@ public class QueryDeviceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8711776634122256591L;
 	
+	private final int PAGE_NUM = 20;
+	
 	private RESTClient client = new RESTClient(AppConfig.REST_URL);
 
 	@SuppressWarnings("unchecked")
@@ -47,7 +49,6 @@ public class QueryDeviceServlet extends HttpServlet {
 			userid = lud.getUserid();
 		}
 		
-		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(req);
 		
 		String sEcho = param.sEcho;
@@ -56,6 +57,11 @@ public class QueryDeviceServlet extends HttpServlet {
 		JSONArray data = new JSONArray(); //data that will be shown in the table
 
 		ArrayList<Device> list = new ArrayList<Device>();
+		//TODO the rest web services is not paginated. so here need to change.
+		int startPage = param.iDisplayStart/PAGE_NUM;
+		int startIndex = param.iDisplayStart%PAGE_NUM;
+		int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
+		
 		try {
 			ArrayList<Entity> devs = (ArrayList<Entity>) client.get("/user/"+userid+"/devices",username,password);
 			for(Entity e:devs){
@@ -96,7 +102,7 @@ public class QueryDeviceServlet extends HttpServlet {
 			@Override
 			public int compare(Device c1, Device c2) {	
 				switch(sortColumnIndex){
-				case 1:
+				case 2:
 					return c1.getName().compareTo(c2.getName()) * sortDirection;
 				case 3:
 					return c1.getCode().compareTo(c2.getCode()) * sortDirection;

@@ -56,7 +56,16 @@ var isRefreshing = false;
 var isAlert = false;
 var refreshid;
 var isConnected = false;
+var trendvalue = new Array();
+var TREND_LEN = 10;
 window.onload = function(){
+	//get variable id need to refresh
+	initConfig();
+ 	
+ 	refreshid = setInterval('refresh()',10000);
+}
+
+function initConfig(){
 	//get all variable ids;
     $('table td').each(function(){
     	var id = $(this).attr('varid');
@@ -77,10 +86,9 @@ window.onload = function(){
  		}else{
  			jsonData += varids[i]+"]";
  		}
+ 		
+ 		trendvalue[varids[i]] = new Array();
  	}
- 	//alert(jsonData);
- 	
- 	refreshid = setInterval('refresh()',2000);
 }
 
 function refresh(){
@@ -111,10 +119,32 @@ function refresh(){
  					var id = tmp[0];
  					var value = tmp[1];
  					$("td[varid='"+id+"']>strong").text(value);
+ 					
+ 					setTrend(value,id);
  				}
  			}
  		} 
  	});
+}
+
+function setTrend(newvalue, varid){
+	if(trendvalue[varid] == null)
+		return;
+	
+	var len = trendvalue[varid].length;
+	if(len == null)
+		return;
+	
+	if(len == TREND_LEN)
+		trendvalue[varid].shift();
+		
+	trendvalue[varid].push(newvalue);
+	$("td[trendid='"+varid+"']>span").sparkline(trendvalue[varid]);
+}
+
+function setRefresh(time){
+	clearInterval(refreshid);
+	refreshid = setInterval('refresh()',time*1000);
 }
 
 window.onunload = function(){
@@ -169,7 +199,7 @@ function publish(varid, value){
 				<li class="dropdown">
 					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Welcome back, ${username} <b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="#" title=""><i class="icon-user"></i>Profile</a></li>
+						<li><a href="profile.html" title=""><i class="icon-user"></i>Profile</a></li>
 						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>
 						<li><a href="j_spring_security_logout" title=""><i class="icon-signout"></i>Logout</a></li>
 					</ul>
@@ -235,7 +265,7 @@ function publish(varid, value){
 		            </ul>
 			        
 		            <ul class="alt-buttons">
-						<li><a href="#" title=""><i class="icon-plus"></i><span>Active Device</span></a></li>
+						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus"></i><span>Active Device</span></a></li>
 						<li class ="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="#" title=""><i class="icon-tasks"></i>Devices</a></li>
@@ -251,6 +281,15 @@ function publish(varid, value){
                 	<div class="navbar">
                     	<div class="navbar-inner">
                         	<h6>Variable table</h6>
+                        	<div class="nav pull-right open">
+                                <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
+                                <ul class="dropdown-menu pull-right">
+                                	<li><a href="#" onclick="setRefresh(2)">2s</a></li>
+                                    <li><a href="#" onclick="setRefresh(10)">10s</a></li>
+	                                <li><a href="#" onclick="setRefresh(30)">30s</a></li>
+	                                <li><a href="#" onclick="setRefresh(60)">60s</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="table-overflow">
@@ -261,6 +300,7 @@ function publish(varid, value){
                                     <th>Type</th>
                                     <th>Name</th>
                                     <th>Value</th>
+                                    <th>Trend</th>
                                     <th class="actions-column">Actions</th>
                                 </tr>
                             </thead>
@@ -278,7 +318,14 @@ function publish(varid, value){
 												<td varid="${variable.id }" class="vvalue"><strong>--</strong></td>
 											</c:when>
 										</c:choose>
-										
+										<c:choose>
+											<c:when test="${variable.type == 'read'}">
+												<td trendid="${variable.id }" class="valuretrend"><span class="dynamictrend">Loading...</span></td>
+											</c:when>
+											<c:when test="${variable.type == 'write'}">
+												<td></td>
+											</c:when>
+										</c:choose>
 										<td>
 											<ul class="table-controls">
 												<li>

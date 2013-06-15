@@ -12,9 +12,6 @@ import org.json.simple.JSONObject;
 
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 
-import com.renren.api.client.RenrenApiClient;
-import com.renren.api.client.param.impl.AccessToken;
-import com.renren.api.client.utils.JsonUtils;
 import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;

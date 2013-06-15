@@ -752,7 +752,7 @@ $(function() {
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
 		},
 		"aoColumnDefs": [
-	      { "bSortable": false, "aTargets": [ 0, 3 ] }
+	      { "bSortable": false, "aTargets": [ 0, 4 ] }
 	    ]
     });
 
@@ -772,7 +772,7 @@ $(function() {
 	    ],
 		"bServerSide": true,
 		"bProcessing": false,
-		"sAjaxSource": "/devicecontroller/querydevice"
+		"sAjaxSource": "/console/querydevice"
 			
     });
 	
@@ -788,7 +788,7 @@ $(function() {
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
 		},
 		"bServerSide": true,
-		"sAjaxSource": "/devicecontroller/getfriends.html"
+		"sAjaxSource": "/console/getfriends.html"
 			
     });
 	

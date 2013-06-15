@@ -42,7 +42,7 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		doInitListViewTask("/device/" + getIntent().getStringExtra("deviceId") + "/variables");
-        new ListenToChannelTask().execute(getIntent().getStringExtra("deviceId"));
+        new ListenToChannelTask().execute(getIntent().getStringExtra("deviceCode"));
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

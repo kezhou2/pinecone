@@ -52,7 +52,8 @@ public class DeviceActivity extends AbstractListActivity {
 					Toast.makeText(getApplicationContext(), R.string.network_turn_off, Toast.LENGTH_LONG).show();
 				} else {
 					Intent intent = new Intent(VariableActivity.ACTIVITY_ACTION);
-					intent.putExtra("deviceId", String.valueOf(view.getTag()));
+					intent.putExtra("deviceId", String.valueOf(view.getId()));
+					intent.putExtra("deviceCode", view.getTag().toString());
 					startActivity(intent);
 				}
 			}
@@ -104,7 +105,7 @@ public class DeviceActivity extends AbstractListActivity {
 	@SuppressWarnings("deprecation")
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		getIntent().putExtra("deviceId", info.targetView.getTag().toString());
+		getIntent().putExtra("deviceId", String.valueOf(info.targetView.getId()));
 		getIntent().putExtra("deviceName", ((TextView) info.targetView.findViewById(R.id.device_name)).getText().toString());
 		switch(item.getItemId()) {
 		case R.id.device_delete: showDialog(DeleteDeviceDialogBuilder.DIALOG_ID); break;
@@ -128,7 +129,7 @@ public class DeviceActivity extends AbstractListActivity {
 	@Override
 	public boolean setViewValue(View view, Object data, String textRepresentation) {
 		// TODO Auto-generated method stub
-		Device device = (Device) data; view.setTag(Long.valueOf(device.getId()).intValue());
+		Device device = (Device) data; view.setTag(device.getCode()); view.setId(device.getId().intValue());
 		((TextView) view.findViewById(R.id.device_name)).setText(device.getName()); return true;
 	}
 	

@@ -35,8 +35,7 @@ public class ChannelService extends AbstractService {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					baseUrl = "tcp://m2m.eclipse.org:1883";
-					client = new MqttClient(baseUrl, UUID.randomUUID().toString(), new MemoryPersistence());
+					client = new MqttClient("tcp://" + baseUrl + ":1883", UUID.randomUUID().toString(), new MemoryPersistence());
 					client.connect();
 				} catch (MqttException e) {
 					// TODO Auto-generated catch block

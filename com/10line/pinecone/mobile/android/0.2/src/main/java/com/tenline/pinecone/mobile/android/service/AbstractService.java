@@ -15,10 +15,10 @@ import android.os.IBinder;
 public abstract class AbstractService extends Service {
 	
 	// For Testing
-	protected String baseUrl = "http://pinecone-service.cloudfoundry.com";
+	protected String baseUrl = "pinecone-service.cloudfoundry.com";
 	
 	// For Deployment
-//	protected String baseUrl = "http://www.pinecone.cc";
+//	protected String baseUrl = "www.pinecone.cc";
 	
 	/**
 	 * 

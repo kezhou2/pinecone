@@ -53,7 +53,7 @@ public class RESTService extends AbstractService {
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		Log.i(getClass().getSimpleName(), "onBind");
-		template = new RestTemplate();
+		template = new RestTemplate(); baseUrl = "http://" + baseUrl;
 		template.getMessageConverters().add(new FormHttpMessageConverter());
 		template.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
 		template.getMessageConverters().add(new MappingJacksonHttpMessageConverter());

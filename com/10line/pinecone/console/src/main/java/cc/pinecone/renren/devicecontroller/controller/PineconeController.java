@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
+import cc.pinecone.renren.devicecontroller.servlet.DataTablesParamUtility;
+import cc.pinecone.renren.devicecontroller.servlet.JQueryDataTableParamModel;
 
 import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.Device;
@@ -161,9 +165,9 @@ public class PineconeController {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/queryvariable.html", method = RequestMethod.GET)
-	public String queryVariable(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void queryVariable(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
@@ -172,9 +176,15 @@ public class PineconeController {
 		System.out.println("queryVariable");
 		String id = request.getParameter("id");
 		System.out.println(id);
+		
+		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
+		
+		String sEcho = param.sEcho;
+		int iTotalRecords = 0; 
+		int iTotalDisplayRecords = 0;
+		JSONArray data = new JSONArray(); //data that will be shown in the table
 
 		List<Variable> list = new ArrayList<Variable>();
-		Device dev = null;
 		try {
 			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
 					.get("/device/" + id + "/variables", username, password);
@@ -191,19 +201,63 @@ public class PineconeController {
 				}
 				var.setItems(itemlist);
 				list.add(var);
+				
+				JSONArray row = new JSONArray();
+				row.add(var.getId());
+				row.add(var.getType());
+				row.add(var.getName());
+				
+				if(var.getType().equals(Variable.READ)){
+					row.add("<strong varid='"+var.getId()+"'>loading...</strong>");
+				}else{
+					row.add("<strong varid='"+var.getId()+"'>--</strong>");
+				}
+				if(var.getType().equals(Variable.READ)){
+					row.add("<span class='dynamictrend' varid='"+var.getId()+"'>Loading...</span>");
+				}else{
+					row.add("");
+				}
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append(	"<ul class='table-controls'>");
+				sb.append(		"<li>");
+				sb.append(			"<div class='btn-group'>");
+				if(var.getType().equals(Variable.READ)){
+					sb.append(			"<button class='disabled btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
+				}else{
+					sb.append(			"<button class='btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
+					sb.append(			"<ul class='dropdown-men'>");
+						for(Item item:var.getItems()){
+							sb.append(		"<li><a href='#' onclick='publish('"+var.getId()+"','"+item.getValue()+"')' >"+item.getValue()+"</a></li>");
+						}
+					sb.append(			"</ul>");
+				}
+				sb.append(			"</div>");
+				sb.append(		"</li>");
+				sb.append(	"</ul>");
+				row.add(sb.toString());
+				
+				data.add(row);
 			}
 			
-			ArrayList<Entity> devs = (ArrayList<Entity>) this.getRESTClient().get("/device/"+id,username,password);
-			dev = (Device) devs.get(0);
+			iTotalRecords = vars.size();
+			iTotalDisplayRecords = vars.size();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		JSONObject jsonResponse = new JSONObject();
+		
+		jsonResponse.put("sEcho", sEcho);
+		jsonResponse.put("iTotalRecords", iTotalRecords);
+		jsonResponse.put("iTotalDisplayRecords", iTotalDisplayRecords);
 
-		request.setAttribute("list", list);
-		request.setAttribute("device", dev);
-		response.setCharacterEncoding("UTF-8");
-		return "variable";
+		jsonResponse.put("aaData", data);
+		System.out.println(jsonResponse.toJSONString());
+		response.setContentType("application/json");
+		response.getWriter().print(jsonResponse.toString());
+
 	}
 	
 	

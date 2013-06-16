@@ -48,6 +48,9 @@
 <script type="text/javascript" src="js/plugins/tables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
+<%
+String querydeviceid = (String)request.getAttribute("querydeviceid");
+%>
 <script type="text/javascript">
 var varids = [];
 var devid;
@@ -59,10 +62,30 @@ var isConnected = false;
 var trendvalue = new Array();
 var TREND_LEN = 10;
 window.onload = function(){
+	$("#variablelist").dataTable({
+		"bJQueryUI": false,
+		"bAutoWidth": false,
+		"bFilter": false,
+		"bPaginate": false,
+		"sPaginationType": "full_numbers",
+		"oLanguage": {
+			"sProcessing": "Loading...",
+			"sSearch": "<span>Filter records:</span> _INPUT_",
+			"sLengthMenu": "<span>Show entries:</span> _MENU_",
+			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
+		},
+		"aoColumnDefs": [
+	      { "bSortable": false, "aTargets": [ 0, 4 ] }
+	    ],
+		"bServerSide": true,
+		"bProcessing": true,
+		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
+    });
+	
 	//get variable id need to refresh
-	initConfig();
+	//initConfig();
  	
- 	refreshid = setInterval('refresh()',10000);
+ 	//refreshid = setInterval('refresh()',10000);
 }
 
 function initConfig(){
@@ -281,7 +304,7 @@ function publish(varid, value){
                 	<div class="navbar">
                     	<div class="navbar-inner">
                         	<h6>Variable table</h6>
-                        	<div class="nav pull-right open">
+                        	<div class="nav pull-right">
                                 <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
                                 <ul class="dropdown-menu pull-right">
                                 	<li><a href="#" onclick="setRefresh(2)">2s</a></li>
@@ -293,7 +316,7 @@ function publish(varid, value){
                         </div>
                     </div>
                     <div class="table-overflow">
-                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" deviceid="${device.code }">
+                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" deviceid="${device.id}">
                             <thead>
                                 <tr>
                                 	<th>ID</th>
@@ -305,7 +328,7 @@ function publish(varid, value){
                                 </tr>
                             </thead>
                             <tbody> 
-								<c:forEach var="variable" items="${list}">
+								<!--<c:forEach var="variable" items="${list}">
 									<tr>
 										<td>${variable.id}</td>
 										<td>${variable.type}</td>
@@ -348,7 +371,7 @@ function publish(varid, value){
 											</ul>
 										</td>
 									</tr>
-								</c:forEach>
+								</c:forEach>-->
                             </tbody>
                         </table>
                     </div>

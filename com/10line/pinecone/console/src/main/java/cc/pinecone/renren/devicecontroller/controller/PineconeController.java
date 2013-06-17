@@ -188,6 +188,7 @@ public class PineconeController {
 		try {
 			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
 					.get("/device/" + id + "/variables", username, password);
+			int index=0;
 			for (Entity ent : vars) {
 				Variable var = (Variable) ent;
 				ArrayList<Item> itemlist = new ArrayList<Item>();
@@ -236,19 +237,21 @@ public class PineconeController {
 //				sb.append(		"</li>");
 //				sb.append(	"</ul>");
 				
-				sb.append("<div class='selector' id='uniform-undefined'><span>Usual select box</span><select onchange='changeSelect()' name='select2' class='styled' style='opacity: 0;'>");
-				sb.append("<option value='opt1'>Usual select box</option>");
-				sb.append("<option value='opt2'>Option 2</option>");
-				sb.append("<option value='opt3'>Option 3</option>");
-				sb.append("<option value='opt4'>Option 4</option>");
-				sb.append("<option value='opt5'>Option 5</option>");
-				sb.append("<option value='opt6'>Option 6</option>");
-				sb.append("<option value='opt7'>Option 7</option>");
-				sb.append("<option value='opt8'>Option 8</option>");
-				sb.append("</select></div>");
+				if(var.getType().equals(Variable.WRITE)){
+					sb.append("<select id='index"+index+"' name='select2' class='styled'>");
+				}else{
+					sb.append("<select id='index"+index+"' name='select2' class='styled'>");
+				}
+				
+				sb.append("<option value='none'>Setting</option>");
+				for(Item it:var.getItems()){
+					sb.append("<option value='"+it.getValue()+"'>"+it.getValue()+"</option>");
+				}
+				sb.append("</select>");
 				row.add(sb.toString());
 				
 				data.add(row);
+				index++;
 			}
 			
 			iTotalRecords = vars.size();

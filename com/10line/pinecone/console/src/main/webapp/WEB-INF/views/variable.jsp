@@ -79,7 +79,13 @@ window.onload = function(){
 	    ],
 		"bServerSide": true,
 		"bProcessing": true,
-		
+		"fnInitComplete": function(oSettings, json) {
+			var row = oSettings._iRecordsDisplay;
+			for(var i=0;i<row;i++){
+				$("#index"+i).select2();
+				$("#index-"+i).select2("enable",false);
+			}
+		},
 		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
     });
 	
@@ -89,8 +95,14 @@ window.onload = function(){
  	//refreshid = setInterval('refresh()',10000);
 }
 
-function changeSelect(){
-	alert("changeSelect");
+function changeSelect(variableid,value){
+	
+	alert(variable+":"+value);
+//	bootbox.confirm("Are you sure?", function(result) {
+//		if(result == true){
+//			publish(variableid,value);
+//		}
+//	});
 }
 
 function initConfig(){

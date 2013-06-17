@@ -219,22 +219,33 @@ public class PineconeController {
 				}
 				
 				StringBuilder sb = new StringBuilder();
-				sb.append(	"<ul class='table-controls'>");
-				sb.append(		"<li>");
-				sb.append(			"<div class='btn-group'>");
-				if(var.getType().equals(Variable.READ)){
-					sb.append(			"<button class='disabled btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
-				}else{
-					sb.append(			"<button class='btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
-					sb.append(			"<ul class='dropdown-men'>");
-						for(Item item:var.getItems()){
-							sb.append(		"<li><a href='#' onclick='publish('"+var.getId()+"','"+item.getValue()+"')' >"+item.getValue()+"</a></li>");
-						}
-					sb.append(			"</ul>");
-				}
-				sb.append(			"</div>");
-				sb.append(		"</li>");
-				sb.append(	"</ul>");
+//				sb.append(	"<ul class='table-controls'>");
+//				sb.append(		"<li>");
+//				sb.append(			"<div class='btn-group'>");
+//				if(var.getType().equals(Variable.READ)){
+//					sb.append(			"<button class='disabled btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
+//				}else{
+//					sb.append(			"<button class='btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
+//					sb.append(			"<ul class='dropdown-men'>");
+//						for(Item item:var.getItems()){
+//							sb.append(		"<li><a href='#' onclick='publish('"+var.getId()+"','"+item.getValue()+"')' >"+item.getValue()+"</a></li>");
+//						}
+//					sb.append(			"</ul>");
+//				}
+//				sb.append(			"</div>");
+//				sb.append(		"</li>");
+//				sb.append(	"</ul>");
+				
+				sb.append("<div class='selector' id='uniform-undefined'><span>Usual select box</span><select onchange='changeSelect()' name='select2' class='styled' style='opacity: 0;'>");
+				sb.append("<option value='opt1'>Usual select box</option>");
+				sb.append("<option value='opt2'>Option 2</option>");
+				sb.append("<option value='opt3'>Option 3</option>");
+				sb.append("<option value='opt4'>Option 4</option>");
+				sb.append("<option value='opt5'>Option 5</option>");
+				sb.append("<option value='opt6'>Option 6</option>");
+				sb.append("<option value='opt7'>Option 7</option>");
+				sb.append("<option value='opt8'>Option 8</option>");
+				sb.append("</select></div>");
 				row.add(sb.toString());
 				
 				data.add(row);

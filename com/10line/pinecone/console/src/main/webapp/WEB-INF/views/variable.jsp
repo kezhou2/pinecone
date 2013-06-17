@@ -75,10 +75,11 @@ window.onload = function(){
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
 		},
 		"aoColumnDefs": [
-	      { "bSortable": false, "aTargets": [ 0, 4 ] }
+	    	{ "bSortable": false, "aTargets": [ 0, 4 ] }
 	    ],
 		"bServerSide": true,
 		"bProcessing": true,
+		
 		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
     });
 	
@@ -86,6 +87,10 @@ window.onload = function(){
 	//initConfig();
  	
  	//refreshid = setInterval('refresh()',10000);
+}
+
+function changeSelect(){
+	alert("changeSelect");
 }
 
 function initConfig(){
@@ -166,16 +171,21 @@ function setTrend(newvalue, varid){
 }
 
 function setRefresh(time){
+	isRefreshing = true;
 	clearInterval(refreshid);
 	refreshid = setInterval('refresh()',time*1000);
 }
 
-window.onunload = function(){
-	alert("onUnload");
+function stopRefresh(){
 	if(isRefreshing){
 		clearInterval(refreshid);
+		isRefreshing = false;
 	}
-	
+}
+
+window.onunload = function(){
+	alert("onUnload");
+	stopRefresh();
 	
 	$.ajax({
  		url:'subscribedata', 

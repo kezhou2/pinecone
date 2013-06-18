@@ -105,9 +105,7 @@ window.onload = function(){
 	    ],
 		"bServerSide": true,
 		"bProcessing": true,
-		"fnInitComplete": function(oSettings, json) {
-			
-			//init select component
+		"fnDrawCallback": function( oSettings ) {
 			var row = oSettings._iRecordsDisplay;
 			for(var i=0;i<row;i++){
 				$("#index"+i).select2({

@@ -14,8 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +43,9 @@ public class PineconeController {
 
 	@Autowired
 	private MessageSource msgSrc;
+	
+	@Autowired
+	public AuthenticationManager authenticationManager;
 
 	private static PineconeApi pApi;
 
@@ -256,6 +264,44 @@ public class PineconeController {
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
 
+	}
+	
+	@RequestMapping(value = "/changepassword.html")
+	public void changePassword(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		
+		logger.info("changePassword.html");
+		System.out.println("changePassword.html");
+		
+		String oldpwd = request.getParameter("oldpassword");
+		String newpwd = request.getParameter("newpassword");
+		System.out.println("old:" + oldpwd + " new:" + newpwd);
+		boolean isSuccess = false;
+		if(password.equals(oldpwd)){		
+			try {
+				ArrayList<Entity> users = (ArrayList<Entity>) this.getRESTClient().get(
+						"/user/search/names?name=" + username, username, oldpwd);
+				if(users.size()>0){
+					User user = (User)users.get(0);
+					user.setPassword(newpwd);
+					String res = client.post("/user/"+user.getId(), user);
+					Authentication r = new UsernamePasswordAuthenticationToken(username, newpwd);
+					Authentication result = authenticationManager.authenticate(r);
+					SecurityContextHolder.getContext().setAuthentication(result);
+					isSuccess = true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		response.setCharacterEncoding("UTF-8");
+		if(isSuccess)
+			response.getWriter().write("true");
+		else
+			response.getWriter().write("false");
 	}
 	
 	

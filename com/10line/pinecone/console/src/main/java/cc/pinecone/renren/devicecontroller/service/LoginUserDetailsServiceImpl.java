@@ -35,6 +35,7 @@ public class LoginUserDetailsServiceImpl implements LoginUserDetailsService {
 			grantedAuthorityImpl.setDelegate(u);
 			return u;
 		}
+		
 		return null;
 	}
 }

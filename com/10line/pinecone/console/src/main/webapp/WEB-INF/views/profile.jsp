@@ -148,7 +148,7 @@ String username = (String)request.getSession().getAttribute("username");
 	                <div class="tabbable">
 	                    <div class="tab-content">
 	                    	<div class="tab-pane fade active in" id="tab5">
-	                       		<form id="validate" class="form-horizontal" action="#" method="post">
+	                       		<form id="validate" class="form-horizontal" action="changepassword.html" method="post">
 			                        <fieldset>
 			                            <div class="step-title">
 			                            	<i>1</i>
@@ -158,15 +158,15 @@ String username = (String)request.getSession().getAttribute("username");
 								    	<div>
 				                            <div class="control-group">
 				                                <label class="control-label">old password:</label>
-				                                <div class="controls"><input type="password" name="oldpassword" class="validate[required] span12"></div>
+				                                <div class="controls"><input id="oldpassword" type="password" name="oldpassword" class="validate[required] span12"></div>
 				                            </div>
 				                            <div class="control-group">
 				                                <label class="control-label">new password:</label>
-				                                <div class="controls"><input type="password" name="newpassword" class="validate[required] span12 ui-wizard-content"></div>
+				                                <div class="controls"><input id="newpassword" type="password" name="newpassword" class="validate[required] span12 ui-wizard-content"></div>
 				                            </div>
 				                            <div class="control-group">
 				                                <label class="control-label">confirm new password:</label>
-				                                <div class="controls"><input type="password" name="confirmpassword" class="validate[required,equals[newpassword]] span12 ui-wizard-content"></div>
+				                                <div class="controls"><input id="confirmpassword" type="password" name="confirmpassword" class="validate[required,equals[newpassword]] span12 ui-wizard-content"></div>
 				                            </div>
 				                        </div>
 			                        </fieldset>

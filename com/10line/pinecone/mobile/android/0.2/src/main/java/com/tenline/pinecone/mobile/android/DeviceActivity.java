@@ -64,9 +64,7 @@ public class DeviceActivity extends AbstractListActivity {
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-		case R.id.device_activate: showDialog(ActivateDeviceDialogBuilder.DIALOG_ID); break;
-		case R.id.user_logout: new LogoutTask(this).execute(); break;}
+		switch(item.getItemId()) {case R.id.device_activate: showDialog(ActivateDeviceDialogBuilder.DIALOG_ID); break;}
 		return super.onOptionsItemSelected(item);
 	}
 	

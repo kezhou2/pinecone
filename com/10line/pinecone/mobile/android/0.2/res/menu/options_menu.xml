@@ -4,12 +4,14 @@
         <item android:id="@+id/user_logout" 
         	android:icon="@android:drawable/ic_menu_close_clear_cancel" 
         	android:orderInCategory="2" 
-        	android:title="@string/user_logout"/>
+        	android:title="@string/user_logout"
+        	android:showAsAction="ifRoom"/>
     </group>
     <group android:id="@+id/device_items">
         <item android:id="@+id/device_activate" 
         	android:icon="@android:drawable/ic_menu_rotate" 
         	android:orderInCategory="1" 
-        	android:title="@string/device_activate"/>
+        	android:title="@string/device_activate"
+        	android:showAsAction="always"/>
     </group>
 </menu>

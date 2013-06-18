@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 
 /**
  * @author Bill
@@ -41,12 +40,6 @@ public abstract class AbstractMessageActivity extends AbstractListActivity {
 	@Override
     public boolean onPrepareOptionsMenu(Menu menu) {
     	menu.setGroupVisible(R.id.device_items, false); return super.onPrepareOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {case R.id.user_logout: new LogoutTask(this).execute(); break;}
-		return super.onOptionsItemSelected(item);
 	}
 
 }

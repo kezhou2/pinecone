@@ -14,6 +14,7 @@ import com.tenline.pinecone.platform.model.User;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -28,6 +29,7 @@ public class RegisterActivity extends AbstractActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); setContentView(R.layout.register);
+		getActionBar().setDisplayHomeAsUpEnabled(true); getActionBar().setHomeButtonEnabled(true); 
         final FormEditText userEmail = (FormEditText) findViewById(R.id.user_email_input);
         final FormEditText userName = (FormEditText) findViewById(R.id.user_name_input);
         final FormEditText userPassword = (FormEditText) findViewById(R.id.user_password_input);
@@ -45,6 +47,12 @@ public class RegisterActivity extends AbstractActivity {
 			}
         	
         });
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {case android.R.id.home: finish(); break;}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	/**

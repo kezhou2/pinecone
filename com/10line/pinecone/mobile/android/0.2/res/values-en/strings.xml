@@ -5,6 +5,8 @@
     <string name="app_name">Pinecone</string>
     <string name="app_slogan">Internet of Things App Platform</string>
     <string name="app_url">http://www.pinecone.cc</string>
+    <string name="app_device_tab">device</string>
+    <string name="app_alarm_tab">alarm</string>
     
     <!-- App Operations -->
     <string name="app_ok">OK</string>

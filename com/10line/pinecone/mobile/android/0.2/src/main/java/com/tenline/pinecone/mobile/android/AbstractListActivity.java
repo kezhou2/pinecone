@@ -10,6 +10,10 @@ import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.service.RESTTask;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,13 +22,14 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SimpleAdapter.ViewBinder;
 
 /**
  * @author Bill
  *
  */
-public abstract class AbstractListActivity extends ListActivity implements ViewBinder {
+public abstract class AbstractListActivity extends ListActivity implements ViewBinder, TabListener {
 
 	private NetworkReceiver receiver = new NetworkReceiver();
 	
@@ -35,6 +40,10 @@ public abstract class AbstractListActivity extends ListActivity implements ViewB
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); Log.i(getClass().getSimpleName(), "onCreate");
+		getActionBar().setDisplayHomeAsUpEnabled(true); getActionBar().setHomeButtonEnabled(true); 
+		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	    getActionBar().addTab(getActionBar().newTab().setText(R.string.app_device_tab).setTabListener(this));
+	    getActionBar().addTab(getActionBar().newTab().setText(R.string.app_alarm_tab).setTabListener(this));
         if (!restHelper.isBound()) bindService(new Intent(this, RESTService.class), restHelper, Context.BIND_AUTO_CREATE);
         IntentFilter filter = new IntentFilter(); filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION); registerReceiver(receiver, filter);
     }
@@ -42,6 +51,14 @@ public abstract class AbstractListActivity extends ListActivity implements ViewB
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.options_menu, menu); return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.user_logout: new LogoutTask(this).execute(); break;
+		case android.R.id.home: finish(); break;}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
@@ -123,6 +140,24 @@ public abstract class AbstractListActivity extends ListActivity implements ViewB
 			// TODO Auto-generated method stub
 			buildListAdapter(result); super.onPostExecute(result);
 		}
+		
+	}
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
 		
 	}
 

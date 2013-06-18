@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/item_icon"
-        android:src="@android:drawable/star_on"
+        android:src="@android:drawable/presence_online"
         android:paddingLeft="6dip"/>
     
     <TextView android:id="@+id/item_value"

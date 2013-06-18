@@ -122,7 +122,7 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 		// TODO Auto-generated method stub
 		Variable variable = (Variable) data; view.setId(Long.valueOf(variable.getId()).intValue());
 		if (variable.getType().contains(Variable.WRITE)) {
-			view.setClickable(false); ((ImageView) view.findViewById(R.id.variable_icon)).setImageResource(android.R.drawable.star_on);
+			view.setClickable(false); ((ImageView) view.findViewById(R.id.variable_icon)).setImageResource(android.R.drawable.presence_online);
 		} else view.setClickable(true); ((TextView) view.findViewById(R.id.variable_name)).setText(variable.getName()); return true;
 	}
 

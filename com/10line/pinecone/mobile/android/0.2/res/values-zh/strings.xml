@@ -5,6 +5,8 @@
     <string name="app_name">松果网</string>
     <string name="app_slogan">物联网应用平台</string>
     <string name="app_url">http://www.pinecone.cc</string>
+    <string name="app_device_tab">设备</string>
+    <string name="app_alarm_tab">报警</string>
     
     <!-- App Operations -->
     <string name="app_ok">确定</string>

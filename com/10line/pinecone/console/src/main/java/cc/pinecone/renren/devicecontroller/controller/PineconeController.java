@@ -220,32 +220,16 @@ public class PineconeController {
 				}
 				
 				StringBuilder sb = new StringBuilder();
-//				sb.append(	"<ul class='table-controls'>");
-//				sb.append(		"<li>");
-//				sb.append(			"<div class='btn-group'>");
-//				if(var.getType().equals(Variable.READ)){
-//					sb.append(			"<button class='disabled btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
-//				}else{
-//					sb.append(			"<button class='btn dropdown-toggle' data-toggle='dropdown'>Setting <span class='caret dd-caret'></span></button>");
-//					sb.append(			"<ul class='dropdown-men'>");
-//						for(Item item:var.getItems()){
-//							sb.append(		"<li><a href='#' onclick='publish('"+var.getId()+"','"+item.getValue()+"')' >"+item.getValue()+"</a></li>");
-//						}
-//					sb.append(			"</ul>");
-//				}
-//				sb.append(			"</div>");
-//				sb.append(		"</li>");
-//				sb.append(	"</ul>");
-				
 				if(var.getType().equals(Variable.WRITE)){
 					sb.append("<select id='index"+index+"' name='select2' class='styled'>");
 				}else{
-					sb.append("<select id='index"+index+"' name='select2' class='styled'>");
+					sb.append("<select id='index-"+index+"' name='select2' class='styled'>");
+					sb.append("<option value=''>None</option>");
 				}
 				
-				sb.append("<option value='none'>Setting</option>");
+				sb.append("<option></option>");
 				for(Item it:var.getItems()){
-					sb.append("<option value='"+it.getValue()+"'>"+it.getValue()+"</option>");
+					sb.append("<option value='"+var.getId()+"_"+it.getValue()+"'>"+it.getValue()+"</option>");
 				}
 				sb.append("</select>");
 				row.add(sb.toString());

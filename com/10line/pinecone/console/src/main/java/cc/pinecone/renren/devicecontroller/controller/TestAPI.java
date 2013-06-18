@@ -41,12 +41,12 @@ public class TestAPI {
 //			api.test();
 //			api.activeDevice("26", "19");
 //			api.getUserData("admin");
-			api.createDevice();
+//			api.createDevice();
 //			api.getAllDevice();
 //			api.getAllUser();
 //			api.getAllUser();
 			
-//			api.testChannel();
+			api.testChannel();
 //			api.test();
 			
 		} catch (Exception e) {

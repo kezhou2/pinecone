@@ -61,53 +61,9 @@ var refreshid;
 var isConnected = false;
 var trendvalue = new Array();
 var TREND_LEN = 10;
-window.onload = function(){
-	$("#variablelist").dataTable({
-		"bJQueryUI": false,
-		"bAutoWidth": false,
-		"bFilter": false,
-		"bPaginate": false,
-		"sPaginationType": "full_numbers",
-		"oLanguage": {
-			"sProcessing": "Loading...",
-			"sSearch": "<span>Filter records:</span> _INPUT_",
-			"sLengthMenu": "<span>Show entries:</span> _MENU_",
-			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
-		},
-		"aoColumnDefs": [
-	    	{ "bSortable": false, "aTargets": [ 0, 4 ] }
-	    ],
-		"bServerSide": true,
-		"bProcessing": true,
-		"fnInitComplete": function(oSettings, json) {
-			var row = oSettings._iRecordsDisplay;
-			for(var i=0;i<row;i++){
-				$("#index"+i).select2();
-				$("#index-"+i).select2("enable",false);
-			}
-		},
-		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
-    });
-	
-	//get variable id need to refresh
-	//initConfig();
- 	
- 	//refreshid = setInterval('refresh()',10000);
-}
-
-function changeSelect(variableid,value){
-	
-	alert(variable+":"+value);
-//	bootbox.confirm("Are you sure?", function(result) {
-//		if(result == true){
-//			publish(variableid,value);
-//		}
-//	});
-}
-
 function initConfig(){
 	//get all variable ids;
-    $('table td').each(function(){
+    $("strong").each(function(){
     	var id = $(this).attr('varid');
     	
      	if(id != null){
@@ -129,6 +85,54 @@ function initConfig(){
  		
  		trendvalue[varids[i]] = new Array();
  	}
+}
+
+window.onload = function(){
+	$("#variablelist").dataTable({
+		"bJQueryUI": false,
+		"bAutoWidth": false,
+		"bFilter": false,
+		"bPaginate": false,
+		"sPaginationType": "full_numbers",
+		"oLanguage": {
+			"sProcessing": "Loading...",
+			"sSearch": "<span>Filter records:</span> _INPUT_",
+			"sLengthMenu": "<span>Show entries:</span> _MENU_",
+			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
+		},
+		"aoColumnDefs": [
+	    	{ "bSortable": false, "aTargets": [ 4, 5 ] }
+	    ],
+		"bServerSide": true,
+		"bProcessing": true,
+		"fnInitComplete": function(oSettings, json) {
+			
+			//init select component
+			var row = oSettings._iRecordsDisplay;
+			for(var i=0;i<row;i++){
+				$("#index"+i).select2({
+					placeholder: 'Setting'
+				});
+				$("#index"+i).on("change", function(e) {
+					var splits = e.val.split("_");
+					if(splits.length >=2){
+						publish(splits[0],splits[1]);
+					}
+				});
+				
+				//disable
+				$("#index-"+i).select2({
+					placeholder: "Setting"
+				});
+				$("#index-"+i).attr("disabled","disabled");
+			}
+			
+			//init background thread
+			initConfig();
+			setRefresh(2);
+		},
+		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
+    });
 }
 
 function refresh(){
@@ -158,7 +162,7 @@ function refresh(){
  					var tmp = splits[n].split(":");
  					var id = tmp[0];
  					var value = tmp[1];
- 					$("td[varid='"+id+"']>strong").text(value);
+ 					$("strong[varid='"+id+"']").text(value);
  					
  					setTrend(value,id);
  				}
@@ -179,13 +183,13 @@ function setTrend(newvalue, varid){
 		trendvalue[varid].shift();
 		
 	trendvalue[varid].push(newvalue);
-	$("td[trendid='"+varid+"']>span").sparkline(trendvalue[varid]);
+	$("span[varid='"+varid+"']").sparkline(trendvalue[varid]);
 }
 
 function setRefresh(time){
 	isRefreshing = true;
 	clearInterval(refreshid);
-	refreshid = setInterval('refresh()',time*1000);
+	refreshid = setInterval("refresh()",time*1000);
 }
 
 function stopRefresh(){
@@ -338,7 +342,7 @@ function publish(varid, value){
                         </div>
                     </div>
                     <div class="table-overflow">
-                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" deviceid="${device.id}">
+                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" deviceid="${device.code}">
                             <thead>
                                 <tr>
                                 	<th>ID</th>

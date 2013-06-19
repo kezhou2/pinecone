@@ -19,6 +19,7 @@ import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
+import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
 /**
@@ -29,8 +30,6 @@ public class PageController {
 
 	@Autowired
 	private MessageSource msgSrc;
-	
-	
 	
 	private static PineconeApi pApi;
 	
@@ -139,8 +138,15 @@ public class PageController {
 	public String profile(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("profile.html");
 		System.out.println("profile.html");
-		String userid = request.getParameter("userid");
-		//TODO
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		
+		User user = this.getPineconeAPI().login(username, password);
+		
+		request.setAttribute("myname", user.getName());
+		request.setAttribute("myemail", user.getEmail());
 		response.setCharacterEncoding("UTF-8");
 		return "profile";
 	}

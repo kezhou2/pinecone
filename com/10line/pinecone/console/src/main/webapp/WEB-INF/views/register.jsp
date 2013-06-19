@@ -8,7 +8,6 @@
 <link rel="shortcut icon" href="img/favicon.ico" ce_href="img/favicon.ico" type="image/x-icon">
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <!--[if IE 8]><link href="css/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
-<!--[if IE 9]><link href="css/ie9.css" rel="stylesheet" type="text/css" /><![endif]-->
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -45,16 +44,12 @@
 <script type="text/javascript" src="js/plugins/forms/jquery.form.wizard.js"></script>
 <script type="text/javascript" src="js/plugins/forms/jquery.form.js"></script>
 
-<script type="text/javascript" src="js/globalize/globalize.js"></script>
-<script type="text/javascript" src="js/globalize/globalize.culture.de-DE.js"></script>
-<script type="text/javascript" src="js/globalize/globalize.culture.ja-JP.js"></script>
-
 <script type="text/javascript" src="js/plugins/tables/jquery.dataTables.min.js"></script>
-
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
-
 <script type="text/javascript" src="js/files/functions.js"></script>
+<script type="text/javascript">
 
+</script>
 </head>
 
 <body class="no-background">

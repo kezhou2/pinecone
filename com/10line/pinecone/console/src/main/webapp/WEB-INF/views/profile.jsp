@@ -49,19 +49,29 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
-function disconnect(id){
-	bootbox.confirm("Are you sure?", function(result) {
-		if(result == true){
-			$.get("disconnectdevice.html?id="+id,function(result){
-				if(result == 'true'){
-					$.jGrowl('Disconnected the device!', { sticky: true, theme: 'growl-success', life:5000});
-					window.location.reload();
-				}else{
-					$.jGrowl('Failure in disconnecting the device!', { sticky: true, theme: 'growl-error', life:5000});
-				}
-			});	
-	  }
-	});
+window.onload = function(){	
+	var isChangedPwd = <%=(String)request.getAttribute("changePwd")%>;
+	if(isChangedPwd != null){
+		if(isChangedPwd){
+			$.jGrowl('Your password is changed!', { sticky: true, theme: 'growl-success', life:5});
+		}else{
+			$.jGrowl('Failure in changing password!', { sticky: true, theme: 'growl-error', life:5});
+		}
+	}
+	
+	var isChangeProfile = <%=(String)request.getAttribute("changeProfile")%>;
+	if(isChangeProfile != null){
+		$("li[id='mchangepassword']").toggleClass("active");
+		$("li[id='mchangeprofile']").toggleClass("active");
+		$("#tab5").toggleClass("active in");
+		$("#tab6").toggleClass("active in");
+		
+		if(isChangeProfile){
+			$.jGrowl('Your profile is changed!', { sticky: true, theme: 'growl-success', life:5});
+		}else{
+			$.jGrowl('Failure in changing your profile!', { sticky: true, theme: 'growl-error', life:5});
+		}
+	}
 }
 </script>
 <%-- <%
@@ -140,8 +150,8 @@ String username = (String)request.getSession().getAttribute("username");
 	                	<div class="navbar-inner">
 	                    	<h6>User Profile Editor</h6>
 	                        <ul class="nav nav-tabs pull-right">
-		                        <li class="active"><a href="#tab5" data-toggle="tab">Password</a></li>
-		                        <li class=""><a href="#tab6" data-toggle="tab">Profile</a></li>
+		                        <li id="mchangepassword" class="active"><a href="#tab5" data-toggle="tab">Password</a></li>
+		                        <li id="mchangeprofile" class=""><a href="#tab6" data-toggle="tab">Profile</a></li>
 	                        </ul>
 	                	</div>
 	              	</div>
@@ -168,6 +178,8 @@ String username = (String)request.getSession().getAttribute("username");
 				                                <label class="control-label">confirm new password:</label>
 				                                <div class="controls"><input id="confirmpassword" type="password" name="confirmpassword" class="validate[required,equals[newpassword]] span12 ui-wizard-content"></div>
 				                            </div>
+				                            <input type="text" name="myname" value="${myname}" style="visibility: hidden;">
+				                            <input type="text" name="myemail" value="${myemail}" style="visibility: hidden;">
 				                        </div>
 			                        </fieldset>
 			                        <div class="form-actions align-right">
@@ -177,7 +189,7 @@ String username = (String)request.getSession().getAttribute("username");
 			                    </form>
 							</div>
 	                   	    <div class="tab-pane fade" id="tab6">
-	                   	    	<form id="validate" class="form-horizontal" action="#" method="post">
+	                   	    	<form id="validate" class="form-horizontal" action="changeprofile.html" method="post">
 			                        <fieldset>
 			                            <div class="step-title">
 			                            	<i>1</i>
@@ -187,11 +199,11 @@ String username = (String)request.getSession().getAttribute("username");
 								    	<div>
 				                            <div class="control-group">
 				                                <label class="control-label">Username:</label>
-				                                <div class="controls"><input type="text" name="username" class="span12 ui-wizard-content"></div>
+				                                <div class="controls"><input type="text" name="username" class="span12 ui-wizard-content" value="${myname}"></div>
 				                            </div>
 				                            <div class="control-group">
 				                                <label class="control-label">Email:</label>
-				                                <div class="controls"><input type="text" class="span12 ui-wizard-content"></div>
+				                                <div class="controls"><input type="text" name="email" class="span12 ui-wizard-content" value="${myemail}"></div>
 				                            </div>
 				                        </div>
 			                        </fieldset>

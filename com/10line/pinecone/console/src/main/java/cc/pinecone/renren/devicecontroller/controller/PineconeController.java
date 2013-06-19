@@ -267,7 +267,7 @@ public class PineconeController {
 	}
 	
 	@RequestMapping(value = "/changepassword.html")
-	public void changePassword(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public String changePassword(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
@@ -277,6 +277,8 @@ public class PineconeController {
 		
 		String oldpwd = request.getParameter("oldpassword");
 		String newpwd = request.getParameter("newpassword");
+		String myname = request.getParameter("myname");
+		String myemail = request.getParameter("myemail");
 		System.out.println("old:" + oldpwd + " new:" + newpwd);
 		boolean isSuccess = false;
 		if(password.equals(oldpwd)){		
@@ -297,12 +299,54 @@ public class PineconeController {
 			}
 		}
 		
-		response.setCharacterEncoding("UTF-8");
+		
 		if(isSuccess)
-			response.getWriter().write("true");
+			request.setAttribute("changePwd", "true");
 		else
-			response.getWriter().write("false");
+			request.setAttribute("changePwd", "false");
+
+		request.setAttribute("myname", myname);
+		request.setAttribute("myemail", myemail);
+		return "profile";
 	}
 	
-	
+	@RequestMapping(value = "/changeprofile.html")
+	public String changeProfile(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		
+		logger.info("changeProfile.html");
+		System.out.println("changeProfile.html");
+		
+		String name = request.getParameter("username");
+		String email = request.getParameter("email");
+		System.out.println("name:"+name+"|email:"+email);
+
+		boolean isSuccess = false;
+		try {
+			ArrayList<Entity> users = (ArrayList<Entity>) this.getRESTClient().get(
+					"/user/search/names?name=" + username, username, password);
+			if(users.size()>0){
+				User user = (User)users.get(0);
+				user.setName(name);
+				user.setPassword(password);
+				user.setEmail(email);
+				String res = client.post("/user/"+user.getId(), user);
+				System.out.println(res);
+				isSuccess = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(isSuccess)
+			request.setAttribute("changeProfile", "true");
+		else
+			request.setAttribute("changeProfile", "false");
+
+		request.setAttribute("myname", name);
+		request.setAttribute("myemail", email);
+		return "profile";
+	}
 }

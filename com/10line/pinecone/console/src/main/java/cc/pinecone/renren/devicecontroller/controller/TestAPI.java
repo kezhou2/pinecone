@@ -46,8 +46,10 @@ public class TestAPI {
 //			api.getAllUser();
 //			api.getAllUser();
 			
-			api.testChannel();
+//			api.testChannel();
 //			api.test();
+			
+			api.modifyUser();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,6 +68,12 @@ public class TestAPI {
 		device.setName("Device for Test");
 		device.setCode(UUID.randomUUID().toString());
 		client = new RESTClient(baseUrl);
+	}
+	
+	public void modifyUser() throws Exception{
+		User user = (User) client.get("/user/21", "admin", "admin").toArray()[0];
+		user.setPassword("liugy");
+		System.out.println(client.post("/user/"+user.getId(), user));
 	}
 	
 	public void test() throws Exception{
@@ -91,18 +99,18 @@ public class TestAPI {
 //		System.out.println(authority.getId().toString());
 //		System.out.println(authority.getAuthority());
 //		System.out.println(client.post("/authority/" + authority.getId() + "/user", "/user/" + user.getId()));	
-		System.out.println("---------- Device Test Case ----------");
-		device.setId(Long.valueOf(client.post("/device", device)));
-		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
-		System.out.println("device id:"+device.getId().toString());
-		System.out.println("device name:"+device.getName());
-		System.out.println("device code:"+device.getCode());
-		device.setName("FM");
-		System.out.println(client.put("/device/" + device.getId(), device));
-		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
-		System.out.println(device.getId().toString());
-		System.out.println(device.getName());
-		System.out.println(device.getCode());
+//		System.out.println("---------- Device Test Case ----------");
+//		device.setId(Long.valueOf(client.post("/device", device)));
+//		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
+//		System.out.println("device id:"+device.getId().toString());
+//		System.out.println("device name:"+device.getName());
+//		System.out.println("device code:"+device.getCode());
+//		device.setName("FM");
+//		System.out.println(client.put("/device/" + device.getId(), device));
+//		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
+//		System.out.println(device.getId().toString());
+//		System.out.println(device.getName());
+//		System.out.println(device.getCode());
 //		System.out.println(client.post("/device/" + device.getId() + "/user", "/user/" + user.getId()));	
 //		System.out.println("----------- Test Case End ---------");
 //		client.get("/user/" + user.getId() + "/devices", user.getName(), "123456");

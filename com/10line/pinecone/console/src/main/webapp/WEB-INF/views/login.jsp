@@ -93,7 +93,7 @@ window.onload = function(){
 
                 <div class="login-btn">
                 	<input name="submit" type="submit" value="Log me in" class="btn btn-danger btn-block" />
-                	<div class="controls"><a href="#">Register to be user→</a></div>
+                	<div class="controls"><a href="register.html">Register to be user→</a></div>
                 </div>
             </form>
         </div>

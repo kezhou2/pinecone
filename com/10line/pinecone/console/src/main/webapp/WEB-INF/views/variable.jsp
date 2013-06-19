@@ -71,9 +71,7 @@ function initConfig(){
      	}
 	})
 	
-	devid = $('#variablelist').attr('deviceid');
-    //alert("device id:"+devid);
-	
+	devid = $('#variablelist').attr('deviceid');	
 	//generate request json
  	jsonData = "[";
  	for(var i=0;i<varids.length;i++){
@@ -331,6 +329,7 @@ function publish(varid, value){
                         	<div class="nav pull-right">
                                 <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
                                 <ul class="dropdown-menu pull-right">
+                                	<li><a href="#" onclick="setRefresh(1000)">Stop</a></li>
                                 	<li><a href="#" onclick="setRefresh(2)">2s</a></li>
                                     <li><a href="#" onclick="setRefresh(10)">10s</a></li>
 	                                <li><a href="#" onclick="setRefresh(30)">30s</a></li>

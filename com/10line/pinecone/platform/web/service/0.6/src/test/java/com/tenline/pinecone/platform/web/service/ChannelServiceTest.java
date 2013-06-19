@@ -41,7 +41,7 @@ public class ChannelServiceTest extends AbstractServiceTest implements MqttCallb
 	
 	@Test
 	public void test() throws Exception {
-		client.publish("Hello World");
+		client.publish(topic, "Hello World");
 	}
 
 	@Override

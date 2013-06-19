@@ -54,6 +54,7 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 					Intent intent = new Intent(ItemActivity.ACTIVITY_ACTION);
 					intent.putExtra("variableId", String.valueOf(view.getId()));
 					intent.putExtra("variableName", ((TextView) view.findViewById(R.id.variable_name)).getText());
+					intent.putExtra("deviceCode", getIntent().getStringExtra("deviceCode"));
 					startActivity(intent);
 				}
 			}
@@ -73,7 +74,7 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 			// TODO Auto-generated method stub
 			try {
 				while (!channelHelper.isBound()) {Thread.sleep(100);} 
-				getChannelService().listen(VariableActivity.this, "pinecone@device." + params[0]); return true;
+				getChannelService().listen(VariableActivity.this, "pinecone@device." + params[0] + ".publish"); return true;
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
 		}
 		

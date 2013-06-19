@@ -31,8 +31,9 @@ public class ItemSettingDialogBuilder extends AbstractDialogBuilder {
 				// TODO Auto-generated method stub
 				String variableId = activity.getIntent().getStringExtra("variableId");
 				String variableValue = activity.getIntent().getStringExtra("itemValue");
+				String deviceCode = activity.getIntent().getStringExtra("deviceCode");
 				dialog.cancel(); activity.finish();
-				if (activity.isFinishing()) {activity.new PublishToChannelTask().execute(variableId, variableValue);}
+				if (activity.isFinishing()) {activity.new PublishToChannelTask().execute(variableId, variableValue, deviceCode);}
 			}
 			
 		});

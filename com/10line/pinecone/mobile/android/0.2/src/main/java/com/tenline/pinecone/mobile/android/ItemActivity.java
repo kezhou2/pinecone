@@ -67,7 +67,7 @@ public class ItemActivity extends AbstractMessageActivity {
 			try {
 				ObjectNode node = mapper.createObjectNode();
 				node.put("id", params[0]); node.put("value", params[1]);
-				getChannelService().publish(mapper.writeValueAsString(node)); return true;
+				getChannelService().publish("pinecone@device." + params[2] + ".subscribe", mapper.writeValueAsString(node)); return true;
 			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage()); return false;}
 		}
 		

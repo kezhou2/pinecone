@@ -82,10 +82,11 @@ public class ChannelService extends AbstractService {
 	
 	/**
 	 * 
+	 * @param topic
 	 * @param payload
 	 * @throws Exception
 	 */
-	public void publish(String payload) throws Exception {
+	public void publish(String topic, String payload) throws Exception {
     	client.getTopic(topic).publish(new MqttMessage(payload.getBytes())).waitForCompletion();
     }
 	

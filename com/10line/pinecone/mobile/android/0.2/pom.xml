@@ -111,6 +111,9 @@
             <debug>false</debug>
           </sign>
           <undeployBeforeDeploy>true</undeployBeforeDeploy>
+          <zipalign>
+            <skip>false</skip>
+          </zipalign>
         </configuration>
         <extensions>true</extensions>
         <executions>

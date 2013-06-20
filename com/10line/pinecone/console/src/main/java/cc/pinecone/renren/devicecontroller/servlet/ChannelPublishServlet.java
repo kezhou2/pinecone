@@ -34,12 +34,15 @@ public class ChannelPublishServlet extends HttpServlet{
 		System.out.println("recived:"+varid);
 		String value = req.getParameter("vvalue");
 		System.out.println("recived:"+value);
+		//here acturally received device code from the jsp page.
 		String deviceid = req.getParameter("deviceid");
 		System.out.println("recived:"+deviceid);
 		
 		if(connectorMap.get(deviceid) == null){
 			try {
-				Connector con = new Connector(deviceid);
+//				Connector con = new Connector(deviceid,"pinecone@device."+deviceid+".publish");
+				//FIXME need to change back.
+				Connector con = new Connector(deviceid,"pinecone@device."+deviceid);
 				connectorMap.put(deviceid, con);
 				
 			} catch (Exception e) {

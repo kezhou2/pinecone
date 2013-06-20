@@ -88,7 +88,7 @@ window.onload = function(){
                 </div>
 
                 <div id="remember_input" class="control-group">
-                    <div class="controls"><label class="checkbox inline"><input type="checkbox" name="_spring_security_remember_me" class="styled" value="" checked="checked">Remember me</label></div>
+                    <div class="controls"><label class="checkbox inline"><input id="_spring_security_remember_me" type="checkbox" name="_spring_security_remember_me" class="styled" value="true" checked="checked">Remember me</label></div>
                 </div>
 
                 <div class="login-btn">

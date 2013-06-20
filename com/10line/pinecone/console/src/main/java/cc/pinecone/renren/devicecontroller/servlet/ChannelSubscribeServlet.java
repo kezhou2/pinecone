@@ -44,6 +44,7 @@ public class ChannelSubscribeServlet extends HttpServlet {
 		System.out.println("isDisconnect========================"+isDisconnect);
 		String ids = req.getParameter("ids");
 		System.out.println("recived:"+ids);
+		//here acturally received device code from the jsp page.
 		String deviceid = req.getParameter("deviceid");
 		System.out.println("recived:"+deviceid);
 		if(isDisconnect != null && isDisconnect.equals("true")){
@@ -64,7 +65,7 @@ public class ChannelSubscribeServlet extends HttpServlet {
 		
 		if(connectorMap.get(deviceid) == null){
 			try {
-				Connector con = new Connector(deviceid);
+				Connector con = new Connector(deviceid,"pinecone@device."+deviceid+".subscribe");
 				connectorMap.put(deviceid, con);
 				
 				Object obj = JSONValue.parse(ids);

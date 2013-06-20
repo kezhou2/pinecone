@@ -27,6 +27,13 @@ public class Connector implements MqttCallback{
 		//TODO
 		this.client.listen(this, "pinecone@device."+deviceid);
 	}
+	
+	public Connector(String deviceid, String topic) throws Exception{
+		values = new LinkedHashMap<String,String>();
+		
+		this.client = new ChannelClient(AppConfig.CHANNEL_URL);
+		this.client.listen(this, topic);
+	}
 
 	@Override
 	public void connectionLost(Throwable arg0) {

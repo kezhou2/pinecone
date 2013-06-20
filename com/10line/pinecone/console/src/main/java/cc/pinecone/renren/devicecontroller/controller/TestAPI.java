@@ -40,7 +40,7 @@ public class TestAPI {
 //			api.createUser();
 //			api.test();
 //			api.activeDevice("26", "19");
-//			api.getUserData("admin");
+			api.getUserData("liugy");
 //			api.createDevice();
 //			api.getAllDevice();
 //			api.getAllUser();
@@ -49,7 +49,7 @@ public class TestAPI {
 //			api.testChannel();
 //			api.test();
 			
-			api.modifyUser();
+//			api.modifyUser();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

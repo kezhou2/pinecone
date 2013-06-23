@@ -1,5 +1,6 @@
 package cc.pinecone.renren.devicecontroller.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import org.json.simple.JSONObject;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 import cc.pinecone.renren.devicecontroller.controller.TestAPI;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
@@ -37,6 +39,8 @@ public class QueryDeviceServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
+		//get user name ,password, userid
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) req.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
 		System.out.println("Username:" + username);  
@@ -49,6 +53,12 @@ public class QueryDeviceServlet extends HttpServlet {
 			userid = lud.getUserid();
 		}
 		
+		//get user config
+		String path =  req.getSession().getServletContext().getRealPath("/");
+		System.out.println("path:"+path);
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		//get request parameter from http request
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(req);
 		
 		String sEcho = param.sEcho;
@@ -129,11 +139,19 @@ public class QueryDeviceServlet extends HttpServlet {
 			row.add(c.getId());
 			row.add(c.getName());
 			row.add(c.getCode());
-			row.add("<ul class='table-controls'>"+
-						"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='ico-eye-open'></i></a></li>"+
-						"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' ico-minus'></i></a></li>"+
-						"<li><a href='#' class='btn tip' title='Share'><i class='ico-share'></i></a></li>"+
-					"</ul>");
+			if(conf.getDevice(""+c.getId()) == null){
+				row.add("<ul class='table-controls'>"+
+							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
+							"<li><a href='#' class='btn tip' title='Share'><i class='icon-star-empty'></i></a></li>"+
+						"</ul>");
+			}else{
+				row.add("<ul class='table-controls'>"+
+							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
+							"<li><a href='#' class='btn tip' title='Share'><i class='icon-star'></i></a></li>"+
+						"</ul>");
+			}
 			data.add(row);
 		}
 		jsonResponse.put("aaData", data);

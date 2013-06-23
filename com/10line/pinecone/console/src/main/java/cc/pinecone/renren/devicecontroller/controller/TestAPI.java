@@ -40,7 +40,7 @@ public class TestAPI {
 //			api.createUser();
 //			api.test();
 //			api.activeDevice("26", "19");
-			api.getUserData("liugy");
+//			api.getUserData("liugy");
 //			api.createDevice();
 //			api.getAllDevice();
 //			api.getAllUser();
@@ -50,6 +50,10 @@ public class TestAPI {
 //			api.test();
 			
 //			api.modifyUser();
+			
+			String a = "abcdefg";
+			
+			System.out.println(a.indexOf("cde", 0));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

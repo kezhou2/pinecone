@@ -1,104 +1,242 @@
 package cc.pinecone.renren.devicecontroller.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+import cc.pinecone.renren.devicecontroller.model.FocusDevice;
+import cc.pinecone.renren.devicecontroller.model.FocusVariable;
 
 public class Config {
-	private JSONArray focusJson;
-	private JSONArray alermJson;
 	
-	private Properties conf;
+	private static Map<String, Config> map = new LinkedHashMap<String,Config>(); 
 	
-	private final String KEY_FOCUS = "pinecone.focus";
-	private final String KEY_ALERM = "pinecone.alerm";
+	private Document doc;
 	
 	private String CONFIG_FILE;
-	private final String CACHE_FOLDER = "config-cache"; 
+ 	
+	public static Config getInstance(String userid, String configPath){
+		if(map.get(userid) == null){
+			try {
+				File file = new File(configPath);
+				if(!file.exists())
+					file.mkdir();
+				Config conf = new Config(configPath+File.separatorChar+userid+".xml");
+				map.put(userid, conf);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return map.get(userid);
+	}
 	
-	public Config(String userid) throws FileNotFoundException, IOException, ParseException{
+	private Config(String filePath) throws DocumentException{
 		
-		String path = this.getClass().getClassLoader().getResource("/").getPath();
-		File pathFile = new File(path);
-		CONFIG_FILE = pathFile.getParentFile().getParentFile().getAbsolutePath()+File.separatorChar+CACHE_FOLDER+File.separatorChar+userid+".properties";
-		
-		conf = new Properties();
+		CONFIG_FILE = filePath;
 		
 		File confFile = new File(CONFIG_FILE);
 		if(!confFile.exists()){
-			confFile.createNewFile();
+			doc = DocumentHelper.createDocument();
+			doc.addElement("configuration");
 		}else{
-			conf.load(new FileInputStream(CONFIG_FILE));
-			String focus = conf.getProperty("pinecone.focus");
-			String alerm = conf.getProperty("pinecone.alerm");
-			
-			JSONParser parser = new JSONParser();
-			if(focus != null){
-				focusJson = (JSONArray)parser.parse(focus);	
-			}
-			
-			if(alerm != null){
-				alermJson = (JSONArray)parser.parse(alerm);
-			}
+			SAXReader saxReader = new SAXReader();
+			doc = saxReader.read(CONFIG_FILE);
 		}
 	}
 	
 	private void save() throws FileNotFoundException, IOException{
-		conf.setProperty(KEY_FOCUS, focusJson.toJSONString());
-		conf.setProperty(KEY_ALERM, alermJson.toJSONString());
-		conf.store(new FileOutputStream(new File(CONFIG_FILE)), "User's device configuration");
+		XMLWriter output = new XMLWriter(new FileWriter( new File(CONFIG_FILE) ));
+	    output.write(doc);
+	    output.close();
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void addFocusVariable(String deviceId, String variable){
-		for(int i=0;i<focusJson.size();i++){
-			JSONObject o = (JSONObject)focusJson.get(i);
-			if(o.get(deviceId) == null){
-				o.put(deviceId, variable);
-			}else{
-				String vStr = (String)o.get(deviceId);
-				o.put(deviceId, vStr+"_"+variable);
+	@SuppressWarnings("rawtypes")
+	public boolean addFocusVariable(String deviceId, String variableId) throws FileNotFoundException, IOException{
+		Element root = doc.getRootElement();
+		Iterator it = root.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				Iterator iit = device.elementIterator("Variable");
+				while(iit.hasNext()){
+					Element var = (Element)iit.next();
+					String varid = var.attributeValue("id");
+					if(varid != null && varid.equals(variableId)){
+						save();
+						return false;
+					}
+				}
+				
+				Element varEl = device.addElement("Variable");
+				varEl.addAttribute("id", variableId);
+				varEl.addElement("AlermStr");
+				save();
+				return true;
 			}
 		}
+		
+		Element devEl = root.addElement("Device");
+		devEl.addAttribute("id", deviceId);
+		Element varEl = devEl.addElement("Variable");
+		varEl.addAttribute("id", variableId);
+		varEl.addElement("AlermStr");
+		save();
+		return true;
 	}
 	
-	public void deleteFocusVariable(String deviceId, String variable){
-		for(int i=0;i<focusJson.size();i++){
-			JSONObject o = (JSONObject)focusJson.get(i);
-			if(o.get(deviceId) != null){
-				String vStr = (String)o.get(deviceId);
-				if(str)
-				o.put(deviceId, vStr+"_"+variable);
+	@SuppressWarnings("rawtypes")
+	public boolean deleteFocusVariable(String deviceId, String variableId) throws FileNotFoundException, IOException{
+		Element root = doc.getRootElement();
+		Iterator it = root.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				Iterator iit = device.elementIterator("Variable");
+				while(iit.hasNext()){
+					Element var = (Element)iit.next();
+					String varid = var.attributeValue("id");
+					if(varid != null && varid.equals(variableId)){
+						device.remove(var);
+						save();
+						return true;
+					}
+				}
 			}
 		}
+		
+		return false;
 	}
 	
-	public List<String> getFocusDeviceVariables(String deviceId){
-		return null;
+	@SuppressWarnings("rawtypes")
+	public boolean deleteDevice(String deviceId) throws FileNotFoundException, IOException{
+		Element root = doc.getRootElement();
+		Iterator it = root.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				root.remove(device);
+				save();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
-	public void addAlermVariable(String deviceId, String variable, String alermString){
+	@SuppressWarnings("rawtypes")
+	public List<String> getFocusDeviceIds(){
+		List<String> result = new ArrayList<String>();
+		
+		Element root = doc.getRootElement();
+		Iterator it = root.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null){
+				result.add(id);
+			}
+		}
+		
+		return result;
 		
 	}
 	
-	public void deleteAlermVariable(String deviceId, String variable){
+	@SuppressWarnings("rawtypes")
+	public List<String> getFocusDeviceVariableIds(String deviceId){
+		List<String> result = new ArrayList<String>();
 		
+		Element root = doc.getRootElement();
+		Iterator it = root.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				Iterator iit = device.elementIterator("Variable");
+				while(iit.hasNext()){
+					Element variable = (Element)iit.next();
+					String varid = variable.attributeValue("id");
+					if(varid != null){
+						result.add(varid);
+					}
+				}
+				break;
+			}
+		}
+		
+		return result;
 	}
 	
-	public Map<String,String> getAlermVariableString(String deviceId){
+	
+	
+	@SuppressWarnings("rawtypes")
+	public FocusVariable getVariable(String deviceId, String variableId){
+		Element root = doc.getRootElement();
+		Iterator it = root.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				Iterator iit = device.elementIterator("Variable");
+				while(iit.hasNext()){
+					Element variable = (Element)iit.next();
+					String varid = variable.attributeValue("id");
+					if(varid != null && varid.equals(variableId)){
+						FocusVariable var = new FocusVariable();
+						var.setId(varid);
+						var.setAlermString(variable.elementText("AlermStr"));
+						return var;
+					}
+				}
+				break;
+			}
+		}
+		
 		return null;
 	}
-
+	
+	@SuppressWarnings("rawtypes")
+	public FocusDevice getDevice(String deviceId){
+		Element root = doc.getRootElement();
+		Iterator it = root.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				FocusDevice dev = new FocusDevice();
+				dev.setId(deviceId);
+						
+				Iterator iit = device.elementIterator("Variable");
+				while(iit.hasNext()){
+					Element variable = (Element)iit.next();
+					String varid = variable.attributeValue("id");
+					if(varid != null){
+						FocusVariable var = new FocusVariable();
+						var.setId(varid);
+						var.setAlermString(variable.elementText("AlermStr"));
+						dev.addVariable(var);
+					}
+				}
+				return dev;
+			}
+		}
+		
+		return null;
+	}
 }

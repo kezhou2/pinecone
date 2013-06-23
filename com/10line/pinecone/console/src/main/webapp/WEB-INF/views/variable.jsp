@@ -99,7 +99,7 @@ window.onload = function(){
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
 		},
 		"aoColumnDefs": [
-	    	{ "bSortable": false, "aTargets": [ 4, 5 ] }
+	    	{ "bSortable": false, "aTargets": [ 4, 5, 6 ] }
 	    ],
 		"bServerSide": true,
 		"bProcessing": true,
@@ -230,6 +230,30 @@ function publish(varid, value){
  		} 
  	});
 }
+
+function addDevice(deviceid){
+	bootbox.confirm("Do you want to add the device into my favorates?", function(result) {
+		if(result =='true'){
+			$.ajax({
+		 		url:'adddevicetofocus.html', 
+		 		type: 'POST',
+		 		data: {deviceid:devid}, 
+				timeout: 1000,
+		 		error: function(){
+		 			$.jGrowl('There is something wrong. Please try again!', { sticky: true, theme: 'growl-error', life:1000});
+		 		}, 
+		 		success: function(result){
+		 			if(result == "true"){
+		 				$.jGrowl('Favorate added!', { sticky: true, theme: 'growl-success', life:1000});
+		 			}else if(result == "false"){
+		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+		 			}
+		 		} 
+		 	});
+		}
+	});
+	
+}
 </script>
 </head>
 
@@ -327,7 +351,15 @@ function publish(varid, value){
                     	<div class="navbar-inner">
                         	<h6>Variable table</h6>
                         	<div class="nav pull-right">
-                                <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
+                        		<c:choose>
+									<c:when test="${addFavorate == true}">
+										<li><a href="#"  onclick="addDevice(${device.id})" title="Add to Favorate"><i class="icon-star"></i><span>Add</span></a></li>
+									</c:when>
+									<c:when test="${addFavorate == false}">
+										<li><a href="#"  title="Remove from Favorate"><i class="icon-star-empty"></i><span>Remove</span></a></li>
+									</c:when>
+								</c:choose>
+                                <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown" title="Refresh time"><i class="icon-refresh"></i></a>
                                 <ul class="dropdown-menu pull-right">
                                 	<li><a href="#" onclick="setRefresh(1000)">Stop</a></li>
                                 	<li><a href="#" onclick="setRefresh(2)">2s</a></li>
@@ -348,6 +380,7 @@ function publish(varid, value){
                                     <th>Value</th>
                                     <th>Trend</th>
                                     <th class="actions-column">Actions</th>
+                                    <th class="actions-column">Attention</th>
                                 </tr>
                             </thead>
                             <tbody> 

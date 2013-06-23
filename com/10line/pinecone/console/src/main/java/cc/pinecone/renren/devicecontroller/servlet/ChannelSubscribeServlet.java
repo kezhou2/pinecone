@@ -65,7 +65,9 @@ public class ChannelSubscribeServlet extends HttpServlet {
 		
 		if(connectorMap.get(deviceid) == null){
 			try {
-				Connector con = new Connector(deviceid,"pinecone@device."+deviceid+".subscribe");
+//				Connector con = new Connector(deviceid,"pinecone@device."+deviceid+".subscribe");
+				//FIXME need to change back.
+				Connector con = new Connector(deviceid,"pinecone@device."+deviceid);
 				connectorMap.put(deviceid, con);
 				
 				Object obj = JSONValue.parse(ids);

@@ -1,5 +1,6 @@
 package cc.pinecone.renren.devicecontroller.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,12 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
+import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.model.Device;
 import com.tenline.pinecone.platform.model.Entity;
@@ -103,6 +107,12 @@ public class PageController {
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
 		
 		try{
 			ArrayList<Entity> devs = (ArrayList<Entity>) this.getRESTClient().get("/device/"+id,username,password);
@@ -114,6 +124,17 @@ public class PageController {
 		}
 		
 		request.setAttribute("querydeviceid", id);
+		
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		System.out.println("path:"+path);
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		if(conf.getDevice(id) == null){
+			request.setAttribute("addFavorate", false);
+		}else{
+			request.setAttribute("addFavorate", true);
+		}
 		
 		return "variable";
 	} 

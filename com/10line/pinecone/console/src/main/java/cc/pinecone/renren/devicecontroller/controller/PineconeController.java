@@ -1,5 +1,6 @@
 package cc.pinecone.renren.devicecontroller.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -20,11 +21,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 import cc.pinecone.renren.devicecontroller.servlet.DataTablesParamUtility;
@@ -51,8 +52,6 @@ public class PineconeController {
 
 	private static RESTClient client;
 	
-	private final int OVERTIME = 20000;
-	private final int BEAT_TIME = 2000;
 	private final String ADMIN_NAME = "admin";
 	private final String ADMIN_PWD = "admin";
 
@@ -179,11 +178,23 @@ public class PineconeController {
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
 		
 		logger.info("queryVariable.html");
 		System.out.println("queryVariable");
 		String id = request.getParameter("id");
 		System.out.println(id);
+		
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		System.out.println("path:"+path);
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		List<String> idsList = conf.getFocusDeviceVariableIds(id);
 		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
 		
@@ -242,6 +253,20 @@ public class PineconeController {
 				sb.append("</select>");
 				row.add(sb.toString());
 				
+				String addStr = new String("<ul class='table-controls'>"+
+												"<li><a href='#' class='btn tip' title='Add to favorate'><i class='icon-star-empty'></i></a></li>"+
+											"</ul>");
+				for(String sId:idsList){
+					if(sId.equals(var.getId())){
+						addStr = "<ul class='table-controls'>"+
+									"<li><a href='#' class='btn tip' title='Add to favorate'><i class='icon-star'></i></a></li>"+
+								"</ul>";
+						break;
+					}
+				}
+				
+				row.add(addStr);
+				
 				data.add(row);
 				index++;
 			}
@@ -288,7 +313,7 @@ public class PineconeController {
 				if(users.size()>0){
 					User user = (User)users.get(0);
 					user.setPassword(newpwd);
-					String res = client.post("/user/"+user.getId(), user);
+					client.post("/user/"+user.getId(), user);
 					Authentication r = new UsernamePasswordAuthenticationToken(username, newpwd);
 					Authentication result = authenticationManager.authenticate(r);
 					SecurityContextHolder.getContext().setAuthentication(result);
@@ -348,5 +373,51 @@ public class PineconeController {
 		request.setAttribute("myname", name);
 		request.setAttribute("myemail", email);
 		return "profile";
+	}
+	
+	
+	
+	@RequestMapping(value = "/adddevicetofocus.html")
+	public void addDeviceToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		logger.info("variable.html");
+		System.out.println("variable.html");
+		String id = request.getParameter("id");
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		boolean isSuccess = false;
+		try {
+			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
+					.get("/device/" + id + "/variables", username, password);
+			for (Entity ent : vars) {
+				Variable var = (Variable) ent;
+				conf.addFocusVariable(id, ""+var.getId());
+			}
+			isSuccess = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		response.setContentType("text/html; charset=utf-8"); 
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Cache-Control","no-cache");
+		PrintWriter out=response.getWriter();
+		
+		if(isSuccess)
+			out.write("true");
+		else
+			out.write("false");
+		out.close();
 	}
 }

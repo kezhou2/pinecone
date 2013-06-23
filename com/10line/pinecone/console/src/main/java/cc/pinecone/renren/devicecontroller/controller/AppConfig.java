@@ -10,6 +10,11 @@ public final class AppConfig {
 	private static String userid = "";
 	private static String access_token = "";
 	private static String sessionkey = "";
+	private static final String CACHE_PATH="config-cache";
+	
+	public static String getCachePath() {
+		return CACHE_PATH;
+	}
 	public static String getUserid() {
 		return userid;
 	}

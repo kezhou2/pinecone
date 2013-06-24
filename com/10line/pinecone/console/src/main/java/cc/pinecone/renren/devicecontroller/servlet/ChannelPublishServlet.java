@@ -35,15 +35,15 @@ public class ChannelPublishServlet extends HttpServlet{
 		String value = req.getParameter("vvalue");
 		System.out.println("recived:"+value);
 		//here acturally received device code from the jsp page.
-		String deviceid = req.getParameter("deviceid");
-		System.out.println("recived:"+deviceid);
+		String devicecode = req.getParameter("devicecode");
+		System.out.println("recived:"+devicecode);
 		
-		if(connectorMap.get(deviceid) == null){
+		if(connectorMap.get(devicecode) == null){
 			try {
-//				Connector con = new Connector(deviceid,"pinecone@device."+deviceid+".publish");
+//				Connector con = new Connector(devicecode,"pinecone@device."+devicecode+".publish");
 				//FIXME need to change back.
-				Connector con = new Connector(deviceid,"pinecone@device."+deviceid);
-				connectorMap.put(deviceid, con);
+				Connector con = new Connector(devicecode,"pinecone@device."+devicecode);
+				connectorMap.put(devicecode, con);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -55,7 +55,7 @@ public class ChannelPublishServlet extends HttpServlet{
 		resp.setHeader("Cache-Control","no-cache");
 		PrintWriter out=resp.getWriter();
 		
-		Connector connector = connectorMap.get(deviceid);
+		Connector connector = connectorMap.get(devicecode);
 		if(connector != null){
 			try {
 				connector.publish(varid, value);

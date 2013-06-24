@@ -45,14 +45,14 @@ public class ChannelSubscribeServlet extends HttpServlet {
 		String ids = req.getParameter("ids");
 		System.out.println("recived:"+ids);
 		//here acturally received device code from the jsp page.
-		String deviceid = req.getParameter("deviceid");
-		System.out.println("recived:"+deviceid);
+		String deviceCode = req.getParameter("devicecode");
+		System.out.println("recived:"+deviceCode);
 		if(isDisconnect != null && isDisconnect.equals("true")){
 			System.out.println("ready to disconnect");
-			if(connectorMap.get(deviceid) != null){
+			if(connectorMap.get(deviceCode) != null){
 				try {
-					connectorMap.get(deviceid).destroy();
-					connectorMap.remove(deviceid);
+					connectorMap.get(deviceCode).destroy();
+					connectorMap.remove(deviceCode);
 					return;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,15 +60,14 @@ public class ChannelSubscribeServlet extends HttpServlet {
 			}
 		}
 		
-//		JSONObject json = new JSONObject();
 		String result = "";
 		
-		if(connectorMap.get(deviceid) == null){
+		if(connectorMap.get(deviceCode) == null){
 			try {
-//				Connector con = new Connector(deviceid,"pinecone@device."+deviceid+".subscribe");
+//				Connector con = new Connector(deviceCode,"pinecone@device."+deviceCode+".subscribe");
 				//FIXME need to change back.
-				Connector con = new Connector(deviceid,"pinecone@device."+deviceid);
-				connectorMap.put(deviceid, con);
+				Connector con = new Connector(deviceCode,"pinecone@device."+deviceCode);
+				connectorMap.put(deviceCode, con);
 				
 				Object obj = JSONValue.parse(ids);
 				JSONArray array=(JSONArray)obj;
@@ -80,13 +79,12 @@ public class ChannelSubscribeServlet extends HttpServlet {
 				e.printStackTrace();
 			}	
 		}else{
-			Connector connector = connectorMap.get(deviceid);
+			Connector connector = connectorMap.get(deviceCode);
 			if(connector != null)
-//				json.put("data", connector.getJSONValues());
 				result = connector.getStringValues();
 		}
-		result = ""+deviceid+","+result;
-		System.out.println(deviceid);
+		result = ""+deviceCode+","+result;
+		System.out.println(deviceCode);
 		System.out.println(result);
 		
 		resp.setContentType("text/html; charset=utf-8"); 

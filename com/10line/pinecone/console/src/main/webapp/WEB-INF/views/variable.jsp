@@ -53,7 +53,7 @@ String querydeviceid = (String)request.getAttribute("querydeviceid");
 %>
 <script type="text/javascript">
 var varids = [];
-var devid;
+var devCode;
 var jsonData;
 var isRefreshing = false;
 var isAlert = false;
@@ -71,7 +71,7 @@ function initConfig(){
      	}
 	})
 	
-	devid = $('#variablelist').attr('deviceid');	
+	devCode = $('#variablelist').attr('devicecode');	
 	//generate request json
  	jsonData = "[";
  	for(var i=0;i<varids.length;i++){
@@ -136,9 +136,9 @@ function refresh(){
 	$.ajax({
  		url:'subscribedata', 
  		type: 'POST',
- 		data: {ids:jsonData,deviceid:devid}, 
+ 		data: {ids:jsonData,devicecode:devCode}, 
 		timeout: 1000,
- 		error: function(){
+ 		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
  				isAlert = true;
 	 			bootbox.confirm("Lost connection. Connect device again?", function(result) {
@@ -216,10 +216,10 @@ function publish(varid, value){
 	$.ajax({
  		url:'publishdata', 
  		type: 'POST',
- 		data: {deviceid:devid,variableid:varid,vvalue:value}, 
+ 		data: {deviceid:devCode,variableid:varid,vvalue:value}, 
 		timeout: 1000,
- 		error: function(){
- 			$.jGrowl('There is something wrong with channel!', { sticky: true, theme: 'growl-error', life:1000});
+ 		error: function(XMLHttpRequest, textStatus, errorThrown){
+ 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
  		}, 
  		success: function(result){
  			if(result == "true"){
@@ -231,21 +231,51 @@ function publish(varid, value){
  	});
 }
 
-function addDevice(deviceid){
-	bootbox.confirm("Do you want to add the device into my favorates?", function(result) {
-		if(result =='true'){
+function addDevice(devid){
+	bootbox.confirm("Do you want to add the device into my favorites?", function(result) {
+		if(result){
 			$.ajax({
 		 		url:'adddevicetofocus.html', 
-		 		type: 'POST',
+		 		type: 'post',
 		 		data: {deviceid:devid}, 
-				timeout: 1000,
-		 		error: function(){
-		 			$.jGrowl('There is something wrong. Please try again!', { sticky: true, theme: 'growl-error', life:1000});
+				timeout: 5000,
+		 		error: function(XMLHttpRequest, textStatus, errorThrown){
+		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
 		 		}, 
 		 		success: function(result){
-		 			if(result == "true"){
-		 				$.jGrowl('Favorate added!', { sticky: true, theme: 'growl-success', life:1000});
-		 			}else if(result == "false"){
+		 			if(result == 'true'){
+		 				$.jGrowl('Favorite added!', { sticky: true, theme: 'growl-success', life:1000});
+		 				$("#addFavorite").attr("onclick","removeDevice('${device.id}')");
+		 				$("#addFavorite").attr("title","Remove from Favorite");
+		 				$("#addFavorite").attr("title","Remove from Favorite");
+		 				$("#addFavorite").html("<i class='icon-star'></i><span>Remove</span></a>");
+		 			}else{
+		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+		 			}
+		 		} 
+		 	});
+		}
+	});
+}
+
+function removeDevice(devid){
+	bootbox.confirm("Do you want to remove the device from my favorites?", function(result) {
+		if(result){
+			$.ajax({
+		 		url:'removedevicetofocus.html', 
+		 		type: 'post',
+		 		data: {deviceid:devid}, 
+				timeout: 5000,
+		 		error: function(XMLHttpRequest, textStatus, errorThrown){
+		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+		 		}, 
+		 		success: function(result){
+		 			if(result == 'true'){
+		 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
+		 				$("#addFavorite").attr("onclick","addDevice('${device.id}')");
+		 				$("#addFavorite").attr("title","Add to Favorite");
+		 				$("#addFavorite").html("<i class='icon-star-empty'></i><span>Add</span></a>");
+		 			}else{
 		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
 		 			}
 		 		} 
@@ -253,6 +283,33 @@ function addDevice(deviceid){
 		}
 	});
 	
+}
+
+function addVariable(varid){
+	bootbox.confirm("Do you want to add the variable into my favorites?", function(result) {
+		if(result){
+			$.ajax({
+		 		url:'adddevicetofocus.html', 
+		 		type: 'post',
+		 		data: {deviceid:devid,variable:varid}, 
+				timeout: 5000,
+		 		error: function(XMLHttpRequest, textStatus, errorThrown){
+		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+		 		}, 
+		 		success: function(result){
+		 			if(result == 'true'){
+		 				$.jGrowl('Favorite added!', { sticky: true, theme: 'growl-success', life:1000});
+		 				$("#addFavorite").attr("onclick","removeDevice('${device.id}')");
+		 				$("#addFavorite").attr("title","Remove from Favorite");
+		 				$("#addFavorite").attr("title","Remove from Favorite");
+		 				$("#addFavorite").html("<i class='icon-star'></i><span>Remove</span></a>");
+		 			}else{
+		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+		 			}
+		 		} 
+		 	});
+		}
+	});
 }
 </script>
 </head>
@@ -352,11 +409,11 @@ function addDevice(deviceid){
                         	<h6>Variable table</h6>
                         	<div class="nav pull-right">
                         		<c:choose>
-									<c:when test="${addFavorate == true}">
-										<li><a href="#"  onclick="addDevice(${device.id})" title="Add to Favorate"><i class="icon-star"></i><span>Add</span></a></li>
+									<c:when test="${addedFavorate == false}">
+										<li><a id="addFavorite" href="#"  onclick="addDevice('${device.id}')" title="Add to Favorite"><i class="icon-star-empty"></i><span>Add</span></a></li>
 									</c:when>
-									<c:when test="${addFavorate == false}">
-										<li><a href="#"  title="Remove from Favorate"><i class="icon-star-empty"></i><span>Remove</span></a></li>
+									<c:when test="${addedFavorate == true}">
+										<li><a id="addFavorite" href="#"  onclick="removeDevice('${device.id}')" title="Remove from Favorite"><i class="icon-star"></i><span>Remove</span></a></li>
 									</c:when>
 								</c:choose>
                                 <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown" title="Refresh time"><i class="icon-refresh"></i></a>
@@ -371,7 +428,7 @@ function addDevice(deviceid){
                         </div>
                     </div>
                     <div class="table-overflow">
-                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" deviceid="${device.code}">
+                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" devicecode="${device.code}">
                             <thead>
                                 <tr>
                                 	<th>ID</th>

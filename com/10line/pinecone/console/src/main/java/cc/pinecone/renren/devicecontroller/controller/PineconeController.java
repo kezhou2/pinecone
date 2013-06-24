@@ -254,12 +254,12 @@ public class PineconeController {
 				row.add(sb.toString());
 				
 				String addStr = new String("<ul class='table-controls'>"+
-												"<li><a href='#' class='btn tip' title='Add to favorate'><i class='icon-star-empty'></i></a></li>"+
+												"<li><a href='#' onclick='addVariable("+var.getId()+")' class='btn tip' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
 											"</ul>");
 				for(String sId:idsList){
 					if(sId.equals(var.getId())){
 						addStr = "<ul class='table-controls'>"+
-									"<li><a href='#' class='btn tip' title='Add to favorate'><i class='icon-star'></i></a></li>"+
+									"<li><a href='#' onclick='removeVariable("+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
 								"</ul>";
 						break;
 					}
@@ -377,11 +377,11 @@ public class PineconeController {
 	
 	
 	
-	@RequestMapping(value = "/adddevicetofocus.html")
+	@RequestMapping(value = "/adddevicetofocus.html", method = RequestMethod.POST)
 	public void addDeviceToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
-		logger.info("variable.html");
-		System.out.println("variable.html");
-		String id = request.getParameter("id");
+		logger.info("adddevicetofocus.html");
+		System.out.println("adddevicetofocus.html");
+		String id = request.getParameter("deviceid");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
@@ -392,14 +392,17 @@ public class PineconeController {
 			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
 			userid = lud.getUserid();
 		}
+		System.out.println("user name:"+username+"|password:"+password+"|userid:"+userid);
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		boolean isSuccess = false;
 		try {
+			System.out.println("query url_____:"+"/device/" + id + "/variables");
 			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
 					.get("/device/" + id + "/variables", username, password);
+			System.out.println("Found variable size:"+vars.size());
 			for (Entity ent : vars) {
 				Variable var = (Variable) ent;
 				conf.addFocusVariable(id, ""+var.getId());
@@ -408,6 +411,82 @@ public class PineconeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		response.setContentType("text/html; charset=utf-8"); 
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Cache-Control","no-cache");
+		PrintWriter out=response.getWriter();
+		
+		if(isSuccess)
+			out.write("true");
+		else
+			out.write("false");
+		out.close();
+	}
+	
+	@RequestMapping(value = "/removedevicetofocus.html", method = RequestMethod.POST)
+	public void removeDeviceToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		logger.info("removedevicetofocus.html");
+		System.out.println("removedevicetofocus.html");
+		String id = request.getParameter("deviceid");
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		System.out.println("user name:"+username+"|password:"+password+"|userid:"+userid);
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		boolean isSuccess = false;
+		try {
+			conf.deleteDevice(id);
+			isSuccess = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		response.setContentType("text/html; charset=utf-8"); 
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Cache-Control","no-cache");
+		PrintWriter out=response.getWriter();
+		
+		if(isSuccess)
+			out.write("true");
+		else
+			out.write("false");
+		out.close();
+	}
+	
+	@RequestMapping(value = "/addvariabletofocus.html", method = RequestMethod.POST)
+	public void addVariableToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		logger.info("addvariabletofocus.html");
+		System.out.println("addvariabletofocus.html");
+		String devid = request.getParameter("deviceid");
+		String varid = request.getParameter("variableid");
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		System.out.println("user name:"+username+"|password:"+password+"|userid:"+userid);
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		boolean isSuccess = false;
+		conf.addFocusVariable(devid, varid);
 		
 		response.setContentType("text/html; charset=utf-8"); 
 		response.setCharacterEncoding("UTF-8");

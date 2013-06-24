@@ -131,9 +131,9 @@ public class PageController {
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		if(conf.getDevice(id) == null){
-			request.setAttribute("addFavorate", false);
+			request.setAttribute("addedFavorate", false);
 		}else{
-			request.setAttribute("addFavorate", true);
+			request.setAttribute("addedFavorate", true);
 		}
 		
 		return "variable";

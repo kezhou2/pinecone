@@ -17,6 +17,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 import cc.pinecone.renren.devicecontroller.model.FocusDevice;
 import cc.pinecone.renren.devicecontroller.model.FocusVariable;
 
@@ -34,7 +35,7 @@ public class Config {
 				File file = new File(configPath);
 				if(!file.exists())
 					file.mkdir();
-				Config conf = new Config(configPath+File.separatorChar+userid+".xml");
+				Config conf = new Config(configPath+File.separatorChar+File.separatorChar+userid+".xml");
 				map.put(userid, conf);
 			} catch (DocumentException e) {
 				e.printStackTrace();
@@ -47,6 +48,7 @@ public class Config {
 	private Config(String filePath) throws DocumentException{
 		
 		CONFIG_FILE = filePath;
+		System.out.println("CONFIG_PATH:"+CONFIG_FILE);
 		
 		File confFile = new File(CONFIG_FILE);
 		if(!confFile.exists()){
@@ -59,6 +61,7 @@ public class Config {
 	}
 	
 	private void save() throws FileNotFoundException, IOException{
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!saved...");
 		XMLWriter output = new XMLWriter(new FileWriter( new File(CONFIG_FILE) ));
 	    output.write(doc);
 	    output.close();
@@ -77,11 +80,13 @@ public class Config {
 					Element var = (Element)iit.next();
 					String varid = var.attributeValue("id");
 					if(varid != null && varid.equals(variableId)){
+						System.out.println("------------------11");
 						save();
 						return false;
 					}
 				}
 				
+				System.out.println("------------------22");
 				Element varEl = device.addElement("Variable");
 				varEl.addAttribute("id", variableId);
 				varEl.addElement("AlermStr");
@@ -90,6 +95,7 @@ public class Config {
 			}
 		}
 		
+		System.out.println("------------------33");
 		Element devEl = root.addElement("Device");
 		devEl.addAttribute("id", deviceId);
 		Element varEl = devEl.addElement("Variable");

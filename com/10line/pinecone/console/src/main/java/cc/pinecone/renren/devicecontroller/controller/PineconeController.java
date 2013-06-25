@@ -195,6 +195,11 @@ public class PineconeController {
 		System.out.println("path:"+path);
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		List<String> idsList = conf.getFocusDeviceVariableIds(id);
+		System.out.println("idsList size:"+idsList.size());
+		for(String s:idsList){
+			System.out.print("###"+s+"|");
+		}
+		System.out.println();
 		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
 		
@@ -254,12 +259,13 @@ public class PineconeController {
 				row.add(sb.toString());
 				
 				String addStr = new String("<ul class='table-controls'>"+
-												"<li><a href='#' onclick='addVariable("+var.getId()+")' class='btn tip' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
+												"<li><a href='#' id='var"+var.getId()+"' onclick='addVariable("+id+","+var.getId()+")' class='btn tip' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
 											"</ul>");
+				
 				for(String sId:idsList){
-					if(sId.equals(var.getId())){
+					if(sId.equals(""+var.getId())){
 						addStr = "<ul class='table-controls'>"+
-									"<li><a href='#' onclick='removeVariable("+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
+									"<li><a href='#' id='var"+var.getId()+"' onclick='removeVariable("+id+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
 								"</ul>";
 						break;
 					}
@@ -346,7 +352,6 @@ public class PineconeController {
 		
 		String name = request.getParameter("username");
 		String email = request.getParameter("email");
-		System.out.println("name:"+name+"|email:"+email);
 
 		boolean isSuccess = false;
 		try {
@@ -392,22 +397,18 @@ public class PineconeController {
 			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
 			userid = lud.getUserid();
 		}
-		System.out.println("user name:"+username+"|password:"+password+"|userid:"+userid);
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		boolean isSuccess = false;
 		try {
-			System.out.println("query url_____:"+"/device/" + id + "/variables");
 			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
 					.get("/device/" + id + "/variables", username, password);
-			System.out.println("Found variable size:"+vars.size());
 			for (Entity ent : vars) {
 				Variable var = (Variable) ent;
-				conf.addFocusVariable(id, ""+var.getId());
+				isSuccess = conf.addFocusVariable(id, ""+var.getId());
 			}
-			isSuccess = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -431,23 +432,19 @@ public class PineconeController {
 		String id = request.getParameter("deviceid");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
-		String username = securityContextImpl.getAuthentication().getName();
-		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
 		String userid = null;
 		if(ud instanceof LoginUserDetailsImpl){
 			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
 			userid = lud.getUserid();
 		}
-		System.out.println("user name:"+username+"|password:"+password+"|userid:"+userid);
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		boolean isSuccess = false;
 		try {
-			conf.deleteDevice(id);
-			isSuccess = true;
+			isSuccess = conf.deleteDevice(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -472,28 +469,52 @@ public class PineconeController {
 		String varid = request.getParameter("variableid");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
-		String username = securityContextImpl.getAuthentication().getName();
-		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
 		String userid = null;
 		if(ud instanceof LoginUserDetailsImpl){
 			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
 			userid = lud.getUserid();
 		}
-		System.out.println("user name:"+username+"|password:"+password+"|userid:"+userid);
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
-		
-		boolean isSuccess = false;
-		conf.addFocusVariable(devid, varid);
 		
 		response.setContentType("text/html; charset=utf-8"); 
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Cache-Control","no-cache");
 		PrintWriter out=response.getWriter();
 		
-		if(isSuccess)
+		if(conf.addFocusVariable(devid, varid))
+			out.write("true");
+		else
+			out.write("false");
+		out.close();
+	}
+	
+	@RequestMapping(value = "/removevariabletofocus.html", method = RequestMethod.POST)
+	public void removeVariableToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		logger.info("removevariabletofocus.html");
+		System.out.println("removevariabletofocus.html");
+		String devid = request.getParameter("deviceid");
+		String varid = request.getParameter("variableid");
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		response.setContentType("text/html; charset=utf-8"); 
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Cache-Control","no-cache");
+		PrintWriter out=response.getWriter();
+		
+		if(conf.deleteFocusVariable(devid, varid))
 			out.write("true");
 		else
 			out.write("false");

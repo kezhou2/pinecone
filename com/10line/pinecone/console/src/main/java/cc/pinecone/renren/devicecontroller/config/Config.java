@@ -88,7 +88,8 @@ public class Config {
 				
 				System.out.println("------------------22");
 				Element varEl = device.addElement("Variable");
-				varEl.addAttribute("id", variableId);
+				Element test = varEl.addAttribute("id", variableId);
+				System.out.println("#####variable id:"+variableId+"|element attr id:"+test.attributeValue("id"));
 				varEl.addElement("AlermStr");
 				save();
 				return true;
@@ -99,7 +100,8 @@ public class Config {
 		Element devEl = root.addElement("Device");
 		devEl.addAttribute("id", deviceId);
 		Element varEl = devEl.addElement("Variable");
-		varEl.addAttribute("id", variableId);
+		Element test = varEl.addAttribute("id", variableId);
+		System.out.println("#####variable id:"+variableId+"|element attr id:"+test.attributeValue("id"));
 		varEl.addElement("AlermStr");
 		save();
 		return true;

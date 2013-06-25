@@ -119,10 +119,10 @@
 
 	<!-- Footer -->
 	<div id="footer">
-		<div class="copyrights">&copy;  Brought to you by Eugene Kopyov.</div>
+		<div class="copyrights">&copy;  Pinecone Tech.</div>
 		<ul class="footer-links">
 			<li><a href="" title=""><i class="icon-cogs"></i>Contact admin</a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i>Report bug</a></li>
+			<li><a href="" title=""><i class="icon-screenshot"></i>Home page</a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

@@ -61,7 +61,6 @@ public class Config {
 	}
 	
 	private void save() throws FileNotFoundException, IOException{
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!saved...");
 		XMLWriter output = new XMLWriter(new FileWriter( new File(CONFIG_FILE) ));
 	    output.write(doc);
 	    output.close();
@@ -80,28 +79,22 @@ public class Config {
 					Element var = (Element)iit.next();
 					String varid = var.attributeValue("id");
 					if(varid != null && varid.equals(variableId)){
-						System.out.println("------------------11");
 						save();
 						return false;
 					}
 				}
-				
-				System.out.println("------------------22");
 				Element varEl = device.addElement("Variable");
 				Element test = varEl.addAttribute("id", variableId);
-				System.out.println("#####variable id:"+variableId+"|element attr id:"+test.attributeValue("id"));
 				varEl.addElement("AlermStr");
 				save();
 				return true;
 			}
 		}
 		
-		System.out.println("------------------33");
 		Element devEl = root.addElement("Device");
 		devEl.addAttribute("id", deviceId);
 		Element varEl = devEl.addElement("Variable");
 		Element test = varEl.addAttribute("id", variableId);
-		System.out.println("#####variable id:"+variableId+"|element attr id:"+test.attributeValue("id"));
 		varEl.addElement("AlermStr");
 		save();
 		return true;

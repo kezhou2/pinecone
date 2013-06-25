@@ -143,13 +143,13 @@ public class QueryDeviceServlet extends HttpServlet {
 				row.add("<ul class='table-controls'>"+
 							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
 							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
-							"<li><a href='#' class='btn tip' title='Share'><i class='icon-star-empty'></i></a></li>"+
+							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='addDevice("+c.getId()+")' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
 						"</ul>");
 			}else{
 				row.add("<ul class='table-controls'>"+
 							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
 							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
-							"<li><a href='#' class='btn tip' title='Share'><i class='icon-star'></i></a></li>"+
+							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='removeDevice("+c.getId()+")' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
 						"</ul>");
 			}
 			data.add(row);

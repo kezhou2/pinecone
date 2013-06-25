@@ -125,7 +125,7 @@ window.onload = function(){
 			
 			//init background thread
 			initConfig();
-			setRefresh(2);
+			//setRefresh(2);
 		},
 		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
     });
@@ -386,8 +386,8 @@ function removeVariable(devid,varid){
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
 			            <li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
-			            <li class="active"><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-			            <li><a href="friends.html" title=""><i class="icon-group"></i>Friend</a></li>
+			            <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
+			            <li class="active"><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
 			        </ul>
 			        <!-- /main navigation -->
 
@@ -418,8 +418,8 @@ function removeVariable(devid,varid){
 						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus"></i><span>Active Device</span></a></li>
 						<li class ="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
-		                        <li><a href="#" title=""><i class="icon-tasks"></i>Devices</a></li>
-		                        <li><a href="#" title=""><i class="icon-group"></i>Friends</a></li>
+		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
+		                        <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
 		                	</ul>
 		                </li>
 		            </ul>
@@ -451,67 +451,75 @@ function removeVariable(devid,varid){
                             </div>
                         </div>
                     </div>
-                    <div class="table-overflow">
-                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" devicecode="${device.code}">
-                            <thead>
-                                <tr>
-                                	<th>ID</th>
-                                    <th>Type</th>
-                                    <th>Name</th>
-                                    <th>Value</th>
-                                    <th>Trend</th>
-                                    <th class="actions-column">Actions</th>
-                                    <th class="actions-column">Attention</th>
-                                </tr>
-                            </thead>
-                            <tbody> 
-								<!--<c:forEach var="variable" items="${list}">
-									<tr>
-										<td>${variable.id}</td>
-										<td>${variable.type}</td>
-										<td>${variable.name}</td>
-										<c:choose>
-											<c:when test="${variable.type == 'read'}">
-												<td varid="${variable.id }" class="vvalue"><strong>loading...</strong></td>
-											</c:when>
-											<c:when test="${variable.type == 'write'}">
-												<td varid="${variable.id }" class="vvalue"><strong>--</strong></td>
-											</c:when>
-										</c:choose>
-										<c:choose>
-											<c:when test="${variable.type == 'read'}">
-												<td trendid="${variable.id }" class="valuretrend"><span class="dynamictrend">Loading...</span></td>
-											</c:when>
-											<c:when test="${variable.type == 'write'}">
-												<td></td>
-											</c:when>
-										</c:choose>
-										<td>
-											<ul class="table-controls">
-												<li>
-													<div class="btn-group">
-														<c:choose>
-														    <c:when test="${variable.type == 'read'}">
-														      	<button class="disabled btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
-														    </c:when>
-														    <c:when test="${variable.type == 'write'}">
-														      	<button class="btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
-																<ul class="dropdown-menu">
-																	<c:forEach var="item" items="${variable.items}">
-																	<li><a href="#" onclick="publish('${variable.id }','${item.value}')" >${item.value}</a></li>
-																	</c:forEach>
-																</ul>
-														    </c:when>
-														</c:choose>
-													</div>
-												</li>
-											</ul>
-										</td>
-									</tr>
-								</c:forEach>-->
-                            </tbody>
-                        </table>
-                    </div>
+                    
+                    <c:forEach var="device" items="${list}">
+	                    <h5 class="widget-name"><i class="icon-film"></i>Videos without titles</h5>
+	                    <div class="table-overflow">
+	                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" devicecode="${device.code}">
+	                            <thead>
+	                                <tr>
+	                                	<th>ID</th>
+	                                    <th>Type</th>
+	                                    <th>Name</th>
+	                                    <th>Value</th>
+	                                    <th>Trend</th>
+	                                    <th class="actions-column">Actions</th>
+	                                    <th class="actions-column">Attention</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody> 
+									<c:forEach var="entry" items="${device.varList}">
+
+									<c:set var="variable" value="${entry.value}" ></c:set>
+										<tr>
+											<td>${variable.id}</td>
+											<td>${variable.type}</td>
+											<td>${variable.name}</td>
+											<c:choose>
+												<c:when test="${variable.type == 'read'}">
+													<td varid="${variable.id }" class="vvalue"><strong>loading...</strong></td>
+												</c:when>
+												<c:when test="${variable.type == 'write'}">
+													<td varid="${variable.id }" class="vvalue"><strong>--</strong></td>
+												</c:when>
+											</c:choose>
+											<c:choose>
+												<c:when test="${variable.type == 'read'}">
+													<td trendid="${variable.id }" class="valuretrend"><span class="dynamictrend">Loading...</span></td>
+												</c:when>
+												<c:when test="${variable.type == 'write'}">
+													<td></td>
+												</c:when>
+											</c:choose>
+											<td>
+												<ul class="table-controls">
+													<li>
+														<div class="btn-group">
+															<c:choose>
+															    <c:when test="${variable.type == 'read'}">
+															      	<button class="disabled btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
+															    </c:when>
+															    <c:when test="${variable.type == 'write'}">
+															      	<button class="btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
+																	<!-- 
+																	<ul class="dropdown-menu">
+																		<c:forEach var="item" items="${variable.items}">
+																		<li><a href="#" onclick="publish('${variable.id }','${item.value}')" >${item.value}</a></li>
+																		</c:forEach>
+																	</ul>
+																	-->
+															    </c:when>
+															</c:choose>
+														</div>
+													</li>
+												</ul>
+											</td>
+										</tr>
+									</c:forEach>
+	                            </tbody>
+	                        </table>
+	                    </div>
+                    </c:forEach>
                 </div>
                 <!-- /media datatable -->
 

@@ -1,15 +1,22 @@
 package cc.pinecone.renren.devicecontroller.model;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class FocusDevice {
 
 	private String id;
+	private String code;
 	private Map<String, FocusVariable> varList = new LinkedHashMap<String,FocusVariable>();
 	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public FocusDevice(){
 		varList = new LinkedHashMap<String,FocusVariable>();
 	}

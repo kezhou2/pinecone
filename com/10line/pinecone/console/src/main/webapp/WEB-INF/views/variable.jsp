@@ -246,7 +246,7 @@ function addDevice(devid){
 		 			if(result == 'true'){
 		 				$.jGrowl('Favorite added!', { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#addFavorite").attr("onclick","removeDevice('${device.id}')");
-		 				$("#addFavorite").attr("title","Remove from Favorite");
+		 				$("#addFavorite").attr("title","Remove from Favorites");
 		 				$("#addFavorite").html("<i class='icon-star'></i><span>Remove</span></a>");
 		 			}else{
 		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
@@ -272,7 +272,7 @@ function removeDevice(devid){
 		 			if(result == 'true'){
 		 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#addFavorite").attr("onclick","addDevice('${device.id}')");
-		 				$("#addFavorite").attr("title","Add to Favorite");
+		 				$("#addFavorite").attr("title","Add to Favorites");
 		 				$("#addFavorite").html("<i class='icon-star-empty'></i><span>Add</span></a>");
 		 			}else{
 		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
@@ -387,7 +387,7 @@ function removeVariable(devid,varid){
 			        <ul class="navigation widget">
 			            <li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
 			            <li class="active"><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-			            <li><a href="friends.html" title=""><i class="icon-group"></i>Friend</a></li>
+			            <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
 			        </ul>
 			        <!-- /main navigation -->
 
@@ -418,8 +418,8 @@ function removeVariable(devid,varid){
 						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus"></i><span>Active Device</span></a></li>
 						<li class ="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
-		                        <li><a href="#" title=""><i class="icon-tasks"></i>Devices</a></li>
-		                        <li><a href="#" title=""><i class="icon-group"></i>Friends</a></li>
+		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
+		                        <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
 		                	</ul>
 		                </li>
 		            </ul>

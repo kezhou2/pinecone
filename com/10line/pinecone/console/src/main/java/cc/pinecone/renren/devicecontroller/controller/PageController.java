@@ -2,6 +2,7 @@ package cc.pinecone.renren.devicecontroller.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
+import cc.pinecone.renren.devicecontroller.model.FocusDevice;
+import cc.pinecone.renren.devicecontroller.model.FocusVariable;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.model.Device;
@@ -153,6 +156,42 @@ public class PageController {
 		System.out.println("friends.html");
 		response.setCharacterEncoding("UTF-8");
 		return "friends";
+	}
+	
+	@RequestMapping(value = "/favorites.html")
+	public String favorites(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("favorites.html");
+		System.out.println("favorites.html");
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		List<String> deviceIds = conf.getFocusDeviceIds();
+		List<FocusDevice> deviceList = new ArrayList<FocusDevice>();
+		
+		for(String devid:deviceIds){
+			FocusDevice fd = conf.getDevice(devid);
+			List<String> variableIds = conf.getFocusDeviceVariableIds(devid);
+			for(String varid:variableIds){
+				System.out.println("*********************************");
+				fd.addVariable(conf.getVariable(devid, varid));
+			}
+			
+			deviceList.add(fd);
+		}
+		
+		request.setAttribute("list", deviceList);
+		
+		return "favorites";
 	}
 	
 	@RequestMapping(value = "/profile.html")

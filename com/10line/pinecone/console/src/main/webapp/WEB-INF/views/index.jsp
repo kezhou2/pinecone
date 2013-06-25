@@ -63,6 +63,59 @@ function disconnect(id){
 	  }
 	});
 }
+
+function addDevice(devid){
+	bootbox.confirm("Do you want to add the device into your favorites?", function(result) {
+		if(result){
+			$.ajax({
+		 		url:'adddevicetofocus.html', 
+		 		type: 'post',
+		 		data: {deviceid:devid}, 
+				timeout: 5000,
+		 		error: function(XMLHttpRequest, textStatus, errorThrown){
+		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+		 		}, 
+		 		success: function(result){
+		 			if(result == 'true'){
+		 				$.jGrowl('Favorite added!', { sticky: true, theme: 'growl-success', life:1000});
+		 				$("#device"+devid).attr("onclick","removeDevice('"+devid+"')");
+		 				$("#device"+devid).attr("title","Remove from Favorites");
+		 				$("#device"+devid).html("<i class='icon-star'></i>");
+		 			}else{
+		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+		 			}
+		 		} 
+		 	});
+		}
+	});
+}
+
+function removeDevice(devid){
+	bootbox.confirm("Do you want to remove the device from your favorites?", function(result) {
+		if(result){
+			$.ajax({
+		 		url:'removedevicetofocus.html', 
+		 		type: 'post',
+		 		data: {deviceid:devid}, 
+				timeout: 5000,
+		 		error: function(XMLHttpRequest, textStatus, errorThrown){
+		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+		 		}, 
+		 		success: function(result){
+		 			if(result == 'true'){
+		 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
+		 				$("#device"+devid).attr("onclick","addDevice('"+devid+"')");
+		 				$("#device"+devid).attr("title","Add to Favorites");
+		 				$("#device"+devid).html("<i class='icon-star-empty'></i>");
+		 			}else{
+		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+		 			}
+		 		} 
+		 	});
+		}
+	});
+	
+}
 </script>
 <%-- <%
 String username = (String)request.getSession().getAttribute("username");
@@ -117,7 +170,7 @@ String username = (String)request.getSession().getAttribute("username");
 			        <ul class="navigation widget">
 			            <li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
 			            <li class="active"><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-			            <li><a href="friends.html" title=""><i class="icon-group"></i>Friend</a></li>
+			            <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
 			        </ul>
 			        <!-- /main navigation -->
 
@@ -148,7 +201,7 @@ String username = (String)request.getSession().getAttribute("username");
 						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-		                        <li><a href="friends.html" title=""><i class="icon-group"></i>Friends</a></li>
+		                        <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
 		                	</ul>
 		                </li>
 		            </ul>

@@ -164,38 +164,6 @@ public class PageController {
 		logger.info("favorites.html");
 		System.out.println("favorites.html");
 		
-		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
-		String username = securityContextImpl.getAuthentication().getName();
-		String password = securityContextImpl.getAuthentication().getCredentials().toString();
-		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
-		String userid = null;
-		if(ud instanceof LoginUserDetailsImpl){
-			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
-			userid = lud.getUserid();
-		}
-		
-		//get user config
-		String path =  request.getSession().getServletContext().getRealPath("/");
-		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
-		
-		List<String> deviceIds = conf.getFocusDeviceIds();	
-		List<Device> deviceList = new ArrayList<Device>();
-		
-		for(String devid:deviceIds){
-			try {
-				ArrayList<Entity> devs = (ArrayList<Entity>) this.getRESTClient()
-						.get("/device/" + devid, username, password);
-				for (Entity ent : devs) {
-					Device dev = (Device) ent;
-					deviceList.add(dev);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		request.setAttribute("list", deviceList);
-		
 		return "favorites";
 	}
 	

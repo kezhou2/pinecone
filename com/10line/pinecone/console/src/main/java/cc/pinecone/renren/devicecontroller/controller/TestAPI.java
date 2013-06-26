@@ -36,7 +36,7 @@ public class TestAPI {
 		TestAPI api = new TestAPI();
 //		api.testCreateData();
 		try {
-//			api.getAllDevice();
+			api.getAllDevice();
 //			api.createUser();
 //			api.test();
 //			api.activeDevice("26", "19");
@@ -50,10 +50,6 @@ public class TestAPI {
 //			api.test();
 			
 //			api.modifyUser();
-			
-			String a = "abcdefg";
-			
-			System.out.println(a.indexOf("cde", 0));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

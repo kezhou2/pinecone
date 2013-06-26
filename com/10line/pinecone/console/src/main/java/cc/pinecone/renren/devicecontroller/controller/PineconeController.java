@@ -520,4 +520,124 @@ public class PineconeController {
 			out.write("false");
 		out.close();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/queryfocusvariable.html", method = RequestMethod.GET)
+	public void queryfocusVariable(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		logger.info("queryfocusvariable.html");
+		System.out.println("queryfocusvariable");
+
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
+		String sEcho = param.sEcho;
+		int iTotalRecords = 0; 
+		int iTotalDisplayRecords = 0;
+		JSONArray data = new JSONArray(); //data that will be shown in the table
+		
+		List<String> deviceIds = conf.getFocusDeviceIds();
+		
+		int count = 0;
+		try{
+			for(String deviceId:deviceIds){
+				ArrayList<Entity> devs = (ArrayList<Entity>) this.getRESTClient()
+						.get("/device/" + deviceId, username, password);
+				Device device = (Device)devs.get(0);
+				
+				//one device title row for table
+				JSONArray r = new JSONArray();
+				r.add("<td colspan='6'>Name:"+device.getName()+" Code:"+device.getCode()+"</td>");
+				r.add("<ul class='table-controls'>"+
+						"<li><a href='#' onclick='removeDevice("+deviceId+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
+					"</ul>");
+				data.add(r);
+				count++;
+				
+				List<String> variableIds = conf.getFocusDeviceVariableIds(deviceId);
+				for(String variableId:variableIds){
+					ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
+							.get("/variable/" + variableId, username, password);
+					for (Entity ent : vars) {
+						Variable var = (Variable) ent;
+						ArrayList<Item> itemlist = new ArrayList<Item>();
+						if(var.getType().equals(Variable.WRITE)){
+							ArrayList<Entity> items = (ArrayList<Entity>) client
+									.get("/variable/" + var.getId() + "/items", username,password);
+							for (Entity ee : items) {
+								Item item = (Item) ee;
+								itemlist.add(item);
+							}
+						}
+						var.setItems(itemlist);
+						
+						JSONArray row = new JSONArray();
+						row.add(var.getId());
+						row.add(var.getType());
+						row.add(var.getName());
+						
+						if(var.getType().equals(Variable.READ)){
+							row.add("<strong varid='"+var.getId()+"'>loading...</strong>");
+						}else{
+							row.add("<strong varid='"+var.getId()+"'>--</strong>");
+						}
+						if(var.getType().equals(Variable.READ)){
+							row.add("<span class='dynamictrend' varid='"+var.getId()+"'>Loading...</span>");
+						}else{
+							row.add("");
+						}
+						
+						StringBuilder sb = new StringBuilder();
+						if(var.getType().equals(Variable.WRITE)){
+							sb.append("<select id='index"+var.getId()+"' name='select2' class='styled'>");
+						}else{
+							sb.append("<select id='index-"+var.getId()+"' name='select2' class='styled'>");
+							sb.append("<option value=''>None</option>");
+						}
+						
+						sb.append("<option></option>");
+						for(Item it:var.getItems()){
+							sb.append("<option value='"+var.getId()+"_"+it.getValue()+"'>"+it.getValue()+"</option>");
+						}
+						sb.append("</select>");
+						row.add(sb.toString());
+						
+						row.add("<ul class='table-controls'>"+
+									"<li><a href='#' onclick='removeVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
+								"</ul>");
+						data.add(row);
+						count++;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		iTotalRecords = count;
+		iTotalDisplayRecords = count;
+		
+		JSONObject jsonResponse = new JSONObject();
+		
+		jsonResponse.put("sEcho", sEcho);
+		jsonResponse.put("iTotalRecords", iTotalRecords);
+		jsonResponse.put("iTotalDisplayRecords", iTotalDisplayRecords);
+
+		jsonResponse.put("aaData", data);
+		System.out.println(jsonResponse.toJSONString());
+		response.setContentType("application/json");
+		response.getWriter().print(jsonResponse.toString());
+
+	}
 }

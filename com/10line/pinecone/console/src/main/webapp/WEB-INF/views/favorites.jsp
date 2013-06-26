@@ -48,294 +48,6 @@
 <script type="text/javascript" src="js/plugins/tables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
-<%
-String querydeviceid = (String)request.getAttribute("querydeviceid");
-%>
-<script type="text/javascript">
-var varids = [];
-var devCode;
-var jsonData;
-var isRefreshing = false;
-var isAlert = false;
-var refreshid;
-var isConnected = false;
-var trendvalue = new Array();
-var TREND_LEN = 10;
-function initConfig(){
-	//get all variable ids;
-    $("strong").each(function(){
-    	var id = $(this).attr('varid');
-    	
-     	if(id != null){
-     		varids.push(id);
-     	}
-	})
-	
-	devCode = $('#variablelist').attr('devicecode');	
-	//generate request json
- 	jsonData = "[";
- 	for(var i=0;i<varids.length;i++){
- 		if(i<varids.length-1){
- 			jsonData += varids[i]+",";
- 		}else{
- 			jsonData += varids[i]+"]";
- 		}
- 		
- 		trendvalue[varids[i]] = new Array();
- 	}
-}
-
-window.onload = function(){
-	$("#variablelist").dataTable({
-		"bJQueryUI": false,
-		"bAutoWidth": false,
-		"bFilter": false,
-		"bPaginate": false,
-		"sPaginationType": "full_numbers",
-		"oLanguage": {
-			"sProcessing": "Loading...",
-			"sSearch": "<span>Filter records:</span> _INPUT_",
-			"sLengthMenu": "<span>Show entries:</span> _MENU_",
-			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
-		},
-		"aoColumnDefs": [
-	    	{ "bSortable": false, "aTargets": [ 4, 5, 6 ] }
-	    ],
-		"bServerSide": true,
-		"bProcessing": true,
-		"fnDrawCallback": function( oSettings ) {
-			var row = oSettings._iRecordsDisplay;
-			for(var i=0;i<row;i++){
-				$("#index"+i).select2({
-					placeholder: 'Setting'
-				});
-				$("#index"+i).on("change", function(e) {
-					var splits = e.val.split("_");
-					if(splits.length >=2){
-						publish(splits[0],splits[1]);
-					}
-				});
-				
-				//disable
-				$("#index-"+i).select2({
-					placeholder: "Setting"
-				});
-				$("#index-"+i).attr("disabled","disabled");
-			}
-			
-			//init background thread
-			initConfig();
-			//setRefresh(2);
-		},
-		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
-    });
-}
-
-function refresh(){
-	isRefreshing = true;
-	$.ajax({
- 		url:'subscribedata', 
- 		type: 'POST',
- 		data: {ids:jsonData,devicecode:devCode}, 
-		timeout: 1000,
- 		error: function(XMLHttpRequest, textStatus, errorThrown){
- 			if(!isAlert){
- 				isAlert = true;
-	 			bootbox.confirm("Lost connection. Connect device again?", function(result) {
-	 				if(result =='false'){
-	 					clearInterval(refreshid);
-	 					isRefreshing = false;
-	 					isAlert = false;
-	 				}
-	 			});
- 			}
- 		}, 
- 		success: function(result){
- 			isConnected = true;
- 			var splits = result.split(",");
- 			if(splits.length > 1){
- 				for(var n=1;n<splits.length;n++){
- 					var tmp = splits[n].split(":");
- 					var id = tmp[0];
- 					var value = tmp[1];
- 					$("strong[varid='"+id+"']").text(value);
- 					
- 					setTrend(value,id);
- 				}
- 			}
- 		} 
- 	});
-}
-
-function setTrend(newvalue, varid){
-	if(trendvalue[varid] == null)
-		return;
-	
-	var len = trendvalue[varid].length;
-	if(len == null)
-		return;
-	
-	if(len == TREND_LEN)
-		trendvalue[varid].shift();
-		
-	trendvalue[varid].push(newvalue);
-	$("span[varid='"+varid+"']").sparkline(trendvalue[varid]);
-}
-
-function setRefresh(time){
-	isRefreshing = true;
-	clearInterval(refreshid);
-	refreshid = setInterval("refresh()",time*1000);
-}
-
-function stopRefresh(){
-	if(isRefreshing){
-		clearInterval(refreshid);
-		isRefreshing = false;
-	}
-}
-
-window.onunload = function(){
-	alert("onUnload");
-	stopRefresh();
-	
-	$.ajax({
- 		url:'subscribedata', 
- 		type: 'POST',
- 		data: {isDisconnect:'true'},
- 		async:false,
-		timeout: 500,
- 		error: function(){}, 
- 		success: function(result){
- 			isConnect = false;
- 		} 
- 	});
-}
-
-function publish(varid, value){
-	$.ajax({
- 		url:'publishdata', 
- 		type: 'POST',
- 		data: {deviceid:devCode,variableid:varid,vvalue:value}, 
-		timeout: 1000,
- 		error: function(XMLHttpRequest, textStatus, errorThrown){
- 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
- 		}, 
- 		success: function(result){
- 			if(result == "true"){
- 				$.jGrowl('Setting finished!', { sticky: true, theme: 'growl-success', life:1000});
- 			}else if(result == "false"){
- 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
- 			}
- 		} 
- 	});
-}
-
-function addDevice(devid){
-	bootbox.confirm("Do you want to add the device into your favorites?", function(result) {
-		if(result){
-			$.ajax({
-		 		url:'adddevicetofocus.html', 
-		 		type: 'post',
-		 		data: {deviceid:devid}, 
-				timeout: 5000,
-		 		error: function(XMLHttpRequest, textStatus, errorThrown){
-		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
-		 		}, 
-		 		success: function(result){
-		 			if(result == 'true'){
-		 				$.jGrowl('Favorite added!', { sticky: true, theme: 'growl-success', life:1000});
-		 				$("#addFavorite").attr("onclick","removeDevice('${device.id}')");
-		 				$("#addFavorite").attr("title","Remove from Favorite");
-		 				$("#addFavorite").html("<i class='icon-star'></i><span>Remove</span></a>");
-		 			}else{
-		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
-		 			}
-		 		} 
-		 	});
-		}
-	});
-}
-
-function removeDevice(devid){
-	bootbox.confirm("Do you want to remove the device from your favorites?", function(result) {
-		if(result){
-			$.ajax({
-		 		url:'removedevicetofocus.html', 
-		 		type: 'post',
-		 		data: {deviceid:devid}, 
-				timeout: 5000,
-		 		error: function(XMLHttpRequest, textStatus, errorThrown){
-		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
-		 		}, 
-		 		success: function(result){
-		 			if(result == 'true'){
-		 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
-		 				$("#addFavorite").attr("onclick","addDevice('${device.id}')");
-		 				$("#addFavorite").attr("title","Add to Favorite");
-		 				$("#addFavorite").html("<i class='icon-star-empty'></i><span>Add</span></a>");
-		 			}else{
-		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
-		 			}
-		 		} 
-		 	});
-		}
-	});
-	
-}
-
-function addVariable(devid,varid){
-	bootbox.confirm("Do you want to add the variable into your favorites?", function(result) {
-		if(result){
-			$.ajax({
-		 		url:'addvariabletofocus.html', 
-		 		type: 'post',
-		 		data: {deviceid:devid,variableid:varid}, 
-				timeout: 5000,
-		 		error: function(XMLHttpRequest, textStatus, errorThrown){
-		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
-		 		}, 
-		 		success: function(result){
-		 			if(result == 'true'){
-		 				$.jGrowl('Favorite added!', { sticky: true, theme: 'growl-success', life:1000});
-		 				$("#var"+varid).attr("onclick","removeVariable("+devid+","+varid+")");
-		 				$("#var"+varid).attr("title","Remove from favorites");
-		 				$("#var"+varid).html("<i class='icon-star'></i>");
-		 			}else{
-		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
-		 			}
-		 		} 
-		 	});
-		}
-	});
-}
-
-function removeVariable(devid,varid){
-	bootbox.confirm("Do you want to remove the variable from your favorites?", function(result) {
-		if(result){
-			$.ajax({
-		 		url:'removevariabletofocus.html', 
-		 		type: 'post',
-		 		data: {deviceid:devid,variableid:varid}, 
-				timeout: 5000,
-		 		error: function(XMLHttpRequest, textStatus, errorThrown){
-		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
-		 		}, 
-		 		success: function(result){
-		 			if(result == 'true'){
-		 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
-		 				$("#var"+varid).attr("onclick","addVariable("+devid+","+varid+")");
-		 				$("#var"+varid).attr("title","Add to favorites");
-		 				$("#var"+varid).html("<i class='icon-star-empty'></i>");
-		 			}else{
-		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
-		 			}
-		 		} 
-		 	});
-		}
-	});
-}
-</script>
 </head>
 
 <body>
@@ -452,10 +164,10 @@ function removeVariable(devid,varid){
                         </div>
                     </div>
                     
-                    <c:forEach var="device" items="${list}">
-	                    <h5 class="widget-name"><i class="icon-film"></i>Videos without titles</h5>
+                    <c:forEach items="${list}" var="dev">
+	                    <h5 class="widget-name" style="margin-top:15px"><i class="icon-film"></i>${dev.name}</h5>
 	                    <div class="table-overflow">
-	                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" devicecode="${device.code}">
+	                        <table id='variablelist' class="table table-striped table-bordered table-checks media-table" devicecode="${dev.code}">
 	                            <thead>
 	                                <tr>
 	                                	<th>ID</th>
@@ -468,8 +180,9 @@ function removeVariable(devid,varid){
 	                                </tr>
 	                            </thead>
 	                            <tbody> 
+	                            <!-- 
 									<c:forEach var="entry" items="${device.varList}">
-
+	
 									<c:set var="variable" value="${entry.value}" ></c:set>
 										<tr>
 											<td>${variable.id}</td>
@@ -501,13 +214,6 @@ function removeVariable(devid,varid){
 															    </c:when>
 															    <c:when test="${variable.type == 'write'}">
 															      	<button class="btn dropdown-toggle" data-toggle="dropdown">Setting <span class="caret dd-caret"></span></button>
-																	<!-- 
-																	<ul class="dropdown-menu">
-																		<c:forEach var="item" items="${variable.items}">
-																		<li><a href="#" onclick="publish('${variable.id }','${item.value}')" >${item.value}</a></li>
-																		</c:forEach>
-																	</ul>
-																	-->
 															    </c:when>
 															</c:choose>
 														</div>
@@ -516,10 +222,11 @@ function removeVariable(devid,varid){
 											</td>
 										</tr>
 									</c:forEach>
+									 -->
 	                            </tbody>
 	                        </table>
 	                    </div>
-                    </c:forEach>
+					</c:forEach>
                 </div>
                 <!-- /media datatable -->
 

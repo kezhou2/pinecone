@@ -1,13 +1,14 @@
 package cc.pinecone.renren.devicecontroller.model;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FocusDevice {
 
 	private String id;
 	private String code;
-	private Map<String, FocusVariable> varList = new LinkedHashMap<String,FocusVariable>();
+	private Map<String, FocusVariable> varList;
 	
 	public String getCode() {
 		return code;
@@ -34,6 +35,14 @@ public class FocusDevice {
 	
 	public void addVariable(FocusVariable variable){
 		varList.put(variable.getId(),variable);
+	}
+
+	public Map<String, FocusVariable> getVarList() {
+		return varList;
+	}
+
+	public void setVarList(Map<String, FocusVariable> varList) {
+		this.varList = varList;
 	}
 	
 }

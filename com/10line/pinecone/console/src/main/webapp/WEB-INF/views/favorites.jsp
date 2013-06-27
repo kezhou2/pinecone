@@ -74,7 +74,40 @@
 	src="js/plugins/tables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
+<script type="text/javascript" src="js/files/utils.js"></script>
+<%
+String conf = (String)request.getAttribute("focusConf");
+%>
 <script type="text/javascript">
+//devices' id user focus. 
+var deviceIds = [];
+//variables' id user focus.
+var variableIds = new Array();
+//json data that datatable sends
+var jsonData;
+//refresh thread's id;
+var refreshid;
+//
+var isConnected = false;
+//used to store variables history data
+var trendvalue = new Map();
+//define the size of history data
+var TREND_LEN = 10;
+//focus configuration in json style
+var focusConf = <%=conf%>
+
+function initConfig(){
+	for(var i=0;i<focusConf.length;i++){
+		var c = focusConf[i];
+		var splits = focusConf[i].variableIds.split("_");
+		for(var j=0;j<splits.length;j++){
+			if(splits[j] != ""){
+				trendvalue.put(splits[j],new Array());
+				variableIds.push(splits[j]);
+			}
+		}
+	}
+}
 
 window.onload = function(){
 	$("#focusList").dataTable({
@@ -95,12 +128,27 @@ window.onload = function(){
 		"bServerSide": true,
 		"bProcessing": true,
 		"fnDrawCallback": function( oSettings ) {
-			var row = oSettings._iRecordsDisplay;
-			for(var i=0;i<row;i++){
-				$("#index"+i).select2({
+			//init background thread
+			initConfig();
+			
+			//get device row
+			$("td>strong").each(function(){
+		    	var id = $(this).attr('deviceId');
+		     	if(id != null){
+		     		$(this).parent().attr("colspan",6);
+		     		$(this).parent().next().remove();
+		     		$(this).parent().next().remove();
+		     		$(this).parent().next().remove();
+		     		$(this).parent().next().remove();
+		     		$(this).parent().next().remove();
+		     	}
+			})
+			
+			for(var i=0;i<variableIds.length;i++){
+				$("#index"+variableIds[i]).select2({
 					placeholder: 'Setting'
 				});
-				$("#index"+i).on("change", function(e) {
+				$("#index"+variableIds[i]).on("change", function(e) {
 					var splits = e.val.split("_");
 					if(splits.length >=2){
 						publish(splits[0],splits[1]);
@@ -108,15 +156,14 @@ window.onload = function(){
 				});
 				
 				//disable
-				$("#index-"+i).select2({
+				$("#index-"+variableIds[i]).select2({
 					placeholder: "Setting"
 				});
-				$("#index-"+i).attr("disabled","disabled");
+				$("#index-"+variableIds[i]).attr("disabled","disabled");
 			}
 			
-			//init background thread
-			initConfig();
-			setRefresh(2);
+			
+			//setRefresh(2);
 		},	
 		"sAjaxSource": "/console/queryfocusvariable.html"
 	});

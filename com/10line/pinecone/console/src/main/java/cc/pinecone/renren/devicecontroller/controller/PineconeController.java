@@ -550,6 +550,7 @@ public class PineconeController {
 		List<String> deviceIds = conf.getFocusDeviceIds();
 		
 		int count = 0;
+		int rowColor = 0;
 		try{
 			for(String deviceId:deviceIds){
 				ArrayList<Entity> devs = (ArrayList<Entity>) this.getRESTClient()
@@ -558,7 +559,12 @@ public class PineconeController {
 				
 				//one device title row for table
 				JSONArray r = new JSONArray();
-				r.add("<td colspan='6'>Name:"+device.getName()+" Code:"+device.getCode()+"</td>");
+				r.add("<Strong deviceId='"+device.getId()+"'>Name:"+device.getName()+" Code:"+device.getCode()+"</strong>");
+				r.add("");
+				r.add("");
+				r.add("");
+				r.add("");
+				r.add("");
 				r.add("<ul class='table-controls'>"+
 						"<li><a href='#' onclick='removeDevice("+deviceId+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
 					"</ul>");

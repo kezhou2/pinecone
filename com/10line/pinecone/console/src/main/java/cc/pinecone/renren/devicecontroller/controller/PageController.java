@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,11 +161,39 @@ public class PageController {
 		return "friends";
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/favorites.html")
 	public String favorites(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("favorites.html");
 		System.out.println("favorites.html");
 		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		List<String> deviceIds = conf.getFocusDeviceIds();
+		
+		JSONArray focus = new JSONArray();
+		for(String devid:deviceIds){
+			List<String> variableIds = conf.getFocusDeviceVariableIds(devid);
+			StringBuilder strIds = new StringBuilder();
+			for(String varid:variableIds)
+				strIds.append(varid+"_");
+			JSONObject o = new JSONObject();
+			o.put("deviceId", devid);
+			o.put("variableIds", strIds.toString());
+			focus.add(o);
+		}
+		
+		System.out.println("json:"+focus.toJSONString());
+		request.setAttribute("focusConf", focus.toJSONString());
+
 		return "favorites";
 	}
 	

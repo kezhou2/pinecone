@@ -388,6 +388,7 @@ function removeVariable(devid,varid){
 			            <li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
 			            <li class="active"><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
 			            <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
+			            <li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
 			        </ul>
 			        <!-- /main navigation -->
 
@@ -420,6 +421,7 @@ function removeVariable(devid,varid){
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
 		                        <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
+		                        <li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
 		                	</ul>
 		                </li>
 		            </ul>

@@ -24,8 +24,12 @@
 <script type="text/javascript"
 	src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&amp;sensor=false"></script>
 
-<script type="text/javascript"
-	src="js/plugins/charts/jquery.sparkline.min.js"></script>
+<script type="text/javascript" src="js/plugins/charts/excanvas.min.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.orderBars.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.resize.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.pie.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.sparkline.min.js"></script>
 
 <script type="text/javascript"
 	src="js/plugins/ui/jquery.easytabs.min.js"></script>
@@ -75,6 +79,7 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript" src="js/files/utils.js"></script>
+<script type="text/javascript" src="js/charts/chart1.js"></script>
 <%
 String conf = (String)request.getAttribute("focusConf");
 %>
@@ -162,12 +167,33 @@ window.onload = function(){
 				$("#index-"+variableIds[i]).attr("disabled","disabled");
 			}
 			
+			//initialize alerm dialog
+			$("a#removeVariable").fancybox({
+				'autoDimensions'	: false,
+				'width'         	: 1000,
+				'height'        	: 'auto',
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none'
+			});
+			//initialize history dialog
+			
+			$("a#historyShow").fancybox({
+				'autoDimensions'	: false,
+				'width'         	: 1000,
+				'height'        	: 500,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none'
+			});
 			
 			//setRefresh(2);
 		},	
 		"sAjaxSource": "/console/queryfocusvariable.html"
 	});
 
+}
+
+function alermVariable(deviceId, variableId){
+	
 }
 
 </script>
@@ -189,10 +215,7 @@ window.onload = function(){
 				</a>
 					<ul class="dropdown-menu">
 						<li><a href="profile.html" title=""><i class="icon-user"></i>Profile</a></li>
-						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span
-								class="badge badge-info">9</span></a></li>
-						<li><a href="j_spring_security_logout" title=""><i
-								class="icon-signout"></i>Logout</a></li>
+						<li><a href="j_spring_security_logout" title=""><i	class="icon-signout"></i>Logout</a></li>
 					</ul></li>
 			</ul>
 		</div>
@@ -232,8 +255,8 @@ window.onload = function(){
 					<ul class="navigation widget">
 						<li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
 						<li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-						<li class="active"><a href="favorites.html" title=""><i
-								class="icon-bookmark"></i>Favorites</a></li>
+						<li class="active"><a href="favorites.html" title=""><i	class="icon-bookmark"></i>Favorites</a></li>
+						<li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
 					</ul>
 					<!-- /main navigation -->
 
@@ -255,7 +278,6 @@ window.onload = function(){
 				<div class="crumbs">
 					<ul id="breadcrumbs" class="breadcrumb">
 						<li><a href="index.html">Dashboard</a></li>
-						<li><a href="index.html">Devices</a></li>
 						<li class="active"><a href="#" title="">My favorites</a></li>
 					</ul>
 
@@ -267,8 +289,8 @@ window.onload = function(){
 							data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 							<ul class="dropdown-menu pull-right">
 								<li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-								<li><a href="favorites.html" title=""><i
-										class="icon-bookmark"></i>Favorites</a></li>
+								<li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
+								<li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
 							</ul></li>
 					</ul>
 				</div>
@@ -336,6 +358,92 @@ window.onload = function(){
 		</ul>
 	</div>
 	<!-- /footer -->
-
+	
+	<!-- fancy box for variable's alerm setting -->
+	<div style="display:none">
+		<form id="variable_form" action="#">
+	    	<div class="widget">
+	            <div class="navbar"><div class="navbar-inner"><h6>Variable alerm setting</h6></div></div>
+	
+	            <div class="well">
+	                
+	                <div class="control-group">
+	                    <label class="control-label">Condition type:</label>
+	                    <div class="controls">
+	                        <select id="conditionType" name="select2" class="styled" style="opacity: 0;">
+	                            <option value="opt1">Numeric</option>
+	                            <option value="opt2">String</option>
+	                        </select>
+	                    </div>
+	                    <label class="control-label">Condition:</label>
+	                    <div class="controls">
+	                        <select id="condition" name="select2" class="styled" style="opacity: 0;">
+	                            <option value="opt1">></option>
+	                            <option value="opt2">>=</option>
+	                            <option value="opt3">=</option>
+	                            <option value="opt4"><</option>
+	                            <option value="opt5"><=</option>
+	                            <option value="opt6">!=</option>
+	                        </select>
+	                    </div>
+	                    <label class="control-label">Value:</label>
+	                    <div class="controls"><input type="text" name="regular" class="span12" placeholder="Regular field"></div>
+	                </div>
+	                
+	                <div class="control-group">
+	                    <label class="control-label">Alerm type:</label>
+	                    <div class="controls">
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="option1" class="styled" style="opacity: 0;"></span></div>Log</label>
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="option1" class="styled" style="opacity: 0;"></span></div>Page</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="inlineCheckbox2" value="option2" class="styled" style="opacity: 0;"></span></div>Sound</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="inlineCheckbox3" value="option3" class="styled" style="opacity: 0;"></span></div>SMS</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="inlineCheckbox4" value="option4" class="styled" style="opacity: 0;"></span></div>Email</label>
+	                    </div>
+	                    <label class="control-label">Cell phone:</label>
+	                    <div class="controls"><input type="text" name="regular" class="span12" placeholder="Regular field"></div>
+	                    <label class="control-label">Email address:</label>
+	                    <div class="controls"><input type="text" name="regular" class="span12" placeholder="Regular field"></div>
+	                </div>
+	                
+	                <div class="form-actions align-right">
+	                    <button type="submit" class="btn btn-primary">Submit</button>
+	                    <button type="button" class="btn btn-danger">Cancel</button>
+	                    <button type="reset" class="btn">Reset</button>
+	                </div>
+	
+	            </div>
+	            
+	        </div>
+	    </form>
+	</div>
+	<!-- /end fancy box for variable's alerm setting -->
+	
+	<!-- fancy box for history show -->
+	<div class="span4" style="display:none">
+    	<div class="widget" id="history_panel">
+			<div class="navbar"><div class="navbar-inner"><h6>Variable history value</h6></div></div>
+            <div class="well body">
+            	<ul class="stats-details">
+            		<li>
+            			<strong>Current balance</strong>
+            			<span>latest update on 12:39 am</span>
+            		</li>
+            		<li>
+            			<div class="number">
+	            			<a href="#" title="" data-toggle="dropdown"></a>
+							<ul class="dropdown-menu pull-right">
+								<li><a href="#" title=""><i class="icon-refresh"></i>Reload data</a></li>
+								<li><a href="#" title=""><i class="icon-calendar"></i>Change time period</a></li>
+								<li><a href="#" title=""><i class="icon-download-alt"></i>Download statement</a></li>
+							</ul>
+							<span>6,458</span>
+						</div>
+            		</li>
+            	</ul>
+            	<div class="graph" id="chart1"></div>
+            </div>
+        </div>
+  	</div>
+	<!-- /end fancy box for history show -->
 </body>
 </html>

@@ -49,73 +49,6 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
-function disconnect(id){
-	bootbox.confirm("Are you sure?", function(result) {
-		if(result == true){
-			$.get("disconnectdevice.html?id="+id,function(result){
-				if(result == 'true'){
-					$.jGrowl('Disconnected the device!', { sticky: true, theme: 'growl-success', life:5000});
-					window.location.reload();
-				}else{
-					$.jGrowl('Failure in disconnecting the device!', { sticky: true, theme: 'growl-error', life:5000});
-				}
-			});	
-	  }
-	});
-}
-
-function addDevice(devid){
-	bootbox.confirm("Do you want to add the device into your favorites?", function(result) {
-		if(result){
-			$.ajax({
-		 		url:'adddevicetofocus.html', 
-		 		type: 'post',
-		 		data: {deviceid:devid}, 
-				timeout: 5000,
-		 		error: function(XMLHttpRequest, textStatus, errorThrown){
-		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
-		 		}, 
-		 		success: function(result){
-		 			if(result == 'true'){
-		 				$.jGrowl('Favorite added!', { sticky: true, theme: 'growl-success', life:1000});
-		 				$("#device"+devid).attr("onclick","removeDevice('"+devid+"')");
-		 				$("#device"+devid).attr("title","Remove from Favorites");
-		 				$("#device"+devid).html("<i class='icon-star'></i>");
-		 			}else{
-		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
-		 			}
-		 		} 
-		 	});
-		}
-	});
-}
-
-function removeDevice(devid){
-	bootbox.confirm("Do you want to remove the device from your favorites?", function(result) {
-		if(result){
-			$.ajax({
-		 		url:'removedevicetofocus.html', 
-		 		type: 'post',
-		 		data: {deviceid:devid}, 
-				timeout: 5000,
-		 		error: function(XMLHttpRequest, textStatus, errorThrown){
-		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
-		 		}, 
-		 		success: function(result){
-		 			if(result == 'true'){
-		 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
-		 				$("#device"+devid).attr("onclick","addDevice('"+devid+"')");
-		 				$("#device"+devid).attr("title","Add to Favorites");
-		 				$("#device"+devid).html("<i class='icon-star-empty'></i>");
-		 			}else{
-		 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
-		 			}
-		 		} 
-		 	});
-		}
-	});
-	
-}
 </script>
 <%-- <%
 String username = (String)request.getSession().getAttribute("username");
@@ -133,7 +66,6 @@ String username = (String)request.getSession().getAttribute("username");
 					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Welcome back, ${username}<b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="profile.html" title=""><i class="icon-user"></i>Profile</a></li>
-						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>
 						<li><a href="j_spring_security_logout" title=""><i class="icon-signout"></i>Logout</a></li>
 					</ul>
 				</li>
@@ -169,9 +101,9 @@ String username = (String)request.getSession().getAttribute("username");
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
 			            <li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
-			            <li class="active"><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
+			            <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
 			            <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
-			            <li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
+			            <li class="active"><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
 			        </ul>
 			        <!-- /main navigation -->
 
@@ -194,11 +126,10 @@ String username = (String)request.getSession().getAttribute("username");
 			    <div class="crumbs">
 		            <ul id="breadcrumbs" class="breadcrumb"> 
 		                <li><a href="index.html">Dashboard</a></li>
-		                <li class="active"><a href="index.html" title="">Devices</a></li>
+		                <li class="active"><a href="#" title="">Environment</a></li>
 		            </ul>
 			        
 		            <ul class="alt-buttons">
-						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus"></i><span>Active Device</span></a></li>
 						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
@@ -210,47 +141,24 @@ String username = (String)request.getSession().getAttribute("username");
 			    </div>
 			    <!-- /breadcrumbs line -->
 				
-                <!-- Media datatable -->
+                <!-- environment tab widget -->
                 <div class="widget">
-                	<div class="navbar">
-                    	<div class="navbar-inner">
-                        	<h6>Devices table</h6>
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab1" data-toggle="tab">house plan</a></li>
+                            <li class=""><a href="#tab2" data-toggle="tab">topology</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                            	<img alt="" src="img/museum/houseplan.png">
+                            </div>
+                            <div class="tab-pane" id="tab2">
+                           		<img alt="" src="img/museum/network.png">
+                            </div>
                         </div>
                     </div>
-                    <div class="table-overflow">
-                        <table id='devicelist' class="table table-striped table-bordered table-checks media-table">
-                            <thead>
-                                <tr>
-                                    <th>Icon</th>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Code</th>
-                                    <th class="actions-column">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <!-- 
-								<c:forEach var="device" items="${list}">
-									<tr>
-										<td><a href="img/demo/big.jpg" title="" class="lightbox"><img src="http://placehold.it/37x37" alt="" /></a></td>
-										<td>${device.name}</td>
-										<td>Feb 12, 2012. 12:28</td>
-										<td>${device.code}</td>
-										<td>
-											<ul class="navbar-icons">
-												<li><a href="#" class="tip" title="Add new option"><i class="icon-plus"></i></a></li>
-												<li><a href="#" class="tip" title="View statistics"><i class="icon-reorder"></i></a></li>
-												<li><a href="#" class="tip" title="Parameters"><i class="icon-cogs"></i></a></li>
-											</ul>
-										</td>
-									</tr>
-								</c:forEach>
-								-->
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
-                <!-- /media datatable -->
+                <!-- /media environment tab widget -->
 
             </div>
             <!-- /content wrapper -->

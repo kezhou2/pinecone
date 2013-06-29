@@ -620,7 +620,9 @@ public class PineconeController {
 						row.add(sb.toString());
 						
 						row.add("<ul class='table-controls'>"+
-									"<li><a href='#' onclick='removeVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
+								"<li><a href='#variable_form' id='removeVariable' onclick='alermVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Alerm setting'><i class='icon-warning-sign'></i></a></li>"+
+								"<li><a href='#history_panel' id='historyShow' onclick='showHistory("+deviceId+","+var.getId()+")' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
+								"<li><a href='#' onclick='removeVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
 								"</ul>");
 						data.add(row);
 						count++;

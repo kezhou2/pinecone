@@ -213,5 +213,14 @@ public class PageController {
 		response.setCharacterEncoding("UTF-8");
 		return "profile";
 	}
+	
+	@RequestMapping(value = "/environment.html")
+	public String environment(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("environment.html");
+		System.out.println("environment.html");
+		
+		response.setCharacterEncoding("UTF-8");
+		return "environment";
+	}
 
 }

@@ -5,6 +5,8 @@ package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -24,6 +26,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.SimpleAdapter;
@@ -115,20 +118,40 @@ public class DeviceActivity extends AbstractListActivity {
 	protected void buildListAdapter(Object[] result) {
 		// TODO Auto-generated method stub
 		if (result.length == 0) Toast.makeText(this, R.string.error_device_code_is_not_existed, Toast.LENGTH_LONG).show();
-		ArrayList<HashMap<String, Device>> items = new ArrayList<HashMap<String, Device>>();
+		ArrayList<HashMap<String, String>> items = new ArrayList<HashMap<String, String>>();
 		for (int i=0; i<result.length; i++) {
-			HashMap<String, Device> item = new HashMap<String, Device>();
-			item.put("device", (Device) result[i]); items.add(item);
+			HashMap<String, String> item = new HashMap<String, String>();
+			Device device = (Device) result[i];
+			item.put("deviceId", device.getId().toString());
+			item.put("deviceCode", device.getCode());
+			item.put("deviceName", device.getName());
+			items.add(item);
 		}	
-		SimpleAdapter adapter = new SimpleAdapter(this, items, R.layout.device_item, new String[]{"device"}, new int[]{R.id.device});
-        adapter.setViewBinder(this); setListAdapter(adapter);
+        setListAdapter(new DeviceAdapter(this, items, R.layout.device_item, new String[]{"deviceName"}, new int[]{R.id.device_name}));
 	}
 	
-	@Override
-	public boolean setViewValue(View view, Object data, String textRepresentation) {
-		// TODO Auto-generated method stub
-		Device device = (Device) data; view.setTag(device.getCode()); view.setId(device.getId().intValue());
-		((TextView) view.findViewById(R.id.device_name)).setText(device.getName()); return true;
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class DeviceAdapter extends SimpleAdapter {
+		
+		public DeviceAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
+			super(context, data, resource, from, to);
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		@SuppressWarnings("unchecked")
+	    public View getView(int position, View convertView, ViewGroup parent) {
+			View view = super.getView(position, convertView, parent);
+			HashMap<String, String> item = (HashMap<String, String>) getItem(position);
+			view.setTag(item.get("deviceCode")); 
+			view.setId(Integer.valueOf(item.get("deviceId")));
+			return view;
+		}
+		
 	}
 	
 	@Override

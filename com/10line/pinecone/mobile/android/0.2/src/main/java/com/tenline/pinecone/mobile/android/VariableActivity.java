@@ -5,6 +5,8 @@ package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -23,6 +25,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
@@ -109,22 +112,45 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 	@Override
 	protected void buildListAdapter(Object[] result) {
 		// TODO Auto-generated method stub
-		ArrayList<HashMap<String, Variable>> items = new ArrayList<HashMap<String, Variable>>();      
+		ArrayList<HashMap<String, String>> items = new ArrayList<HashMap<String, String>>();      
         for (int i=0; i<result.length; i++) {
-        	HashMap<String, Variable> item = new HashMap<String, Variable>();
-        	item.put("variable", (Variable) result[i]); items.add(item);
+        	HashMap<String, String> item = new HashMap<String, String>();
+        	Variable variable = (Variable) result[i];
+        	item.put("variableId", variable.getId().toString()); 
+        	item.put("variableName", variable.getName());
+        	item.put("variableType", variable.getType());
+        	items.add(item);
         }
-        SimpleAdapter adapter = new SimpleAdapter(this, items, R.layout.variable_item, new String[]{"variable"}, new int[]{R.id.variable});
-        adapter.setViewBinder(this); setListAdapter(adapter);
+        setListAdapter(new VariableAdapter(this, items, R.layout.variable_item, new String[]{"variableName"}, new int[]{R.id.variable_name}));
 	}
+	
+	/**
+	 * 
+	 * @author Bill
+	 *
+	 */
+	private class VariableAdapter extends SimpleAdapter {
 
-	@Override
-	public boolean setViewValue(View view, Object data, String textRepresentation) {
-		// TODO Auto-generated method stub
-		Variable variable = (Variable) data; view.setId(Long.valueOf(variable.getId()).intValue());
-		if (variable.getType().contains(Variable.WRITE)) {
-			view.setClickable(false); ((ImageView) view.findViewById(R.id.variable_icon)).setImageResource(android.R.drawable.presence_online);
-		} else view.setClickable(true); ((TextView) view.findViewById(R.id.variable_name)).setText(variable.getName()); return true;
+		public VariableAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
+			super(context, data, resource, from, to);
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		@SuppressWarnings("unchecked")
+	    public View getView(int position, View convertView, ViewGroup parent) {
+			View view = super.getView(position, convertView, parent);
+			HashMap<String, String> item = (HashMap<String, String>) getItem(position);
+			view.setId(Integer.valueOf(item.get("variableId")));
+			if (item.get("variableType").contains(Variable.WRITE)) {
+				view.setClickable(false); 
+				((ImageView) view.findViewById(R.id.variable_icon)).setImageResource(android.R.drawable.presence_online);
+			} else {
+				view.setClickable(true);
+			}
+			return view;
+		}
+		
 	}
 
 	@Override

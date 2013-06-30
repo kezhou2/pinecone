@@ -23,13 +23,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SimpleAdapter.ViewBinder;
 
 /**
  * @author Bill
  *
  */
-public abstract class AbstractListActivity extends ListActivity implements ViewBinder, TabListener {
+public abstract class AbstractListActivity extends ListActivity implements TabListener {
 
 	private NetworkReceiver receiver = new NetworkReceiver();
 	

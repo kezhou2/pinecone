@@ -96,19 +96,12 @@ public class ItemActivity extends AbstractMessageActivity {
 	@Override
 	protected void buildListAdapter(Object[] result) {
 		// TODO Auto-generated method stub
-		ArrayList<HashMap<String, Item>> items = new ArrayList<HashMap<String, Item>>();
+		ArrayList<HashMap<String, String>> items = new ArrayList<HashMap<String, String>>();
 		for (int i=0; i<result.length; i++) {
-			HashMap<String, Item> item = new HashMap<String, Item>();
-			item.put("item", (Item) result[i]); items.add(item);
+			HashMap<String, String> item = new HashMap<String, String>();
+			item.put("itemValue", ((Item) result[i]).getValue()); items.add(item);
 		}	
-		SimpleAdapter adapter = new SimpleAdapter(this, items, R.layout.item_item, new String[]{"item"}, new int[]{R.id.item});
-        adapter.setViewBinder(this); setListAdapter(adapter);
-	}
-
-	@Override
-	public boolean setViewValue(View view, Object data, String textRepresentation) {
-		// TODO Auto-generated method stub
-		Item item = (Item) data; ((TextView) view.findViewById(R.id.item_value)).setText(item.getValue()); return true;
+        setListAdapter(new SimpleAdapter(this, items, R.layout.item_item, new String[]{"itemValue"}, new int[]{R.id.item_value}));
 	}
 
 }

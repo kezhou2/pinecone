@@ -36,11 +36,11 @@ public class TestAPI {
 		TestAPI api = new TestAPI();
 //		api.testCreateData();
 		try {
-			api.getAllDevice();
+//			api.getAllDevice();
 //			api.createUser();
 //			api.test();
 //			api.activeDevice("26", "19");
-//			api.getUserData("liugy");
+			api.getUserData("sunny");
 //			api.createDevice();
 //			api.getAllDevice();
 //			api.getAllUser();
@@ -50,6 +50,7 @@ public class TestAPI {
 //			api.test();
 			
 //			api.modifyUser();
+//			api.test1();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,60 +71,71 @@ public class TestAPI {
 		client = new RESTClient(baseUrl);
 	}
 	
+	public void test1()throws Exception{
+		User user = (User) client.get("/user/93", "admin", "admin").toArray()[0];
+		System.out.println("user id:"+user.getId().toString());
+		System.out.println("user name:"+user.getName());
+		System.out.println("user email:"+user.getEmail());
+	}
+	
 	public void modifyUser() throws Exception{
-		User user = (User) client.get("/user/21", "admin", "admin").toArray()[0];
-		user.setPassword("liugy");
+		User user = (User) client.get("/user/93", "admin", "admin").toArray()[0];
+//		user.setPassword("liugy");
+		
+		authority = new Authority();
+		authority.setAuthority("ROLE_USER");
+		authority.setUserName("sunny");
 		System.out.println(client.post("/user/"+user.getId(), user));
 	}
 	
 	public void test() throws Exception{
-//		user.setId(Long.valueOf(client.post("/user", user)));
-//		authority.setId(Long.valueOf(client.post("/authority", authority)));
-//		System.out.println("---------- User Test Case ----------");
-//		user = (User) client.get("/user/" + user.getId(), user.getName(), user.getPassword()).toArray()[0];
-//		System.out.println("user id:"+user.getId().toString());
-//		System.out.println("user name:"+user.getName());
-//		System.out.println("user email:"+user.getEmail());
-//
-//		System.out.println("Modify:"+client.put("/user/" + user.getId(), user));
-//		user = (User) client.get("/user/" + user.getId(), user.getName(), "198297").toArray()[0];
-//		
-//		System.out.println("----------- Authority Test Case ---------");
-//		authority = (Authority) client.get("/authority/" + authority.getId(), "admin", "admin").toArray()[0];
-//		System.out.println("authority id:"+authority.getId().toString());
-//		
-//		authority.setUserName("liugy");
-//		authority.setAuthority("ROLE_ADMIN");
-//		System.out.println("modify:"+client.post("/authority/" + authority.getId(), authority));// UserName is updated (exported = false)
-//		authority = (Authority) client.get("/authority/" + authority.getId(), "admin", "admin").toArray()[0];
-//		System.out.println(authority.getId().toString());
-//		System.out.println(authority.getAuthority());
-//		System.out.println(client.post("/authority/" + authority.getId() + "/user", "/user/" + user.getId()));	
-//		System.out.println("---------- Device Test Case ----------");
-//		device.setId(Long.valueOf(client.post("/device", device)));
-//		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
-//		System.out.println("device id:"+device.getId().toString());
-//		System.out.println("device name:"+device.getName());
-//		System.out.println("device code:"+device.getCode());
-//		device.setName("FM");
-//		System.out.println(client.put("/device/" + device.getId(), device));
-//		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
-//		System.out.println(device.getId().toString());
-//		System.out.println(device.getName());
-//		System.out.println(device.getCode());
-//		System.out.println(client.post("/device/" + device.getId() + "/user", "/user/" + user.getId()));	
-//		System.out.println("----------- Test Case End ---------");
-//		client.get("/user/" + user.getId() + "/devices", user.getName(), "123456");
-//		client.get("/user/" + user.getId() + "/authorities", user.getName(), "123456");
-//		System.out.println(client.delete("/user/" + user.getId()));	
-//		// Authentication request for failed, because user has been deleted
-//		client.get("/user", user.getName(), "123456");
-//		client.get("/authority", user.getName(), "123456");
-//		client.get("/device", user.getName(), "123456");
-//		// The correct result
-//		client.get("/user", "admin", "admin");
-//		client.get("/authority", "admin", "admin");
-//		client.get("/device", "admin", "admin");
+		user.setId(Long.valueOf(client.post("/user", user)));
+		authority.setId(Long.valueOf(client.post("/authority", authority)));
+		System.out.println("---------- User Test Case ----------");
+		user = (User) client.get("/user/" + user.getId(), user.getName(), user.getPassword()).toArray()[0];
+		System.out.println("user id:"+user.getId().toString());
+		System.out.println("user name:"+user.getName());
+		System.out.println("user email:"+user.getEmail());
+
+		System.out.println("Modify:"+client.put("/user/" + user.getId(), user));
+		user = (User) client.get("/user/" + user.getId(), user.getName(), "198297").toArray()[0];
+		
+		System.out.println("----------- Authority Test Case ---------");
+		authority = (Authority) client.get("/authority/" + authority.getId(), "admin", "admin").toArray()[0];
+		System.out.println("authority id:"+authority.getId().toString());
+		
+		authority.setUserName("liugy");
+		authority.setAuthority("ROLE_ADMIN");
+		System.out.println("modify:"+client.post("/authority/" + authority.getId(), authority));// UserName is updated (exported = false)
+		authority = (Authority) client.get("/authority/" + authority.getId(), "admin", "admin").toArray()[0];
+		System.out.println(authority.getId().toString());
+		System.out.println(authority.getAuthority());
+		System.out.println(client.post("/authority/" + authority.getId() + "/user", "/user/" + user.getId()));	
+		System.out.println("---------- Device Test Case ----------");
+		device.setId(Long.valueOf(client.post("/device", device)));
+		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
+		System.out.println("device id:"+device.getId().toString());
+		System.out.println("device name:"+device.getName());
+		System.out.println("device code:"+device.getCode());
+		device.setName("FM");
+		System.out.println(client.put("/device/" + device.getId(), device));
+		device = (Device) client.get("/device/" + device.getId(), "admin", "admin").toArray()[0];
+		System.out.println(device.getId().toString());
+		System.out.println(device.getName());
+		System.out.println(device.getCode());
+		System.out.println(client.post("/device/" + device.getId() + "/user", "/user/" + user.getId()));	
+		System.out.println("----------- Test Case End ---------");
+		client.get("/user/" + user.getId() + "/devices", user.getName(), "123456");
+		client.get("/user/" + user.getId() + "/authorities", user.getName(), "123456");
+		System.out.println(client.delete("/user/" + user.getId()));	
+		// Authentication request for failed, because user has been deleted
+		client.get("/user", user.getName(), "123456");
+		client.get("/authority", user.getName(), "123456");
+		client.get("/device", user.getName(), "123456");
+		// The correct result
+		client.get("/user", "admin", "admin");
+		client.get("/authority", "admin", "admin");
+		client.get("/device", "admin", "admin");
 	}
 	
 	public void activeDevice(String userid, String deviceid) throws Exception{

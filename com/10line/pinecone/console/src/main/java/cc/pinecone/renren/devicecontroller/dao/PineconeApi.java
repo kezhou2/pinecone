@@ -135,7 +135,7 @@ public class PineconeApi {
 				System.out.println("messageArrived");
 			}
 		}, subject);
-		cclient.publish(payload);
+		cclient.publish(subject,payload);
 		return true;
 	}
 

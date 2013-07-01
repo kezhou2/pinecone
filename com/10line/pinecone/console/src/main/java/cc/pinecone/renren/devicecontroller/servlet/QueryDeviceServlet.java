@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 import cc.pinecone.renren.devicecontroller.controller.TestAPI;
+import cc.pinecone.renren.devicecontroller.model.ExDeviceInfo;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.model.Device;
@@ -134,21 +135,28 @@ public class QueryDeviceServlet extends HttpServlet {
 		jsonResponse.put("iTotalDisplayRecords", iTotalDisplayRecords);
 			
 		for(Device c : devices){
+			ExDeviceInfo info = conf.getDeviceExtInfo(c.getId().toString());
+			System.out.println("&&&mac:"+info.getMacId()+"|addr:"+info.getAddress()+"|desc:"+info.getDescription());
 			JSONArray row = new JSONArray();
 			row.add("<a href='img/demo/big.jpg' title='' class='lightbox'><img src='http://placehold.it/37x37' alt='' /></a>");
 			row.add(c.getId());
 			row.add(c.getName());
 			row.add(c.getCode());
+			row.add(info.getMacId());
+			row.add(info.getAddress());
+
 			if(conf.getDevice(""+c.getId()) == null){
 				row.add("<ul class='table-controls'>"+
 							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
 							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='Edit Information'><i class='icon-edit'></i></a></li>"+
 							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='addDevice("+c.getId()+")' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
 						"</ul>");
 			}else{
 				row.add("<ul class='table-controls'>"+
 							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
 							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='Edit Information'><i class='icon-edit'></i></a></li>"+
 							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='removeDevice("+c.getId()+")' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
 						"</ul>");
 			}
@@ -156,6 +164,7 @@ public class QueryDeviceServlet extends HttpServlet {
 		}
 		jsonResponse.put("aaData", data);
 		System.out.println(jsonResponse.toJSONString());
+		resp.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.getWriter().print(jsonResponse.toString());
 	}

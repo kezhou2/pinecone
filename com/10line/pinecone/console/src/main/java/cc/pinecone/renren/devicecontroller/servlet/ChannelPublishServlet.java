@@ -40,9 +40,9 @@ public class ChannelPublishServlet extends HttpServlet{
 		
 		if(connectorMap.get(devicecode) == null){
 			try {
-//				Connector con = new Connector(devicecode,"pinecone@device."+devicecode+".publish");
+				Connector con = new Connector(devicecode,"pinecone@device."+devicecode+".publish");
 				//FIXME need to change back.
-				Connector con = new Connector(devicecode,"pinecone@device."+devicecode);
+//				Connector con = new Connector(devicecode,"pinecone@device."+devicecode);
 				connectorMap.put(devicecode, con);
 				
 			} catch (Exception e) {
@@ -58,7 +58,7 @@ public class ChannelPublishServlet extends HttpServlet{
 		Connector connector = connectorMap.get(devicecode);
 		if(connector != null){
 			try {
-				connector.publish(varid, value);
+				connector.publish("pinecone@device."+devicecode+".publish",varid, value);
 				out.write("true");
 				out.close();
 				return;

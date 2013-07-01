@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
+import cc.pinecone.renren.devicecontroller.model.ExDeviceInfo;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 import cc.pinecone.renren.devicecontroller.servlet.DataTablesParamUtility;
 import cc.pinecone.renren.devicecontroller.servlet.JQueryDataTableParamModel;
@@ -646,6 +647,34 @@ public class PineconeController {
 		System.out.println(jsonResponse.toJSONString());
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
-
+	}
+	
+	@RequestMapping(value = "/editdeviceinfo.html", method = RequestMethod.GET)
+	public void editDeviceInfo(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		logger.info("editDeviceInfo.html");
+		System.out.println("editDeviceInfo");
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		String devid = request.getParameter("id");
+		String mac = request.getParameter("mac");
+		String addr = new String(request.getParameter("addr").getBytes("iso8859-1"),"utf-8"); 
+		System.out.println("devid:" + devid + " mac:" + mac+" addr:"+addr);
+		ExDeviceInfo info = new ExDeviceInfo();
+		info.setId(Long.parseLong(devid));
+		info.setMacId(mac);
+		info.setAddress(addr);
+		conf.addDeviceExtInfo(info);
+		PrintWriter out = response.getWriter();
+		out.print("true");
 	}
 }

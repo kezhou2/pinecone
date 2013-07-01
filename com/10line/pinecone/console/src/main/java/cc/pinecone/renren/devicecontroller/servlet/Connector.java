@@ -20,13 +20,13 @@ public class Connector implements MqttCallback{
 	private Map<String,String> values;
 	private ChannelClient client;
 	
-	public Connector(String deviceid) throws Exception{
-		values = new LinkedHashMap<String,String>();
-		
-		this.client = new ChannelClient(AppConfig.CHANNEL_URL);
-		//TODO
-		this.client.listen(this, "pinecone@device."+deviceid);
-	}
+//	public Connector(String deviceid) throws Exception{
+//		values = new LinkedHashMap<String,String>();
+//		
+//		this.client = new ChannelClient(AppConfig.CHANNEL_URL);
+//		//TODO
+//		this.client.listen(this, "pinecone@device."+deviceid);
+//	}
 	
 	public Connector(String deviceid, String topic) throws Exception{
 		values = new LinkedHashMap<String,String>();
@@ -116,11 +116,11 @@ public class Connector implements MqttCallback{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void publish(String varid,String value) throws Exception{
+	public void publish(String topic, String varid,String value) throws Exception{
 		JSONObject obj = new JSONObject();
 		obj.put("id", varid);
 		obj.put("value", value);
 		System.out.println("publish json string------------------------------:"+obj.toJSONString());
-		client.publish(obj.toJSONString());
+		client.publish(topic,obj.toJSONString());
 	}
 }

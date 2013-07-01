@@ -2,7 +2,7 @@ package cc.pinecone.renren.devicecontroller.config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +17,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import cc.pinecone.renren.devicecontroller.controller.AppConfig;
+import cc.pinecone.renren.devicecontroller.model.ExDeviceInfo;
 import cc.pinecone.renren.devicecontroller.model.FocusDevice;
 import cc.pinecone.renren.devicecontroller.model.FocusVariable;
 
@@ -53,7 +53,9 @@ public class Config {
 		File confFile = new File(CONFIG_FILE);
 		if(!confFile.exists()){
 			doc = DocumentHelper.createDocument();
-			doc.addElement("configuration");
+			Element root = doc.addElement("configuration");
+			root.addElement("extension");
+			root.addElement("favorites");
 		}else{
 			SAXReader saxReader = new SAXReader();
 			doc = saxReader.read(CONFIG_FILE);
@@ -61,15 +63,15 @@ public class Config {
 	}
 	
 	private void save() throws FileNotFoundException, IOException{
-		XMLWriter output = new XMLWriter(new FileWriter( new File(CONFIG_FILE) ));
+		XMLWriter output = new XMLWriter(new FileOutputStream( new File(CONFIG_FILE) ));
 	    output.write(doc);
 	    output.close();
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public boolean addFocusVariable(String deviceId, String variableId) throws FileNotFoundException, IOException{
-		Element root = doc.getRootElement();
-		Iterator it = root.elementIterator("Device");
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
 		while(it.hasNext()){
 			Element device = (Element)it.next();
 			String id = device.attributeValue("id");
@@ -84,17 +86,17 @@ public class Config {
 					}
 				}
 				Element varEl = device.addElement("Variable");
-				Element test = varEl.addAttribute("id", variableId);
+				varEl.addAttribute("id", variableId);
 				varEl.addElement("AlermStr");
 				save();
 				return true;
 			}
 		}
 		
-		Element devEl = root.addElement("Device");
+		Element devEl = favorites.addElement("Device");
 		devEl.addAttribute("id", deviceId);
 		Element varEl = devEl.addElement("Variable");
-		Element test = varEl.addAttribute("id", variableId);
+		varEl.addAttribute("id", variableId);
 		varEl.addElement("AlermStr");
 		save();
 		return true;
@@ -102,8 +104,8 @@ public class Config {
 	
 	@SuppressWarnings("rawtypes")
 	public boolean deleteFocusVariable(String deviceId, String variableId) throws FileNotFoundException, IOException{
-		Element root = doc.getRootElement();
-		Iterator it = root.elementIterator("Device");
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
 		while(it.hasNext()){
 			Element device = (Element)it.next();
 			String id = device.attributeValue("id");
@@ -126,13 +128,13 @@ public class Config {
 	
 	@SuppressWarnings("rawtypes")
 	public boolean deleteDevice(String deviceId) throws FileNotFoundException, IOException{
-		Element root = doc.getRootElement();
-		Iterator it = root.elementIterator("Device");
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
 		while(it.hasNext()){
 			Element device = (Element)it.next();
 			String id = device.attributeValue("id");
 			if(id != null && id.equals(deviceId)){
-				root.remove(device);
+				favorites.remove(device);
 				save();
 				return true;
 			}
@@ -145,8 +147,8 @@ public class Config {
 	public List<String> getFocusDeviceIds(){
 		List<String> result = new ArrayList<String>();
 		
-		Element root = doc.getRootElement();
-		Iterator it = root.elementIterator("Device");
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
 		while(it.hasNext()){
 			Element device = (Element)it.next();
 			String id = device.attributeValue("id");
@@ -163,8 +165,8 @@ public class Config {
 	public List<String> getFocusDeviceVariableIds(String deviceId){
 		List<String> result = new ArrayList<String>();
 		
-		Element root = doc.getRootElement();
-		Iterator it = root.elementIterator("Device");
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
 		while(it.hasNext()){
 			Element device = (Element)it.next();
 			String id = device.attributeValue("id");
@@ -188,8 +190,8 @@ public class Config {
 	
 	@SuppressWarnings("rawtypes")
 	public FocusVariable getVariable(String deviceId, String variableId){
-		Element root = doc.getRootElement();
-		Iterator it = root.elementIterator("Device");
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
 		while(it.hasNext()){
 			Element device = (Element)it.next();
 			String id = device.attributeValue("id");
@@ -214,8 +216,8 @@ public class Config {
 	
 	@SuppressWarnings("rawtypes")
 	public FocusDevice getDevice(String deviceId){
-		Element root = doc.getRootElement();
-		Iterator it = root.elementIterator("Device");
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
 		while(it.hasNext()){
 			Element device = (Element)it.next();
 			String id = device.attributeValue("id");
@@ -239,5 +241,115 @@ public class Config {
 		}
 		
 		return null;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public boolean addDeviceExtInfo(ExDeviceInfo info) throws FileNotFoundException, IOException{
+		Element extension = doc.getRootElement().element("extension");
+		Iterator it = extension.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(""+info.getId())){
+				{
+					Element macId = device.element("MacID");
+					if(macId == null){
+						macId = device.addElement("MacID");
+						macId.setText(info.getMacId());
+					}else{
+						macId.setText(info.getMacId());
+					}
+				}
+				
+				{
+					Element addr = device.element("Address");
+					if(addr == null){
+						addr = device.addElement("Address");
+						addr.setText(info.getAddress());
+					}else{
+						addr.setText(info.getAddress());
+					}
+				}
+				
+				{
+					Element des = device.element("Description");
+					if(des == null){
+						des = device.addElement("Description");
+						des.setText(info.getDescription());
+					}else{
+						des.setText(info.getDescription());
+					}
+				}
+				
+				save();
+				return true;
+			}
+		}
+		
+		Element devEl = extension.addElement("Device");
+		devEl.addAttribute("id", ""+info.getId());
+		Element macId = devEl.addElement("MacID");
+		macId.setText(info.getMacId());
+		Element addr = devEl.addElement("Address");
+		addr.setText(info.getAddress());
+		Element des = devEl.addElement("Description");
+		des.setText(info.getDescription());
+		save();
+		return true;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public ExDeviceInfo getDeviceExtInfo(String deviceId) throws FileNotFoundException, IOException{
+		Element extension = doc.getRootElement().element("extension");
+		Iterator it = extension.elementIterator("Device");
+		ExDeviceInfo info = new ExDeviceInfo();
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				Element macId = device.element("MacID");
+				if(macId == null){
+					info.setMacId("");
+				}else{
+					info.setMacId(macId.getTextTrim());
+				}
+
+				Element addr = device.element("Address");
+				if(addr == null){
+					info.setAddress("");
+				}else{
+					info.setAddress(addr.getTextTrim());
+				}
+				
+				Element des = device.element("Description");
+				if(des == null){
+					info.setDescription("");
+				}else{
+					info.setDescription(des.getTextTrim());
+				}
+				return info;
+			}
+		}
+		
+		return info;
+	}
+	
+	public static void main(String[] args){
+		try {
+			Config conf = new Config("D:\\Workspace\\Console\\console\\src\\main\\webapp\\config-cache\\45.xml");
+			ExDeviceInfo info = new ExDeviceInfo();
+			info.setId(500L);
+			info.setMacId("222");
+			info.setAddress("奇怪");
+			conf.addDeviceExtInfo(info);
+			conf.addDeviceExtInfo(info);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

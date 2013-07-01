@@ -114,7 +114,26 @@ function removeDevice(devid){
 		 	});
 		}
 	});
-	
+}
+
+function editDeviceInfo(devid){
+	bootbox.prompt("Please input device mac id:", function(mac) {
+		if(mac != null){
+			bootbox.prompt("Please input device address",function(addr){
+				if(addr != null){
+					var address = encodeURI(addr);
+					$.get("editdeviceinfo.html?id="+devid+"&mac="+mac+"&addr="+address,function(result){
+						if(result == 'true'){
+							$.jGrowl('Appended device information!', { sticky: true, theme: 'growl-success', life:5000});
+							window.location.reload();
+						}else{
+							$.jGrowl('Failure in appending device information!', { sticky: true, theme: 'growl-error', life:5000});
+						}
+					});
+				}
+			});
+		}
+	});
 }
 </script>
 <%-- <%
@@ -225,6 +244,8 @@ String username = (String)request.getSession().getAttribute("username");
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Code</th>
+                                    <th>Mac</th>
+                                    <th>Address</th>
                                     <th class="actions-column">Actions</th>
                                 </tr>
                             </thead>

@@ -15,6 +15,11 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&amp;sensor=false"></script>
 
+<script type="text/javascript" src="js/plugins/charts/excanvas.min.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.orderBars.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.resize.js"></script>
+<script type="text/javascript" src="js/plugins/charts/jquery.flot.pie.js"></script>
 <script type="text/javascript" src="js/plugins/charts/jquery.sparkline.min.js"></script>
 
 <script type="text/javascript" src="js/plugins/ui/jquery.easytabs.min.js"></script>
@@ -48,6 +53,9 @@
 <script type="text/javascript" src="js/plugins/tables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
+
+<script type="text/javascript" src="js/files/utils.js"></script>
+<script type="text/javascript" src="js/charts/chart1.js"></script>
 <%
 String querydeviceid = (String)request.getAttribute("querydeviceid");
 %>
@@ -122,6 +130,17 @@ window.onload = function(){
 				});
 				$("#index-"+i).attr("disabled","disabled");
 			}
+			
+			//init history dialog
+			$("a#historyShow").fancybox({
+				'autoDimensions'	: false,
+				'width'         	: 500,
+				'height'        	: 500,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'autoScale'		: false,
+				
+			});
 			
 			//init background thread
 			initConfig();
@@ -536,6 +555,32 @@ function removeVariable(devid,varid){
 		</ul>
 	</div>
 	<!-- /footer -->
-
+	<!-- fancy box for history show -->
+	<div class="span4" style="display:none">
+    	<div class="widget" id="history_panel">
+			<div class="navbar"><div class="navbar-inner"><h6>Variable history value</h6></div></div>
+            <div class="well body">
+            	<ul class="stats-details">
+            		<li>
+            			<strong>Current balance</strong>
+            			<span>latest update on 12:39 am</span>
+            		</li>
+            		<li>
+            			<div class="number">
+	            			<a href="#" title="" data-toggle="dropdown"></a>
+							<ul class="dropdown-menu pull-right">
+								<li><a href="#" title=""><i class="icon-refresh"></i>Reload data</a></li>
+								<li><a href="#" title=""><i class="icon-calendar"></i>Change time period</a></li>
+								<li><a href="#" title=""><i class="icon-download-alt"></i>Download statement</a></li>
+							</ul>
+							<span>6,458</span>
+						</div>
+            		</li>
+            	</ul>
+            	<div class="graph" id="chart1"></div>
+            </div>
+        </div>
+  	</div>
+	<!-- /end fancy box for history show -->
 </body>
 </html>

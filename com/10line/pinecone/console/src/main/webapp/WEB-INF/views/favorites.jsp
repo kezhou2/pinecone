@@ -168,7 +168,7 @@ window.onload = function(){
 			}
 			
 			//initialize alerm dialog
-			$("a#removeVariable").fancybox({
+			$("a#alermVariable").fancybox({
 				'autoDimensions'	: false,
 				'width'         	: 1000,
 				'height'        	: 'auto',
@@ -179,10 +179,12 @@ window.onload = function(){
 			
 			$("a#historyShow").fancybox({
 				'autoDimensions'	: false,
-				'width'         	: 1000,
+				'width'         	: 500,
 				'height'        	: 500,
 				'transitionIn'		: 'none',
-				'transitionOut'		: 'none'
+				'transitionOut'		: 'none',
+				'autoScale'		: false,
+				
 			});
 			
 			//setRefresh(2);

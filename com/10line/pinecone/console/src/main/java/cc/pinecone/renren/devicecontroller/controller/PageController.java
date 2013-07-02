@@ -219,6 +219,30 @@ public class PageController {
 		logger.info("environment.html");
 		System.out.println("environment.html");
 		
+		//get user name ,password, userid
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		System.out.println("Username:" + username);  
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		System.out.println("Credentials:" + password);
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		ArrayList<Device> list = new ArrayList<Device>();
+		try {
+			ArrayList<Entity> devs = (ArrayList<Entity>) getRESTClient().get("/user/"+userid+"/devices",username,password);
+			for(Entity e:devs){
+				Device dev = (Device) e;
+				list.add(dev);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		request.setAttribute("list", list);
 		response.setCharacterEncoding("UTF-8");
 		return "environment";
 	}

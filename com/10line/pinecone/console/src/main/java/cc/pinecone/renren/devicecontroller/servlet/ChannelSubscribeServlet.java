@@ -64,7 +64,7 @@ public class ChannelSubscribeServlet extends HttpServlet {
 		
 		if(connectorMap.get(deviceCode) == null){
 			try {
-				Connector con = new Connector(deviceCode,"pinecone@device."+deviceCode+".subscribe");
+				Connector con = new Connector(deviceCode,"pinecone@device."+deviceCode+".publish");
 				//FIXME need to change back.
 //				Connector con = new Connector(deviceCode,"pinecone@device."+deviceCode);
 				connectorMap.put(deviceCode, con);

@@ -40,13 +40,13 @@ public class TestAPI {
 //			api.createUser();
 //			api.test();
 //			api.activeDevice("26", "19");
-			api.getUserData("sunny");
+//			api.getUserData("sunny");
 //			api.createDevice();
 //			api.getAllDevice();
 //			api.getAllUser();
 //			api.getAllUser();
 			
-//			api.testChannel();
+			api.testChannel();
 //			api.test();
 			
 //			api.modifyUser();
@@ -391,7 +391,7 @@ public class TestAPI {
 	}
 	
 	public void testChannel() throws Exception{
-		ChannelClient client = new ChannelClient("tcp://m2m.eclipse.org:1883");
+		ChannelClient client = new ChannelClient("tcp://www.pinecone.cc:1883");
 		client.listen(new MqttCallback(){
 				@Override
 				public void connectionLost(Throwable arg0) {
@@ -411,7 +411,7 @@ public class TestAPI {
 				}
 				
 			}
-			, "pinecone@device.1234");
+			, "pinecone@device.083561af-fe69-4ce3-b593-9d98ed1d7fb5.publish");
 		
 		Thread.sleep(10000);
 		

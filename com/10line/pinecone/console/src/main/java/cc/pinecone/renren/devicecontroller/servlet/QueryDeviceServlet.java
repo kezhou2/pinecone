@@ -136,7 +136,6 @@ public class QueryDeviceServlet extends HttpServlet {
 			
 		for(Device c : devices){
 			ExDeviceInfo info = conf.getDeviceExtInfo(c.getId().toString());
-			System.out.println("&&&mac:"+info.getMacId()+"|addr:"+info.getAddress()+"|desc:"+info.getDescription());
 			JSONArray row = new JSONArray();
 			row.add("<a href='img/demo/big.jpg' title='' class='lightbox'><img src='http://placehold.it/37x37' alt='' /></a>");
 			row.add(c.getId());
@@ -144,7 +143,6 @@ public class QueryDeviceServlet extends HttpServlet {
 			row.add(c.getCode());
 			row.add(info.getMacId());
 			row.add(info.getAddress());
-
 			if(conf.getDevice(""+c.getId()) == null){
 				row.add("<ul class='table-controls'>"+
 							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+

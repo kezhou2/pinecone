@@ -333,23 +333,4 @@ public class Config {
 		
 		return info;
 	}
-	
-	public static void main(String[] args){
-		try {
-			Config conf = new Config("D:\\Workspace\\Console\\console\\src\\main\\webapp\\config-cache\\45.xml");
-			ExDeviceInfo info = new ExDeviceInfo();
-			info.setId(500L);
-			info.setMacId("222");
-			info.setAddress("奇怪");
-			conf.addDeviceExtInfo(info);
-			conf.addDeviceExtInfo(info);
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

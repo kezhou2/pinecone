@@ -49,10 +49,21 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
+window.onload = function(){
+			
+	//initialize alerm dialog
+	$("a#deviceShow").fancybox({
+		'autoDimensions'	: false,
+		'width'         	: 1000,
+		'height'        	: 'auto',
+		'transitionIn'		: 'none',
+		'transitionOut'		: 'none',
+		'type'				: 'iframe'
+	});
+
+}
 </script>
-<%-- <%
-String username = (String)request.getSession().getAttribute("username");
-%> --%>
+
 </head>
 
 <body>
@@ -145,15 +156,33 @@ String username = (String)request.getSession().getAttribute("username");
                 <div class="widget">
                     <div class="tabbable">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab1" data-toggle="tab">house plan</a></li>
-                            <li class=""><a href="#tab2" data-toggle="tab">topology</a></li>
+                        	<li class="active"><a href="#tab1" data-toggle="tab">Dashboard</a></li>
+                            <li class=""><a href="#tab2" data-toggle="tab">House Plan</a></li>
+                            <li class=""><a href="#tab3" data-toggle="tab">Topology</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab1">
-                            	<img alt="" src="img/museum/houseplan.png">
+                            	<table width="781px" border="1">
+                            		<c:forEach var="device" items="${list}" varStatus="status">
+        								<c:choose>
+											<c:when test="${status.index % 10 == 0}">
+												<tr>
+											</c:when>
+										</c:choose>
+								  		<td><a href='variable.html?id=${device.id}' id='deviceShow' class='btn tip' title='${device.name}'><img src="img/demo/ok.png" width="78" height="71" /></a></td>
+								   		<c:choose>
+											<c:when test="${status.index % 10 == 9}">
+												</tr>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+								</table>
                             </div>
                             <div class="tab-pane" id="tab2">
                            		<img alt="" src="img/museum/network.png">
+                            </div>
+                            <div class="tab-pane" id="tab3">
+                            	<img alt="" src="img/museum/houseplan.png">
                             </div>
                         </div>
                     </div>

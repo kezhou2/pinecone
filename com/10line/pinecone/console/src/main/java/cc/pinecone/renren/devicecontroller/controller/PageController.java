@@ -247,4 +247,22 @@ public class PageController {
 		return "environment";
 	}
 
+	@RequestMapping(value = "/history.html")
+	public String history(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("history.html");
+		System.out.println("history.html");
+		String id = request.getParameter("id");
+		
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		
+		return "history";
+	}
 }

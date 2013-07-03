@@ -133,13 +133,16 @@ window.onload = function(){
 			
 			//init history dialog
 			$("a#historyShow").fancybox({
-				'autoDimensions'	: false,
-				'width'         	: 500,
-				'height'        	: 500,
-				'transitionIn'		: 'none',
-				'transitionOut'		: 'none',
-				'autoScale'		: false,
-				
+				maxWidth	: 520,
+				maxHeight	: 250,
+				fitToView	: false,
+				width		: '70%',
+				height		: '70%',
+				autoSize	: false,
+				closeClick	: false,
+				openEffect	: 'none',
+				closeEffect	: 'none',
+				scrolling   : 'no'
 			});
 			
 			//init background thread
@@ -555,32 +558,5 @@ function removeVariable(devid,varid){
 		</ul>
 	</div>
 	<!-- /footer -->
-	<!-- fancy box for history show -->
-	<div class="span4" style="display:none">
-    	<div class="widget" id="history_panel">
-			<div class="navbar"><div class="navbar-inner"><h6>Variable history value</h6></div></div>
-            <div class="well body">
-            	<ul class="stats-details">
-            		<li>
-            			<strong>Current balance</strong>
-            			<span>latest update on 12:39 am</span>
-            		</li>
-            		<li>
-            			<div class="number">
-	            			<a href="#" title="" data-toggle="dropdown"></a>
-							<ul class="dropdown-menu pull-right">
-								<li><a href="#" title=""><i class="icon-refresh"></i>Reload data</a></li>
-								<li><a href="#" title=""><i class="icon-calendar"></i>Change time period</a></li>
-								<li><a href="#" title=""><i class="icon-download-alt"></i>Download statement</a></li>
-							</ul>
-							<span>6,458</span>
-						</div>
-            		</li>
-            	</ul>
-            	<div class="graph" id="chart1"></div>
-            </div>
-        </div>
-  	</div>
-	<!-- /end fancy box for history show -->
 </body>
 </html>

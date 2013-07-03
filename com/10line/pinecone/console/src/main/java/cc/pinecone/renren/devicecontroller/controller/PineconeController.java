@@ -260,14 +260,14 @@ public class PineconeController {
 				row.add(sb.toString());
 				
 				String addStr = new String("<ul class='table-controls'>"+
-												"<li><a href='#history_panel' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
+												"<li><a href='history.html?id="+var.getId()+"' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
 												"<li><a href='#' id='var"+var.getId()+"' onclick='addVariable("+id+","+var.getId()+")' class='btn tip' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
 											"</ul>");
 				
 				for(String sId:idsList){
 					if(sId.equals(""+var.getId())){
 						addStr = "<ul class='table-controls'>"+
-									"<li><a href='#history_panel' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
+									"<li><a href='history.html?id="+var.getId()+"' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
 									"<li><a href='#' id='var"+var.getId()+"' onclick='removeVariable("+id+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
 								"</ul>";
 						break;
@@ -624,7 +624,7 @@ public class PineconeController {
 						
 						row.add("<ul class='table-controls'>"+
 								"<li><a href='#variable_form' id='alermVariable' onclick='alermVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Alerm setting'><i class='icon-warning-sign'></i></a></li>"+
-								"<li><a href='#history_panel' id='historyShow' onclick='showHistory("+deviceId+","+var.getId()+")' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
+								"<li><a href='history.html?id="+var.getId()+"' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
 								"<li><a href='#' onclick='removeVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
 								"</ul>");
 						data.add(row);

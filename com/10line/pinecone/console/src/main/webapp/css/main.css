@@ -265,6 +265,14 @@ pre code { padding: 0; color: inherit; white-space: pre; white-space: pre-wrap; 
 .register .form-horizontal .control-label {float: left;width: 30%;padding-top: 5px;}
 .register .form-horizontal .controls {position: relative; margin-left: 30%;}
 
+/* # History page
+================================================== */
+.history { width: 500px; height: 500px}
+.history .control-group { padding: 16px 16px 16px 16px; border: none; }
+.history-btn { margin: 16px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; -ms-box-sizing: border-box; } 
+.history .form-horizontal .control-label {float: left;width: 30%;padding-top: 5px;}
+.history .form-horizontal .controls {position: relative; margin-left: 30%;}
+
 /* # profile page
 ================================================== */
 .profile { margin-top: 30px;}

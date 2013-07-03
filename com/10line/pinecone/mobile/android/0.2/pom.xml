@@ -67,6 +67,13 @@
 	  <artifactId>android-integration</artifactId>
 	  <version>2.1</version>
 	</dependency>       
+	<!-- Action Bar Sherlock Lib -->
+	<dependency>
+  	  <groupId>com.actionbarsherlock</groupId>
+  	  <artifactId>actionbarsherlock</artifactId>
+  	  <version>4.3.1</version>
+  	  <type>apklib</type>
+	</dependency>
   </dependencies>
   <build>
     <plugins>

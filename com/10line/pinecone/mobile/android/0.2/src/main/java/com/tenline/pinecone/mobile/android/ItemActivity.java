@@ -35,7 +35,7 @@ public class ItemActivity extends AbstractMessageActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState); getSupportActionBar().setTitle(R.string.item_title);
 		doInitListViewTask("/variable/" + getIntent().getStringExtra("variableId") + "/items");
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 

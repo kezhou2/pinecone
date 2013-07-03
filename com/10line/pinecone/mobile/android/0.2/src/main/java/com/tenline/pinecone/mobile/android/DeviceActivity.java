@@ -45,6 +45,7 @@ public class DeviceActivity extends AbstractListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); registerForContextMenu(getListView());
+		getSupportActionBar().setTitle(R.string.device_title);
 		doInitListViewTask("/user/" + getIntent().getStringExtra("userId") + "/devices");
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
@@ -66,7 +67,7 @@ public class DeviceActivity extends AbstractListActivity {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		switch(item.getItemId()) {case R.id.device_activate: showDialog(ActivateDeviceDialogBuilder.DIALOG_ID); break;}
 		return super.onOptionsItemSelected(item);
 	}

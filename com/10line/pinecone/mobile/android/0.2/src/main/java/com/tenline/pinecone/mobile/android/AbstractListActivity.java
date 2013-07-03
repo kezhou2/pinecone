@@ -5,30 +5,26 @@ package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
 
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.tenline.pinecone.mobile.android.receiver.NetworkReceiver;
 import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.service.RESTTask;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.ActionBar.TabListener;
-import android.app.FragmentTransaction;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 /**
  * @author Bill
  *
  */
-public abstract class AbstractListActivity extends ListActivity implements TabListener {
+public abstract class AbstractListActivity extends SherlockListActivity {
 
 	private NetworkReceiver receiver = new NetworkReceiver();
 	
@@ -39,17 +35,14 @@ public abstract class AbstractListActivity extends ListActivity implements TabLi
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); Log.i(getClass().getSimpleName(), "onCreate");
-		getActionBar().setDisplayHomeAsUpEnabled(true); getActionBar().setHomeButtonEnabled(true); 
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-	    getActionBar().addTab(getActionBar().newTab().setText(R.string.app_device_tab).setTabListener(this));
-	    getActionBar().addTab(getActionBar().newTab().setText(R.string.app_alarm_tab).setTabListener(this));
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true); getSupportActionBar().setHomeButtonEnabled(true);
         if (!restHelper.isBound()) bindService(new Intent(this, RESTService.class), restHelper, Context.BIND_AUTO_CREATE);
         IntentFilter filter = new IntentFilter(); filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION); registerReceiver(receiver, filter);
     }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.options_menu, menu); return super.onCreateOptionsMenu(menu);
+		getSupportMenuInflater().inflate(R.menu.options_menu, menu); return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override
@@ -139,24 +132,6 @@ public abstract class AbstractListActivity extends ListActivity implements TabLi
 			// TODO Auto-generated method stub
 			buildListAdapter(result); super.onPostExecute(result);
 		}
-		
-	}
-
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
 		
 	}
 

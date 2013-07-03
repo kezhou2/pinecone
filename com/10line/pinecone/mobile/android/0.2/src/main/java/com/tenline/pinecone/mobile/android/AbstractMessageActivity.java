@@ -5,13 +5,13 @@ package com.tenline.pinecone.mobile.android;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.actionbarsherlock.view.Menu;
 import com.tenline.pinecone.mobile.android.service.ChannelService;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 
 /**
  * @author Bill

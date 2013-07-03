@@ -5,6 +5,7 @@ package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
 
+import com.actionbarsherlock.view.MenuItem;
 import com.tenline.pinecone.mobile.android.service.RESTTask;
 import com.tenline.pinecone.mobile.android.validation.EqualityValidator;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
@@ -14,7 +15,6 @@ import com.tenline.pinecone.platform.model.User;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -29,7 +29,9 @@ public class RegisterActivity extends AbstractActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState); setContentView(R.layout.register);
-		getActionBar().setDisplayHomeAsUpEnabled(true); getActionBar().setHomeButtonEnabled(true); 
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true); 
+		getSupportActionBar().setHomeButtonEnabled(true); 
+		getSupportActionBar().setTitle(R.string.user_register);
         final FormEditText userEmail = (FormEditText) findViewById(R.id.user_email_input);
         final FormEditText userName = (FormEditText) findViewById(R.id.user_name_input);
         final FormEditText userPassword = (FormEditText) findViewById(R.id.user_password_input);

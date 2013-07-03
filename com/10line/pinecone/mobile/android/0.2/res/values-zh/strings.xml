@@ -5,8 +5,6 @@
     <string name="app_name">松果网</string>
     <string name="app_slogan">物联网应用平台</string>
     <string name="app_url">http://www.pinecone.cc</string>
-    <string name="app_device_tab">设备</string>
-    <string name="app_alarm_tab">报警</string>
     
     <!-- App Operations -->
     <string name="app_ok">确定</string>
@@ -27,6 +25,7 @@
     <string name="user_submit">提交</string>
     
     <!-- Device Properties -->
+    <string name="device_title">设备</string>
     <string name="device_code">编号：</string>
     <string name="device_code_tips">请输入设备编号</string>
     <string name="device_code_scan">扫描</string>
@@ -43,9 +42,11 @@
     <string name="device_icon">设备图标</string>
     
     <!-- Variable Properties -->
+    <string name="variable_title">变量</string>
     <string name="variable_icon">变量图标</string>
     
     <!-- Item Properties -->
+    <string name="item_title">可选项</string>
     <string name="item_setting">确定设置为</string>
     <string name="item_icon">项目图标</string>
     

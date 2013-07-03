@@ -3,11 +3,11 @@
  */
 package com.tenline.pinecone.mobile.android;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.tenline.pinecone.mobile.android.receiver.NetworkReceiver;
 import com.tenline.pinecone.mobile.android.service.RESTService;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,7 +19,7 @@ import android.util.Log;
  * @author Bill
  *
  */
-public abstract class AbstractActivity extends Activity {
+public abstract class AbstractActivity extends SherlockActivity {
 
 	private NetworkReceiver receiver = new NetworkReceiver();
 

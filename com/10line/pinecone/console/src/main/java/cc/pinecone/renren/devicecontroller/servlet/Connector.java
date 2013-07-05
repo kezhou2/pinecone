@@ -1,5 +1,6 @@
 package cc.pinecone.renren.devicecontroller.servlet;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,6 +21,11 @@ public class Connector implements MqttCallback{
 	private Map<String,String> values;
 	private ChannelClient client;
 	
+	private Date lastReceived;
+	
+	private final String CONNECT = "connect";
+	private final String DISCONNECT = "disconnect" ;
+	
 //	public Connector(String deviceid) throws Exception{
 //		values = new LinkedHashMap<String,String>();
 //		
@@ -33,6 +39,7 @@ public class Connector implements MqttCallback{
 		
 		this.client = new ChannelClient(AppConfig.CHANNEL_URL);
 		this.client.listen(this, topic);
+		this.lastReceived = new Date();
 	}
 
 	@Override
@@ -53,15 +60,19 @@ public class Connector implements MqttCallback{
 		if(buf != null){
 			JSONObject obj = (JSONObject)JSONValue.parse(new String(buf));
 			values.put((String)obj.get("id"), (String)obj.get("value"));
+			this.lastReceived = new Date();
 		}
 	}
 	
 	public String getValue(String id){
-		if(values.containsKey(id)){
-			return values.get(id);
-		}else{
-			return null;
+		Date now = new Date();
+		if((now.getTime() - this.lastReceived.getTime()) < 5*60*1000){		//long time no revceived data
+			if(values.containsKey(id)){										//load data in cache
+				return values.get(id);
+			}
 		}
+		
+		return null;
 	}
 	
 	public void addVariable(String id){
@@ -123,4 +134,20 @@ public class Connector implements MqttCallback{
 		System.out.println("publish json string------------------------------:"+obj.toJSONString());
 		client.publish(topic,obj.toJSONString());
 	}
+	
+	public String getDeviceStatus(){
+		if(values.keySet().size() == 0){
+			return DISCONNECT;
+		}else{
+			Date now = new Date();
+			if(now.getTime() - this.lastReceived.getTime() > 5*60*1000){
+				return "DISCONNECT";
+			}
+		}
+		
+		//TODO here we need to add alermer
+		
+		return CONNECT;
+	}
+	
 }

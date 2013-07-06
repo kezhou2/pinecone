@@ -43,10 +43,15 @@
     
     <!-- Variable Properties -->
     <string name="variable_title">变量</string>
+    
+    <!-- Variable Operations -->
+    <string name="variable_query">查询变量</string>
     <string name="variable_icon">变量图标</string>
     
     <!-- Item Properties -->
-    <string name="item_title">可选项</string>
+    <string name="item_title">设置</string>
+    
+    <!-- Item Operations -->
     <string name="item_setting">确定设置为</string>
     <string name="item_icon">项目图标</string>
     
@@ -67,6 +72,7 @@
 	<string name="error_user_email_is_existed">电子邮箱已经存在</string>
 	<string name="error_device_code_is_not_existed">请先接入设备</string>
 	<string name="error_device_has_been_activated">设备已经激活</string>
+	<string name="error_variable_could_not_be_set">变量不能被设置</string>
 	
 	<!-- Progress Properties -->
 	<string name="progress_message">网络数据读取中&#8230;</string>

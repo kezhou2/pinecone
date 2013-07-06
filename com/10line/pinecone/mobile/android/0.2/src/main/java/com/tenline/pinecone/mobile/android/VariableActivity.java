@@ -14,8 +14,11 @@ import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 
+import com.tenline.pinecone.mobile.android.view.QueryVariableDialogBuilder;
 import com.tenline.pinecone.platform.model.Variable;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -24,12 +27,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
@@ -63,6 +67,32 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 			}
 			
 		});
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	protected void onPrepareDialog(final int id, final Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+		switch(id) {
+		case QueryVariableDialogBuilder.DIALOG_ID: ((AlertDialog) dialog).setTitle(getIntent().getStringExtra("variableName")); break;
+		}
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	protected Dialog onCreateDialog(int id) {
+		switch(id) {
+		case QueryVariableDialogBuilder.DIALOG_ID: return new QueryVariableDialogBuilder(this).getDialog();
+		} return super.onCreateDialog(id);
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		getIntent().putExtra("variableName", ((TextView) info.targetView.findViewById(R.id.variable_name)).getText().toString());
+		switch(item.getItemId()) {case R.id.variable_query: showDialog(QueryVariableDialogBuilder.DIALOG_ID); break;} 
+		return super.onContextItemSelected(item);
 	}
 	
 	/**
@@ -118,7 +148,6 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
         	Variable variable = (Variable) result[i];
         	item.put("variableId", variable.getId().toString()); 
         	item.put("variableName", variable.getName());
-        	item.put("variableType", variable.getType());
         	items.add(item);
         }
         setListAdapter(new VariableAdapter(this, items, R.layout.variable_item, new String[]{"variableName"}, new int[]{R.id.variable_name}));
@@ -142,12 +171,6 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 			View view = super.getView(position, convertView, parent);
 			HashMap<String, String> item = (HashMap<String, String>) getItem(position);
 			view.setId(Integer.valueOf(item.get("variableId")));
-			if (item.get("variableType").contains(Variable.WRITE)) {
-				view.setClickable(false); 
-				((ImageView) view.findViewById(R.id.variable_icon)).setImageResource(android.R.drawable.presence_online);
-			} else {
-				view.setClickable(true);
-			}
 			return view;
 		}
 		

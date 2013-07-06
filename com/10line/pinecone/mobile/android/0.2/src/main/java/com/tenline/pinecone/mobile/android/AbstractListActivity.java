@@ -19,6 +19,9 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 
 /**
  * @author Bill
@@ -34,7 +37,8 @@ public abstract class AbstractListActivity extends SherlockListActivity {
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState); Log.i(getClass().getSimpleName(), "onCreate");
+		super.onCreate(savedInstanceState);
+		Log.i(getClass().getSimpleName(), "onCreate"); registerForContextMenu(getListView());
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true); getSupportActionBar().setHomeButtonEnabled(true);
         if (!restHelper.isBound()) bindService(new Intent(this, RESTService.class), restHelper, Context.BIND_AUTO_CREATE);
         IntentFilter filter = new IntentFilter(); filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION); registerReceiver(receiver, filter);
@@ -51,6 +55,11 @@ public abstract class AbstractListActivity extends SherlockListActivity {
 		case R.id.user_logout: new LogoutTask(this).execute(); break;
 		case android.R.id.home: finish(); break;}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo); getMenuInflater().inflate(R.menu.context_menu, menu); 
 	}
 	
 	@Override

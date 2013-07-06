@@ -12,6 +12,9 @@ import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 
 /**
  * @author Bill
@@ -40,6 +43,11 @@ public abstract class AbstractMessageActivity extends AbstractListActivity {
 	@Override
     public boolean onPrepareOptionsMenu(Menu menu) {
     	menu.setGroupVisible(R.id.device_items, false); return super.onPrepareOptionsMenu(menu);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo); menu.setGroupVisible(R.id.device_items, false); 
 	}
 
 }

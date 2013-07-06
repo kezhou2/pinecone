@@ -18,7 +18,9 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -52,6 +54,11 @@ public class ItemActivity extends AbstractMessageActivity {
 			}
 			
 		});
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo); menu.setGroupVisible(R.id.variable_items, false); 
 	}
 	
 	/**
@@ -96,6 +103,7 @@ public class ItemActivity extends AbstractMessageActivity {
 	@Override
 	protected void buildListAdapter(Object[] result) {
 		// TODO Auto-generated method stub
+		if (result.length == 0) Toast.makeText(this, R.string.error_variable_could_not_be_set, Toast.LENGTH_LONG).show();
 		ArrayList<HashMap<String, String>> items = new ArrayList<HashMap<String, String>>();
 		for (int i=0; i<result.length; i++) {
 			HashMap<String, String> item = new HashMap<String, String>();

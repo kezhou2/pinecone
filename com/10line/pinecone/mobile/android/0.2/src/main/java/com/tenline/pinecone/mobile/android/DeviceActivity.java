@@ -44,8 +44,7 @@ public class DeviceActivity extends AbstractListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState); registerForContextMenu(getListView());
-		getSupportActionBar().setTitle(R.string.device_title);
+		super.onCreate(savedInstanceState); getSupportActionBar().setTitle(R.string.device_title);
 		doInitListViewTask("/user/" + getIntent().getStringExtra("userId") + "/devices");
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
@@ -88,19 +87,15 @@ public class DeviceActivity extends AbstractListActivity {
 	@SuppressWarnings("deprecation")
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
-		case ActivateDeviceDialogBuilder.DIALOG_ID:
-			builder = new ActivateDeviceDialogBuilder(this); return builder.getDialog();
-		case ModifyDeviceDialogBuilder.DIALOG_ID:
-			return new ModifyDeviceDialogBuilder(this).getDialog();
-		case DeleteDeviceDialogBuilder.DIALOG_ID:
-			return new DeleteDeviceDialogBuilder(this).getDialog();
-		}
-		return super.onCreateDialog(id);
+		case ActivateDeviceDialogBuilder.DIALOG_ID: builder = new ActivateDeviceDialogBuilder(this); return builder.getDialog();
+		case ModifyDeviceDialogBuilder.DIALOG_ID: return new ModifyDeviceDialogBuilder(this).getDialog();
+		case DeleteDeviceDialogBuilder.DIALOG_ID: return new DeleteDeviceDialogBuilder(this).getDialog();
+		} return super.onCreateDialog(id);
 	}
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo); getMenuInflater().inflate(R.menu.context_menu, menu);
+		super.onCreateContextMenu(menu, view, menuInfo); menu.setGroupVisible(R.id.variable_items, false);
 	}
 	
 	@Override

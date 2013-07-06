@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/variable_icon"
-        android:src="@android:drawable/presence_invisible"
+        android:src="@android:drawable/presence_online"
         android:paddingLeft="6dip"/>
     
     <TextView android:id="@+id/variable_name"

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/device_modify" 
-    	android:icon="@android:drawable/ic_menu_edit" 
-        android:orderInCategory="1" 
-        android:title="@string/device_modify"/>
-    <item android:id="@+id/device_delete" 
-    	android:icon="@android:drawable/ic_menu_delete" 
-        android:orderInCategory="2" 
-        android:title="@string/device_delete"/>
+    <group android:id="@+id/device_items">
+        <item android:id="@+id/device_modify"
+    		android:icon="@android:drawable/ic_menu_edit"
+        	android:orderInCategory="1"
+        	android:title="@string/device_modify"/>
+    	<item android:id="@+id/device_delete"
+    		android:icon="@android:drawable/ic_menu_delete"
+        	android:orderInCategory="2"
+        	android:title="@string/device_delete"/>
+    </group>
+    <group android:id="@+id/variable_items">
+        <item android:id="@+id/variable_query"
+    		android:icon="@android:drawable/ic_menu_search"
+        	android:orderInCategory="3"
+        	android:title="@string/variable_query"/>
+    </group>
 </menu>

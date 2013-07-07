@@ -9,6 +9,7 @@ public final class AppConfig {
 	public static final String REST_URL = "http://www.pinecone.cc";
 //	public static final String CHANNEL_URL = "tcp://m2m.eclipse.org:1883";
 	public static final String CHANNEL_URL = "tcp://www.pinecone.cc:1883";
+	public static final String HISTORY_URL = "www.pinecone.cc";
 	private static String userid = "";
 	private static String access_token = "";
 	private static String sessionkey = "";

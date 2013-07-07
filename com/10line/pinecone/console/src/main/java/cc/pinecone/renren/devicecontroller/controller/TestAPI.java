@@ -1,7 +1,13 @@
 package cc.pinecone.renren.devicecontroller.controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -9,8 +15,10 @@ import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.model.Authority;
 import com.tenline.pinecone.platform.model.Device;
@@ -19,6 +27,7 @@ import com.tenline.pinecone.platform.model.Item;
 import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.ChannelClient;
+import com.tenline.pinecone.platform.sdk.HistoryClient;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
 public class TestAPI {
@@ -29,6 +38,7 @@ public class TestAPI {
 	private Authority authority;
 	private Device device;
 	private RESTClient client;
+	private HistoryClient historyClient;
 	/**
 	 * @param liugy
 	 */
@@ -46,12 +56,14 @@ public class TestAPI {
 //			api.getAllUser();
 //			api.getAllUser();
 			
-			api.testChannel();
+//			api.testChannel();
 //			api.test();
 			
 //			api.modifyUser();
 //			api.test1();
 			
+			api.createHistoryData();
+//			api.getHistoryData();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,6 +81,7 @@ public class TestAPI {
 		device.setName("Device for Test");
 		device.setCode(UUID.randomUUID().toString());
 		client = new RESTClient(baseUrl);
+		historyClient = new HistoryClient("www.pinecone.cc");
 	}
 	
 	public void test1()throws Exception{
@@ -425,6 +438,45 @@ public class TestAPI {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void createHistoryData(){
+		Random r = new Random();
+		Date date = new Date();
+		System.out.println("Start Time:"+date.getTime());
+		for(int i=0;i<300;i++){
+			Date now = new Date();
+			historyClient.setValue("259", now, String.valueOf(r.nextInt(50)));
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		date = new Date();
+		System.out.println("End Time:"+date.getTime());
+	}
+	
+	public void getHistoryData() throws ParseException{
+		List<Date> dateList = new ArrayList<Date>();
+		Date startDate = new Date();
+		startDate.setTime(startDate.getTime()-(60*60*1000));;
+		System.out.println("start:"+startDate.getTime());
+		Date endDate = new Date();
+		JSONArray data = new JSONArray();
+		for(long i=startDate.getTime();i<endDate.getTime();i=i+1000){
+			String value = historyClient.getValue("259", new Date(i));
+			if(value != null){
+				JSONArray ob = new JSONArray();
+				ob.add(i);
+				ob.add(value);
+				data.add(ob);
+			}
+		}
+		
+		System.out.println("data json string:"+data.toJSONString());
+	
 	}
 
 }

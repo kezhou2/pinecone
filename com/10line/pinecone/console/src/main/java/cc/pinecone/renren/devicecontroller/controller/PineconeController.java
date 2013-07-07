@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -260,14 +261,14 @@ public class PineconeController {
 				row.add(sb.toString());
 				
 				String addStr = new String("<ul class='table-controls'>"+
-												"<li><a href='history.html?id="+var.getId()+"' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
+												"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
 												"<li><a href='#' id='var"+var.getId()+"' onclick='addVariable("+id+","+var.getId()+")' class='btn tip' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
 											"</ul>");
 				
 				for(String sId:idsList){
 					if(sId.equals(""+var.getId())){
 						addStr = "<ul class='table-controls'>"+
-									"<li><a href='history.html?id="+var.getId()+"' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
+									"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
 									"<li><a href='#' id='var"+var.getId()+"' onclick='removeVariable("+id+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
 								"</ul>";
 						break;
@@ -568,6 +569,7 @@ public class PineconeController {
 				r.add("");
 				r.add("");
 				r.add("");
+				r.add("");
 				r.add("<ul class='table-controls'>"+
 						"<li><a href='#' onclick='removeDevice("+deviceId+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
 					"</ul>");
@@ -607,6 +609,16 @@ public class PineconeController {
 							row.add("");
 						}
 						
+						String alermStr = conf.getVariable(""+device.getId(), variableId).getAlermString();
+						if(alermStr != null && !alermStr.equals("")){
+							JSONParser p = new JSONParser();
+							JSONObject ob = (JSONObject)p.parse(alermStr);
+							
+							row.add(ob.get("condition").toString()+ob.get("variablevalue").toString());
+						}else{
+							row.add("");
+						}
+						
 						StringBuilder sb = new StringBuilder();
 						if(var.getType().equals(Variable.WRITE)){
 							sb.append("<select id='index"+var.getId()+"' name='select2' class='styled'>");
@@ -623,8 +635,8 @@ public class PineconeController {
 						row.add(sb.toString());
 						
 						row.add("<ul class='table-controls'>"+
-								"<li><a href='#variable_form' id='alermVariable' onclick='alermVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Alerm setting'><i class='icon-warning-sign'></i></a></li>"+
-								"<li><a href='history.html?id="+var.getId()+"' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
+								"<li><a href='alermsetting.html?deviceId="+deviceId+"&variableId="+var.getId()+"' id='alermVariable' class='btn tip' title='Alerm setting'><i class='icon-warning-sign'></i></a></li>"+
+								"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='icon-time'></i></a></li>"+
 								"<li><a href='#' onclick='removeVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='icon-remove'></i></a></li>"+
 								"</ul>");
 						data.add(row);

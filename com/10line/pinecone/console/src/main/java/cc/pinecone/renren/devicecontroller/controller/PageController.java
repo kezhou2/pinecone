@@ -32,9 +32,6 @@ import com.tenline.pinecone.platform.model.User;
 import com.tenline.pinecone.platform.model.Variable;
 import com.tenline.pinecone.platform.sdk.RESTClient;
 
-/**
- * Sample controller for going to the home page with a message
- */
 @Controller
 public class PageController {
 
@@ -246,23 +243,16 @@ public class PageController {
 		response.setCharacterEncoding("UTF-8");
 		return "environment";
 	}
-
-	@RequestMapping(value = "/history.html")
-	public String history(HttpServletRequest request,HttpServletResponse response) {
-		logger.info("history.html");
-		System.out.println("history.html");
-		String id = request.getParameter("id");
+	
+	@RequestMapping(value = "/alermsetting.html")
+	public String alermsetting(HttpServletRequest request,HttpServletResponse response) {
+		logger.info("alermsetting.html");
+		System.out.println("alermsetting.html");
+		String devid = request.getParameter("deviceId");
+		String varid = request.getParameter("variableId");
 		
-		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
-		String username = securityContextImpl.getAuthentication().getName();
-		String password = securityContextImpl.getAuthentication().getCredentials().toString();
-		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
-		String userid = null;
-		if(ud instanceof LoginUserDetailsImpl){
-			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
-			userid = lud.getUserid();
-		}
-		
-		return "history";
+		request.setAttribute("deviceId", devid);
+		request.setAttribute("variableId", varid);
+		return "alermsetting";
 	}
 }

@@ -79,8 +79,105 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript" src="js/files/utils.js"></script>
-<script type="text/javascript" src="js/charts/chart1.js"></script>
 <script type="text/javascript">
+$(document).ready(function () {
+	var timeType = '${type}';
+	//var d1 = [[1373122733356,0],[1373122793356,0],[1373122853356,0],[1373122913356,0],[1373122973356,0],[1373123033356,0],[1373123093356,0],[1373123153356,0],[1373123213356,0],[1373123273356,0],[1373123333356,0],[1373123393356,0],[1373123453356,0],[1373123513356,0],[1373123573356,0],[1373123633356,45],[1373123693356,45],[1373123753356,45],[1373123813356,38],[1373123873356,49],[1373123933356,0],[1373123993356,0],[1373124053356,0],[1373124113356,0],[1373124173356,0],[1373124233356,0],[1373124293356,0],[1373124353356,0],[1373124413356,0],[1373124473356,0]];
+	var d1 = ${data};
+ 
+    var data1 = [
+        { 
+            label: "Value", 
+            data: d1, 
+            color: '#f1553c' 
+        }
+    ];
+ 
+    $.plot($("#chart1"), data1, {
+        xaxis: {
+            show: true,
+            min: ${startDate},
+            max: ${endDate},
+            mode: "time",
+            tickSize: [1, timeType],
+            tickLength: 1,
+            axisLabel: timeType,
+            axisLabelFontSizePixels: 11
+        },
+        yaxis: {
+            axisLabel: 'Amount',
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 11,
+            autoscaleMargin: 0.01,
+            axisLabelPadding: 5
+        },
+        series: {
+            lines: {
+                show: true, 
+                fill: true,
+                fillColor: { colors: [ { opacity: 0.5 }, { opacity: 0.2 } ] },
+                lineWidth: 1.5
+            },
+            points: {
+                show: true,
+                radius: 2.5,
+                fill: true,
+                fillColor: "#ffffff",
+                symbol: "circle",
+                lineWidth: 1.1
+            }
+        },
+       grid: { hoverable: true, clickable: true },
+        legend: {
+            show: false
+        }
+    });
+
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip" class="chart-tooltip">' + contents + '</div>').css( {
+            position: 'absolute',
+            display: 'none',
+            top: y - 46,
+            left: x - 9,
+            'z-index': '9999',
+            opacity: 0.9
+        }).appendTo("body").fadeIn(200);
+    }
+
+    var previousPoint = null;
+    $("#chart1").bind("plothover", function (event, pos, item) {
+        $("#x").text(pos.x.toFixed(2));
+        $("#y").text(pos.y.toFixed(2));
+
+        if ($("#chart1").length > 0) {
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+                    
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2);
+                    
+                    showTooltip(item.pageX, item.pageY,
+                                item.series.label + " " + "<strong>" + y + "</strong>");
+                }
+            }
+            else {
+                $("#tooltip").remove();
+                previousPoint = null;            
+            }
+        }
+    });
+
+    $("#chart1").bind("plotclick", function (event, pos, item) {
+        if (item) {
+            $("#clickdata").text("You clicked point " + item.dataIndex + " in " + item.series.label + ".");
+            plot.highlight(item.series, item.datapoint);
+        }
+    });
+
+
+});
 </script>
 
 </head>
@@ -93,18 +190,16 @@
             <div class="well body">
             	<ul class="stats-details">
             		<li>
-            			<strong>Current balance</strong>
-            			<span>latest update on 12:39 am</span>
+            			<strong>${updateDate} </strong>
             		</li>
             		<li>
             			<div class="number">
 	            			<a href="#" title="" data-toggle="dropdown"></a>
 							<ul class="dropdown-menu pull-right">
-								<li><a href="#" title=""><i class="icon-refresh"></i>Reload data</a></li>
-								<li><a href="#" title=""><i class="icon-calendar"></i>Change time period</a></li>
-								<li><a href="#" title=""><i class="icon-download-alt"></i>Download statement</a></li>
+								<li><a href="history.html?id=${id}&type=second&period=30" title=""><i class=""></i>30 seconds</a></li>
+								<li><a href="history.html?id=${id}&type=minute&period=10" title=""><i class=""></i>10 minutes</a></li>
+								<li><a href="history.html?id=${id}&type=hour&period=10" title=""><i class=""></i>10 hours</a></li>
 							</ul>
-							<span>6,458</span>
 						</div>
             		</li>
             	</ul>

@@ -103,6 +103,31 @@ public class Config {
 	}
 	
 	@SuppressWarnings("rawtypes")
+	public boolean addAlerm(String deviceId, String variableId,String alermsetting) throws FileNotFoundException, IOException{
+		Element favorites = doc.getRootElement().element("favorites");
+		Iterator it = favorites.elementIterator("Device");
+		while(it.hasNext()){
+			Element device = (Element)it.next();
+			String id = device.attributeValue("id");
+			if(id != null && id.equals(deviceId)){
+				Iterator iit = device.elementIterator("Variable");
+				while(iit.hasNext()){
+					Element var = (Element)iit.next();
+					String varid = var.attributeValue("id");
+					if(varid != null && varid.equals(variableId)){
+						Element alermEl = var.element("AlermStr");
+						alermEl.setText(alermsetting);
+						save();
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	@SuppressWarnings("rawtypes")
 	public boolean deleteFocusVariable(String deviceId, String variableId) throws FileNotFoundException, IOException{
 		Element favorites = doc.getRootElement().element("favorites");
 		Iterator it = favorites.elementIterator("Device");

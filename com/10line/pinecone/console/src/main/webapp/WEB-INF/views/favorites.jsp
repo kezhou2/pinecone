@@ -140,7 +140,8 @@ window.onload = function(){
 			$("td>strong").each(function(){
 		    	var id = $(this).attr('deviceId');
 		     	if(id != null){
-		     		$(this).parent().attr("colspan",6);
+		     		$(this).parent().attr("colspan",7);
+		     		$(this).parent().next().remove();
 		     		$(this).parent().next().remove();
 		     		$(this).parent().next().remove();
 		     		$(this).parent().next().remove();
@@ -169,11 +170,32 @@ window.onload = function(){
 			
 			//initialize alerm dialog
 			$("a#alermVariable").fancybox({
-				'autoDimensions'	: false,
-				'width'         	: 1000,
-				'height'        	: 'auto',
-				'transitionIn'		: 'none',
-				'transitionOut'		: 'none'
+				maxWidth	: 520,
+				maxHeight	: 850,
+				fitToView	: false,
+				width		: '70%',
+				height		: '95%',
+				autoSize	: false,
+				closeClick	: false,
+				openEffect	: 'none',
+				closeEffect	: 'none',
+				scrolling   : 'no',
+				type        : 'iframe',
+				'onStart'     :  function(){
+					alerm("onStart");
+				},
+				'onCancel'     :  function(){
+					alerm("onCancel");
+				},
+				'onComplete'     :  function(){
+					alerm("onComplete");
+				},
+				'onCleanup'     :  function(){
+					alerm("onCleanup");
+				},
+				'onClosed'   :  function(){
+					alerm("onClosed");
+				}
 			});
 			//initialize history dialog
 			
@@ -332,6 +354,7 @@ function alermVariable(deviceId, variableId){
 									<th>Name</th>
 									<th>Value</th>
 									<th>Trend</th>
+									<th>Alerm</th>
 									<th class="actions-column">Actions</th>
 									<th class="actions-column">Attention</th>
 								</tr>
@@ -363,64 +386,5 @@ function alermVariable(deviceId, variableId){
 		</ul>
 	</div>
 	<!-- /footer -->
-	
-	<!-- fancy box for variable's alerm setting -->
-	<div style="display:none">
-		<form id="variable_form" action="#">
-	    	<div class="widget">
-	            <div class="navbar"><div class="navbar-inner"><h6>Variable alerm setting</h6></div></div>
-	
-	            <div class="well">
-	                
-	                <div class="control-group">
-	                    <label class="control-label">Condition type:</label>
-	                    <div class="controls">
-	                        <select id="conditionType" name="select2" class="styled" style="opacity: 0;">
-	                            <option value="opt1">Numeric</option>
-	                            <option value="opt2">String</option>
-	                        </select>
-	                    </div>
-	                    <label class="control-label">Condition:</label>
-	                    <div class="controls">
-	                        <select id="condition" name="select2" class="styled" style="opacity: 0;">
-	                            <option value="opt1">></option>
-	                            <option value="opt2">>=</option>
-	                            <option value="opt3">=</option>
-	                            <option value="opt4"><</option>
-	                            <option value="opt5"><=</option>
-	                            <option value="opt6">!=</option>
-	                        </select>
-	                    </div>
-	                    <label class="control-label">Value:</label>
-	                    <div class="controls"><input type="text" name="regular" class="span12" placeholder="Regular field"></div>
-	                </div>
-	                
-	                <div class="control-group">
-	                    <label class="control-label">Alerm type:</label>
-	                    <div class="controls">
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="option1" class="styled" style="opacity: 0;"></span></div>Log</label>
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="option1" class="styled" style="opacity: 0;"></span></div>Page</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="inlineCheckbox2" value="option2" class="styled" style="opacity: 0;"></span></div>Sound</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="inlineCheckbox3" value="option3" class="styled" style="opacity: 0;"></span></div>SMS</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="inlineCheckbox4" value="option4" class="styled" style="opacity: 0;"></span></div>Email</label>
-	                    </div>
-	                    <label class="control-label">Cell phone:</label>
-	                    <div class="controls"><input type="text" name="regular" class="span12" placeholder="Regular field"></div>
-	                    <label class="control-label">Email address:</label>
-	                    <div class="controls"><input type="text" name="regular" class="span12" placeholder="Regular field"></div>
-	                </div>
-	                
-	                <div class="form-actions align-right">
-	                    <button type="submit" class="btn btn-primary">Submit</button>
-	                    <button type="button" class="btn btn-danger">Cancel</button>
-	                    <button type="reset" class="btn">Reset</button>
-	                </div>
-	
-	            </div>
-	            
-	        </div>
-	    </form>
-	</div>
-	<!-- /end fancy box for variable's alerm setting -->
 </body>
 </html>

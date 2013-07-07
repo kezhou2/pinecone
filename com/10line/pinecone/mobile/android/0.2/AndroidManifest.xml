@@ -39,6 +39,7 @@
     </activity>
     <service android:name=".service.RESTService" android:exported="false"/>
     <service android:name=".service.ChannelService" android:exported="false"/>
+    <service android:name=".service.HistoryService" android:exported="false"/>
     <receiver android:name=".receiver.NetworkReceiver">
       <intent-filter>   
         <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>   

@@ -20,7 +20,7 @@ import android.view.ContextMenu.ContextMenuInfo;
  * @author Bill
  *
  */
-public abstract class AbstractMessageActivity extends AbstractListActivity {
+public abstract class AbstractMessageActivity extends AbstractRESTActivity {
 
 	protected ObjectMapper mapper = new ObjectMapper();
 	

@@ -3,14 +3,12 @@
  */
 package com.tenline.pinecone.mobile.android;
 
-import java.util.ArrayList;
-
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.tenline.pinecone.mobile.android.receiver.NetworkReceiver;
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.service.RESTTask;
+import com.tenline.pinecone.mobile.android.service.ProgressTask;
 import com.tenline.pinecone.mobile.android.service.ServiceConnectionHelper;
 
 import android.content.Context;
@@ -79,7 +77,7 @@ public abstract class AbstractListActivity extends SherlockListActivity {
 	 * @author Bill
 	 *
 	 */
-	protected class LogoutTask extends RESTTask {
+	protected class LogoutTask extends ProgressTask {
 
 		/**
 		 * 
@@ -103,43 +101,6 @@ public abstract class AbstractListActivity extends SherlockListActivity {
 			Intent intent = new Intent(progress.getContext(), LoginActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); startActivity(intent);
 			super.onPostExecute(result);
-		}
-		
-	}
-	
-	public void doInitListViewTask(Object... params) {
-		new InitListViewTask(this).execute(params);
-	}
-	
-	/**
-	 * 
-	 * @author Bill
-	 *
-	 */
-	private class InitListViewTask extends RESTTask {
-
-		/**
-		 * 
-		 * @param context
-		 */
-		private InitListViewTask(Context context) {
-			super(context);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		protected Object[] doTaskAction(Object... params) {
-			// TODO Auto-generated method stub
-			try {
-				while (!restHelper.isBound()) {Thread.sleep(100);} 
-				params = ((ArrayList<?>) getRESTService().get(params[0].toString())).toArray();
-			} catch (Exception e) {Log.e(getClass().getSimpleName(), e.getMessage());} return params;
-		}
-		
-		@Override
-		protected void onPostExecute(Object[] result) {
-			// TODO Auto-generated method stub
-			buildListAdapter(result); super.onPostExecute(result);
 		}
 		
 	}

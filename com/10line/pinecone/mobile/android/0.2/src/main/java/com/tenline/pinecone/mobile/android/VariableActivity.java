@@ -14,11 +14,8 @@ import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 
-import com.tenline.pinecone.mobile.android.view.QueryVariableDialogBuilder;
 import com.tenline.pinecone.platform.model.Variable;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -70,29 +67,18 @@ public class VariableActivity extends AbstractMessageActivity implements MqttCal
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	protected void onPrepareDialog(final int id, final Dialog dialog) {
-		super.onPrepareDialog(id, dialog);
-		switch(id) {
-		case QueryVariableDialogBuilder.DIALOG_ID: ((AlertDialog) dialog).setTitle(getIntent().getStringExtra("variableName")); break;
-		}
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	protected Dialog onCreateDialog(int id) {
-		switch(id) {
-		case QueryVariableDialogBuilder.DIALOG_ID: return new QueryVariableDialogBuilder(this).getDialog();
-		} return super.onCreateDialog(id);
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		getIntent().putExtra("variableName", ((TextView) info.targetView.findViewById(R.id.variable_name)).getText().toString());
-		switch(item.getItemId()) {case R.id.variable_query: showDialog(QueryVariableDialogBuilder.DIALOG_ID); break;} 
-		return super.onContextItemSelected(item);
+		switch(item.getItemId()) {
+		case R.id.variable_query:
+			if (((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() == null) {
+				Toast.makeText(this, R.string.network_turn_off, Toast.LENGTH_LONG).show();
+			} else {
+				Intent intent = new Intent(HistoryActivity.ACTIVITY_ACTION);
+				intent.putExtra("variableId", String.valueOf(info.targetView.getId()));
+				startActivity(intent);	
+			} break;
+		} return super.onContextItemSelected(item);
 	}
 	
 	/**

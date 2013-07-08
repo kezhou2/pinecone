@@ -38,7 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author Bill
  *
  */
-public class DeviceActivity extends AbstractListActivity {
+public class DeviceActivity extends AbstractRESTActivity {
 	
 	public static final String ACTIVITY_ACTION = "com.tenline.pinecone.mobile.android.device";
 

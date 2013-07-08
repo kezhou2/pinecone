@@ -3,6 +3,7 @@ package cc.pinecone.renren.devicecontroller.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -116,6 +117,7 @@ public class AlermController {
 		
 		conf.addAlerm(deviceId, variableId, ob.toJSONString());
 		
-		request.getRequestDispatcher("/favorites.html").forward(request, response);
+		PrintWriter out = response.getWriter();
+		out.print("true");
 	}
 }

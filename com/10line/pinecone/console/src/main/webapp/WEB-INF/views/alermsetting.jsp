@@ -80,6 +80,39 @@
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript" src="js/files/utils.js"></script>
 <script type="text/javascript">
+window.onload = function(){
+$("#submitBtn").click(function(e){
+	e.preventDefault();
+	
+	
+	
+	
+	$.ajax({
+ 		url:'setalerm.html', 
+ 		type: 'post',
+ 		data: {deviceid:devid}, 
+		timeout: 5000,
+ 		error: function(XMLHttpRequest, textStatus, errorThrown){
+ 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+ 		}, 
+ 		success: function(result){
+ 			if(result == 'true'){
+ 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
+ 				$("#device"+devid).attr("onclick","addDevice('"+devid+"')");
+ 				$("#device"+devid).attr("title","Add to Favorites");
+ 				$("#device"+devid).html("<i class='icon-star-empty'></i>");
+ 			}else{
+ 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+ 			}
+ 		} 
+ 	});
+	
+	
+	parent.$.jGrowl('Disconnected the device!', { sticky: true, theme: 'growl-success', life:5000});
+	alert("Submitted");
+	parent.$.fancybox.close();
+});
+}
 </script>
 </head>
 
@@ -132,7 +165,7 @@
 	                </div>
 	                
 	                <div class="form-actions align-right">
-	                    <button type="submit" class="btn btn-primary">Submit</button>
+	                    <button id="submitBtn" type="submit" class="btn btn-primary">Submit</button>
 	                    <button type="reset" class="btn">Reset</button>
 	                </div>
 	

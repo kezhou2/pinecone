@@ -386,5 +386,63 @@ function alermVariable(deviceId, variableId){
 		</ul>
 	</div>
 	<!-- /footer -->
+	
+	<div style="display:none">
+		<form id="variable_form" action="setalerm.html" method="POST">
+			<input type="text" value="${deviceId}" name="deviceId" style="display:none">
+			<input type="text" value="${variableId}" name="variableId" style="display:none">
+	    	<div class="widget">
+	            <div class="navbar"><div class="navbar-inner"><h6>Variable alerm setting</h6></div></div>
+	
+	            <div class="well">
+	                
+	                <div class="control-group">
+	                    <label class="control-label">Condition type:</label>
+	                    <div class="controls">
+	                        <select id="conditionType" name="conditionType" class="styled" style="opacity: 0;">
+	                            <option value="numeric">Numeric</option>
+	                            <option value="string">String</option>
+	                        </select>
+	                    </div>
+	                    <label class="control-label">Condition:</label>
+	                    <div class="controls">
+	                        <select id="condition" name="condition" class="styled" style="opacity: 0;">
+	                            <option value=">">></option>
+	                            <option value=">=">>=</option>
+	                            <option value="=">=</option>
+	                            <option value="<"><</option>
+	                            <option value="<="><=</option>
+	                            <option value="!=">!=</option>
+	                        </select>
+	                    </div>
+	                    <label class="control-label">Value:</label>
+	                    <div class="controls"><input type="text" name="variablevalue" class="span12" placeholder="Variable value"></div>
+	                </div>
+	                
+	                <div class="control-group">
+	                    <label class="control-label">Alerm type:</label>
+	                    <div class="controls">
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="log" name="clog" class="styled" style="opacity: 0;"></span></div>Log</label>
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="page" name="cpage" class="styled" style="opacity: 0;"></span></div>Page</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="inlineCheckbox2" value="sound" name="csound" class="styled" style="opacity: 0;"></span></div>Sound</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="inlineCheckbox3" value="sms" name="csms" class="styled" style="opacity: 0;"></span></div>SMS</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="inlineCheckbox4" value="email" name="cemail" class="styled" style="opacity: 0;"></span></div>Email</label>
+	                    </div>
+	                    <label class="control-label">Cell phone:</label>
+	                    <div class="controls"><input type="text" name="cellphone" class="span12" placeholder="Regular field"></div>
+	                    <label class="control-label">Email address:</label>
+	                    <div class="controls"><input type="text" name="email" class="span12" placeholder="Regular field"></div>
+	                </div>
+	                
+	                <div class="form-actions align-right">
+	                    <button type="submit" class="btn btn-primary">Submit</button>
+	                    <button type="reset" class="btn">Reset</button>
+	                </div>
+	
+	            </div>
+	            
+	        </div>
+	    </form>
+	</div>
 </body>
 </html>

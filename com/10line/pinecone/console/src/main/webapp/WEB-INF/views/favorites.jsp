@@ -80,16 +80,13 @@
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript" src="js/files/utils.js"></script>
 <script type="text/javascript" src="js/charts/chart1.js"></script>
-<%
-String conf = (String)request.getAttribute("focusConf");
-%>
 <script type="text/javascript">
 //devices' id user focus. 
-var deviceIds = [];
+var deviceCodes = "";
 //variables' id user focus.
 var variableIds = new Array();
 //json data that datatable sends
-var jsonData;
+var jsonData = "${jsonData}";
 //refresh thread's id;
 var refreshid;
 //
@@ -99,19 +96,26 @@ var trendvalue = new Map();
 //define the size of history data
 var TREND_LEN = 10;
 //focus configuration in json style
-var focusConf = <%=conf%>
+var deviceStr = "${deviceIds}";
+var variableStr = "${variableIds}";
+//flag for alert dialog. prevent the windwo popup too many warning dialogs.
+var isAlert = false;
 
 function initConfig(){
-	for(var i=0;i<focusConf.length;i++){
-		var c = focusConf[i];
-		var splits = focusConf[i].variableIds.split("_");
-		for(var j=0;j<splits.length;j++){
-			if(splits[j] != ""){
-				trendvalue.put(splits[j],new Array());
-				variableIds.push(splits[j]);
-			}
-		}
-	}
+	//get all variable ids;
+    $("strong").each(function(){
+    	var code = $(this).attr('deviceCode');
+    	
+     	if(code != null){
+     		deviceCodes = deviceCodes+code+"_";
+     	}
+	})
+	
+    var _variableIds = variableStr.split("_");
+    for(var i=0;i<_variableIds.length;i++){
+    	trendvalue.put(_variableIds[i],new Array());
+    	variableIds.push(_variableIds[i]);
+    }
 }
 
 window.onload = function(){
@@ -156,8 +160,8 @@ window.onload = function(){
 				});
 				$("#index"+variableIds[i]).on("change", function(e) {
 					var splits = e.val.split("_");
-					if(splits.length >=2){
-						publish(splits[0],splits[1]);
+					if(splits.length >=3){
+						publish(splits[0],splits[1],splits[2]);
 					}
 				});
 				
@@ -181,21 +185,6 @@ window.onload = function(){
 				closeEffect	: 'none',
 				scrolling   : 'no',
 				type        : 'iframe',
-				'onStart'     :  function(){
-					alerm("onStart");
-				},
-				'onCancel'     :  function(){
-					alerm("onCancel");
-				},
-				'onComplete'     :  function(){
-					alerm("onComplete");
-				},
-				'onCleanup'     :  function(){
-					alerm("onCleanup");
-				},
-				'onClosed'   :  function(){
-					alerm("onClosed");
-				}
 			});
 			//initialize history dialog
 			
@@ -212,15 +201,115 @@ window.onload = function(){
 				scrolling   : 'no'
 			});
 			
-			//setRefresh(2);
+			//start refresh thread on the background
+			setRefresh(5);
 		},	
 		"sAjaxSource": "/console/queryfocusvariable.html"
 	});
 
 }
 
-function alermVariable(deviceId, variableId){
+function setTrend(newvalue, varid){
+	if(trendvalue[varid] == null)
+		return;
 	
+	var len = trendvalue[varid].length;
+	if(len == null)
+		return;
+	
+	if(len == TREND_LEN)
+		trendvalue[varid].shift();
+		
+	trendvalue[varid].push(newvalue);
+	$("span[varid='"+varid+"']").sparkline(trendvalue[varid]);
+}
+
+function setRefresh(time){
+	isRefreshing = true;
+	clearInterval(refreshid);
+	refreshid = setInterval("refresh()",time*1000);
+}
+
+function stopRefresh(){
+	if(isRefreshing){
+		clearInterval(refreshid);
+		isRefreshing = false;
+	}
+}
+
+function refresh(){
+	isRefreshing = true;
+	$.ajax({
+ 		url:'subscribefavoritesdata', 
+ 		type: 'POST',
+ 		data: {ids:jsonData,devicecodes:deviceCodes}, 
+		timeout: 1000,
+ 		error: function(XMLHttpRequest, textStatus, errorThrown){
+ 			if(!isAlert){
+ 				isAlert = true;
+	 			bootbox.confirm("Lost connection. Connect device again?", function(result) {
+	 				if(result =='false'){
+	 					clearInterval(refreshid);
+	 					isRefreshing = false;
+	 					isAlert = false;
+	 				}
+	 			});
+ 			}
+ 		}, 
+ 		success: function(result){
+ 			isConnected = true;
+ 			var splits = result.split(",");
+ 			if(splits.length > 1){
+ 				for(var n=1;n<splits.length;n++){
+ 					var tmp = splits[n].split(":");
+ 					var id = tmp[0];
+ 					var value = tmp[1];
+ 					$("strong[varid='"+id+"']").text(value);
+ 					setTrend(value,id);
+ 				}
+ 			}
+ 		} 
+ 	});
+}
+
+window.onunload = function(){
+	alert("onUnload");
+	stopRefresh();
+	
+	$.ajax({
+ 		url:'subscribedata', 
+ 		type: 'POST',
+ 		data: {isDisconnect:'true', devicecodes:deviceCodes},
+ 		async:false,
+		timeout: 500,
+ 		error: function(){}, 
+ 		success: function(result){
+ 			isConnect = false;
+ 		} 
+ 	});
+}
+
+function publish(devCode, varid, value){
+	$.ajax({
+ 		url:'publishdata', 
+ 		type: 'POST',
+ 		data: {deviceid:devCode,variableid:varid,vvalue:value}, 
+		timeout: 1000,
+ 		error: function(XMLHttpRequest, textStatus, errorThrown){
+ 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+ 		}, 
+ 		success: function(result){
+ 			if(result == "true"){
+ 				$.jGrowl('Setting finished!', { sticky: true, theme: 'growl-success', life:1000});
+ 			}else if(result == "false"){
+ 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+ 			}
+ 		} 
+ 	});
+}
+
+function setAlermStr(variableId, alermStr){
+	$("strong[alermVarid='"+variableId+"']").text(alermStr);
 }
 
 </script>
@@ -386,63 +475,5 @@ function alermVariable(deviceId, variableId){
 		</ul>
 	</div>
 	<!-- /footer -->
-	
-	<div style="display:none">
-		<form id="variable_form" action="setalerm.html" method="POST">
-			<input type="text" value="${deviceId}" name="deviceId" style="display:none">
-			<input type="text" value="${variableId}" name="variableId" style="display:none">
-	    	<div class="widget">
-	            <div class="navbar"><div class="navbar-inner"><h6>Variable alerm setting</h6></div></div>
-	
-	            <div class="well">
-	                
-	                <div class="control-group">
-	                    <label class="control-label">Condition type:</label>
-	                    <div class="controls">
-	                        <select id="conditionType" name="conditionType" class="styled" style="opacity: 0;">
-	                            <option value="numeric">Numeric</option>
-	                            <option value="string">String</option>
-	                        </select>
-	                    </div>
-	                    <label class="control-label">Condition:</label>
-	                    <div class="controls">
-	                        <select id="condition" name="condition" class="styled" style="opacity: 0;">
-	                            <option value=">">></option>
-	                            <option value=">=">>=</option>
-	                            <option value="=">=</option>
-	                            <option value="<"><</option>
-	                            <option value="<="><=</option>
-	                            <option value="!=">!=</option>
-	                        </select>
-	                    </div>
-	                    <label class="control-label">Value:</label>
-	                    <div class="controls"><input type="text" name="variablevalue" class="span12" placeholder="Variable value"></div>
-	                </div>
-	                
-	                <div class="control-group">
-	                    <label class="control-label">Alerm type:</label>
-	                    <div class="controls">
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="log" name="clog" class="styled" style="opacity: 0;"></span></div>Log</label>
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="page" name="cpage" class="styled" style="opacity: 0;"></span></div>Page</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="inlineCheckbox2" value="sound" name="csound" class="styled" style="opacity: 0;"></span></div>Sound</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="inlineCheckbox3" value="sms" name="csms" class="styled" style="opacity: 0;"></span></div>SMS</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="inlineCheckbox4" value="email" name="cemail" class="styled" style="opacity: 0;"></span></div>Email</label>
-	                    </div>
-	                    <label class="control-label">Cell phone:</label>
-	                    <div class="controls"><input type="text" name="cellphone" class="span12" placeholder="Regular field"></div>
-	                    <label class="control-label">Email address:</label>
-	                    <div class="controls"><input type="text" name="email" class="span12" placeholder="Regular field"></div>
-	                </div>
-	                
-	                <div class="form-actions align-right">
-	                    <button type="submit" class="btn btn-primary">Submit</button>
-	                    <button type="reset" class="btn">Reset</button>
-	                </div>
-	
-	            </div>
-	            
-	        </div>
-	    </form>
-	</div>
 </body>
 </html>

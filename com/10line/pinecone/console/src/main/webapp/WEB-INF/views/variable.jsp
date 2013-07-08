@@ -81,12 +81,12 @@ function initConfig(){
 	
 	devCode = $('#variablelist').attr('devicecode');	
 	//generate request json
- 	jsonData = "[";
+ 	jsonData = "[[";
  	for(var i=0;i<varids.length;i++){
  		if(i<varids.length-1){
  			jsonData += varids[i]+",";
  		}else{
- 			jsonData += varids[i]+"]";
+ 			jsonData += varids[i]+"]]";
  		}
  		
  		trendvalue[varids[i]] = new Array();
@@ -147,7 +147,7 @@ window.onload = function(){
 			
 			//init background thread
 			initConfig();
-			setRefresh(2);
+			setRefresh(5);
 		},
 		"sAjaxSource": "/console/queryvariable.html?id=<%=querydeviceid%>"
     });
@@ -158,7 +158,7 @@ function refresh(){
 	$.ajax({
  		url:'subscribedata', 
  		type: 'POST',
- 		data: {ids:jsonData,devicecode:devCode}, 
+ 		data: {ids:jsonData,devicecodes:devCode}, 
 		timeout: 1000,
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
@@ -174,16 +174,18 @@ function refresh(){
  		}, 
  		success: function(result){
  			isConnected = true;
- 			var splits = result.split(",");
- 			if(splits.length > 1){
- 				for(var n=1;n<splits.length;n++){
- 					var tmp = splits[n].split(":");
- 					var id = tmp[0];
- 					var value = tmp[1];
- 					$("strong[varid='"+id+"']").text(value);
- 					
- 					setTrend(value,id);
- 				}
+ 			var deviceData = result.split("/");
+ 			for(var m=0;m<deviceData.length;m++){
+	 			var splits = deviceData[m].split(",");
+	 			if(splits.length > 1){
+	 				for(var n=1;n<splits.length;n++){
+	 					var tmp = splits[n].split(":");
+	 					var id = tmp[0];
+	 					var value = tmp[1];
+	 					$("strong[varid='"+id+"']").text(value);
+	 					setTrend(value,id);
+	 				}
+	 			}
  			}
  		} 
  	});
@@ -224,7 +226,7 @@ window.onunload = function(){
 	$.ajax({
  		url:'subscribedata', 
  		type: 'POST',
- 		data: {isDisconnect:'true'},
+ 		data: {isDisconnect:'true', devicecodes:devCode},
  		async:false,
 		timeout: 500,
  		error: function(){}, 

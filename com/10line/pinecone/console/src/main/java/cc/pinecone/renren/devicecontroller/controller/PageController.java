@@ -176,20 +176,25 @@ public class PageController {
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		List<String> deviceIds = conf.getFocusDeviceIds();
 		
-		JSONArray focus = new JSONArray();
+		JSONArray jsonData = new JSONArray();
+		String deviceids = "";
+		String variableids = "";
 		for(String devid:deviceIds){
+			deviceids = deviceids+devid+"_";
 			List<String> variableIds = conf.getFocusDeviceVariableIds(devid);
-			StringBuilder strIds = new StringBuilder();
-			for(String varid:variableIds)
-				strIds.append(varid+"_");
-			JSONObject o = new JSONObject();
-			o.put("deviceId", devid);
-			o.put("variableIds", strIds.toString());
-			focus.add(o);
+			JSONArray data = new JSONArray();
+			for(int i=0;i<variableIds.size();i++){
+				data.add(Integer.parseInt(variableIds.get(i)));
+				variableids = variableids+variableIds.get(i)+"_";
+			}
+			
+			jsonData.add(data);
 		}
 		
-		System.out.println("json:"+focus.toJSONString());
-		request.setAttribute("focusConf", focus.toJSONString());
+		System.out.println("json:"+jsonData.toJSONString());
+		request.setAttribute("jsonData", jsonData.toJSONString());
+		request.setAttribute("deviceIds", deviceids);
+		request.setAttribute("variableIds", variableids);
 
 		return "favorites";
 	}

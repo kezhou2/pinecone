@@ -35,6 +35,7 @@ public class Connector implements MqttCallback{
 //	}
 	
 	public Connector(String deviceid, String topic) throws Exception{
+		System.out.println("####################initialize topic:"+topic);
 		values = new LinkedHashMap<String,String>();
 		
 		this.client = new ChannelClient(AppConfig.CHANNEL_URL);

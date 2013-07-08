@@ -74,6 +74,26 @@
 		<servlet-name>publishData</servlet-name>
 		<url-pattern>/publishdata</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>subscribeFavoritesData</servlet-name>
+		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.SubscribeFavoritesServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>subscribeFavoritesData</servlet-name>
+		<url-pattern>/subscribefavoritesdata</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>deviceStatusData</servlet-name>
+		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.DeviceStatusServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>deviceStatusData</servlet-name>
+		<url-pattern>/devicestatusdata</url-pattern>
+	</servlet-mapping>
 
 	<session-config>
 		<session-timeout>30</session-timeout>

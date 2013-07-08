@@ -84,33 +84,57 @@ window.onload = function(){
 $("#submitBtn").click(function(e){
 	e.preventDefault();
 	
+	//get data from form
+	var deviceId = ${deviceId};
+	var variableId = ${variableId};
+	var conditionType = $("select[name='conditionType']").val();
+	var condition = $("select[name='condition']").val();
+	var variablevalue = $("input[name='variablevalue']").val();
+	var clog = $("#clog").val();
+	var cpage = $("cpage").val();
+	var csound = $("csound").val();
+	var csms = $("csms").val();
+	var cemail = $("cemail").val();
+	var cellphone = $("input[name='cellphone']").val();
+	var email = $("input[name='email']").val();
 	
-	
-	
+	//submit to servlet
 	$.ajax({
  		url:'setalerm.html', 
  		type: 'post',
- 		data: {deviceid:devid}, 
+ 		data: {
+			deviceId:deviceId,
+			variableId:variableId,
+			conditionType:conditionType,
+			condition:condition,
+			variablevalue:variablevalue,
+			clog:clog,
+			cpage:cpage,
+			csound:csound,
+			csms:csms,
+			cemail:cemail,
+			cellphone:cellphone,
+			email:email
+ 		}, 
 		timeout: 5000,
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
  		}, 
  		success: function(result){
  			if(result == 'true'){
- 				$.jGrowl('Favorite removed!', { sticky: true, theme: 'growl-success', life:1000});
- 				$("#device"+devid).attr("onclick","addDevice('"+devid+"')");
- 				$("#device"+devid).attr("title","Add to Favorites");
- 				$("#device"+devid).html("<i class='icon-star-empty'></i>");
+ 				parent.$.jGrowl('Added alerm to this variable!', { sticky: true, theme: 'growl-success', life:1000});
+ 				window.parent.setAlermStr(variableId,(condition+variablevalue));
+ 				parent.$.fancybox.close();
  			}else{
  				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+ 				parent.$.fancybox.close();
  			}
  		} 
  	});
 	
 	
-	parent.$.jGrowl('Disconnected the device!', { sticky: true, theme: 'growl-success', life:5000});
-	alert("Submitted");
-	parent.$.fancybox.close();
+	
+	
 });
 }
 </script>
@@ -152,11 +176,11 @@ $("#submitBtn").click(function(e){
 	                <div class="control-group">
 	                    <label class="control-label">Alerm type:</label>
 	                    <div class="controls">
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="log" name="clog" class="styled" style="opacity: 0;"></span></div>Log</label>
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="inlineCheckbox1" value="page" name="cpage" class="styled" style="opacity: 0;"></span></div>Page</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="inlineCheckbox2" value="sound" name="csound" class="styled" style="opacity: 0;"></span></div>Sound</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="inlineCheckbox3" value="sms" name="csms" class="styled" style="opacity: 0;"></span></div>SMS</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="inlineCheckbox4" value="email" name="cemail" class="styled" style="opacity: 0;"></span></div>Email</label>
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="clog" value="log" name="clog" class="styled" style="opacity: 0;"></span></div>Log</label>
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="cpage" value="page" name="cpage" class="styled" style="opacity: 0;"></span></div>Page</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="csound" value="sound" name="csound" class="styled" style="opacity: 0;"></span></div>Sound</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="csms" value="sms" name="csms" class="styled" style="opacity: 0;"></span></div>SMS</label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="cemail" value="email" name="cemail" class="styled" style="opacity: 0;"></span></div>Email</label>
 	                    </div>
 	                    <label class="control-label">Cell phone:</label>
 	                    <div class="controls"><input type="text" name="cellphone" class="span12" placeholder="Regular field"></div>

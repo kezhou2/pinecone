@@ -563,7 +563,7 @@ public class PineconeController {
 				
 				//one device title row for table
 				JSONArray r = new JSONArray();
-				r.add("<Strong deviceId='"+device.getId()+"'>Name:"+device.getName()+" Code:"+device.getCode()+"</strong>");
+				r.add("<Strong deviceId='"+device.getId()+"' deviceCode='"+device.getCode()+"'>Name:"+device.getName()+" Code:"+device.getCode()+"</strong>");
 				r.add("");
 				r.add("");
 				r.add("");
@@ -614,9 +614,9 @@ public class PineconeController {
 							JSONParser p = new JSONParser();
 							JSONObject ob = (JSONObject)p.parse(alermStr);
 							
-							row.add(ob.get("condition").toString()+ob.get("variablevalue").toString());
+							row.add("<Strong alermVarid='"+var.getId()+"'>"+ob.get("condition").toString()+ob.get("variablevalue").toString()+"</strong>");
 						}else{
-							row.add("");
+							row.add("<Strong alermVarid='"+var.getId()+"' />");
 						}
 						
 						StringBuilder sb = new StringBuilder();
@@ -629,7 +629,7 @@ public class PineconeController {
 						
 						sb.append("<option></option>");
 						for(Item it:var.getItems()){
-							sb.append("<option value='"+var.getId()+"_"+it.getValue()+"'>"+it.getValue()+"</option>");
+							sb.append("<option value='"+deviceId+"_"+var.getId()+"_"+it.getValue()+"'>"+it.getValue()+"</option>");
 						}
 						sb.append("</select>");
 						row.add(sb.toString());

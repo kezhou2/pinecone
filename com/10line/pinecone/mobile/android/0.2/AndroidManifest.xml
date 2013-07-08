@@ -37,6 +37,12 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>  
     </activity>
+    <activity android:name=".HistoryActivity" android:uiOptions="splitActionBarWhenNarrow" android:exported="false">
+      <intent-filter>
+        <action android:name="com.tenline.pinecone.mobile.android.history" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>  
+    </activity>
     <service android:name=".service.RESTService" android:exported="false"/>
     <service android:name=".service.ChannelService" android:exported="false"/>
     <service android:name=".service.HistoryService" android:exported="false"/>

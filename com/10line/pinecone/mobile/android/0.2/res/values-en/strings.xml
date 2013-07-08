@@ -45,7 +45,7 @@
     <string name="variable_title">Variable</string>
     
     <!-- Variable Operations -->
-    <string name="variable_query">Query variable</string>
+    <string name="variable_query">Query history</string>
     <string name="variable_icon">Variable Icon</string>
     
     <!-- Item Properties -->
@@ -53,7 +53,7 @@
     
     <!-- Item Opertions -->
     <string name="item_setting">Are you sure to set</string>
-    <string name="item_icon">Item Icon</string>
+    <string name="item_icon">Setting Icon</string>
     
     <!-- History Properties -->
     <string name="history_title">History</string>
@@ -77,6 +77,7 @@
 	<string name="error_device_code_is_not_existed">Please accessing device first</string>
 	<string name="error_device_has_been_activated">Device has been activated</string>
 	<string name="error_variable_could_not_be_set">Variable could not be set</string>
+	<string name="error_no_history">No History</string>
 	
 	<!-- Progress Properties -->
 	<string name="progress_message">Loading&#8230;</string>

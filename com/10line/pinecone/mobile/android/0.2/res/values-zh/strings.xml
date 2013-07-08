@@ -45,7 +45,7 @@
     <string name="variable_title">变量</string>
     
     <!-- Variable Operations -->
-    <string name="variable_query">查询变量</string>
+    <string name="variable_query">历史查询</string>
     <string name="variable_icon">变量图标</string>
     
     <!-- Item Properties -->
@@ -53,7 +53,7 @@
     
     <!-- Item Operations -->
     <string name="item_setting">确定设置为</string>
-    <string name="item_icon">项目图标</string>
+    <string name="item_icon">设置图标</string>
     
     <!-- History Properties -->
     <string name="history_title">历史数据</string>
@@ -77,6 +77,7 @@
 	<string name="error_device_code_is_not_existed">请先接入设备</string>
 	<string name="error_device_has_been_activated">设备已经激活</string>
 	<string name="error_variable_could_not_be_set">变量不能被设置</string>
+	<string name="error_no_history">没有历史数据</string>
 	
 	<!-- Progress Properties -->
 	<string name="progress_message">网络数据读取中&#8230;</string>

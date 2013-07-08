@@ -6,7 +6,7 @@ package com.tenline.pinecone.mobile.android.view;
 import com.tenline.pinecone.mobile.android.DeviceActivity;
 import com.tenline.pinecone.mobile.android.R;
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.service.RESTTask;
+import com.tenline.pinecone.mobile.android.service.ProgressTask;
 import com.tenline.pinecone.platform.model.Device;
 
 import android.content.Context;
@@ -62,7 +62,7 @@ public class ModifyDeviceDialogBuilder extends AbstractDialogBuilder {
 	 * @author Bill
 	 *
 	 */
-	private class ModifyDeviceTask extends RESTTask {
+	private class ModifyDeviceTask extends ProgressTask {
 
 		/**
 		 * 

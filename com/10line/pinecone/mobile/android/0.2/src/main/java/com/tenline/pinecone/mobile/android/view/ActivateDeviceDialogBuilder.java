@@ -9,7 +9,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.tenline.pinecone.mobile.android.DeviceActivity;
 import com.tenline.pinecone.mobile.android.R;
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.service.RESTTask;
+import com.tenline.pinecone.mobile.android.service.ProgressTask;
 import com.tenline.pinecone.platform.model.Device;
 
 import android.content.Context;
@@ -77,7 +77,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 	 * @author Bill
 	 *
 	 */
-	private class DeviceCodeValidationTask extends RESTTask {
+	private class DeviceCodeValidationTask extends ProgressTask {
 
 		/**
 		 * 
@@ -114,7 +114,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 	 * @author Bill
 	 *
 	 */
-	private class DeviceValidationTask extends RESTTask {
+	private class DeviceValidationTask extends ProgressTask {
 
 		/**
 		 * 
@@ -151,7 +151,7 @@ public class ActivateDeviceDialogBuilder extends AbstractDialogBuilder {
 	 * @author Bill
 	 *
 	 */
-	private class ActivateDeviceTask extends RESTTask {
+	private class ActivateDeviceTask extends ProgressTask {
 
 		/**
 		 * 

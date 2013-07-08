@@ -5,7 +5,7 @@ package com.tenline.pinecone.mobile.android.view;
 
 import com.tenline.pinecone.mobile.android.DeviceActivity;
 import com.tenline.pinecone.mobile.android.R;
-import com.tenline.pinecone.mobile.android.service.RESTTask;
+import com.tenline.pinecone.mobile.android.service.ProgressTask;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -57,7 +57,7 @@ public class DeleteDeviceDialogBuilder extends AbstractDialogBuilder {
 	 * @author Bill
 	 *
 	 */
-	private class DeleteDeviceTask extends RESTTask {
+	private class DeleteDeviceTask extends ProgressTask {
 
 		/**
 		 * 

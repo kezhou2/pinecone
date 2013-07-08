@@ -6,7 +6,7 @@ package com.tenline.pinecone.mobile.android;
 import java.util.ArrayList;
 
 import com.tenline.pinecone.mobile.android.service.RESTService;
-import com.tenline.pinecone.mobile.android.service.RESTTask;
+import com.tenline.pinecone.mobile.android.service.ProgressTask;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
 import com.tenline.pinecone.platform.model.User;
 
@@ -59,7 +59,7 @@ public class LoginActivity extends AbstractActivity {
      * @author Bill
      *
      */
-    private class LoginValidationTask extends RESTTask {
+    private class LoginValidationTask extends ProgressTask {
 
     	/**
     	 * 
@@ -91,7 +91,7 @@ public class LoginActivity extends AbstractActivity {
      * @author Bill
      *
      */
-    private class LoginTask extends RESTTask {
+    private class LoginTask extends ProgressTask {
 
     	/**
     	 * 

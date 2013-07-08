@@ -15,7 +15,7 @@ import android.widget.Toast;
  * @author Bill
  *
  */
-public abstract class RESTTask extends AsyncTask<Object, Object, Object[]> {
+public abstract class ProgressTask extends AsyncTask<Object, Object, Object[]> {
 	
 	protected ProgressDialog progress;
 	
@@ -23,7 +23,7 @@ public abstract class RESTTask extends AsyncTask<Object, Object, Object[]> {
 	 * 
 	 * @param context
 	 */
-	public RESTTask(Context context) {
+	public ProgressTask(Context context) {
 		progress = new ProgressDialog(context);
 		progress.setCancelable(false); progress.setCanceledOnTouchOutside(false);
 		progress.setMessage(context.getString(R.string.progress_message));

@@ -6,7 +6,7 @@ package com.tenline.pinecone.mobile.android;
 import java.util.ArrayList;
 
 import com.actionbarsherlock.view.MenuItem;
-import com.tenline.pinecone.mobile.android.service.RESTTask;
+import com.tenline.pinecone.mobile.android.service.ProgressTask;
 import com.tenline.pinecone.mobile.android.validation.EqualityValidator;
 import com.tenline.pinecone.mobile.android.view.FormEditText;
 import com.tenline.pinecone.platform.model.Authority;
@@ -62,7 +62,7 @@ public class RegisterActivity extends AbstractActivity {
 	 * @author Bill
 	 *
 	 */
-	private class UserNameValidationTask extends RESTTask {
+	private class UserNameValidationTask extends ProgressTask {
 
 		/**
 		 * 
@@ -97,7 +97,7 @@ public class RegisterActivity extends AbstractActivity {
 	 * @author Bill
 	 *
 	 */
-	private class UserEmailValidationTask extends RESTTask {
+	private class UserEmailValidationTask extends ProgressTask {
 
 		/**
 		 * 
@@ -132,7 +132,7 @@ public class RegisterActivity extends AbstractActivity {
 	 * @author Bill
 	 *
 	 */
-	private class RegisterTask extends RESTTask {
+	private class RegisterTask extends ProgressTask {
 
 		/**
 		 * 

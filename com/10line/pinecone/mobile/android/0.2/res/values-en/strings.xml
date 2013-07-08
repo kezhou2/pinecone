@@ -55,6 +55,10 @@
     <string name="item_setting">Are you sure to set</string>
     <string name="item_icon">Item Icon</string>
     
+    <!-- History Properties -->
+    <string name="history_title">History</string>
+    <string name="history_icon">History Icon</string>
+    
     <!-- Validation Properties -->
     <string name="error_only_numeric_digits_allowed">Only numeric digits are allowed</string>
 	<string name="error_this_field_cannot_contain_special_character">This field cannot contain any special character</string>

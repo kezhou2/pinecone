@@ -55,6 +55,10 @@
     <string name="item_setting">确定设置为</string>
     <string name="item_icon">项目图标</string>
     
+    <!-- History Properties -->
+    <string name="history_title">历史数据</string>
+    <string name="history_icon">历史数据图标</string>
+    
     <!-- Validation Properties -->
     <string name="error_only_numeric_digits_allowed">只允许填写数字</string>
 	<string name="error_this_field_cannot_contain_special_character">只允许填写数字或字母</string>

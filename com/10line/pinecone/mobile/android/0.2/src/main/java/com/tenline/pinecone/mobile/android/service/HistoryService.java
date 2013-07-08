@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import android.content.Intent;
@@ -105,6 +106,15 @@ public class HistoryService extends AbstractService {
 	 */
 	public Set<String> getDates(String id) {
 		return client.hkeys(id);
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Map<String, String> getAll(String id) {
+		return client.hgetAll(id);
 	}
 
 }

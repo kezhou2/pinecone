@@ -4,6 +4,8 @@
 package com.tenline.pinecone.mobile.android;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,7 +103,19 @@ public class HistoryActivity extends AbstractListActivity {
 			HashMap<String, String> item = new HashMap<String, String>();
 			item.put("historyDate", key); item.put("historyValue", histories.get(key));
 			items.add(item);
-		} String[] from = new String[]{"historyDate", "historyValue"};
+		}
+		if (!items.isEmpty()) {
+			Collections.sort(items, new Comparator<HashMap<String, String>>() {
+
+				@Override
+				public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
+					// TODO Auto-generated method stub
+					return rhs.get("historyDate").compareTo(lhs.get("historyDate"));
+				}
+				
+			});
+		}
+		String[] from = new String[]{"historyDate", "historyValue"};
 		int[] to = new int[]{R.id.history_date, R.id.history_value}; 
 		setListAdapter(new SimpleAdapter(this, items, R.layout.history_item, from, to));
 	}

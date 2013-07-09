@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.ParseException;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,6 +21,7 @@ import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
+@SuppressWarnings("serial")
 public class SubscribeFavoritesServlet extends HttpServlet {
 
 	private static Map<String, Connector> connectorMap = new LinkedHashMap<String, Connector>();

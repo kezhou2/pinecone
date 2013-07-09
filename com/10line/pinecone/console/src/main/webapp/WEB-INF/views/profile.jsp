@@ -90,7 +90,6 @@ String username = (String)request.getSession().getAttribute("username");
 					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Welcome back, ${username}<b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="profile.html" title=""><i class="icon-user"></i>Profile</a></li>
-						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>
 						<li><a href="j_spring_security_logout" title=""><i class="icon-signout"></i>Logout</a></li>
 					</ul>
 				</li>

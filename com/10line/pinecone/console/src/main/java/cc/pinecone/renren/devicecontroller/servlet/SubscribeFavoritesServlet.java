@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -31,23 +33,49 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		doPost(req, resp);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String isDisconnect = request.getParameter("isDisconnect");
 		System.out.println("isDisconnect========================"+isDisconnect);
 		
-		String ids = request.getParameter("ids");
-		System.out.println("recived:"+ids);
-		Object obj = JSONValue.parse(ids);
-		JSONArray array=(JSONArray)obj;
-		
-		//here acturally received device code from the jsp page.
+		//device codes
 		String code = request.getParameter("devicecodes");
 		System.out.println("recived:"+code);
 		String[] deviceCodes = new String[0];
 		if(code != null)
 			deviceCodes = code.split("_");
+		
+		if(isDisconnect != null && isDisconnect.equals("true")){
+			System.out.println("ready to disconnect");
+			for(String deviceCode:deviceCodes){
+				if(connectorMap.get(deviceCode) != null){
+					try {
+						connectorMap.get(deviceCode).destroy();
+						connectorMap.remove(deviceCode);
+						return;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		//variable ids
+		String ids = request.getParameter("ids");
+		System.out.println("recived:"+ids);
+		Object obj = JSONValue.parse(ids);
+		JSONArray array=(JSONArray)obj;
+		
+		
+		
+		//device ids
+		String devids = request.getParameter("deviceids");
+		System.out.println("recived:"+devids);
+		String[] deviceIds = new String[0];
+		if(code != null)
+			deviceIds = devids.split("_");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
@@ -61,32 +89,18 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		String path =  request.getSession().getServletContext().getRealPath("/");
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
-		List<String> deviceIds = conf.getFocusDeviceIds();
-		if(isDisconnect != null && isDisconnect.equals("true")){
-			System.out.println("ready to disconnect");
-			for(String deviceCode:deviceIds){
-				if(connectorMap.get(deviceCode) != null){
-					try {
-						connectorMap.get(deviceCode).destroy();
-						connectorMap.remove(deviceCode);
-						return;
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
 		
-		String result = "";
-		String res = "";
+		
+		JSONArray result = new JSONArray();
 		for(int i=0;i<deviceCodes.length;i++){
 			
 			String deviceCode = deviceCodes[i];
+			String deviceId = deviceIds[i];
 	
 			if(connectorMap.get(deviceCode) == null){
-				System.out.println("#################initial deviceCode:"+deviceCodes[i]);
+				System.out.println("#################initial deviceCode:"+deviceCode);
 				try {
-					Connector con = new Connector(deviceCode,"pinecone@device."+deviceCode+".publish");
+					Connector con = new Connector(deviceId,"pinecone@device."+deviceCode+".publish");
 					connectorMap.put(deviceCode, con);
 					
 					JSONArray varArray = (JSONArray)array.get(i);
@@ -99,20 +113,24 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 			}else{
 				System.out.println("#################getting data. deviceCode:"+deviceCodes[i]);
 				Connector connector = connectorMap.get(deviceCode);
-				if(connector != null)
-					res = connector.getStringValues();
+				if(connector != null){
+					
+					JSONObject o = new JSONObject();
+					o.put("deviceCode", deviceCode);
+					o.put("value", connector.getJSONValue(conf));
+					result.add(o);
+					
+				}
 			}
-			result = result+deviceCode+","+res+"/";
 		}
-		System.out.println(result);
 		
 		response.setContentType("text/html; charset=utf-8"); 
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Cache-Control","no-cache");
 		PrintWriter out=response.getWriter();
 		
-		System.out.println("json string------------------------------:"+result);
-		out.write(result);
+		System.out.println("json string------------------------------:"+result.toJSONString());
+		out.write(result.toJSONString());
 		out.close();
 		
 	}

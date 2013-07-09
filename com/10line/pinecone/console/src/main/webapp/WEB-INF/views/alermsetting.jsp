@@ -131,10 +131,6 @@ $("#submitBtn").click(function(e){
  			}
  		} 
  	});
-	
-	
-	
-	
 });
 }
 </script>

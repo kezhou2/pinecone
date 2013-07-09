@@ -81,8 +81,10 @@
 <script type="text/javascript" src="js/files/utils.js"></script>
 <script type="text/javascript" src="js/charts/chart1.js"></script>
 <script type="text/javascript">
-//devices' id user focus. 
+//devices' code user focus. 
 var deviceCodes = "";
+//devices' id user focus. 
+var deviceIds = "";
 //variables' id user focus.
 var variableIds = new Array();
 //json data that datatable sends
@@ -101,13 +103,17 @@ var variableStr = "${variableIds}";
 //flag for alert dialog. prevent the windwo popup too many warning dialogs.
 var isAlert = false;
 
+var jsonObject;
+
 function initConfig(){
 	//get all variable ids;
     $("strong").each(function(){
     	var code = $(this).attr('deviceCode');
+    	var id = $(this).attr('deviceId');
     	
      	if(code != null){
      		deviceCodes = deviceCodes+code+"_";
+     		deviceIds = deviceIds+id+"_";
      	}
 	})
 	
@@ -210,18 +216,18 @@ window.onload = function(){
 }
 
 function setTrend(newvalue, varid){
-	if(trendvalue[varid] == null)
+	if(trendvalue.get(varid) == null)
 		return;
 	
-	var len = trendvalue[varid].length;
+	var len = trendvalue.get(varid).length;
 	if(len == null)
 		return;
 	
 	if(len == TREND_LEN)
-		trendvalue[varid].shift();
+		trendvalue.get(varid).shift();
 		
-	trendvalue[varid].push(newvalue);
-	$("span[varid='"+varid+"']").sparkline(trendvalue[varid]);
+	trendvalue.get(varid).push(newvalue);
+	$("span[varid='"+varid+"']").sparkline(trendvalue.get(varid));
 }
 
 function setRefresh(time){
@@ -242,7 +248,7 @@ function refresh(){
 	$.ajax({
  		url:'subscribefavoritesdata', 
  		type: 'POST',
- 		data: {ids:jsonData,devicecodes:deviceCodes}, 
+ 		data: {ids:jsonData,devicecodes:deviceCodes,deviceids:deviceIds}, 
 		timeout: 1000,
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
@@ -258,14 +264,21 @@ function refresh(){
  		}, 
  		success: function(result){
  			isConnected = true;
- 			var splits = result.split(",");
- 			if(splits.length > 1){
- 				for(var n=1;n<splits.length;n++){
- 					var tmp = splits[n].split(":");
- 					var id = tmp[0];
- 					var value = tmp[1];
- 					$("strong[varid='"+id+"']").text(value);
- 					setTrend(value,id);
+ 			var obj = eval('(' + result + ')'); 
+ 			jsonObject = obj;
+ 			
+ 			for(var n=0;n<obj.length;n++){
+ 				for(var m=0;m<obj[n].value.length;m++){
+ 					var id = obj[n].value[m].id;
+ 					var value = obj[n].value[m].value;
+ 					var isAlerm = obj[n].value[m].isAlerm;
+ 					$("strong[varid='"+obj[n].value[m].id+"']").text(obj[n].value[m].value);
+ 					setTrend(value,obj[n].value[m].id);
+ 					if(obj[n].value[m].isAlerm){
+ 						$("strong[varid='"+obj[n].value[m].id+"']").parent().parent().toggleClass("error")
+ 					}else{
+ 						$("strong[varid='"+obj[n].value[m].id+"']").parent().parent().removeClass("error")
+ 					}
  				}
  			}
  		} 
@@ -277,7 +290,7 @@ window.onunload = function(){
 	stopRefresh();
 	
 	$.ajax({
- 		url:'subscribedata', 
+ 		url:'subscribefavoritesdata', 
  		type: 'POST',
  		data: {isDisconnect:'true', devicecodes:deviceCodes},
  		async:false,

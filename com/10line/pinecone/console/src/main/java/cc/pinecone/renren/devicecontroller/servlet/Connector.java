@@ -11,8 +11,11 @@ import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 
+import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
+import cc.pinecone.renren.devicecontroller.model.FocusVariable;
 
 import com.tenline.pinecone.platform.sdk.ChannelClient;
 
@@ -20,23 +23,19 @@ public class Connector implements MqttCallback{
 	
 	private Map<String,String> values;
 	private ChannelClient client;
+	private String deviceId;
 	
 	private Date lastReceived;
 	
 	private final String CONNECT = "connect";
-	private final String DISCONNECT = "disconnect" ;
-	
-//	public Connector(String deviceid) throws Exception{
-//		values = new LinkedHashMap<String,String>();
-//		
-//		this.client = new ChannelClient(AppConfig.CHANNEL_URL);
-//		//TODO
-//		this.client.listen(this, "pinecone@device."+deviceid);
-//	}
+	private final String DISCONNECT = "disconnect";
+	private final String NUMERIC = "numeric";
+	private final String STRING = "string";
 	
 	public Connector(String deviceid, String topic) throws Exception{
 		System.out.println("####################initialize topic:"+topic);
 		values = new LinkedHashMap<String,String>();
+		this.deviceId = deviceid;
 		
 		this.client = new ChannelClient(AppConfig.CHANNEL_URL);
 		this.client.listen(this, topic);
@@ -56,7 +55,7 @@ public class Connector implements MqttCallback{
 	@Override
 	public void messageArrived(MqttTopic arg0, MqttMessage arg1)
 			throws Exception {
-		System.out.println(new String(arg1.getPayload()));
+		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&"+new String(arg1.getPayload()));
 		byte[] buf = arg1.getPayload();
 		if(buf != null){
 			JSONObject obj = (JSONObject)JSONValue.parse(new String(buf));
@@ -112,6 +111,25 @@ public class Connector implements MqttCallback{
 	}
 	
 	@SuppressWarnings("unchecked")
+	public JSONArray getJSONValue(Config conf){
+		JSONArray array = new JSONArray();
+		for(String variableId:values.keySet()){
+			JSONObject obj = new JSONObject();
+			System.out.println("key:"+variableId+"|value:"+values.get(variableId));
+			if(values.get(variableId) != null){
+				obj.put("id", variableId);
+				obj.put("value", values.get(variableId));
+				FocusVariable fv = conf.getVariable(deviceId, variableId);
+				boolean isAlerm = isAlerm(fv.getAlermString(), values.get(variableId));
+				obj.put("isAlerm", isAlerm);
+			}
+			array.add(obj);
+		}
+		System.out.println("getvalues:"+array.toJSONString());
+		
+		return array;
+	}
+	
 	public String getStringValues(){
 		String value = "";
 		for(String key:values.keySet()){
@@ -149,6 +167,54 @@ public class Connector implements MqttCallback{
 		//TODO here we need to add alermer
 		
 		return CONNECT;
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean isAlerm(String alermStr, String value){
+		
+		if(alermStr == null || "".equals(alermStr))
+			return false;
+		
+		try{
+			JSONParser parser = new JSONParser();
+			JSONObject ob = (JSONObject)parser.parse(alermStr);
+			String conditionType = (String)ob.get("conditionType");
+			String condition = (String)ob.get("condition");
+			String variablevalue = (String)ob.get("variablevalue");
+			String clog = (String)ob.get("clog");
+			String cpage = (String)ob.get("cpage");
+			String csound = (String)ob.get("csound");
+			String csms = (String)ob.get("csms");
+			String cemail = (String)ob.get("cemail");
+			
+			if(conditionType.equals(NUMERIC)){
+				float val = Float.parseFloat(variablevalue);
+				float cur = Float.parseFloat(value);
+				if(condition.equals(">")){
+					if(cur > val)
+						return true;
+				}else if(condition.equals(">=")){
+					if(cur >= val)
+						return true;
+				}else if(condition.equals("=")){
+					if(cur == val)
+						return true;
+				}else if(condition.equals("<")){
+					if(cur < val)
+						return true;
+				}else if(condition.equals("<=")){
+					if(cur <= val)
+						return true;
+				}else if(condition.equals("!=")){
+					if(cur != val)
+						return true;
+				}
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 }

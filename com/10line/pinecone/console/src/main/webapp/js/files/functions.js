@@ -751,7 +751,9 @@ $(function() {
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
 		},
 		"aoColumnDefs": [
-	      { "bSortable": false, "aTargets": [ 0, 6 ] }
+	      { "bSortable": false, "aTargets": [ 0, 6 ] },
+	      { "sWidth":"150px", "aTargets":[6]},
+	      { "sWidth":"250px", "aTargets":[3]}
 	    ],
 		"bServerSide": true,
 		"bProcessing": true,

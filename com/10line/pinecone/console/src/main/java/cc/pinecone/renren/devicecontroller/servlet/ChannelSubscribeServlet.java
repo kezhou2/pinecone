@@ -68,6 +68,7 @@ public class ChannelSubscribeServlet extends HttpServlet {
 					try {
 						connectorMap.get(deviceCode).destroy();
 						connectorMap.remove(deviceCode);
+						connectorMap.clear();
 						return;
 					} catch (Exception e) {
 						e.printStackTrace();

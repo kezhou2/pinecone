@@ -50,6 +50,7 @@ public class DeviceStatusServlet extends HttpServlet {
 					try {
 						connectorMap.get(obj.get("deviceCode")).destroy();
 						connectorMap.remove(obj.get("deviceCode"));
+						connectorMap.clear();
 						return;
 					} catch (Exception e) {
 						e.printStackTrace();

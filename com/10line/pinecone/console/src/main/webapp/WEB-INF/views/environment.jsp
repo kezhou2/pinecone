@@ -49,6 +49,20 @@
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/files/functions.js"></script>
 <script type="text/javascript">
+//devices' code user focus. 
+var deviceCodes = "";
+//devices' id user focus. 
+var deviceIds = "";
+//variables' id user focus.
+var variableIds = new Array();
+//json data that datatable sends
+var jsonData = '${jsonData}';
+//refresh thread's id;
+var refreshid;
+
+//flag for alert dialog. prevent the windwo popup too many warning dialogs.
+var isAlert = false;
+
 window.onload = function(){
 			
 	//initialize alerm dialog
@@ -61,6 +75,72 @@ window.onload = function(){
 		'type'				: 'iframe'
 	});
 
+	//start refresh thread on the background
+	setRefresh(5);
+}
+
+function setRefresh(time){
+	isRefreshing = true;
+	clearInterval(refreshid);
+	refreshid = setInterval("refresh()",time*1000);
+}
+
+function stopRefresh(){
+	if(isRefreshing){
+		clearInterval(refreshid);
+		isRefreshing = false;
+	}
+}
+
+function refresh(){
+	isRefreshing = true;
+	$.ajax({
+ 		url:'devicestatusdata', 
+ 		type: 'POST',
+ 		data: {jsonData:jsonData}, 
+		timeout: 1000,
+ 		error: function(XMLHttpRequest, textStatus, errorThrown){
+ 			if(!isAlert){
+ 				isAlert = true;
+	 			bootbox.confirm("Lost connection. Connect device again?", function(result) {
+	 				if(result =='false'){
+	 					clearInterval(refreshid);
+	 					isRefreshing = false;
+	 					isAlert = false;
+	 				}
+	 			});
+ 			}
+ 		}, 
+ 		success: function(result){
+ 			isConnected = true;
+ 			var obj = eval('(' + result + ')'); 
+ 			
+ 			for(var n=0;n<obj.length;n++){
+ 				if(obj[n].status == 'connect'){
+ 					$("img[deviceId='"+obj[n].deviceId+"']").attr("src","img/demo/ok.png");
+ 				}else if(obj[n].status == 'disconnect'){
+ 					$("img[deviceId='"+obj[n].deviceId+"']").attr("src","img/demo/off.png");
+ 				}
+ 			}
+ 		} 
+ 	});
+}
+
+window.onunload = function(){
+	alert("onUnload");
+	stopRefresh();
+	
+	$.ajax({
+ 		url:'devicestatusdata', 
+ 		type: 'POST',
+ 		data: {isDisconnect:'true', jsonData:jsonData},
+ 		async:false,
+		timeout: 500,
+ 		error: function(){}, 
+ 		success: function(result){
+ 			isConnect = false;
+ 		} 
+ 	});
 }
 </script>
 
@@ -169,7 +249,7 @@ window.onload = function(){
 												<tr>
 											</c:when>
 										</c:choose>
-								  		<td><a href='variable.html?id=${device.id}' id='deviceShow' class='btn tip' title='${device.name}'><img src="img/demo/ok.png" width="78" height="71" /></a></td>
+								  		<td><a href='variable.html?id=${device.id}' id='deviceShow' class='btn tip' title='${device.name}'><img src="img/demo/off.png" deviceId='${device.id}' width="78" height="71" /></a></td>
 								   		<c:choose>
 											<c:when test="${status.index % 10 == 9}">
 												</tr>

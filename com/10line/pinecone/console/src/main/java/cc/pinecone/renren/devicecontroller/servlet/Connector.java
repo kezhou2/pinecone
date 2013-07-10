@@ -27,6 +27,8 @@ public class Connector implements MqttCallback{
 	
 	private Date lastReceived;
 	
+	private boolean isConnected;
+	
 	private final String CONNECT = "connect";
 	private final String DISCONNECT = "disconnect";
 	private final String NUMERIC = "numeric";
@@ -40,11 +42,12 @@ public class Connector implements MqttCallback{
 		this.client = new ChannelClient(AppConfig.CHANNEL_URL);
 		this.client.listen(this, topic);
 		this.lastReceived = new Date();
+		this.isConnected = false;
 	}
 
 	@Override
 	public void connectionLost(Throwable arg0) {
-		System.out.println(arg0.getMessage());
+		this.isConnected = false;
 	}
 
 	@Override
@@ -55,12 +58,12 @@ public class Connector implements MqttCallback{
 	@Override
 	public void messageArrived(MqttTopic arg0, MqttMessage arg1)
 			throws Exception {
-		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&"+new String(arg1.getPayload()));
 		byte[] buf = arg1.getPayload();
 		if(buf != null){
 			JSONObject obj = (JSONObject)JSONValue.parse(new String(buf));
 			values.put((String)obj.get("id"), (String)obj.get("value"));
 			this.lastReceived = new Date();
+			this.isConnected = true;
 		}
 	}
 	
@@ -155,18 +158,19 @@ public class Connector implements MqttCallback{
 	}
 	
 	public String getDeviceStatus(){
-		if(values.keySet().size() == 0){
-			return DISCONNECT;
-		}else{
+		
+		if(this.isConnected){
 			Date now = new Date();
 			if(now.getTime() - this.lastReceived.getTime() > 5*60*1000){
 				return "DISCONNECT";
+			}else{
+				return CONNECT;
 			}
+		}else{
+			//TODO here we need to add alermer
+			return DISCONNECT;
 		}
-		
-		//TODO here we need to add alermer
-		
-		return CONNECT;
+				
 	}
 	
 	@SuppressWarnings("unused")

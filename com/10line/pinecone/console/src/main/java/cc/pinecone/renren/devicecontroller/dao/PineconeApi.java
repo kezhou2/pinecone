@@ -49,6 +49,7 @@ public class PineconeApi {
 		try {
 			ArrayList<Entity> users = (ArrayList<Entity>) client.get(
 					"/user/search/names?name=" + username, ADMIN_NAME, ADMIN_PWD);
+			System.out.println("login:"+users.size());
 			for (Entity en : users) {
 				if (en instanceof User) {
 					User user = (User) en;

@@ -233,16 +233,25 @@ public class PageController {
 			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
 			userid = lud.getUserid();
 		}
+		
+		JSONArray jsonData = new JSONArray();
 		ArrayList<Device> list = new ArrayList<Device>();
 		try {
 			ArrayList<Entity> devs = (ArrayList<Entity>) getRESTClient().get("/user/"+userid+"/devices",username,password);
 			for(Entity e:devs){
 				Device dev = (Device) e;
+				JSONObject ob = new JSONObject();
+				ob.put("deviceId", dev.getId());
+				ob.put("deviceCode", dev.getCode());
+				jsonData.add(ob);
 				list.add(dev);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		
+		System.out.println("json:"+jsonData.toJSONString());
+		request.setAttribute("jsonData", jsonData.toJSONString());
 		
 		request.setAttribute("list", list);
 		response.setCharacterEncoding("UTF-8");

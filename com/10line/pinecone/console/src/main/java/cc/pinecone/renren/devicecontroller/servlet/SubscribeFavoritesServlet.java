@@ -67,8 +67,6 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		Object obj = JSONValue.parse(ids);
 		JSONArray array=(JSONArray)obj;
 		
-		
-		
 		//device ids
 		String devids = request.getParameter("deviceids");
 		System.out.println("recived:"+devids);
@@ -87,9 +85,7 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
-		
-		
-		
+
 		JSONArray result = new JSONArray();
 		for(int i=0;i<deviceCodes.length;i++){
 			

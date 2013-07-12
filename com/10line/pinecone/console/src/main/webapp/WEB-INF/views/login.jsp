@@ -68,7 +68,7 @@ window.onload = function(){
             <div class="navbar-inner">
                 <h6><i class="icon-user"></i>Login page</h6>
                 <div class="nav pull-right">
-                    <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cog"></i></a>
+                    <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cogs"></i></a>
                     <ul class="dropdown-menu pull-right">
                         <li><a href="register.html"><i class="icon-plus"></i>Register</a></li>
                     </ul>
@@ -83,7 +83,7 @@ window.onload = function(){
                 </div>
                 
                 <div id="password_input" class="control-group">
-                    <label class="control-label">Password:</label>
+                    <label class="control-label">Password</label>
                     <div class="controls"><input class="span12" type="password" name="j_password" placeholder="password" /></div>
                 </div>
 

@@ -137,7 +137,7 @@ public class QueryDeviceServlet extends HttpServlet {
 		for(Device c : devices){
 			ExDeviceInfo info = conf.getDeviceExtInfo(c.getId().toString());
 			JSONArray row = new JSONArray();
-			row.add("<a href='img/demo/big.jpg' title='' class='lightbox'><img src='http://placehold.it/37x37' alt='' /></a>");
+			row.add("<a href='img/demo/big.jpg' title='' class='lightbox'><img src='img/device_card.png' alt='' /></a>");
 			row.add(c.getId());
 			row.add(c.getName());
 			row.add(c.getCode());
@@ -145,17 +145,17 @@ public class QueryDeviceServlet extends HttpServlet {
 			row.add(info.getAddress());
 			if(conf.getDevice(""+c.getId()) == null){
 				row.add("<ul class='table-controls'>"+
-							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
-							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
-							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='Edit Information'><i class='icon-edit'></i></a></li>"+
-							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='addDevice("+c.getId()+")' title='Add to favorites'><i class='icon-star-empty'></i></a></li>"+
+							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='fam-zoom'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class='fam-disconnect'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='Edit Information'><i class='fam-application-edit'></i></a></li>"+
+							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='addDevice("+c.getId()+")' title='Add to favorites'><i class='fam-bell-add'></i></a></li>"+
 						"</ul>");
 			}else{
 				row.add("<ul class='table-controls'>"+
-							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='icon-dashboard'></i></a></li>"+
-							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class=' icon-minus'></i></a></li>"+
-							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='Edit Information'><i class='icon-edit'></i></a></li>"+
-							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='removeDevice("+c.getId()+")' title='Remove from favorites'><i class='icon-star'></i></a></li>"+
+							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='View'><i class='fam-zoom'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='Disconnect'><i class='fam-disconnect'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='Edit Information'><i class='fam-application-edit'></i></a></li>"+
+							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='removeDevice("+c.getId()+")' title='Remove from favorites'><i class='fam-bell-delete'></i></a></li>"+
 						"</ul>");
 			}
 			data.add(row);

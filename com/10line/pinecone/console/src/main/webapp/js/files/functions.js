@@ -742,7 +742,7 @@ $(function() {
 
 	oTable = $("#devicelist").dataTable({
 		"bJQueryUI": false,
-		"bAutoWidth": true,
+		"bAutoWidth": false,
 		"sPaginationType": "full_numbers",
 		"oLanguage": {
 			"sProcessing": "Loading...",
@@ -752,8 +752,9 @@ $(function() {
 		},
 		"aoColumnDefs": [
 	      { "bSortable": false, "aTargets": [ 0, 6 ] },
-	      { "sWidth":"150px", "aTargets":[6]},
-	      { "sWidth":"250px", "aTargets":[3]}
+	      { "sWidth":"133px", "aTargets":[6]},
+	      { "sWidth":"250px", "aTargets":[3]},
+	      { "sWidth":"40px", "aTargets":[0]}
 	    ],
 		"bServerSide": true,
 		"bProcessing": true,

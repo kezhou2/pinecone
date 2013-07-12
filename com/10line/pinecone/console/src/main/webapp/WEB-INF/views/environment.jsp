@@ -156,8 +156,8 @@ window.onunload = function(){
 				<li class="dropdown">
 					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Welcome back, ${username}<b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="profile.html" title=""><i class="icon-user"></i>Profile</a></li>
-						<li><a href="j_spring_security_logout" title=""><i class="icon-signout"></i>Logout</a></li>
+						<li><a href="profile.html" title=""><i class="fam-group-gear"></i>Profile</a></li>
+						<li><a href="j_spring_security_logout" title=""><i class="fam-door-out"></i>Logout</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -174,8 +174,8 @@ window.onunload = function(){
 
 			<div class="sidebar-tabs">
 		        <ul class="tabs-nav two-items">
-		            <li><a href="#general" title=""><i class="icon-reorder"></i></a></li>
-		            <li><a href="#stuff" title=""><i class="icon-cogs"></i></a></li>
+		            <li><a href="#general" title=""><i class="icon-reorder" style="color:green"></i></a></li>
+		            <li><a href="#stuff" title=""><i class="icon-cogs" style="color:green"></i></a></li>
 		        </ul>
 
 		        <div id="general">
@@ -184,17 +184,17 @@ window.onunload = function(){
 			        <div class="sidebar-user widget">
 						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Welcome back, ${username}</h6></div></div>
 						<div>
-			            	<a href="#" title="" class="user"><img src="http://placehold.it/210x110" alt="" /></a>
+			            	<a href="#" title="" class="user"><img src="img/user.jpg" style="border:1px solid #d5d5d5" alt="" /></a>
 			            </div>
 			        </div>
 			        <!-- /sidebar user -->
 
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
-			            <li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
-			            <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-			            <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
-			            <li class="active"><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
+			            <li><a href="#" title=""><i class="fam-application-home"></i>Dashboard</a></li>
+			            <li><a href="index.html" title=""><i class="fam-application-view-tile"></i>Devices</a></li>
+			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i>Favorites</a></li>
+			            <li class="active"><a href="environment.html" title=""><i class="fam-world"></i>Environment</a></li>
 			        </ul>
 			        <!-- /main navigation -->
 
@@ -221,11 +221,11 @@ window.onunload = function(){
 		            </ul>
 			        
 		            <ul class="alt-buttons">
-						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
+						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog" style="color:green"></i><span>Menu</span></a>
 		                	<ul class="dropdown-menu pull-right">
-		                        <li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-		                        <li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
-		                        <li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
+		                        <li><a href="index.html" title=""><i class="fam-application-view-tile"></i>Devices</a></li>
+		                        <li><a href="favorites.html" title=""><i class="fam-folder-star"></i>Favorites</a></li>
+		                        <li><a href="environment.html" title=""><i class="fam-world"></i>Environment</a></li>
 		                	</ul>
 		                </li>
 		            </ul>
@@ -235,7 +235,7 @@ window.onunload = function(){
                 <!-- environment tab widget -->
                 <div class="widget">
                     <div class="tabbable">
-                        <ul class="nav nav-tabs">
+                        <ul class="nav nav-tabs"  style="margin-top: 10px;">
                         	<li class="active"><a href="#tab1" data-toggle="tab">Dashboard</a></li>
                             <li class=""><a href="#tab2" data-toggle="tab">House Plan</a></li>
                             <li class=""><a href="#tab3" data-toggle="tab">Topology</a></li>

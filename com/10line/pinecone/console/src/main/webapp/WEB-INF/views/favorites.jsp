@@ -343,8 +343,8 @@ function setAlermStr(variableId, alermStr){
 							class="caret"></b></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="profile.html" title=""><i class="icon-user"></i>Profile</a></li>
-						<li><a href="j_spring_security_logout" title=""><i	class="icon-signout"></i>Logout</a></li>
+						<li><a href="profile.html" title=""><i class="fam-group-gear"></i>Profile</a></li>
+						<li><a href="j_spring_security_logout" title=""><i	class="fam-door-out"></i>Logout</a></li>
 					</ul></li>
 			</ul>
 		</div>
@@ -360,8 +360,8 @@ function setAlermStr(variableId, alermStr){
 
 			<div class="sidebar-tabs">
 				<ul class="tabs-nav two-items">
-					<li><a href="#general" title=""><i class="icon-reorder"></i></a></li>
-					<li><a href="#stuff" title=""><i class="icon-cogs"></i></a></li>
+					<li><a href="#general" title=""><i class="icon-reorder" style="color:green"></i></a></li>
+					<li><a href="#stuff" title=""><i class="icon-cogs" style="color:green"></i></a></li>
 				</ul>
 
 				<div id="general">
@@ -375,17 +375,17 @@ function setAlermStr(variableId, alermStr){
 						</div>
 						<div>
 							<a href="#" title="" class="user"><img
-								src="http://placehold.it/210x110" alt="" /></a>
+								src="img/user.jpg" style="border:1px solid #d5d5d5" alt="" /></a>
 						</div>
 					</div>
 					<!-- /sidebar user -->
 
 					<!-- Main navigation -->
 					<ul class="navigation widget">
-						<li><a href="#" title=""><i class="icon-home"></i>Dashboard</a></li>
-						<li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-						<li class="active"><a href="favorites.html" title=""><i	class="icon-bookmark"></i>Favorites</a></li>
-						<li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
+						<li><a href="#" title=""><i class="fam-application-home"></i>Dashboard</a></li>
+						<li><a href="index.html" title=""><i class="fam-application-view-tile"></i>Devices</a></li>
+						<li class="active"><a href="favorites.html" title=""><i	class="fam-folder-star"></i>Favorites</a></li>
+						<li><a href="environment.html" title=""><i class="fam-world"></i>Environment</a></li>
 					</ul>
 					<!-- /main navigation -->
 
@@ -413,13 +413,13 @@ function setAlermStr(variableId, alermStr){
 					<ul class="alt-buttons">
 						<li><a href="#" id="active-device-dialog"
 							class="active-device-dialog" title="Active Device"><i
-								class="icon-plus"></i><span>Active Device</span></a></li>
+								class="icon-plus"  style="color:green"></i><span>Active Device</span></a></li>
 						<li class="dropdown"><a href="#" title=""
-							data-toggle="dropdown"><i class="icon-cog"></i><span>Menu</span></a>
+							data-toggle="dropdown"><i class="icon-cog"  style="color:green"></i><span>Menu</span></a>
 							<ul class="dropdown-menu pull-right">
-								<li><a href="index.html" title=""><i class="icon-tasks"></i>Devices</a></li>
-								<li><a href="favorites.html" title=""><i class="icon-bookmark"></i>Favorites</a></li>
-								<li><a href="environment.html" title=""><i class="icon-sitemap"></i>Environment</a></li>
+								<li><a href="index.html" title=""><i class="fam-application-view-tile"></i>Devices</a></li>
+								<li><a href="favorites.html" title=""><i class="fam-folder-star"></i>Favorites</a></li>
+								<li><a href="environment.html" title=""><i class="fam-world"></i>Environment</a></li>
 							</ul></li>
 					</ul>
 				</div>
@@ -428,8 +428,8 @@ function setAlermStr(variableId, alermStr){
 				<!-- Media datatable -->
 				<div class="widget">
 					<div class="navbar">
-						<div class="navbar-inner">
-							<h6>Variable table</h6>
+						<div class="navbar-inner" style="margin-top: 10px; margin-bottom: 10px;">
+							<h6>Focus devices and variabls</h6>
 							<div class="nav pull-right">
 								<a href="#" class="dropdown-toggle navbar-icon"
 									data-toggle="dropdown" title="Refresh time"><i
@@ -444,9 +444,7 @@ function setAlermStr(variableId, alermStr){
 							</div>
 						</div>
 					</div>
-					<h5 class="widget-name" style="margin-top: 15px">
-						<i class="icon-film"></i>Focus devices and variabls
-					</h5>
+
 					<div class="table-overflow">
 						<table id='focusList' class="table table-striped table-bordered table-checks media-table">
 							<thead>

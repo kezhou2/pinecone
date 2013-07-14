@@ -245,6 +245,7 @@ String username = (String)request.getSession().getAttribute("username");
 		            </ul>
 			        
 		            <ul class="alt-buttons">
+		            	<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus" style="color:green"></i><span><fmt:message key="application.active" /></span></a></li>
 						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog" style="color:green"></i><span><fmt:message key="application.menu" /></span></a>
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>

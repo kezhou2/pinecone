@@ -123,8 +123,10 @@ public class Connector implements MqttCallback{
 				obj.put("id", variableId);
 				obj.put("value", values.get(variableId));
 				FocusVariable fv = conf.getVariable(deviceId, variableId);
-				boolean isAlerm = isAlerm(fv.getAlermString(), values.get(variableId));
-				obj.put("isAlerm", isAlerm);
+				if(fv != null){
+					boolean isAlerm = isAlerm(fv.getAlermString(), values.get(variableId));
+					obj.put("isAlerm", isAlerm);
+				}
 			}
 			array.add(obj);
 		}

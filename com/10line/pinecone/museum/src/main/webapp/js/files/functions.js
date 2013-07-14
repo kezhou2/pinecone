@@ -504,16 +504,6 @@ $(function() {
 	//===== Jquery UI sliders =====//
 
 	$( "#default-slider" ).slider();
-
-	$( "#increments-slider" ).slider({
-		value:100,
-		min: 0,
-		max: 500,
-		step: 50,
-		slide: function( event, ui ) {
-		$( "#donation-amount" ).val( "$" + ui.value );
-	}
-    });
     $( "#donation-amount" ).val( "$" + $( "#increments-slider" ).slider( "value" ) );
 
 	$( "#range-slider, #range-slider1" ).slider({
@@ -752,7 +742,7 @@ $(function() {
 			"oPaginate": { "sFirst": "First", "sLast": "Last", "sNext": ">", "sPrevious": "<" }
 		},
 		"bServerSide": true,
-		"sAjaxSource": "/console/getfriends.html"
+		"sAjaxSource": "/museum/getfriends.html"
 			
     });
 	

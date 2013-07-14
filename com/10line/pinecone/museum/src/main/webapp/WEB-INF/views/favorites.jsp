@@ -213,7 +213,7 @@ window.onload = function(){
 			//start refresh thread on the background
 			setRefresh(5);
 		},	
-		"sAjaxSource": "/console/queryfocusvariable.html"
+		"sAjaxSource": "/museum/queryfocusvariable.html"
 	});
 
 }
@@ -414,6 +414,7 @@ function setAlermStr(variableId, alermStr){
 					</ul>
 
 					<ul class="alt-buttons">
+						<li><a href="#" id="active-device-dialog" class="active-device-dialog" title="Active Device"><i class="icon-plus" style="color:green"></i><span><fmt:message key="application.active" /></span></a></li>
 						<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog" style="color:green"></i><span><fmt:message key="application.menu" /></span></a>
 		                	<ul class="dropdown-menu pull-right">
 		                        <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
@@ -433,7 +434,7 @@ function setAlermStr(variableId, alermStr){
 							<div class="nav pull-right">
 								<a href="#" class="dropdown-toggle navbar-icon"
 									data-toggle="dropdown" title="<fmt:message key="favorites.refresh" />"><i
-									class="icon-refresh"></i></a>
+									class="icon-refresh" style="color:green"></i></a>
 								<ul class="dropdown-menu pull-right">
 									<li><a href="#" onclick="setRefresh(1000)"><fmt:message key="favorites.stop" /></a></li>
 									<li><a href="#" onclick="setRefresh(2)">2s</a></li>

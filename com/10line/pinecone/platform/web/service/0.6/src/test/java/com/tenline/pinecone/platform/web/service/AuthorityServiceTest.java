@@ -34,7 +34,7 @@ public class AuthorityServiceTest extends AbstractServiceTest {
 	
 	@Test
 	public void test() throws Exception {
-		ArrayList<Entity> entities = client.get("/user?page=3", "admin", "admin");
+		ArrayList<Entity> entities = client.get("/user?page=4", "admin", "admin");
 		for (Entity entity : entities) {
 			User user = (User) entity;
 			if (client.get("/user/"+user.getId()+"/authorities", "admin", "admin").size() == 0) {
@@ -52,6 +52,13 @@ public class AuthorityServiceTest extends AbstractServiceTest {
 			if (client.get("/user/search/emails?email="+user.getEmail(), "admin", "admin").size()>1) {
 				logger.info(user.getEmail());
 				client.delete("/user/" + user.getId());
+			}
+		}
+		entities = client.get("/authority?page=4", "admin", "admin");
+		for (Entity entity : entities) {
+			Authority authority = (Authority) entity;
+			if (client.get("/authority/"+authority.getId()+"/user", "admin", "admin").size() == 0) {
+				client.delete("/authority/"+authority.getId());
 			}
 		}
 	}

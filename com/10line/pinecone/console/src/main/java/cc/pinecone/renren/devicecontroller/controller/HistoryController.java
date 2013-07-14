@@ -57,13 +57,6 @@ public class HistoryController {
 		return pApi;
 	}
 	
-//	public HistoryClient getHistoryAPI(){
-//		if(hisClient == null){
-//			hisClient = new HistoryClient(AppConfig.HISTORY_URL);
-//		}
-//		return hisClient;
-//	}
-
 	private static final Logger logger = LoggerFactory
 			.getLogger(PageController.class);
 	

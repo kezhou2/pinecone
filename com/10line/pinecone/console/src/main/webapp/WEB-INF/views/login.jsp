@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,7 @@ window.onload = function(){
 		//);
 		$("#name_input").before(
 			"<div class='control-group warning'>"+
-				"<span class='help-block'>Authentication failed, please enter again.</span>"+
+				"<span class='help-block'>"+"<fmt:message key="login.fail.authentication" />"+"</span>"+
 			"</div>"
 		);
 	}
@@ -42,7 +43,7 @@ window.onload = function(){
 	if(isregister){
 		$("#name_input").before(
 			"<div class='control-group warning'>"+
-				"<span class='help-block'>Registry successed, congratulation!</span>"+
+				"<span class='help-block'>"+"<fmt:message key='login.success.registry' />"+"</span>"+
 			"</div>"
 		);
 	}
@@ -66,11 +67,11 @@ window.onload = function(){
     <div class="login">
         <div class="navbar">
             <div class="navbar-inner">
-                <h6><i class="icon-user"></i>Login page</h6>
+                <h6><i class="icon-user"></i><fmt:message key="login.page" /></h6>
                 <div class="nav pull-right">
                     <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cogs"></i></a>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="register.html"><i class="icon-plus"></i>Register</a></li>
+                        <li><a href="register.html"><i class="icon-plus"></i><fmt:message key="login.registry" /></a></li>
                     </ul>
                 </div>
             </div>
@@ -78,22 +79,22 @@ window.onload = function(){
         <div class="well">
             <form action="${pageContext.request.contextPath}/j_spring_security_check" class="row-fluid" method="post">
                 <div id="name_input" class="control-group">
-                    <label class="control-label">Username</label>
-                    <div class="controls"><input class="span12" type="text" name="j_username" placeholder="username" /></div>
+                    <label class="control-label"><fmt:message key="login.username" /></label>
+                    <div class="controls"><input class="span12" type="text" name="j_username" placeholder="<fmt:message key="login.username" />" /></div>
                 </div>
                 
                 <div id="password_input" class="control-group">
-                    <label class="control-label">Password</label>
-                    <div class="controls"><input class="span12" type="password" name="j_password" placeholder="password" /></div>
+                    <label class="control-label"><fmt:message key="login.password" /></label>
+                    <div class="controls"><input class="span12" type="password" name="j_password" placeholder="<fmt:message key="login.password" />" /></div>
                 </div>
 
                 <div id="remember_input" class="control-group">
-                    <div class="controls"><label class="checkbox inline"><input id="_spring_security_remember_me" type="checkbox" name="_spring_security_remember_me" class="styled" value="true" checked="checked">Remember me</label></div>
+                    <div class="controls"><label class="checkbox inline"><input id="_spring_security_remember_me" type="checkbox" name="_spring_security_remember_me" class="styled" value="true" checked="checked"><fmt:message key="login.remember" /></label></div>
                 </div>
 
                 <div class="login-btn">
-                	<input name="submit" type="submit" value="Log me in" class="btn btn-danger btn-block" />
-                	<div class="controls"><a href="register.html">Register to be user→</a></div>
+                	<input name="submit" type="submit" value="<fmt:message key="login.login" />" class="btn btn-danger btn-block" />
+                	<div class="controls"><a href="register.html"><fmt:message key="login.gotoregistry" />→</a></div>
                 </div>
             </form>
         </div>
@@ -103,10 +104,10 @@ window.onload = function(){
 
 	<!-- Footer -->
 	<div id="footer">
-		<div class="copyrights">&copy;  Pinecone Tech.</div>
+		<div class="copyrights"><fmt:message key="application.company" /></div>
 		<ul class="footer-links">
-			<li><a href="" title=""><i class="icon-cogs"></i>Contact admin</a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i>Home page</a></li>
+			<li><a href="" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
+			<li><a href="" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

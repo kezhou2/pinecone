@@ -5,6 +5,7 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
+	
 	<!-- The definition of the Root Spring Container shared by all Servlets 
 		and Filters -->
 	<context-param>
@@ -43,16 +44,6 @@
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>*.html</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>queryDeviceData</servlet-name>
-		<servlet-class>cc.pinecone.renren.devicecontroller.servlet.QueryDeviceServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>queryDeviceData</servlet-name>
-		<url-pattern>/querydevice</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

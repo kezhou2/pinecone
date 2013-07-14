@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-<title>Pannonia - premium responsive admin template by Eugene Kopyov</title>
+<title><fmt:message key="application.title" /></title>
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <!--[if IE 8]><link href="css/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
 <!--[if IE 9]><link href="css/ie9.css" rel="stylesheet" type="text/css" /><![endif]-->
@@ -78,7 +80,7 @@
     <div class="crumbs">
         <ul id="breadcrumbs" class="breadcrumb"> 
             <li><a href="index.html">Dashboard</a></li>
-            <li class="active"><a href="503.html" title="">503 error</a></li>
+            <li class="active"><a href="500.html" title="">500 error</a></li>
         </ul>
         
         <ul class="alt-buttons">
@@ -98,9 +100,9 @@
 
 	<!-- Error wrapper -->
 	<div class="error-page">
-	    <span class="reason">503</span>
+	    <span class="reason">500</span>
 		<div class="error-content">
-	        <span class="reason-title">- Oops, an error has occurred. Service unavailable! -</span>
+	        <span class="reason-title">- Oops, an error has occurred. Internal server error! -</span>
 
 	    	<!-- Search widget -->
 	    	<form class="search" action="#">

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page  import="java.util.*" %>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-<title>Pinecone - device controller</title>
+<title><fmt:message key="application.title" /></title>
 <link rel="icon" href="img/favicon.ico" mce_href="img/favicon.ico"
 	type="image/x-icon">
 <link rel="shortcut icon" href="img/favicon.ico"
@@ -87,7 +89,7 @@ $(document).ready(function () {
  
     var data1 = [
         { 
-            label: "Value", 
+            label: "<fmt:message key='history.value' />", 
             data: d1, 
             color: '#f1553c' 
         }
@@ -186,7 +188,7 @@ $(document).ready(function () {
 	<!-- fancy box for history show -->
 	<div class="history">
     	<div class="widget" id="history_panel">
-			<div class="navbar"><div class="navbar-inner"><h6>Variable history value</h6></div></div>
+			<div class="navbar"><div class="navbar-inner"><h6><fmt:message key="history.title" /></h6></div></div>
             <div class="well body">
             	<ul class="stats-details">
             		<li>
@@ -196,9 +198,9 @@ $(document).ready(function () {
             			<div class="number">
 	            			<a href="#" title="" data-toggle="dropdown"></a>
 							<ul class="dropdown-menu pull-right">
-								<li><a href="history.html?id=${id}&type=second&period=30" title=""><i class=""></i>30 seconds</a></li>
-								<li><a href="history.html?id=${id}&type=minute&period=10" title=""><i class=""></i>10 minutes</a></li>
-								<li><a href="history.html?id=${id}&type=hour&period=10" title=""><i class=""></i>10 hours</a></li>
+								<li><a href="history.html?id=${id}&type=second&period=30" title=""><i class=""></i><fmt:message key="history.second" /></a></li>
+								<li><a href="history.html?id=${id}&type=minute&period=10" title=""><i class=""></i><fmt:message key="history.minute" /></a></li>
+								<li><a href="history.html?id=${id}&type=hour&period=10" title=""><i class=""></i><fmt:message key="history.hour" /></a></li>
 							</ul>
 						</div>
             		</li>

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-<title>Pinecone - device controller</title>
+<title><fmt:message key="application.title" /></title>
 <link rel="icon" href="img/favicon.ico" mce_href="img/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="img/favicon.ico" ce_href="img/favicon.ico" type="image/x-icon">
 <link href="css/main.css" rel="stylesheet" type="text/css" />
@@ -53,9 +55,9 @@ window.onload = function(){
 	var isChangedPwd = <%=(String)request.getAttribute("changePwd")%>;
 	if(isChangedPwd != null){
 		if(isChangedPwd){
-			$.jGrowl('Your password is changed!', { sticky: true, theme: 'growl-success', life:5});
+			$.jGrowl("<fmt:message key='profile.your.password.changed' />", { sticky: true, theme: 'growl-success', life:5});
 		}else{
-			$.jGrowl('Failure in changing password!', { sticky: true, theme: 'growl-error', life:5});
+			$.jGrowl("<fmt:message key='profile.fail.change.password' />", { sticky: true, theme: 'growl-error', life:5});
 		}
 	}
 	
@@ -67,9 +69,9 @@ window.onload = function(){
 		$("#tab6").toggleClass("active in");
 		
 		if(isChangeProfile){
-			$.jGrowl('Your profile is changed!', { sticky: true, theme: 'growl-success', life:5});
+			$.jGrowl("<fmt:message key='profile.change.success' />", { sticky: true, theme: 'growl-success', life:5});
 		}else{
-			$.jGrowl('Failure in changing your profile!', { sticky: true, theme: 'growl-error', life:5});
+			$.jGrowl("<fmt:message key='profile.change.fail' />", { sticky: true, theme: 'growl-error', life:5});
 		}
 	}
 }
@@ -87,10 +89,10 @@ String username = (String)request.getSession().getAttribute("username");
 			<ul class="top-menu">
 				
 				<li class="dropdown">
-					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1">Welcome back, ${username}<b class="caret"></b></span></a>
+					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1"><fmt:message key="application.welcome"><fmt:param value="${username}" /></fmt:message><b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="profile.html" title=""><i class="fam-group-gear"></i>Profile</a></li>
-						<li><a href="j_spring_security_logout" title=""><i class="fam-door-out"></i>Logout</a></li>
+						<li><a href="profile.html" title=""><i class="fam-group-gear"></i><fmt:message key="application.profile" /></a></li>
+						<li><a href="j_spring_security_logout" title=""><i class="fam-door-out"></i><fmt:message key="application.logout" /></a></li>
 					</ul>
 				</li>
 			</ul>
@@ -107,15 +109,15 @@ String username = (String)request.getSession().getAttribute("username");
 
 			<div class="sidebar-tabs">
 		        <ul class="tabs-nav two-items">
-		            <li><a href="#general" title=""><i class="icon-reorder"></i></a></li>
-		            <li><a href="#stuff" title=""><i class="icon-cogs"></i></a></li>
+		            <li><a href="#general" title=""><i class="icon-reorder" style="color:green"></i></a></li>
+		            <li><a href="#stuff" title=""><i class="icon-cogs" style="color:green"></i></a></li>
 		        </ul>
 
 		        <div id="general">
 
 			        <!-- Sidebar user -->
 			        <div class="sidebar-user widget">
-						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2">Welcome back, ${username}</h6></div></div>
+						<div class="navbar"><div class="navbar-inner"><h6 id="greeting_word_2"><fmt:message key="application.welcome"><fmt:param value="${username}" /></fmt:message></h6></div></div>
 						<div>
 			            	<a href="#" title="" class="user"><img src="img/user.jpg" style="border:1px solid #d5d5d5" alt="" /></a>
 			            </div>
@@ -124,10 +126,10 @@ String username = (String)request.getSession().getAttribute("username");
 
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
-			            <li><a href="#" title=""><i class="fam-application-home"></i>Dashboard</a></li>
-			            <li><a href="index.html" title=""><i class="fam-application-view-tile"></i>Devices</a></li>
-			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i>Favorites</a></li>
-			            <li><a href="environment.html" title=""><i class="fam-world"></i>Environment</a></li>
+			            <li><a href="#" title=""><i class="fam-application-home"></i><fmt:message key="application.menu" /></a></li>
+			            <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
+			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
+			            <li><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
 			        </ul>
 			        <!-- /main navigation -->
 
@@ -148,10 +150,10 @@ String username = (String)request.getSession().getAttribute("username");
     			<div class="widget navbar-tabs">
 	            	<div class="navbar">
 	                	<div class="navbar-inner">
-	                    	<h6>User Profile Editor</h6>
+	                    	<h6><fmt:message key="profile.edit" /></h6>
 	                        <ul class="nav nav-tabs pull-right">
-		                        <li id="mchangepassword" class="active"><a href="#tab5" data-toggle="tab">Password</a></li>
-		                        <li id="mchangeprofile" class=""><a href="#tab6" data-toggle="tab">Profile</a></li>
+		                        <li id="mchangepassword" class="active"><a href="#tab5" data-toggle="tab"><fmt:message key="profile.password" /></a></li>
+		                        <li id="mchangeprofile" class=""><a href="#tab6" data-toggle="tab"><fmt:message key="profile.profile" /></a></li>
 	                        </ul>
 	                	</div>
 	              	</div>
@@ -162,20 +164,20 @@ String username = (String)request.getSession().getAttribute("username");
 			                        <fieldset>
 			                            <div class="step-title">
 			                            	<i>1</i>
-								    		<h5>Password Change</h5>
+								    		<h5><fmt:message key="profile.change.password" /></h5>
 								    		<span>&nbsp</span>
 								    	</div>
 								    	<div>
 				                            <div class="control-group">
-				                                <label class="control-label">old password:</label>
+				                                <label class="control-label"><fmt:message key="profile.old.password" /></label>
 				                                <div class="controls"><input id="oldpassword" type="password" name="oldpassword" class="validate[required] span12"></div>
 				                            </div>
 				                            <div class="control-group">
-				                                <label class="control-label">new password:</label>
+				                                <label class="control-label"><fmt:message key="profile.new.password" /></label>
 				                                <div class="controls"><input id="newpassword" type="password" name="newpassword" class="validate[required] span12 ui-wizard-content"></div>
 				                            </div>
 				                            <div class="control-group">
-				                                <label class="control-label">confirm new password:</label>
+				                                <label class="control-label"><fmt:message key="profile.confirm.password" /></label>
 				                                <div class="controls"><input id="confirmpassword" type="password" name="confirmpassword" class="validate[required,equals[newpassword]] span12 ui-wizard-content"></div>
 				                            </div>
 				                            <input type="text" name="myname" value="${myname}" style="visibility: hidden;">
@@ -183,8 +185,8 @@ String username = (String)request.getSession().getAttribute("username");
 				                        </div>
 			                        </fieldset>
 			                        <div class="form-actions align-right">
-		                                <input type="submit" class="btn btn-info" value="submit">
-		                                <input type="reset" class="btn" value="reset">
+		                                <input type="submit" class="btn btn-info" value="<fmt:message key="profile.submit" />">
+		                                <input type="reset" class="btn" value="<fmt:message key="profile.reset" />">
 	                            	</div>
 			                    </form>
 							</div>
@@ -193,23 +195,23 @@ String username = (String)request.getSession().getAttribute("username");
 			                        <fieldset>
 			                            <div class="step-title">
 			                            	<i>1</i>
-								    		<h5>Enter your basic information</h5>
+								    		<h5><fmt:message key="profile.edit.basic.profile" /></h5>
 								    		<span>&nbsp</span>
 								    	</div>
 								    	<div>
 				                            <div class="control-group">
-				                                <label class="control-label">Username:</label>
+				                                <label class="control-label"><fmt:message key="profile.username" /></label>
 				                                <div class="controls"><input type="text" name="username" class="span12 ui-wizard-content" value="${myname}"></div>
 				                            </div>
 				                            <div class="control-group">
-				                                <label class="control-label">Email:</label>
+				                                <label class="control-label"><fmt:message key="profile.email" /></label>
 				                                <div class="controls"><input type="text" name="email" class="span12 ui-wizard-content" value="${myemail}"></div>
 				                            </div>
 				                        </div>
 			                        </fieldset>
 			                        <div class="form-actions align-right">
-		                                <input type="submit" class="btn btn-info" value="submit">
-		                                <input type="reset" class="btn" value="reset">
+		                                <input type="submit" class="btn btn-info" value="<fmt:message key="profile.submit" />">
+		                                <input type="reset" class="btn" value="<fmt:message key="profile.reset" />">
 	                            	</div>
 			                    </form>
 	                   	    </div>
@@ -228,10 +230,10 @@ String username = (String)request.getSession().getAttribute("username");
 
 	<!-- Footer -->
 	<div id="footer">
-		<div class="copyrights">&copy;  Pinecone Tech.</div>
+		<div class="copyrights"><fmt:message key="application.company" /></div>
 		<ul class="footer-links">
-			<li><a href="" title=""><i class="icon-cogs"></i>Contact admin</a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i>Home page</a></li>
+			<li><a href="" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
+			<li><a href="" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

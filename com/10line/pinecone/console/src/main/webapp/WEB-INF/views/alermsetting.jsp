@@ -1,12 +1,14 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page  import="java.util.*" %>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-<title>Pinecone - device controller</title>
+<title><fmt:message key="application.title" /></title>
 <link rel="icon" href="img/favicon.ico" mce_href="img/favicon.ico"
 	type="image/x-icon">
 <link rel="shortcut icon" href="img/favicon.ico"
@@ -122,11 +124,11 @@ $("#submitBtn").click(function(e){
  		}, 
  		success: function(result){
  			if(result == 'true'){
- 				parent.$.jGrowl('Added alerm to this variable!', { sticky: true, theme: 'growl-success', life:1000});
+ 				parent.$.jGrowl('<fmt:message key="alermsetting.success.add" />', { sticky: true, theme: 'growl-success', life:1000});
  				window.parent.setAlermStr(variableId,(condition+variablevalue));
  				parent.$.fancybox.close();
  			}else{
- 				$.jGrowl('Setting failed!', { sticky: true, theme: 'growl-error', life:1000});
+ 				$.jGrowl('<fmt:message key="alermsetting.failure.add" />', { sticky: true, theme: 'growl-error', life:1000});
  				parent.$.fancybox.close();
  			}
  		} 
@@ -142,19 +144,19 @@ $("#submitBtn").click(function(e){
 			<input type="text" value="${deviceId}" name="deviceId" style="display:none">
 			<input type="text" value="${variableId}" name="variableId" style="display:none">
 	    	<div class="widget">
-	            <div class="navbar"><div class="navbar-inner"><h6>Variable alerm setting</h6></div></div>
+	            <div class="navbar"><div class="navbar-inner"><h6><fmt:message key="alermsetting.variable.setting" /></h6></div></div>
 	
 	            <div class="well">
 	                
 	                <div class="control-group">
-	                    <label class="control-label">Condition type:</label>
+	                    <label class="control-label"><fmt:message key="alermsetting.condition.type" /></label>
 	                    <div class="controls">
 	                        <select id="conditionType" name="conditionType" class="styled" style="opacity: 0;">
-	                            <option value="numeric">Numeric</option>
-	                            <option value="string">String</option>
+	                            <option value="numeric"><fmt:message key="alermsetting.condition.type.numeric" /></option>
+	                            <option value="string"><fmt:message key="alermsetting.condition.type.string" /></option>
 	                        </select>
 	                    </div>
-	                    <label class="control-label">Condition:</label>
+	                    <label class="control-label"><fmt:message key="alermsetting.condition" /></label>
 	                    <div class="controls">
 	                        <select id="condition" name="condition" class="styled" style="opacity: 0;">
 	                            <option value=">">></option>
@@ -165,28 +167,28 @@ $("#submitBtn").click(function(e){
 	                            <option value="!=">!=</option>
 	                        </select>
 	                    </div>
-	                    <label class="control-label">Value:</label>
+	                    <label class="control-label"><fmt:message key="alermsetting.variable.value" /></label>
 	                    <div class="controls"><input type="text" name="variablevalue" class="span12" placeholder="Variable value"></div>
 	                </div>
 	                
 	                <div class="control-group">
-	                    <label class="control-label">Alerm type:</label>
+	                    <label class="control-label"><fmt:message key="alermsetting.alerm.type" /></label>
 	                    <div class="controls">
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="clog" value="log" name="clog" class="styled" style="opacity: 0;"></span></div>Log</label>
-	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="cpage" value="page" name="cpage" class="styled" style="opacity: 0;"></span></div>Page</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="csound" value="sound" name="csound" class="styled" style="opacity: 0;"></span></div>Sound</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="csms" value="sms" name="csms" class="styled" style="opacity: 0;"></span></div>SMS</label>
-	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="cemail" value="email" name="cemail" class="styled" style="opacity: 0;"></span></div>Email</label>
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="clog" value="log" name="clog" class="styled" style="opacity: 0;"></span></div><fmt:message key="alermsetting.log" /></label>
+	                    	<label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" id="cpage" value="page" name="cpage" class="styled" style="opacity: 0;"></span></div><fmt:message key="alermsetting.page" /></label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox2"><span><input type="checkbox" id="csound" value="sound" name="csound" class="styled" style="opacity: 0;"></span></div><fmt:message key="alermsetting.sound" /></label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox3"><span><input type="checkbox" id="csms" value="sms" name="csms" class="styled" style="opacity: 0;"></span></div><fmt:message key="alermsetting.sms" /></label>
+	                        <label class="checkbox inline"><div class="checker" id="uniform-inlineCheckbox4"><span><input type="checkbox" id="cemail" value="email" name="cemail" class="styled" style="opacity: 0;"></span></div><fmt:message key="alermsetting.email" /></label>
 	                    </div>
-	                    <label class="control-label">Cell phone:</label>
+	                    <label class="control-label"><fmt:message key="alermsetting.cellphone" /></label>
 	                    <div class="controls"><input type="text" name="cellphone" class="span12" placeholder="Regular field"></div>
-	                    <label class="control-label">Email address:</label>
+	                    <label class="control-label"><fmt:message key="alermsetting.email.address" /></label>
 	                    <div class="controls"><input type="text" name="email" class="span12" placeholder="Regular field"></div>
 	                </div>
 	                
 	                <div class="form-actions align-right">
-	                    <button id="submitBtn" type="submit" class="btn btn-primary">Submit</button>
-	                    <button type="reset" class="btn">Reset</button>
+	                    <button id="submitBtn" type="submit" class="btn btn-primary"><fmt:message key="alermsetting.submit" /></button>
+	                    <button type="reset" class="btn"><fmt:message key="alermsetting.reset" /></button>
 	                </div>
 	
 	            </div>

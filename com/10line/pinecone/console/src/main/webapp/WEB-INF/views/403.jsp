@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -78,7 +80,7 @@
     <div class="crumbs">
         <ul id="breadcrumbs" class="breadcrumb"> 
             <li><a href="index.html">Dashboard</a></li>
-            <li class="active"><a href="404.html" title="">404 error</a></li>
+            <li class="active"><a href="403.html" title="">403 error</a></li>
         </ul>
         
         <ul class="alt-buttons">
@@ -98,9 +100,9 @@
 
 	<!-- Error wrapper -->
 	<div class="error-page">
-	    <span class="reason">404</span>
+	    <span class="reason">403</span>
 		<div class="error-content">
-	        <span class="reason-title">- Oops, an error has occurred. Page not found! -</span>
+	        <span class="reason-title">- Oops, an error has occurred. Forbidden! -</span>
 
 	    	<!-- Search widget -->
 	    	<form class="search" action="#">

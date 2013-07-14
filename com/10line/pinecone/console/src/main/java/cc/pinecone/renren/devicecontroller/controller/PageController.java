@@ -98,6 +98,7 @@ public class PageController {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		System.out.println("username:"+username+"\npassword:"+password);
+		response.setCharacterEncoding("UTF-8");
 		return "devices";
 	}
 	
@@ -138,7 +139,7 @@ public class PageController {
 		}else{
 			request.setAttribute("addedFavorate", true);
 		}
-		
+		response.setCharacterEncoding("UTF-8");
 		return "variable";
 	} 
 
@@ -146,6 +147,7 @@ public class PageController {
 	public String registry(HttpServletRequest request,HttpServletResponse response) {
 		logger.info("setting.html");
 		System.out.println("setting.html");
+		response.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		return "setting";
 	}
@@ -195,7 +197,7 @@ public class PageController {
 		request.setAttribute("jsonData", jsonData.toJSONString());
 		request.setAttribute("deviceIds", deviceids);
 		request.setAttribute("variableIds", variableids);
-
+		response.setCharacterEncoding("UTF-8");
 		return "favorites";
 	}
 	
@@ -267,6 +269,7 @@ public class PageController {
 		
 		request.setAttribute("deviceId", devid);
 		request.setAttribute("variableId", varid);
+		response.setCharacterEncoding("UTF-8");
 		return "alermsetting";
 	}
 }

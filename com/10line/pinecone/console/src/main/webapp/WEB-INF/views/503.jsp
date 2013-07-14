@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-<title>Pannonia - premium responsive admin template by Eugene Kopyov</title>
+<title><fmt:message key="application.title" /></title>
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <!--[if IE 8]><link href="css/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
 <!--[if IE 9]><link href="css/ie9.css" rel="stylesheet" type="text/css" /><![endif]-->
@@ -58,14 +60,12 @@
 		<div class="fixed">
 			<a href="index.html" title="" class="logo"><img src="img/logo.png" alt="" /></a>
 			<ul class="top-menu">
-				<li><a href="#" title="" class="messages"><i class="new-message"></i></a></li>
+				
 				<li class="dropdown">
-					<a class="user-menu" data-toggle="dropdown"><img src="img/userpic.png" alt="" /><span>Howdy, Eugene! <b class="caret"></b></span></a>
+					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1"><fmt:message key="application.welcome"><fmt:param value="${username}" /></fmt:message><b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="#" title=""><i class="icon-user"></i>Profile</a></li>
-						<li><a href="#" title=""><i class="icon-inbox"></i>Messages<span class="badge badge-info">9</span></a></li>
-						<li><a href="#" title=""><i class="icon-cog"></i>Settings</a></li>
-						<li><a href="#" title=""><i class="icon-remove"></i>Logout</a></li>
+						<li><a href="profile.html" title=""><i class="fam-group-gear"></i><fmt:message key="application.profile" /></a></li>
+						<li><a href="j_spring_security_logout" title=""><i class="fam-door-out"></i><fmt:message key="application.logout" /></a></li>
 					</ul>
 				</li>
 			</ul>
@@ -78,7 +78,7 @@
     <div class="crumbs">
         <ul id="breadcrumbs" class="breadcrumb"> 
             <li><a href="index.html">Dashboard</a></li>
-            <li class="active"><a href="405.html" title="">405 error</a></li>
+            <li class="active"><a href="503.html" title="">503 error</a></li>
         </ul>
         
         <ul class="alt-buttons">
@@ -98,9 +98,9 @@
 
 	<!-- Error wrapper -->
 	<div class="error-page">
-	    <span class="reason">405</span>
+	    <span class="reason">503</span>
 		<div class="error-content">
-	        <span class="reason-title">- Oops, an error has occurred. Not allowed! -</span>
+	        <span class="reason-title">- Oops, an error has occurred. Service unavailable! -</span>
 
 	    	<!-- Search widget -->
 	    	<form class="search" action="#">

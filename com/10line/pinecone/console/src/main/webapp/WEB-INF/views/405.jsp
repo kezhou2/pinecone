@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -78,7 +80,7 @@
     <div class="crumbs">
         <ul id="breadcrumbs" class="breadcrumb"> 
             <li><a href="index.html">Dashboard</a></li>
-            <li class="active"><a href="500.html" title="">500 error</a></li>
+            <li class="active"><a href="405.html" title="">405 error</a></li>
         </ul>
         
         <ul class="alt-buttons">
@@ -98,9 +100,9 @@
 
 	<!-- Error wrapper -->
 	<div class="error-page">
-	    <span class="reason">500</span>
+	    <span class="reason">405</span>
 		<div class="error-content">
-	        <span class="reason-title">- Oops, an error has occurred. Internal server error! -</span>
+	        <span class="reason-title">- Oops, an error has occurred. Not allowed! -</span>
 
 	    	<!-- Search widget -->
 	    	<form class="search" action="#">

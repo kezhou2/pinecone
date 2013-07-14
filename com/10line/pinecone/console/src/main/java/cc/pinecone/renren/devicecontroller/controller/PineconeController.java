@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +59,8 @@ public class PineconeController {
 	
 	private final String ADMIN_NAME = "admin";
 	private final String ADMIN_PWD = "admin";
-
+	private final int PAGE_NUM = 20;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(PageController.class);
 
@@ -210,6 +214,11 @@ public class PineconeController {
 		int iTotalDisplayRecords = 0;
 		JSONArray data = new JSONArray(); //data that will be shown in the table
 
+		String strLoading=msgSrc.getMessage("pineconecontroller.loading", null, null);
+		String strHistoryData = msgSrc.getMessage("pineconecontroller.historydata", null, null);
+		String strAddFavorites = msgSrc.getMessage("pineconecontroller.addfavorites", null, null);
+		String strRemoveFavorites = msgSrc.getMessage("pineconecontroller.removefavorites", null, null);
+		
 		List<Variable> list = new ArrayList<Variable>();
 		try {
 			ArrayList<Entity> vars = (ArrayList<Entity>) this.getRESTClient()
@@ -235,12 +244,12 @@ public class PineconeController {
 				row.add(var.getName());
 				
 				if(var.getType().equals(Variable.READ)){
-					row.add("<strong varid='"+var.getId()+"'>loading...</strong>");
+					row.add("<strong varid='"+var.getId()+"'>"+strLoading+"</strong>");
 				}else{
 					row.add("<strong varid='"+var.getId()+"'>--</strong>");
 				}
 				if(var.getType().equals(Variable.READ)){
-					row.add("<span class='dynamictrend' varid='"+var.getId()+"'>Loading...</span>");
+					row.add("<span class='dynamictrend' varid='"+var.getId()+"'>"+strLoading+"</span>");
 				}else{
 					row.add("");
 				}
@@ -261,15 +270,15 @@ public class PineconeController {
 				row.add(sb.toString());
 				
 				String addStr = new String("<ul class='table-controls'>"+
-												"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='fam-chart-bar'></i></a></li>"+
-												"<li><a href='#' id='var"+var.getId()+"' onclick='addVariable("+id+","+var.getId()+")' class='btn tip' title='Add to favorites'><i class='fam-bell-add'></i></a></li>"+
+												"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='"+strHistoryData+"'><i class='fam-chart-bar'></i></a></li>"+
+												"<li><a href='#' id='var"+var.getId()+"' onclick='addVariable("+id+","+var.getId()+")' class='btn tip' title='"+strAddFavorites+"'><i class='fam-bell-add'></i></a></li>"+
 											"</ul>");
 				
 				for(String sId:idsList){
 					if(sId.equals(""+var.getId())){
 						addStr = "<ul class='table-controls'>"+
-									"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='fam-chart-bar'></i></a></li>"+
-									"<li><a href='#' id='var"+var.getId()+"' onclick='removeVariable("+id+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='fam-bell-delete'></i></a></li>"+
+									"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='"+strHistoryData+"'><i class='fam-chart-bar'></i></a></li>"+
+									"<li><a href='#' id='var"+var.getId()+"' onclick='removeVariable("+id+","+var.getId()+")' class='btn tip' title='"+strRemoveFavorites+"'><i class='fam-bell-delete'></i></a></li>"+
 								"</ul>";
 						break;
 					}
@@ -296,6 +305,7 @@ public class PineconeController {
 
 		jsonResponse.put("aaData", data);
 		System.out.println(jsonResponse.toJSONString());
+		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
 
@@ -551,10 +561,16 @@ public class PineconeController {
 		int iTotalDisplayRecords = 0;
 		JSONArray data = new JSONArray(); //data that will be shown in the table
 		
+		String strLoading=msgSrc.getMessage("pineconecontroller.loading", null, null);
+		String strHistoryData = msgSrc.getMessage("pineconecontroller.historydata", null, null);
+		String strRemoveFavorites = msgSrc.getMessage("pineconecontroller.removefavorites", null, null);
+		String strDeviceName = msgSrc.getMessage("pineconecontroller.devicename", null, null);
+		String strDeviceCode = msgSrc.getMessage("pineconecontroller.devicecode", null, null);
+		String strAlermSetting = msgSrc.getMessage("pineconecontroller.alermsetting", null, null);
+		
 		List<String> deviceIds = conf.getFocusDeviceIds();
 		
 		int count = 0;
-		int rowColor = 0;
 		try{
 			for(String deviceId:deviceIds){
 				ArrayList<Entity> devs = (ArrayList<Entity>) this.getRESTClient()
@@ -563,7 +579,7 @@ public class PineconeController {
 				
 				//one device title row for table
 				JSONArray r = new JSONArray();
-				r.add("<Strong deviceId='"+device.getId()+"' deviceCode='"+device.getCode()+"'>Name:"+device.getName()+" Code:"+device.getCode()+"</strong>");
+				r.add("<Strong deviceId='"+device.getId()+"' deviceCode='"+device.getCode()+"'>"+strDeviceName+device.getName()+" "+strDeviceCode+device.getCode()+"</strong>");
 				r.add("");
 				r.add("");
 				r.add("");
@@ -571,7 +587,7 @@ public class PineconeController {
 				r.add("");
 				r.add("");
 				r.add("<ul class='table-controls'>"+
-						"<li><a href='#' onclick='removeDevice("+deviceId+")' class='btn tip' title='Remove from favorites'><i class='fam-bell-delete'></i></a></li>"+
+						"<li><a href='#' onclick='removeDevice("+deviceId+")' class='btn tip' title='"+strRemoveFavorites+"'><i class='fam-bell-delete'></i></a></li>"+
 					"</ul>");
 				data.add(r);
 				count++;
@@ -599,12 +615,12 @@ public class PineconeController {
 						row.add(var.getName());
 						
 						if(var.getType().equals(Variable.READ)){
-							row.add("<strong varid='"+var.getId()+"'>loading...</strong>");
+							row.add("<strong varid='"+var.getId()+"'>"+strLoading+"</strong>");
 						}else{
 							row.add("<strong varid='"+var.getId()+"'>--</strong>");
 						}
 						if(var.getType().equals(Variable.READ)){
-							row.add("<span class='dynamictrend' varid='"+var.getId()+"'>Loading...</span>");
+							row.add("<span class='dynamictrend' varid='"+var.getId()+"'>"+strLoading+"</span>");
 						}else{
 							row.add("");
 						}
@@ -635,9 +651,9 @@ public class PineconeController {
 						row.add(sb.toString());
 						
 						row.add("<ul class='table-controls'>"+
-								"<li><a href='alermsetting.html?deviceId="+deviceId+"&variableId="+var.getId()+"' id='alermVariable' class='btn tip' title='Alerm setting'><i class='fam-monitor-edit'></i></a></li>"+
-								"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='History data'><i class='fam-chart-bar'></i></a></li>"+
-								"<li><a href='#' onclick='removeVariable("+deviceId+","+var.getId()+")' class='btn tip' title='Remove from favorites'><i class='fam-bell-delete'></i></a></li>"+
+								"<li><a href='alermsetting.html?deviceId="+deviceId+"&variableId="+var.getId()+"' id='alermVariable' class='btn tip' title='"+strAlermSetting+"'><i class='fam-monitor-edit'></i></a></li>"+
+								"<li><a href='history.html?id="+var.getId()+"&type=minute&period=10' data-fancybox-type='iframe' id='historyShow' class='btn tip' title='"+strHistoryData+"'><i class='fam-chart-bar'></i></a></li>"+
+								"<li><a href='#' onclick='removeVariable("+deviceId+","+var.getId()+")' class='btn tip' title='"+strRemoveFavorites+"'><i class='fam-bell-delete'></i></a></li>"+
 								"</ul>");
 						data.add(row);
 						count++;
@@ -659,6 +675,7 @@ public class PineconeController {
 
 		jsonResponse.put("aaData", data);
 		System.out.println(jsonResponse.toJSONString());
+		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
 	}
@@ -690,5 +707,140 @@ public class PineconeController {
 		conf.addDeviceExtInfo(info);
 		PrintWriter out = response.getWriter();
 		out.print("true");
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/querydevices.html", method = RequestMethod.GET)
+	public void queryDevices(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		//get user name ,password, userid
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		String username = securityContextImpl.getAuthentication().getName();
+		System.out.println("Username:" + username);  
+		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+		System.out.println("Credentials:" + password);
+		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
+		String userid = null;
+		if(ud instanceof LoginUserDetailsImpl){
+			LoginUserDetailsImpl lud = (LoginUserDetailsImpl)ud;
+			userid = lud.getUserid();
+		}
+		
+		//get user config
+		String path =  request.getSession().getServletContext().getRealPath("/");
+		System.out.println("path:"+path);
+		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
+		
+		//get request parameter from http request
+		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
+		
+		String sEcho = param.sEcho;
+		int iTotalRecords; // total number of records (unfiltered)
+		int iTotalDisplayRecords;//value will be set when code filters companies by keyword
+		JSONArray data = new JSONArray(); //data that will be shown in the table
+
+		String strRemoveFavorites = msgSrc.getMessage("pineconecontroller.removefavorites", null, null);
+		String strAddFavorites = msgSrc.getMessage("pineconecontroller.addfavorites", null, null);
+		String strDetail = msgSrc.getMessage("pineconecontroller.detail", null, null);
+		String strDisconnect = msgSrc.getMessage("pineconecontroller.disconnect", null, null);
+		String strEdit = msgSrc.getMessage("pineconecontroller.edit", null, null);
+		
+		ArrayList<Device> list = new ArrayList<Device>();
+		//TODO the rest web services is not paginated. so here need to change.
+		int startPage = param.iDisplayStart/PAGE_NUM;
+		int startIndex = param.iDisplayStart%PAGE_NUM;
+		int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
+		
+		try {
+			ArrayList<Entity> devs = (ArrayList<Entity>) getRESTClient().get("/user/"+userid+"/devices",username,password);
+			for(Entity e:devs){
+				Device dev = (Device) e;
+				list.add(dev);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	
+		System.out.println("size:"+list.size());
+		iTotalRecords = list.size();
+		List<Device> devices = new LinkedList<Device>();
+		for(Device d : list){
+			if(d.getName() == null){
+				continue;
+			}
+			if(	d.getName().toLowerCase().contains(param.sSearch.toLowerCase())){
+				devices.add(d);
+				continue;
+			}
+			
+			if(d.getCode() == null){
+				continue;
+			}
+			if(d.getCode().toLowerCase().contains(param.sSearch.toLowerCase())){
+				devices.add(d);
+				continue;
+			}
+			devices.add(d);
+		}
+		iTotalDisplayRecords = devices.size();//Number of companies that matches search criterion should be returned
+		
+		final int sortColumnIndex = param.iSortColumnIndex;
+		final int sortDirection = param.sSortDirection.equals("asc") ? -1 : 1;
+		
+		Collections.sort(devices, new Comparator<Device>(){
+			@Override
+			public int compare(Device c1, Device c2) {	
+				switch(sortColumnIndex){
+				case 2:
+					return c1.getName().compareTo(c2.getName()) * sortDirection;
+				case 3:
+					return c1.getCode().compareTo(c2.getCode()) * sortDirection;
+				}
+				return 0;
+			}
+		});
+		
+		if(devices.size()< param.iDisplayStart + param.iDisplayLength)
+			devices = devices.subList(param.iDisplayStart, devices.size());
+		else
+			devices = devices.subList(param.iDisplayStart, param.iDisplayStart + param.iDisplayLength);
+	
+
+		JSONObject jsonResponse = new JSONObject();
+			
+		jsonResponse.put("sEcho", sEcho);
+		jsonResponse.put("iTotalRecords", iTotalRecords);
+		jsonResponse.put("iTotalDisplayRecords", iTotalDisplayRecords);
+			
+		for(Device c : devices){
+			ExDeviceInfo info = conf.getDeviceExtInfo(c.getId().toString());
+			JSONArray row = new JSONArray();
+			row.add("<a href='img/demo/big.jpg' title='' class='lightbox'><img src='img/device_card.png' alt='' /></a>");
+			row.add(c.getId());
+			row.add(c.getName());
+			row.add(c.getCode());
+			row.add(info.getMacId());
+			row.add(info.getAddress());
+			if(conf.getDevice(""+c.getId()) == null){
+				row.add("<ul class='table-controls'>"+
+							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='"+strDetail+"'><i class='fam-zoom'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='"+strDisconnect+"'><i class='fam-disconnect'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='"+strEdit+"'><i class='fam-application-edit'></i></a></li>"+
+							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='addDevice("+c.getId()+")' title='"+strAddFavorites+"'><i class='fam-bell-add'></i></a></li>"+
+						"</ul>");
+			}else{
+				row.add("<ul class='table-controls'>"+
+							"<li><a href='variable.html?id="+c.getId()+"' class='btn tip' title='"+strDetail+"'><i class='fam-zoom'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='disconnect("+c.getId()+")' title='"+strDisconnect+"'><i class='fam-disconnect'></i></a></li>"+
+							"<li><a href='#' class='btn tip' onclick='editDeviceInfo("+c.getId()+")' title='"+strEdit+"'><i class='fam-application-edit'></i></a></li>"+
+							"<li><a id='device"+c.getId()+"' href='#' class='btn tip' onclick='removeDevice("+c.getId()+")' title='"+strRemoveFavorites+"'><i class='fam-bell-delete'></i></a></li>"+
+						"</ul>");
+			}
+			data.add(row);
+		}
+		jsonResponse.put("aaData", data);
+		System.out.println(jsonResponse.toJSONString());
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json");
+		response.getWriter().print(jsonResponse.toString());
 	}
 }

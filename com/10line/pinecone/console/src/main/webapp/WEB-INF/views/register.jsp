@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-<title>Pinecone - device controller</title>
+<title><fmt:message key="application.title" /></title>
 <link rel="icon" href="img/favicon.ico" mce_href="img/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="img/favicon.ico" ce_href="img/favicon.ico" type="image/x-icon">
 <link href="css/main.css" rel="stylesheet" type="text/css" />
@@ -70,40 +73,40 @@
 
 	                    <!-- Form validation -->
 	                    <div class="widget">
-	                        <div class="navbar"><div class="navbar-inner"><h6>Welcome to join us!</h6></div></div>
+	                        <div class="navbar"><div class="navbar-inner"><h6><fmt:message key="registry.welcome" /></h6></div></div>
 	                    	<div class="well row-fluid">
 
 	                            <div class="control-group">
-	                                <label class="control-label">Username: <span class="text-error">*</span></label>
+	                                <label class="control-label"><fmt:message key="registry.username" /><span class="text-error">*</span></label>
 	                                <div class="controls">
 	                                    <input type="text" class="validate[required] span12" name="username" id="username">
 	                                </div>
 	                            </div>
 	                        
 	                            <div class="control-group">
-	                                <label class="control-label">Password: <span class="text-error">*</span></label>
+	                                <label class="control-label"><fmt:message key="registry.password" /> <span class="text-error">*</span></label>
 	                                <div class="controls">
 	                                    <input type="password" class="validate[required] span12" name="password1" id="password1">
 	                                </div>
 	                            </div>
 	                        
 	                            <div class="control-group">
-	                                <label class="control-label">Repeat password: <span class="text-error">*</span></label>
+	                                <label class="control-label"><fmt:message key="registry.repeat.password" /><span class="text-error">*</span></label>
 	                                <div class="controls">
 	                                    <input type="password" class="validate[required,equals[password1]] span12" name="password2" id="password2">
 	                                </div>
 	                            </div>
 	                        
 	                            <div class="control-group">
-	                                <label class="control-label">Email address: <span class="text-error">*</span></label>
+	                                <label class="control-label"><fmt:message key="registry.repeat.password" /><span class="text-error">*</span></label>
 	                                <div class="controls">
 	                                    <input type="text" value="" class="validate[required,custom[email]] span12" name="emailValid" id="emailValid">
 	                                </div>
 	                            </div>
 
 	                            <div class="form-actions align-right">
-	                                <input type="submit" class="btn btn-info" value="submit"/>
-	                                <input type="reset" class="btn" value="reset"/>
+	                                <input type="submit" class="btn btn-info" value="<fmt:message key="registry.submit" />"/>
+	                                <input type="reset" class="btn" value="<fmt:message key="registry.reset" />"/>
 	                            </div>
 
 	                        </div>
@@ -119,10 +122,10 @@
 
 	<!-- Footer -->
 	<div id="footer">
-		<div class="copyrights">&copy;  Pinecone Tech.</div>
+		<div class="copyrights"><fmt:message key="application.company" /></div>
 		<ul class="footer-links">
-			<li><a href="" title=""><i class="icon-cogs"></i>Contact admin</a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i>Home page</a></li>
+			<li><a href="" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
+			<li><a href="" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

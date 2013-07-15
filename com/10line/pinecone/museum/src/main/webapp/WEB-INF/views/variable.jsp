@@ -162,6 +162,7 @@ function refresh(){
  		type: 'POST',
  		data: {ids:jsonData,devicecodes:devCode}, 
 		timeout: 1000,
+		cache: false,
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
  				isAlert = true;
@@ -229,7 +230,8 @@ window.onunload = function(){
  		url:'subscribedata', 
  		type: 'POST',
  		data: {isDisconnect:'true', devicecodes:devCode},
- 		async:false,
+ 		async:true,
+ 		cache:false,
 		timeout: 500,
  		error: function(){}, 
  		success: function(result){

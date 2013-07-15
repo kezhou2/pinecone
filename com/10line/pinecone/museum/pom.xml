@@ -278,7 +278,7 @@
 			</plugin>
 
 			<!-- Tomcat plugin for embedded tomcat --> 
-			<!-- 
+			 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
@@ -287,8 +287,8 @@
 					<path>/${project.build.finalName}</path>
 				</configuration>
 			</plugin>
-			  -->
 			 
+			 <!-- 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
@@ -309,7 +309,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+			 -->
 		</plugins>
 	</build>
 </project>

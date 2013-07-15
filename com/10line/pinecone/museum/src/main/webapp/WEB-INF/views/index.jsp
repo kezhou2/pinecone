@@ -248,6 +248,7 @@ function refresh(){
  		type: 'POST',
  		data: {ids:'['+jsonData.toString()+']',devicecodes:deviceCodes,deviceids:deviceIds}, 
 		timeout: 1000,
+		cache: false,
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
  				isAlert = true;
@@ -291,7 +292,8 @@ window.onunload = function(){
  		url:'subscribefavoritesdata', 
  		type: 'POST',
  		data: {isDisconnect:'true', devicecodes:deviceCodes},
- 		async:false,
+ 		async:true,
+ 		cache:false,
 		timeout: 500,
  		error: function(){}, 
  		success: function(result){

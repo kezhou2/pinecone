@@ -135,10 +135,11 @@ window.onload = function(){
 			"sProcessing": "<img src='img/elements/loaders/5s.gif'><strong>&nbsp<fmt:message key='application.loading' /></strong>",
 			"sSearch": "<span><fmt:message key='application.filter.record' /></span> _INPUT_",
 			"sLengthMenu": "<span><fmt:message key='application.show.entries' /></span> _MENU_",
-			"oPaginate": { "sFirst": "<fmt:message key='application.table.first' />", "sLast": "<fmt:message key='application.table.last' />", "sNext": ">", "sPrevious": "<" }
+			"oPaginate": { "sFirst": "<fmt:message key='application.table.first' />", "sLast": "<fmt:message key='application.table.last' />", "sNext": ">", "sPrevious": "<" },
+			"sInfo" : "<fmt:message key='application.table.sinfo' ><fmt:param value='_START_' /><fmt:param value='_END_' /><fmt:param value='_TOTAL_' /></fmt:message>"
 		},
 		"aoColumnDefs": [
-	    	{ "bSortable": false, "aTargets": [0,1,2,3,4,5,6,7,8] },
+	    	{ "bSortable": false, "aTargets": [0,1,2,3,7,8,9] },
 	    	{ "sWidth":"40px", "aTargets":[0]},
 	    	{ "sWidth":"50px", "aTargets":[1]},
 	    	{ "sWidth":"100px", "aTargets":[2]},
@@ -566,8 +567,8 @@ function editDeviceInfo(devid){
 	<div id="footer">
 		<div class="copyrights"><fmt:message key="application.company" /></div>
 		<ul class="footer-links">
-			<li><a href="" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
+			<li><a href="mailto:liugyang@gmail.com?Subject=helpme" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
+			<li><a href="http://www.pinecone.cc" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

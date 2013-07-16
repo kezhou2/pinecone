@@ -162,7 +162,7 @@ function refresh(){
  		type: 'POST',
  		data: {ids:jsonData,devicecodes:devCode}, 
 		timeout: 1000,
-		cache: false,
+		cache:false,
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
  				isAlert = true;
@@ -230,7 +230,7 @@ window.onunload = function(){
  		url:'subscribedata', 
  		type: 'POST',
  		data: {isDisconnect:'true', devicecodes:devCode},
- 		async:true,
+ 		async:false,
  		cache:false,
 		timeout: 500,
  		error: function(){}, 
@@ -514,8 +514,8 @@ function removeVariable(devid,varid){
 	<div id="footer">
 		<div class="copyrights"><fmt:message key="application.company" /></div>
 		<ul class="footer-links">
-			<li><a href="" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
+			<li><a href="mailto:liugyang@gmail.com?Subject=helpme" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
+			<li><a href="http://www.pinecone.cc" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

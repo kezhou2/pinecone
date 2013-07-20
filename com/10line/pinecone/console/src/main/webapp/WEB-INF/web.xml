@@ -6,6 +6,27 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	
+	<error-page>  
+        <error-code>403</error-code>
+        <location>/403.html</location>
+    </error-page>
+    <error-page>  
+        <error-code>404</error-code>
+        <location>/404.html</location>
+    </error-page>
+    <error-page>  
+        <error-code>405</error-code>
+        <location>/405.html</location>
+    </error-page>
+    <error-page>  
+        <error-code>500</error-code>
+        <location>/500.html</location>
+    </error-page>
+    <error-page>  
+        <error-code>503</error-code>
+        <location>/503.html</location>
+    </error-page>
+	
 	<!-- The definition of the Root Spring Container shared by all Servlets 
 		and Filters -->
 	<context-param>

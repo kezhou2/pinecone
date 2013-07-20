@@ -272,4 +272,29 @@ public class PageController {
 		response.setCharacterEncoding("UTF-8");
 		return "alermsetting";
 	}
+	
+	@RequestMapping(value = "/403.html")
+	public String goto403(HttpServletRequest request,HttpServletResponse response) {
+		return "403";
+	}
+	
+	@RequestMapping(value = "/404.html")
+	public String goto404(HttpServletRequest request,HttpServletResponse response) {
+		return "404";
+	}
+	
+	@RequestMapping(value = "/405.html")
+	public String goto405(HttpServletRequest request,HttpServletResponse response) {
+		return "405";
+	}
+	
+	@RequestMapping(value = "/500.html")
+	public String goto500(HttpServletRequest request,HttpServletResponse response) {
+		return "500";
+	}
+	
+	@RequestMapping(value = "/503.html")
+	public String goto503(HttpServletRequest request,HttpServletResponse response) {
+		return "503";
+	}
 }

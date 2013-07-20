@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
@@ -6,9 +7,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 <title><fmt:message key="application.title" /></title>
+<link rel="icon" href="img/favicon.ico" mce_href="img/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="img/favicon.ico" ce_href="img/favicon.ico" type="image/x-icon">
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <!--[if IE 8]><link href="css/ie8.css" rel="stylesheet" type="text/css" /><![endif]-->
-<!--[if IE 9]><link href="css/ie9.css" rel="stylesheet" type="text/css" /><![endif]-->
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -46,15 +48,14 @@
 <script type="text/javascript" src="js/plugins/forms/jquery.form.js"></script>
 
 <script type="text/javascript" src="js/plugins/tables/jquery.dataTables.min.js"></script>
-
 <script type="text/javascript" src="js/files/bootstrap.min.js"></script>
-
 <script type="text/javascript" src="js/files/functions.js"></script>
+<script type="text/javascript">
+</script>
 
 </head>
 
-<body class="no-background">
-
+<body>
 	<!-- Fixed top -->
 	<div id="top">
 		<div class="fixed">
@@ -74,33 +75,30 @@
 	<!-- /fixed top -->
 
 
-    <!-- Breadcrumbs line -->
+	<!-- Breadcrumbs line -->
     <div class="crumbs">
-        <ul id="breadcrumbs" class="breadcrumb"> 
-            <li><a href="index.html">Dashboard</a></li>
-            <li class="active"><a href="503.html" title="">503 error</a></li>
-        </ul>
+           <ul id="breadcrumbs" class="breadcrumb"> 
+               <li><a href="index.html"><fmt:message key="application.dashboard" /></a></li>
+               <li class="active"><a href="#" title=""><fmt:message key="application.environment" /></a></li>
+           </ul>
         
-        <ul class="alt-buttons">
-            <li><a href="#" title=""><i class="icon-signal"></i><span>Stats</span></a></li>
-            <li><a href="#" title=""><i class="icon-comments"></i><span>Messages</span></a></li>
-            <li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-tasks"></i><span>Tasks</span> <strong>(+16)</strong></a>
-            	<ul class="dropdown-menu pull-right">
-                    <li><a href="#" title=""><i class="icon-plus"></i>Add new task</a></li>
-                    <li><a href="#" title=""><i class="icon-reorder"></i>Statement</a></li>
-                    <li><a href="#" title=""><i class="icon-cog"></i>Settings</a></li>
-            	</ul>
-            </li>
-        </ul>
+           <ul class="alt-buttons">
+			<li class="dropdown"><a href="#" title="" data-toggle="dropdown"><i class="icon-cog" style="color:green"></i><span><fmt:message key="application.menu" /></span></a>
+               	<ul class="dropdown-menu pull-right">
+                       <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
+                       <li><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
+                       <li><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
+               	</ul>
+               </li>
+           </ul>
     </div>
     <!-- /breadcrumbs line -->
-
-
-	<!-- Error wrapper -->
+    
+    <!-- Error wrapper -->
 	<div class="error-page">
 	    <span class="reason">503</span>
 		<div class="error-content">
-	        <span class="reason-title">- Oops, an error has occurred. Service unavailable! -</span>
+	        <span class="reason-title"><fmt:message key="application.error.503" /></span>
 
 	    	<!-- Search widget -->
 	    	<form class="search" action="#">
@@ -112,20 +110,19 @@
 	    	<!-- /search widget -->
 
 	        <div class="row-fluid error-buttons">
-	            <a href="index.html" title="" class="btn btn-info span6">Back to dashboard</a>
-	            <a href="index.html" title="" class="btn btn-success span6">Back to the website</a>
+	            <a href="index.html" title="" class="btn btn-info span6"><fmt:message key="application.error.backtodashboad" /></a>
+	            <a href="login.html" title="" class="btn btn-success span6"><fmt:message key="application.error.loginagain" /></a>
 	        </div>
 	    </div>
 	</div>  
 	<!-- /error wrapper -->
 
-
 	<!-- Footer -->
 	<div id="footer">
-		<div class="copyrights">&copy;  Brought to you by Eugene Kopyov.</div>
+		<div class="copyrights"><fmt:message key="application.company" /></div>
 		<ul class="footer-links">
-			<li><a href="" title=""><i class="icon-cogs"></i>Contact admin</a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i>Report bug</a></li>
+			<li><a href="mailto:liugyang@gmail.com?Subject=helpme" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
+			<li><a href="http://www.pinecone.cc" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

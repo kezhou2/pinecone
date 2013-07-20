@@ -162,6 +162,7 @@ function refresh(){
  		type: 'POST',
  		data: {ids:jsonData,devicecodes:devCode}, 
 		timeout: 1000,
+		cache:false,
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
  				isAlert = true;
@@ -230,6 +231,7 @@ window.onunload = function(){
  		type: 'POST',
  		data: {isDisconnect:'true', devicecodes:devCode},
  		async:false,
+ 		cache:false,
 		timeout: 500,
  		error: function(){}, 
  		success: function(result){
@@ -273,7 +275,7 @@ function addDevice(devid){
 		 				$.jGrowl("<fmt:message key='variable.adddevicesuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#addFavorite").attr("onclick","removeDevice('${device.id}')");
 		 				$("#addFavorite").attr("title","<fmt:message key='variable.tooltip.remove.favorites' />");
-		 				$("#addFavorite").html("<i class='icon-star'></i><span>Remove</span></a>");
+		 				$("#addFavorite").html("<i class='fam-bell-add'></i><span>Remove</span></a>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='variable.adddevicefail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -299,7 +301,7 @@ function removeDevice(devid){
 		 				$.jGrowl("<fmt:message key='variable.removedevicesuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#addFavorite").attr("onclick","addDevice('${device.id}')");
 		 				$("#addFavorite").attr("title","<fmt:message key='variable.tooltip.add.favorites' />");
-		 				$("#addFavorite").html("<i class='icon-star-empty'></i><span>Add</span></a>");
+		 				$("#addFavorite").html("<i class='fam-bell-delete'></i><span>Add</span></a>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='variable.removedevicefail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -512,8 +514,8 @@ function removeVariable(devid,varid){
 	<div id="footer">
 		<div class="copyrights"><fmt:message key="application.company" /></div>
 		<ul class="footer-links">
-			<li><a href="" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
-			<li><a href="" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
+			<li><a href="mailto:liugyang@gmail.com?Subject=helpme" title=""><i class="icon-cogs"></i><fmt:message key="application.contact.admin" /></a></li>
+			<li><a href="http://www.pinecone.cc" title=""><i class="icon-screenshot"></i><fmt:message key="application.home.page" /></a></li>
 		</ul>
 	</div>
 	<!-- /footer -->

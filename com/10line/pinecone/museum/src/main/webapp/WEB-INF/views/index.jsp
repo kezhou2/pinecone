@@ -173,7 +173,10 @@ window.onload = function(){
 					max: 500,
 					step: 50,
 					slide: function( event, ui ) {
-					//$( "#donation-amount" ).val( "$" + ui.value );
+						$(this).attr("title", ui.value );
+					},
+					create: function(event,ui){
+						$(this).attr("title",100);
 					}
 			    });
 			});
@@ -286,7 +289,6 @@ function refresh(){
 }
 
 window.onunload = function(){
-	alert("onUnload");
 	stopRefresh();
 	
 	$.ajax({
@@ -358,7 +360,7 @@ function addDevice(devid){
 		 				$.jGrowl("<fmt:message key='index.addsuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#device"+devid).attr("onclick","removeDevice('"+devid+"')");
 		 				$("#device"+devid).attr("title","<fmt:message key='index.tooltip.remove.favorites' />");
-		 				$("#device"+devid).html("<i class='icon-star'></i>");
+		 				$("#device"+devid).html("<i class='fam-bell-delete'></i>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='index.addfail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -384,7 +386,7 @@ function removeDevice(devid){
 		 				$.jGrowl("<fmt:message key='index.removesuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#device"+devid).attr("onclick","addDevice('"+devid+"')");
 		 				$("#device"+devid).attr("title","<fmt:message key='index.tooltip.add.favorites' />");
-		 				$("#device"+devid).html("<i class='icon-star-empty'></i>");
+		 				$("#device"+devid).html("<i class='fam-bell-add'></i>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='index.removefail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -448,8 +450,6 @@ function editDeviceInfo(devid){
 
 			<div class="sidebar-tabs">
 				<ul class="tabs-nav two-items">
-					<li><a href="#general" title=""><i class="icon-reorder" style="color:green"></i></a></li>
-					<li><a href="#stuff" title=""><i class="icon-cogs" style="color:green"></i></a></li>
 				</ul>
 
 				<div id="general">
@@ -478,8 +478,6 @@ function editDeviceInfo(devid){
 					<!-- /main navigation -->
 
 				</div>
-
-				<div id="stuff"></div>
 
 			</div>
 		</div>

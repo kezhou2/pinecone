@@ -223,7 +223,6 @@ function stopRefresh(){
 }
 
 window.onunload = function(){
-	alert("onUnload");
 	stopRefresh();
 	
 	$.ajax({
@@ -275,7 +274,7 @@ function addDevice(devid){
 		 				$.jGrowl("<fmt:message key='variable.adddevicesuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#addFavorite").attr("onclick","removeDevice('${device.id}')");
 		 				$("#addFavorite").attr("title","<fmt:message key='variable.tooltip.remove.favorites' />");
-		 				$("#addFavorite").html("<i class='icon-star'></i><span>Remove</span></a>");
+		 				$("#addFavorite").html("<i class='fam-bell-delete'></i><span>Remove</span></a>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='variable.adddevicefail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -301,7 +300,7 @@ function removeDevice(devid){
 		 				$.jGrowl("<fmt:message key='variable.removedevicesuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#addFavorite").attr("onclick","addDevice('${device.id}')");
 		 				$("#addFavorite").attr("title","<fmt:message key='variable.tooltip.add.favorites' />");
-		 				$("#addFavorite").html("<i class='icon-star-empty'></i><span>Add</span></a>");
+		 				$("#addFavorite").html("<i class='fam-bell-add'></i><span>Add</span></a>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='variable.removedevicefail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -328,7 +327,7 @@ function addVariable(devid,varid){
 		 				$.jGrowl("<fmt:message key='variable.addvariablesuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#var"+varid).attr("onclick","removeVariable("+devid+","+varid+")");
 		 				$("#var"+varid).attr("title","<fmt:message key='variable.tooltip.remove.favorites' />");
-		 				$("#var"+varid).html("<i class='icon-star'></i>");
+		 				$("#var"+varid).html("<i class='fam-bell-delete'></i>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='variable.addvariablefail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -354,7 +353,7 @@ function removeVariable(devid,varid){
 		 				$.jGrowl("<fmt:message key='variable.removevariablesuccess' />", { sticky: true, theme: 'growl-success', life:1000});
 		 				$("#var"+varid).attr("onclick","addVariable("+devid+","+varid+")");
 		 				$("#var"+varid).attr("title","<fmt:message key='variable.tooltip.add.favorites' />");
-		 				$("#var"+varid).html("<i class='icon-star-empty'></i>");
+		 				$("#var"+varid).html("<i class='fam-bell-add'></i>");
 		 			}else{
 		 				$.jGrowl("<fmt:message key='variable.removevariablefail' />", { sticky: true, theme: 'growl-error', life:1000});
 		 			}
@@ -395,8 +394,6 @@ function removeVariable(devid,varid){
 
 			<div class="sidebar-tabs">
 		        <ul class="tabs-nav two-items">
-		            <li><a href="#general" title=""><i class="icon-reorder" style="color:green"></i></a></li>
-		            <li><a href="#stuff" title=""><i class="icon-cogs" style="color:green"></i></a></li>
 		        </ul>
 
 		        <div id="general">
@@ -419,9 +416,6 @@ function removeVariable(devid,varid){
 			        </ul>
 			        <!-- /main navigation -->
 
-		        </div>
-
-		        <div id="stuff">
 		        </div>
 
 		    </div>
@@ -463,10 +457,10 @@ function removeVariable(devid,varid){
                         	<div class="nav pull-right">
                         		<c:choose>
 									<c:when test="${addedFavorate == false}">
-										<li><a id="addFavorite" href="#"  onclick="addDevice('${device.id}')" title="<fmt:message key="variable.tooltip.add" />"><i class="icon-star-empty"></i><span><fmt:message key="variable.add" /></span></a></li>
+										<li><a id="addFavorite" href="#"  onclick="addDevice('${device.id}')" title="<fmt:message key="variable.tooltip.add" />"><i class="fam-bell-add"></i><span><fmt:message key="variable.add" /></span></a></li>
 									</c:when>
 									<c:when test="${addedFavorate == true}">
-										<li><a id="addFavorite" href="#"  onclick="removeDevice('${device.id}')" title="<fmt:message key="variable.tooltip.remove" />"><i class="icon-star"></i><span><fmt:message key="variable.remove" /></span></a></li>
+										<li><a id="addFavorite" href="#"  onclick="removeDevice('${device.id}')" title="<fmt:message key="variable.tooltip.remove" />"><i class="fam-bell-delet"></i><span><fmt:message key="variable.remove" /></span></a></li>
 									</c:when>
 								</c:choose>
                                 <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown" title="<fmt:message key="variable.refreshtime" />"><i class="icon-refresh" style="color:green"></i></a>

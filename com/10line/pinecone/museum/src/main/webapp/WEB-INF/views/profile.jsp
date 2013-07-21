@@ -109,8 +109,6 @@ String username = (String)request.getSession().getAttribute("username");
 
 			<div class="sidebar-tabs">
 		        <ul class="tabs-nav two-items">
-		            <li><a href="#general" title=""><i class="icon-reorder" style="color:green"></i></a></li>
-		            <li><a href="#stuff" title=""><i class="icon-cogs" style="color:green"></i></a></li>
 		        </ul>
 
 		        <div id="general">
@@ -135,8 +133,6 @@ String username = (String)request.getSession().getAttribute("username");
 
 		        </div>
 
-		        <div id="stuff">
-		        </div>
 
 		    </div>
 		</div>

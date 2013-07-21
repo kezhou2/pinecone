@@ -937,7 +937,7 @@ public class PineconeController {
 				//TODO switch
 				row.add("<input type='checkbox' cheched='checked' />");
 				//TODO slide bar
-				row.add("<div id='increments-slider'></div>");
+				row.add("<div id='increments-slider' title='0'></div>");
 				if(conf.getDevice(""+dev.getId()) == null){
 					row.add("<ul class='table-controls'>"+
 								"<li><a href='variable.html?id="+dev.getId()+"' class='btn tip' title='"+strDetail+"'><i class='fam-zoom'></i></a></li>"+

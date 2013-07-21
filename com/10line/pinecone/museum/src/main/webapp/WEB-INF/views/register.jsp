@@ -98,7 +98,7 @@
 	                            </div>
 	                        
 	                            <div class="control-group">
-	                                <label class="control-label"><fmt:message key="registry.repeat.password" /><span class="text-error">*</span></label>
+	                                <label class="control-label"><fmt:message key="registry.email.address" /><span class="text-error">*</span></label>
 	                                <div class="controls">
 	                                    <input type="text" value="" class="validate[required,custom[email]] span12" name="emailValid" id="emailValid">
 	                                </div>

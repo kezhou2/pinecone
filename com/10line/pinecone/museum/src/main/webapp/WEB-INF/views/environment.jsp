@@ -129,7 +129,6 @@ function refresh(){
 }
 
 window.onunload = function(){
-	alert("onUnload");
 	stopRefresh();
 	
 	$.ajax({
@@ -176,8 +175,6 @@ window.onunload = function(){
 
 			<div class="sidebar-tabs">
 		        <ul class="tabs-nav two-items">
-		            <li><a href="#general" title=""><i class="icon-reorder" style="color:green"></i></a></li>
-		            <li><a href="#stuff" title=""><i class="icon-cogs" style="color:green"></i></a></li>
 		        </ul>
 
 		        <div id="general">
@@ -200,9 +197,6 @@ window.onunload = function(){
 			        </ul>
 			        <!-- /main navigation -->
 
-		        </div>
-
-		        <div id="stuff">
 		        </div>
 
 		    </div>

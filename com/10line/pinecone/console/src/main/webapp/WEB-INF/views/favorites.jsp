@@ -330,6 +330,48 @@ function setAlermStr(variableId, alermStr){
 	$("strong[alermVarid='"+variableId+"']").text(alermStr);
 }
 
+function removeDevice(devid){
+	bootbox.confirm("<fmt:message key='index.removefromfavorites' />", function(result) {
+		if(result){
+			$.ajax({
+		 		url:'removedevicetofocus.html', 
+		 		type: 'post',
+		 		data: {deviceid:devid}, 
+				timeout: 5000,
+		 		error: function(XMLHttpRequest, textStatus, errorThrown){
+		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+		 		}, 
+		 		success: function(result){
+		 			if(result == 'true'){
+		 				window.location.reload();
+		 			}
+		 		} 
+		 	});
+		}
+	});
+}
+
+function removeVariable(devid,varid){
+	bootbox.confirm("<fmt:message key='variable.removevariablefromfavorites' />", function(result) {
+		if(result){
+			$.ajax({
+		 		url:'removevariabletofocus.html', 
+		 		type: 'post',
+		 		data: {deviceid:devid,variableid:varid}, 
+				timeout: 5000,
+		 		error: function(XMLHttpRequest, textStatus, errorThrown){
+		 			$.jGrowl(textStatus, { sticky: true, theme: 'growl-error', life:1000});
+		 		}, 
+		 		success: function(result){
+		 			if(result == 'true'){
+		 				window.location.reload();
+		 			}
+		 		} 
+		 	});
+		}
+	});
+}
+
 </script>
 </head>
 

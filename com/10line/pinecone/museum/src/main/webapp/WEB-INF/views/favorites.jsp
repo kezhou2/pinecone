@@ -248,6 +248,8 @@ function stopRefresh(){
 
 function refresh(){
 	isRefreshing = true;
+	if(jsonData == null || jsonData=='')
+		return;
 	$.ajax({
  		url:'subscribefavoritesdata', 
  		type: 'POST',

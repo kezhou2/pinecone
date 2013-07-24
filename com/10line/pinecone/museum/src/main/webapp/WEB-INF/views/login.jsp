@@ -68,12 +68,6 @@ window.onload = function(){
         <div class="navbar">
             <div class="navbar-inner">
                 <h6><i class="icon-user"></i><fmt:message key="login.page" /></h6>
-                <div class="nav pull-right">
-                    <a href="#" class="dropdown-toggle navbar-icon" data-toggle="dropdown"><i class="icon-cogs"></i></a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="register.html"><i class="icon-plus"></i><fmt:message key="login.registry" /></a></li>
-                    </ul>
-                </div>
             </div>
         </div>
         <div class="well">
@@ -93,9 +87,11 @@ window.onload = function(){
                 </div>
 
                 <div class="login-btn">
-                	<input name="submit" type="submit" value="<fmt:message key="login.login" />" class="btn btn-danger btn-block" />
-                	<div class="controls"><a href="register.html"><fmt:message key="login.gotoregistry" />→</a></div>
+                	<div class="span6"><input name="submit" type="submit" value="<fmt:message key="login.login" />" class="btn btn-danger btn-block" /></div>
+                	<div class="span6"><a href="register.html" class="btn btn-success btn-block bs-prompt"><fmt:message key="login.gotoregistry" /></a></div>
+                	<div class="controls" style="visibility:hidden"><a href="#"><fmt:message key="login.gotoregistry" />→</a></div>
                 </div>
+                
             </form>
         </div>
     </div>

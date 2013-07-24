@@ -36,6 +36,7 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		try{
 		String isDisconnect = request.getParameter("isDisconnect");
 		System.out.println("isDisconnect========================"+isDisconnect);
 		
@@ -64,7 +65,7 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 
 		//variable ids
 		String ids = request.getParameter("ids");
-		System.out.println("recived ids:"+ids);
+		System.out.println("recived ids*****:"+ids);
 		Object obj = JSONValue.parse(ids);
 		JSONArray array=(JSONArray)obj;
 		
@@ -128,7 +129,9 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		System.out.println("json string------------------------------:"+result.toJSONString());
 		out.write(result.toJSONString());
 		out.close();
-		
+		}catch(Exception ex){
+			request.getRequestDispatcher("index.html").forward(request, response);
+		}
 	}
 
 }

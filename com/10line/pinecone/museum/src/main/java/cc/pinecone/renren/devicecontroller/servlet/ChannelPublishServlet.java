@@ -30,45 +30,46 @@ public class ChannelPublishServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String varid = req.getParameter("variableid");
-		System.out.println("recived:"+varid);
-		String value = req.getParameter("vvalue");
-		System.out.println("recived:"+value);
-		//here acturally received device code from the jsp page.
-		String devicecode = req.getParameter("devicecode");
-		System.out.println("recived:"+devicecode);
-		
-		if(connectorMap.get(devicecode) == null){
-			try {
-				Connector con = new Connector(devicecode,"pinecone@device."+devicecode+".subscribe");
-				//FIXME need to change back.
-//				Connector con = new Connector(devicecode,"pinecone@device."+devicecode);
-				connectorMap.put(devicecode, con);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}	
-		}
-		
-		resp.setContentType("text/html; charset=utf-8"); 
-		resp.setCharacterEncoding("UTF-8");
-		resp.setHeader("Cache-Control","no-cache");
-		PrintWriter out=resp.getWriter();
-		
-		Connector connector = connectorMap.get(devicecode);
-		if(connector != null){
-			try {
-				connector.publish("pinecone@device."+devicecode+".subscribe",varid, value);
-				out.write("true");
-				out.close();
-				return;
-			} catch (Exception e) {
-				e.printStackTrace();
+		try{
+			String varid = req.getParameter("variableid");
+			System.out.println("recived:"+varid);
+			String value = req.getParameter("vvalue");
+			System.out.println("recived:"+value);
+			String devicecode = req.getParameter("devicecode");
+			System.out.println("recived:"+devicecode);
+			
+			if(connectorMap.get(devicecode) == null){
+				try {
+					Connector con = new Connector(devicecode,"pinecone@device."+devicecode+".subscribe");
+					connectorMap.put(devicecode, con);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}	
 			}
+			
+			resp.setContentType("text/html; charset=utf-8"); 
+			resp.setCharacterEncoding("UTF-8");
+			resp.setHeader("Cache-Control","no-cache");
+			PrintWriter out=resp.getWriter();
+			
+			Connector connector = connectorMap.get(devicecode);
+			if(connector != null){
+				try {
+					connector.publish("pinecone@device."+devicecode+".subscribe",varid, value);
+					out.write("true");
+					out.close();
+					return;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			out.write("false");
+			out.close();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			req.getRequestDispatcher("index.html").forward(req, resp);
 		}
-		
-		out.write("false");
-		out.close();
 	}
 
 }

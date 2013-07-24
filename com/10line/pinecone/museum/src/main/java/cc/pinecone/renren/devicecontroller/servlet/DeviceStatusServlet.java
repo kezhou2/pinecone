@@ -34,68 +34,73 @@ public class DeviceStatusServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String isDisconnect = request.getParameter("isDisconnect");
-		System.out.println("isDisconnect========================"+isDisconnect);
-		
-		//device codes
-		String jsonData = request.getParameter("jsonData");
-		System.out.println("recived:"+jsonData);
-		JSONArray array = (JSONArray)JSONValue.parse(jsonData);
-		
-		if(isDisconnect != null && isDisconnect.equals("true")){
-			System.out.println("ready to disconnect");
-			for(int i=0;i<array.size();i++){
-				JSONObject obj = (JSONObject)array.get(i);
-				if(connectorMap.get(obj.get("deviceCode")) != null){
-					try {
-						connectorMap.get(obj.get("deviceCode")).destroy();
-						connectorMap.remove(obj.get("deviceCode"));
-						connectorMap.clear();
-						return;
-					} catch (Exception e) {
-						e.printStackTrace();
+		try{
+			String isDisconnect = request.getParameter("isDisconnect");
+			System.out.println("isDisconnect========================"+isDisconnect);
+			
+			//device codes
+			String jsonData = request.getParameter("jsonData");
+			System.out.println("recived:"+jsonData);
+			JSONArray array = (JSONArray)JSONValue.parse(jsonData);
+			
+			if(isDisconnect != null && isDisconnect.equals("true")){
+				System.out.println("ready to disconnect");
+				for(int i=0;i<array.size();i++){
+					JSONObject obj = (JSONObject)array.get(i);
+					if(connectorMap.get(obj.get("deviceCode")) != null){
+						try {
+							connectorMap.get(obj.get("deviceCode")).destroy();
+							connectorMap.remove(obj.get("deviceCode"));
+							connectorMap.clear();
+							return;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
-		}
-
-		
-		JSONArray result = new JSONArray();
-		for(int i=0;i<array.size();i++){
-			JSONObject obj = (JSONObject)array.get(i);
-			String deviceCode = (String)obj.get("deviceCode");
-			long deviceId = (Long)obj.get("deviceId");
 	
-			if(connectorMap.get(deviceCode) == null){
-				System.out.println("#################initial deviceCode:"+deviceCode);
-				try {
-					Connector con = new Connector(""+deviceId,"pinecone@device."+deviceCode+".publish");
-					connectorMap.put(deviceCode, con);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}	
-			}else{
-				System.out.println("#################getting data. deviceCode:"+deviceCode);
-				Connector connector = connectorMap.get(deviceCode);
-				if(connector != null){
-					JSONObject o = new JSONObject();
-					o.put("deviceCode", deviceCode);
-					o.put("deviceId", deviceId);
-					o.put("status", connector.getDeviceStatus());
-					result.add(o);
+			
+			JSONArray result = new JSONArray();
+			for(int i=0;i<array.size();i++){
+				JSONObject obj = (JSONObject)array.get(i);
+				String deviceCode = (String)obj.get("deviceCode");
+				long deviceId = (Long)obj.get("deviceId");
+		
+				if(connectorMap.get(deviceCode) == null){
+					System.out.println("#################initial deviceCode:"+deviceCode);
+					try {
+						Connector con = new Connector(""+deviceId,"pinecone@device."+deviceCode+".publish");
+						connectorMap.put(deviceCode, con);
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}	
+				}else{
+					System.out.println("#################getting data. deviceCode:"+deviceCode);
+					Connector connector = connectorMap.get(deviceCode);
+					if(connector != null){
+						JSONObject o = new JSONObject();
+						o.put("deviceCode", deviceCode);
+						o.put("deviceId", deviceId);
+						o.put("status", connector.getDeviceStatus());
+						result.add(o);
+					}
 				}
 			}
+			
+			response.setContentType("text/html; charset=utf-8"); 
+			response.setCharacterEncoding("UTF-8");
+			response.setHeader("Cache-Control","no-cache");
+			PrintWriter out=response.getWriter();
+			
+			System.out.println("json string------------------------------:"+result.toJSONString());
+			out.write(result.toJSONString());
+			out.close();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			request.getRequestDispatcher("index.html").forward(request, response);
 		}
-		
-		response.setContentType("text/html; charset=utf-8"); 
-		response.setCharacterEncoding("UTF-8");
-		response.setHeader("Cache-Control","no-cache");
-		PrintWriter out=response.getWriter();
-		
-		System.out.println("json string------------------------------:"+result.toJSONString());
-		out.write(result.toJSONString());
-		out.close();
 	}
 
 }

@@ -114,7 +114,6 @@ public class HistoryController {
 			client.disconnect();
 		}
 		
-		System.out.println("data json string:"+data.toJSONString());
 		request.setAttribute("data", data.toJSONString());
 		request.setAttribute("type", type);
 		request.setAttribute("startDate", startDate.getTime());

@@ -76,19 +76,6 @@ public class AlermController {
 		String cellphone = request.getParameter("cellphone");
 		String email = request.getParameter("email");
 		
-		System.out.println("deviceId:"+deviceId);
-		System.out.println("variableId:"+variableId);
-		System.out.println("conditionType:"+conditionType);
-		System.out.println("condition:"+condition);
-		System.out.println("variablevalue:"+variablevalue);
-		System.out.println("clog:"+clog);
-		System.out.println("cpage:"+cpage);
-		System.out.println("csound:"+csound);
-		System.out.println("csms:"+csms);
-		System.out.println("cemail:"+cemail);
-		System.out.println("cellphone:"+cellphone);
-		System.out.println("email:"+email);
-		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();

@@ -965,4 +965,5 @@ public class PineconeController {
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
 	}
+	
 }

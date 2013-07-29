@@ -133,10 +133,18 @@
                 },
                 // --- CUSTOM RULES -- Those are specific to the demos, they can be removed or changed to your likings
                 "ajaxUserCall": {
-                    "url": "ajaxValidateFieldUser",
+                    "url": "validatename.html",
                     // you may want to pass extra data on the ajax call
                     "extraData": "name=eric",
                     "alertText": "This user is already taken",
+                    "alertTextLoad": "Validating, please wait"
+                },
+                
+                "ajaxEmailCall": {
+                    "url": "validateemail.html",
+                    // you may want to pass extra data on the ajax call
+                    "extraData": "name=eric",
+                    "alertText": "This email is already taken",
                     "alertTextLoad": "Validating, please wait"
                 },
 				"ajaxUserCallPhp": {

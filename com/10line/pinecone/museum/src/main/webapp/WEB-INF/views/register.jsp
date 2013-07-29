@@ -80,7 +80,7 @@
 	                            <div class="control-group">
 	                                <label class="control-label"><fmt:message key="registry.username" /><span class="text-error">*</span></label>
 	                                <div class="controls">
-	                                    <input type="text" class="validate[required] span12" name="username" id="username">
+	                                    <input type="text" class="validate[required,ajax[ajaxUserCall]] span12" name="username" id="username">
 	                                </div>
 	                            </div>
 	                        
@@ -101,7 +101,7 @@
 	                            <div class="control-group">
 	                                <label class="control-label"><fmt:message key="registry.email.address" /><span class="text-error">*</span></label>
 	                                <div class="controls">
-	                                    <input type="text" value="" class="validate[required,custom[email]] span12" name="emailValid" id="emailValid">
+	                                    <input type="text" value="" class="validate[required,custom[email],,ajax[ajaxEmailCall]] span12" name="emailValid" id="emailValid">
 	                                </div>
 	                            </div>
 

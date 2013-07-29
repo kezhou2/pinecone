@@ -133,11 +133,18 @@
                 },
                 // --- CUSTOM RULES -- Those are specific to the demos, they can be removed or changed to your likings
                 "ajaxUserCall": {
-                    "url": "ajaxValidateFieldUser",
+                    "url": "validatename.html",
                     // you may want to pass extra data on the ajax call
                     "extraData": "name=eric",
                     "alertText": "该用户名已经被使用",
-                    "alertTextLoad": "验证中，请等待。。。"
+                    "alertTextLoad": "验证中，请等待..."
+                },
+                "ajaxEmailCall": {
+                    "url": "validateemail.html",
+                    // you may want to pass extra data on the ajax call
+                    "extraData": "name=eric",
+                    "alertText": "该邮箱已经被使用",
+                    "alertTextLoad": "验证中，请等待..."
                 },
 				"ajaxUserCallPhp": {
                     "url": "phpajax/ajaxValidateFieldUser.php",
@@ -146,7 +153,7 @@
                     // if you provide an "alertTextOk", it will show as a green prompt when the field validates
                     "alertTextOk": "该用户名可用",
                     "alertText": "该用户名已经被使用",
-                    "alertTextLoad": "验证中，请等待。。。"
+                    "alertTextLoad": "验证中，请等待..."
                 },
                 "ajaxNameCall": {
                     // remote json service location

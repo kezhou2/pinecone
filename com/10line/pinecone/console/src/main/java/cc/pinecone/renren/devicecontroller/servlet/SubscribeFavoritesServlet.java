@@ -39,9 +39,10 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		String isDisconnect = request.getParameter("isDisconnect");
 		System.out.println("isDisconnect========================"+isDisconnect);
 		
+		try{
 		//device codes
 		String code = request.getParameter("devicecodes");
-		System.out.println("recived:"+code);
+		System.out.println("recived devicecodes***:"+code);
 		String[] deviceCodes = new String[0];
 		if(code != null)
 			deviceCodes = code.split("_");
@@ -64,13 +65,13 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 
 		//variable ids
 		String ids = request.getParameter("ids");
-		System.out.println("recived:"+ids);
+		System.out.println("recived ids:***:"+ids);
 		Object obj = JSONValue.parse(ids);
 		JSONArray array=(JSONArray)obj;
 		
 		//device ids
 		String devids = request.getParameter("deviceids");
-		System.out.println("recived:"+devids);
+		System.out.println("recived deviceids:***"+devids);
 		String[] deviceIds = new String[0];
 		if(code != null)
 			deviceIds = devids.split("_");
@@ -128,7 +129,10 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		System.out.println("json string------------------------------:"+result.toJSONString());
 		out.write(result.toJSONString());
 		out.close();
-		
+		}catch(Exception ex){
+			ex.printStackTrace();
+			request.getRequestDispatcher("index.html").forward(request, response);
+		}
 	}
 
 }

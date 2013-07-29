@@ -49,6 +49,7 @@
 <script type="text/javascript" src="js/plugins/forms/jquery.listbox.js"></script>
 <script type="text/javascript" src="js/plugins/forms/jquery.validation.js"></script>
 <script type="text/javascript" src="js/plugins/forms/jquery.validationEngine-en.js"></script>
+<script type="text/javascript" src="js/plugins/forms/jquery.validationEngine-cn.js"></script>
 <script type="text/javascript" src="js/plugins/forms/jquery.form.wizard.js"></script>
 <script type="text/javascript" src="js/plugins/forms/jquery.form.js"></script>
 

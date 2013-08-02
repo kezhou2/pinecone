@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security 
+       http://www.springframework.org/schema/security/spring-security.xsd">
+  
+  <!-- Enables Spring Security Debugging --><sec:debug/>
+  
+  <!-- Spring Security Filter Chain for REST Service -->
+  <sec:http pattern="/rest/**" create-session="stateless">
+    <sec:intercept-url pattern="/rest/**" access="ROLE_USER, ROLE_ADMIN" method="GET" />
+    <sec:intercept-url pattern="/rest/**" access="ROLE_ADMIN" />
+    <sec:anonymous enabled="false" />
+    <sec:http-basic/>
+  </sec:http>
+  
+  <!-- Spring Security Filter Chain for WEB Pages -->
+  <sec:http>
+    <sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    <sec:form-login/>
+    <sec:logout/>
+  </sec:http>
+  
+  <!-- Spring Security JDBC-based User Service -->
+  <sec:authentication-manager>
+  	<sec:authentication-provider>
+      <sec:jdbc-user-service data-source-ref="dataSource"/>
+  	</sec:authentication-provider>
+  </sec:authentication-manager>
+    
+</beans>

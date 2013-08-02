@@ -49,6 +49,13 @@
 	  <version>1.0.2</version>
 	  <scope>test</scope>
 	</dependency>
+	<!-- Jedis -->
+	<dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>2.1.0</version>
+      <scope>test</scope>
+	</dependency>
 	<!-- Pinecone Model -->
 	<dependency>
   	  <groupId>com.10line.pinecone.platform</groupId>

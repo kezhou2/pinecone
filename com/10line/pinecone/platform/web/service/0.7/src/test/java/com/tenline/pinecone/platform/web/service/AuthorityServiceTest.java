@@ -20,6 +20,7 @@ import com.tenline.pinecone.platform.sdk.RESTClient;
  */
 public class AuthorityServiceTest extends AbstractServiceTest {
 
+	private int page = 5;
 	private RESTClient client;
 	
 	@Before
@@ -34,7 +35,7 @@ public class AuthorityServiceTest extends AbstractServiceTest {
 	
 	@Test
 	public void test() throws Exception {
-		ArrayList<Entity> entities = client.get("/user?page=5", "admin", "admin");
+		ArrayList<Entity> entities = client.get("/user?page=" + page, "admin", "admin");
 		for (Entity entity : entities) {
 			User user = (User) entity;
 			if (client.get("/user/"+user.getId()+"/authorities", "admin", "admin").size() == 0) {
@@ -54,7 +55,7 @@ public class AuthorityServiceTest extends AbstractServiceTest {
 				client.delete("/user/" + user.getId());
 			}
 		}
-		entities = client.get("/authority?page=4", "admin", "admin");
+		entities = client.get("/authority?page=" + page, "admin", "admin");
 		for (Entity entity : entities) {
 			Authority authority = (Authority) entity;
 			if (client.get("/authority/"+authority.getId()+"/user", "admin", "admin").size() == 0) {

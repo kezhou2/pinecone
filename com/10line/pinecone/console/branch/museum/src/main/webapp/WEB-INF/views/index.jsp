@@ -142,14 +142,11 @@ window.onload = function(){
 		"aoColumnDefs": [
 	    	{ "bSortable": false, "aTargets": [0,1,2,3,7,8,9] },
 	    	{ "sWidth":"40px", "aTargets":[0]},
-	    	{ "sWidth":"50px", "aTargets":[1]},
-	    	{ "sWidth":"100px", "aTargets":[2]},
-	    	{ "sWidth":"30px", "aTargets":[3]},
-	    	{ "sWidth":"30px", "aTargets":[4]},
-	    	{ "sWidth":"30px", "aTargets":[5]},
-	    	{ "sWidth":"60px", "aTargets":[6]},
-	    	{ "sWidth":"60px", "aTargets":[7]},
-	    	{ "sWidth":"60px", "aTargets":[8]}
+	    	{ "sWidth":"50px", "sClass":"wordwrapper-text","aTargets":[1]},
+	    	{ "sWidth":"80px", "sClass":"wordwrapper-text","aTargets":[2]},
+	    	{ "sWidth":"60px", "sClass":"wordwrapper-text","aTargets":[3]},
+	    	{ "sWidth":"40px", "sClass":"wordwrapper-number","aTargets":[4,5,6]},
+	    	{ "sWidth":"60px", "aTargets":[7,8]}
 	    ],
 		"bServerSide": true,
 		"bProcessing": true,
@@ -494,7 +491,7 @@ function editDeviceInfo(devid){
 				<div class="crumbs">
 					<ul id="breadcrumbs" class="breadcrumb">
 						<li><a href="index.html"><fmt:message key="application.dashboard" /></a></li>
-						<li class="active"><a href="#" title=""><fmt:message key="favorites.myfavorites" /></a></li>
+						<li class="active"><a href="#" title=""><fmt:message key="index.title" /></a></li>
 					</ul>
 
 					<ul class="alt-buttons">

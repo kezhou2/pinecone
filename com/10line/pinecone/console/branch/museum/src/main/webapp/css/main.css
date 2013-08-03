@@ -2819,3 +2819,15 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
 
 }
 
+.wordwrapper-number{
+    max-width: 60px;
+    overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+.wordwrapper-text{
+    max-width: 80px;
+    overflow:hidden;
+	text-overflow:ellipsis;
+}
+

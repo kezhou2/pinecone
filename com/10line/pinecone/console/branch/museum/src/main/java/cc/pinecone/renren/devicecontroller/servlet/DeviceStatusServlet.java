@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -18,6 +19,7 @@ import org.json.simple.JSONValue;
 public class DeviceStatusServlet extends HttpServlet {
 
 	private static Map<String, Connector> connectorMap = new LinkedHashMap<String, Connector>();
+	private static final Logger logger = Logger.getLogger(DeviceStatusServlet.class);
 	/**
 	 * @param args
 	 */
@@ -36,15 +38,15 @@ public class DeviceStatusServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try{
 			String isDisconnect = request.getParameter("isDisconnect");
-			System.out.println("isDisconnect========================"+isDisconnect);
+			logger.info("isDisconnect========================"+isDisconnect);
 			
 			//device codes
 			String jsonData = request.getParameter("jsonData");
-			System.out.println("recived:"+jsonData);
+			logger.info("recived:"+jsonData);
 			JSONArray array = (JSONArray)JSONValue.parse(jsonData);
 			
 			if(isDisconnect != null && isDisconnect.equals("true")){
-				System.out.println("ready to disconnect");
+				logger.info("ready to disconnect");
 				for(int i=0;i<array.size();i++){
 					JSONObject obj = (JSONObject)array.get(i);
 					if(connectorMap.get(obj.get("deviceCode")) != null){
@@ -68,7 +70,7 @@ public class DeviceStatusServlet extends HttpServlet {
 				long deviceId = (Long)obj.get("deviceId");
 		
 				if(connectorMap.get(deviceCode) == null){
-					System.out.println("#################initial deviceCode:"+deviceCode);
+					logger.info("#################initial deviceCode:"+deviceCode);
 					try {
 						Connector con = new Connector(""+deviceId,"pinecone@device."+deviceCode+".publish");
 						connectorMap.put(deviceCode, con);
@@ -77,7 +79,7 @@ public class DeviceStatusServlet extends HttpServlet {
 						e.printStackTrace();
 					}	
 				}else{
-					System.out.println("#################getting data. deviceCode:"+deviceCode);
+					logger.info("#################getting data. deviceCode:"+deviceCode);
 					Connector connector = connectorMap.get(deviceCode);
 					if(connector != null){
 						JSONObject o = new JSONObject();
@@ -94,7 +96,7 @@ public class DeviceStatusServlet extends HttpServlet {
 			response.setHeader("Cache-Control","no-cache");
 			PrintWriter out=response.getWriter();
 			
-			System.out.println("json string------------------------------:"+result.toJSONString());
+			logger.info("json string------------------------------:"+result.toJSONString());
 			out.write(result.toJSONString());
 			out.close();
 		}catch(Exception ex){

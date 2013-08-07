@@ -9,9 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -55,13 +54,11 @@ public class AlermController {
 		return pApi;
 	}
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PageController.class);
+	private static final Logger logger = Logger.getLogger(AlermController.class);
 	
 	@RequestMapping(value = "/setalerm.html")
 	public void setAlerm(HttpServletRequest request,HttpServletResponse response) throws FileNotFoundException, IOException, ServletException {
 		logger.info("setalerm.html");
-		System.out.println("setalerm.html");
 		
 		String deviceId = request.getParameter("deviceId");
 		String variableId = request.getParameter("variableId");
@@ -77,8 +74,8 @@ public class AlermController {
 		String email = request.getParameter("email");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
-		String username = securityContextImpl.getAuthentication().getName();
-		String password = securityContextImpl.getAuthentication().getCredentials().toString();
+//		String username = securityContextImpl.getAuthentication().getName();
+//		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
 		String userid = null;
 		if(ud instanceof LoginUserDetailsImpl){
@@ -91,16 +88,16 @@ public class AlermController {
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		JSONObject ob = new JSONObject();
-		ob.put("conditionType", conditionType);
-		ob.put("condition", condition);
-		ob.put("variablevalue", variablevalue);
-		ob.put("clog", clog);
-		ob.put("cpage", cpage);
-		ob.put("csound", csound);
-		ob.put("csms", csms);
-		ob.put("cemail", cemail);
-		ob.put("cellphone", cellphone);
-		ob.put("email", email);
+//		ob.put("conditionType", conditionType);
+//		ob.put("condition", condition);
+//		ob.put("variablevalue", variablevalue);
+//		ob.put("clog", clog);
+//		ob.put("cpage", cpage);
+//		ob.put("csound", csound);
+//		ob.put("csms", csms);
+//		ob.put("cemail", cemail);
+//		ob.put("cellphone", cellphone);
+//		ob.put("email", email);
 		
 		conf.addAlerm(deviceId, variableId, ob.toJSONString());
 		

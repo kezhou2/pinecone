@@ -10,20 +10,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
 public class ChannelPublishServlet extends HttpServlet{
 	
 	private static Map<String, Connector> connectorMap = new LinkedHashMap<String, Connector>();
+	private static final Logger logger = Logger.getLogger(ChannelPublishServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
 		doPost(req, resp);
 	}
 
@@ -32,11 +29,11 @@ public class ChannelPublishServlet extends HttpServlet{
 			throws ServletException, IOException {
 		try{
 			String varid = req.getParameter("variableid");
-			System.out.println("recived:"+varid);
+			logger.info("recived:"+varid);
 			String value = req.getParameter("vvalue");
-			System.out.println("recived:"+value);
+			logger.info("recived:"+value);
 			String devicecode = req.getParameter("devicecode");
-			System.out.println("recived:"+devicecode);
+			logger.info("recived:"+devicecode);
 			
 			if(connectorMap.get(devicecode) == null){
 				try {

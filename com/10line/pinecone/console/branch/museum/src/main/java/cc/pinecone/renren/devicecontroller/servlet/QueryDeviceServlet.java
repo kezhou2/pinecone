@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -20,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import cc.pinecone.renren.devicecontroller.config.Config;
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
-import cc.pinecone.renren.devicecontroller.controller.TestAPI;
 import cc.pinecone.renren.devicecontroller.model.ExDeviceInfo;
 import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
@@ -31,8 +31,9 @@ import com.tenline.pinecone.platform.sdk.RESTClient;
 public class QueryDeviceServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8711776634122256591L;
+	private static final Logger logger = Logger.getLogger(QueryDeviceServlet.class);
 	
-	private final int PAGE_NUM = 20;
+//	private final int PAGE_NUM = 20;
 	
 	private RESTClient client = new RESTClient(AppConfig.REST_URL);
 
@@ -44,9 +45,9 @@ public class QueryDeviceServlet extends HttpServlet {
 			//get user name ,password, userid
 			SecurityContextImpl securityContextImpl = (SecurityContextImpl) req.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 			String username = securityContextImpl.getAuthentication().getName();
-			System.out.println("Username:" + username);  
+			logger.info("Username:" + username);  
 			String password = securityContextImpl.getAuthentication().getCredentials().toString();
-			System.out.println("Credentials:" + password);
+			logger.info("Credentials:" + password);
 			UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
 			String userid = null;
 			if(ud instanceof LoginUserDetailsImpl){
@@ -56,7 +57,7 @@ public class QueryDeviceServlet extends HttpServlet {
 			
 			//get user config
 			String path =  req.getSession().getServletContext().getRealPath("/");
-			System.out.println("path:"+path);
+			logger.info("path:"+path);
 			Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 			
 			//get request parameter from http request
@@ -68,10 +69,9 @@ public class QueryDeviceServlet extends HttpServlet {
 			JSONArray data = new JSONArray(); //data that will be shown in the table
 	
 			ArrayList<Device> list = new ArrayList<Device>();
-			//TODO the rest web services is not paginated. so here need to change.
-			int startPage = param.iDisplayStart/PAGE_NUM;
-			int startIndex = param.iDisplayStart%PAGE_NUM;
-			int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
+//			int startPage = param.iDisplayStart/PAGE_NUM;
+//			int startIndex = param.iDisplayStart%PAGE_NUM;
+//			int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
 			
 			try {
 				ArrayList<Entity> devs = (ArrayList<Entity>) client.get("/user/"+userid+"/devices",username,password);
@@ -83,7 +83,7 @@ public class QueryDeviceServlet extends HttpServlet {
 				e1.printStackTrace();
 			}
 		
-			System.out.println("size:"+list.size());
+			logger.info("size:"+list.size());
 			iTotalRecords = list.size();
 			List<Device> devices = new LinkedList<Device>();
 			for(Device d : list){
@@ -161,7 +161,7 @@ public class QueryDeviceServlet extends HttpServlet {
 				data.add(row);
 			}
 			jsonResponse.put("aaData", data);
-			System.out.println(jsonResponse.toJSONString());
+			logger.info(jsonResponse.toJSONString());
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("application/json");
 			resp.getWriter().print(jsonResponse.toString());

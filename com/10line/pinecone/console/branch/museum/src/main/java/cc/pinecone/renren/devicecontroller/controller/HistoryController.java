@@ -1,27 +1,19 @@
 package cc.pinecone.renren.devicecontroller.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cc.pinecone.renren.devicecontroller.dao.PineconeApi;
-import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 
 import com.tenline.pinecone.platform.sdk.HistoryClient;
 import com.tenline.pinecone.platform.sdk.RESTClient;
@@ -35,8 +27,6 @@ public class HistoryController {
 	private static PineconeApi pApi;
 	
 	private static RESTClient client;
-	
-	private static HistoryClient hisClient;
 
 	private final String MINUTE = "minute";
 	private final String SECOND = "sec";
@@ -57,20 +47,18 @@ public class HistoryController {
 		return pApi;
 	}
 	
-	private static final Logger logger = LoggerFactory
-			.getLogger(PageController.class);
+	private static final Logger logger = Logger.getLogger(HistoryController.class);
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/history.html")
 	public String history(HttpServletRequest request,HttpServletResponse response) throws ParseException {
 		logger.info("history.html");
-		System.out.println("history.html");
 		String id = request.getParameter("id");
-		System.out.println("id:"+id);
+		logger.info("id:"+id);
 		String type = request.getParameter("type");
-		System.out.println("type:"+type);
+		logger.info("type:"+type);
 		String per = request.getParameter("period");
-		System.out.println("period"+per);
+		logger.info("period"+per);
 		if(per != null);
 			int period = Integer.parseInt(per);
 		

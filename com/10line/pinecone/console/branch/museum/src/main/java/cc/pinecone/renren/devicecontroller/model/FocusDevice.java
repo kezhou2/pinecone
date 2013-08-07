@@ -1,7 +1,6 @@
 package cc.pinecone.renren.devicecontroller.model;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class FocusDevice {

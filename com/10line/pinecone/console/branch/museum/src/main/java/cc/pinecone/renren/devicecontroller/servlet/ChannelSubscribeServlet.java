@@ -4,30 +4,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.UUID;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.internal.MemoryPersistence;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import cc.pinecone.renren.devicecontroller.controller.AppConfig;
-
-import com.tenline.pinecone.platform.sdk.ChannelClient;
-
+@SuppressWarnings("serial")
 public class ChannelSubscribeServlet extends HttpServlet {
 
 	private static Map<String, Connector> connectorMap = new LinkedHashMap<String, Connector>();
+	private static final Logger logger = Logger.getLogger(ChannelSubscribeServlet.class);
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -39,15 +30,14 @@ public class ChannelSubscribeServlet extends HttpServlet {
 	 * subscribe data type:
 	 * [ids:[[var1_1,var1_2,var1_3...],[var2_1,var2_2,var2_3...]..], deviceCodes:deviceCode1_deviceCode2_...]
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try{
 			String isDisconnect = req.getParameter("isDisconnect");
-			System.out.println("isDisconnect========================"+isDisconnect);
+			logger.info("isDisconnect========================"+isDisconnect);
 			String ids = req.getParameter("ids");
-			System.out.println("recived:"+ids);
+			logger.info("recived:"+ids);
 			JSONArray array = new JSONArray();
 			if(ids != null){
 				Object obj = JSONValue.parse(ids);
@@ -56,13 +46,13 @@ public class ChannelSubscribeServlet extends HttpServlet {
 			
 			//here acturally received device code from the jsp page.
 			String code = req.getParameter("devicecodes");
-			System.out.println("recived:"+code);
+			logger.info("recived:"+code);
 			String[] deviceCodes = new String[0];
 			if(code != null)
 				deviceCodes = code.split("_");
 			
 			if(isDisconnect != null && isDisconnect.equals("true")){
-				System.out.println("ready to disconnect");
+				logger.info("ready to disconnect");
 				for(String deviceCode:deviceCodes){
 					if(connectorMap.get(deviceCode) != null){
 						try {
@@ -101,14 +91,14 @@ public class ChannelSubscribeServlet extends HttpServlet {
 				}
 				result = result+deviceCode+","+res+"/";
 			}
-			System.out.println(result);
+			logger.info(result);
 			
 			resp.setContentType("text/html; charset=utf-8"); 
 			resp.setCharacterEncoding("UTF-8");
 			resp.setHeader("Cache-Control","no-cache");
 			PrintWriter out=resp.getWriter();
 			
-			System.out.println("json string------------------------------:"+result);
+			logger.info("json string------------------------------:"+result);
 			out.write(result);
 			out.close();
 		}catch(Exception ex){

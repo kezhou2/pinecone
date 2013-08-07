@@ -1,14 +1,11 @@
 package cc.pinecone.renren.devicecontroller.dao;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import cc.pinecone.renren.devicecontroller.controller.AppConfig;
 

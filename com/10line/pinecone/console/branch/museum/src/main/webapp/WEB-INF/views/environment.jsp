@@ -246,7 +246,7 @@ window.onunload = function(){
 												<tr>
 											</c:when>
 										</c:choose>
-								  		<td><a href='variable.html?id=${device.id}' id='deviceShow' class='btn tip' title='${device.name}'><img src="img/demo/off.png" deviceId='${device.id}' width="78" height="71" /></a></td>
+								  		<td><a href='devicedetail.html?id=${device.id}' id='deviceShow' class='btn tip' title='${device.name}'><img src="img/demo/off.png" deviceId='${device.id}' width="78" height="71" /></a></td>
 								   		<c:choose>
 											<c:when test="${status.index % 10 == 9}">
 												</tr>

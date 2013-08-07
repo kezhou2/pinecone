@@ -32,7 +32,7 @@ public class Connector implements MqttCallback{
 	private final String CONNECT = "connect";
 	private final String DISCONNECT = "disconnect";
 	private final String NUMERIC = "numeric";
-	private final String STRING = "string";
+//	private final String STRING = "string";
 	
 	public Connector(String deviceid, String topic) throws Exception{
 		System.out.println("####################initialize topic:"+topic);

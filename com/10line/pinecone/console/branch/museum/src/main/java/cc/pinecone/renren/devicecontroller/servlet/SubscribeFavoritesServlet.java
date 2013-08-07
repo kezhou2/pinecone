@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -25,6 +26,7 @@ import cc.pinecone.renren.devicecontroller.service.LoginUserDetailsImpl;
 public class SubscribeFavoritesServlet extends HttpServlet {
 
 	private static Map<String, Connector> connectorMap = new LinkedHashMap<String, Connector>();
+	private static final Logger logger = Logger.getLogger(SubscribeFavoritesServlet.class);
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -38,17 +40,17 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try{
 		String isDisconnect = request.getParameter("isDisconnect");
-		System.out.println("isDisconnect========================"+isDisconnect);
+		logger.info("isDisconnect========================"+isDisconnect);
 		
 		//device codes
 		String code = request.getParameter("devicecodes");
-		System.out.println("recived deviceCodes:"+code);
+		logger.info("recived deviceCodes:"+code);
 		String[] deviceCodes = new String[0];
 		if(code != null)
 			deviceCodes = code.split("_");
 		
 		if(isDisconnect != null && isDisconnect.equals("true")){
-			System.out.println("ready to disconnect");
+			logger.info("ready to disconnect");
 			for(String deviceCode:deviceCodes){
 				if(connectorMap.get(deviceCode) != null){
 					try {
@@ -65,13 +67,13 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 
 		//variable ids
 		String ids = request.getParameter("ids");
-		System.out.println("recived ids*****:"+ids);
+		logger.info("recived ids*****:"+ids);
 		Object obj = JSONValue.parse(ids);
 		JSONArray array=(JSONArray)obj;
 		
 		//device ids
 		String devids = request.getParameter("deviceids");
-		System.out.println("recived deviceIds:"+devids);
+		logger.info("recived deviceIds:"+devids);
 		String[] deviceIds = new String[0];
 		if(code != null)
 			deviceIds = devids.split("_");
@@ -95,7 +97,7 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 			String deviceId = deviceIds[i];
 	
 			if(connectorMap.get(deviceCode) == null){
-				System.out.println("#################initial deviceCode:"+deviceCode);
+				logger.info("#################initial deviceCode:"+deviceCode);
 				try {
 					Connector con = new Connector(deviceId,"pinecone@device."+deviceCode+".publish");
 					connectorMap.put(deviceCode, con);
@@ -108,7 +110,7 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 					e.printStackTrace();
 				}	
 			}else{
-				System.out.println("#################getting data. deviceCode:"+deviceCodes[i]);
+				logger.info("#################getting data. deviceCode:"+deviceCodes[i]);
 				Connector connector = connectorMap.get(deviceCode);
 				if(connector != null){
 					
@@ -126,7 +128,7 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 		response.setHeader("Cache-Control","no-cache");
 		PrintWriter out=response.getWriter();
 		
-		System.out.println("json string------------------------------:"+result.toJSONString());
+		logger.info("json string------------------------------:"+result.toJSONString());
 		out.write(result.toJSONString());
 		out.close();
 		}catch(Exception ex){

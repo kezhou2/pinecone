@@ -12,11 +12,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,10 +58,9 @@ public class PineconeController {
 	
 	private final String ADMIN_NAME = "admin";
 	private final String ADMIN_PWD = "admin";
-	private final int PAGE_NUM = 20;
+//	private final int PAGE_NUM = 20;
 	
-	private static final Logger logger = LoggerFactory
-			.getLogger(PageController.class);
+	private static final Logger logger = Logger.getLogger(PineconeController.class);
 
 	public RESTClient getRESTClient() {
 		if (client == null) {
@@ -82,9 +80,8 @@ public class PineconeController {
 	public void disconnectDevice(HttpServletRequest request,
 			HttpServletResponse response) {
 		logger.info("disconnectdevice.html");
-		System.out.println("disconnectdevice");
 		String id = request.getParameter("id");
-		System.out.println("id:" + id);
+		logger.info("id:" + id);
 
 		try {
 			this.getRESTClient().delete("/device/" + id);
@@ -104,10 +101,9 @@ public class PineconeController {
 		String username = securityContextImpl.getAuthentication().getName();
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		logger.info("activeDevice.html");
-		System.out.println("activeDevice");
 		String code = request.getParameter("code");
 		String name = request.getParameter("name");
-		System.out.println("code:" + code + " name:" + name);
+		logger.info("code:" + code + " name:" + name);
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
 		String userid = null;
 		if(ud instanceof LoginUserDetailsImpl){
@@ -121,11 +117,11 @@ public class PineconeController {
 
 			String msg = client.post("/device/" + dev.getId() + "/user",
 					"/user/" + userid);
-			System.out.println("adding device to user:" + msg);
+			logger.info("adding device to user:" + msg);
 			Device device = new Device();
 			device.setName(name);
 			msg = client.put("/device/" + dev.getId(), device);
-			System.out.println("changing device name:" + msg);
+			logger.info("changing device name:" + msg);
 
 			PrintWriter out = response.getWriter();
 			out.print("true");
@@ -139,11 +135,11 @@ public class PineconeController {
 	
 	@RequestMapping(value = "/registeruser.html")
 	public String registerUser(HttpServletRequest request,	HttpServletResponse response) {
-		System.out.println("registeruser.html");
+		logger.info("registeruser.html");
 		String username = (String)request.getParameter("username");
 		String password = (String)request.getParameter("password1");
 		String email = (String)request.getParameter("emailValid");
-		System.out.println("username:"+username+"\npassword:"+password+"\nemail:"+email);
+		logger.info("username:"+username+"\npassword:"+password+"\nemail:"+email);
 		
 		try {
 			if(username == null || password == null){
@@ -192,20 +188,20 @@ public class PineconeController {
 		}
 		
 		logger.info("queryVariable.html");
-		System.out.println("queryVariable");
 		String id = request.getParameter("id");
-		System.out.println(id);
+		logger.info(id);
 		
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
-		System.out.println("path:"+path);
+		logger.info("path:"+path);
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		List<String> idsList = conf.getFocusDeviceVariableIds(id);
-		System.out.println("idsList size:"+idsList.size());
+		logger.info("idsList size:"+idsList.size());
+		StringBuilder str = new StringBuilder();
 		for(String s:idsList){
-			System.out.print("###"+s+"|");
+			str.append("###"+s+"|");
 		}
-		System.out.println();
+		logger.info(str);
 		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
 		
@@ -304,7 +300,7 @@ public class PineconeController {
 		jsonResponse.put("iTotalDisplayRecords", iTotalDisplayRecords);
 
 		jsonResponse.put("aaData", data);
-		System.out.println(jsonResponse.toJSONString());
+		logger.info(jsonResponse.toJSONString());
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
@@ -318,13 +314,12 @@ public class PineconeController {
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		
 		logger.info("changePassword.html");
-		System.out.println("changePassword.html");
 		
 		String oldpwd = request.getParameter("oldpassword");
 		String newpwd = request.getParameter("newpassword");
 		String myname = request.getParameter("myname");
 		String myemail = request.getParameter("myemail");
-		System.out.println("old:" + oldpwd + " new:" + newpwd);
+		logger.info("old:" + oldpwd + " new:" + newpwd);
 		boolean isSuccess = false;
 		if(password.equals(oldpwd)){		
 			try {
@@ -362,7 +357,6 @@ public class PineconeController {
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
 		
 		logger.info("changeProfile.html");
-		System.out.println("changeProfile.html");
 		
 		String name = request.getParameter("username");
 		String email = request.getParameter("email");
@@ -377,7 +371,7 @@ public class PineconeController {
 				user.setPassword(password);
 				user.setEmail(email);
 				String res = client.post("/user/"+user.getId(), user);
-				System.out.println(res);
+				logger.info(res);
 				isSuccess = true;
 			}
 		} catch (Exception e) {
@@ -399,7 +393,6 @@ public class PineconeController {
 	@RequestMapping(value = "/adddevicetofocus.html", method = RequestMethod.POST)
 	public void addDeviceToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		logger.info("adddevicetofocus.html");
-		System.out.println("adddevicetofocus.html");
 		String id = request.getParameter("deviceid");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
@@ -442,7 +435,6 @@ public class PineconeController {
 	@RequestMapping(value = "/removedevicetofocus.html", method = RequestMethod.POST)
 	public void removeDeviceToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		logger.info("removedevicetofocus.html");
-		System.out.println("removedevicetofocus.html");
 		String id = request.getParameter("deviceid");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
@@ -478,7 +470,6 @@ public class PineconeController {
 	@RequestMapping(value = "/addvariabletofocus.html", method = RequestMethod.POST)
 	public void addVariableToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		logger.info("addvariabletofocus.html");
-		System.out.println("addvariabletofocus.html");
 		String devid = request.getParameter("deviceid");
 		String varid = request.getParameter("variableid");
 		
@@ -508,7 +499,6 @@ public class PineconeController {
 	@RequestMapping(value = "/removevariabletofocus.html", method = RequestMethod.POST)
 	public void removeVariableToFocus(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		logger.info("removevariabletofocus.html");
-		System.out.println("removevariabletofocus.html");
 		String devid = request.getParameter("deviceid");
 		String varid = request.getParameter("variableid");
 		
@@ -539,7 +529,6 @@ public class PineconeController {
 	@RequestMapping(value = "/queryfocusvariable.html", method = RequestMethod.GET)
 	public void queryfocusVariable(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		logger.info("queryfocusvariable.html");
-		System.out.println("queryfocusvariable");
 
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
@@ -674,7 +663,7 @@ public class PineconeController {
 		jsonResponse.put("iTotalDisplayRecords", iTotalDisplayRecords);
 
 		jsonResponse.put("aaData", data);
-		System.out.println(jsonResponse.toJSONString());
+		logger.info(jsonResponse.toJSONString());
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
@@ -683,7 +672,6 @@ public class PineconeController {
 	@RequestMapping(value = "/editdeviceinfo.html", method = RequestMethod.GET)
 	public void editDeviceInfo(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		logger.info("editDeviceInfo.html");
-		System.out.println("editDeviceInfo");
 		
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
@@ -699,7 +687,7 @@ public class PineconeController {
 		String devid = request.getParameter("id");
 		String mac = request.getParameter("mac");
 		String addr = new String(request.getParameter("addr").getBytes("iso8859-1"),"utf-8"); 
-		System.out.println("devid:" + devid + " mac:" + mac+" addr:"+addr);
+		logger.info("devid:" + devid + " mac:" + mac+" addr:"+addr);
 		ExDeviceInfo info = new ExDeviceInfo();
 		info.setId(Long.parseLong(devid));
 		info.setMacId(mac);
@@ -715,9 +703,9 @@ public class PineconeController {
 		//get user name ,password, userid
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
-		System.out.println("Username:" + username);  
+		logger.info("Username:" + username);  
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
-		System.out.println("Credentials:" + password);
+		logger.info("Credentials:" + password);
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
 		String userid = null;
 		if(ud instanceof LoginUserDetailsImpl){
@@ -727,7 +715,7 @@ public class PineconeController {
 		
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
-		System.out.println("path:"+path);
+		logger.info("path:"+path);
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		//get request parameter from http request
@@ -745,10 +733,10 @@ public class PineconeController {
 		String strEdit = msgSrc.getMessage("pineconecontroller.edit", null, null);
 		
 		ArrayList<Device> list = new ArrayList<Device>();
-		//TODO the rest web services is not paginated. so here need to change.
-		int startPage = param.iDisplayStart/PAGE_NUM;
-		int startIndex = param.iDisplayStart%PAGE_NUM;
-		int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
+		
+//		int startPage = param.iDisplayStart/PAGE_NUM;
+//		int startIndex = param.iDisplayStart%PAGE_NUM;
+//		int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
 		
 		try {
 			ArrayList<Entity> devs = (ArrayList<Entity>) getRESTClient().get("/user/"+userid+"/devices",username,password);
@@ -760,7 +748,7 @@ public class PineconeController {
 			e1.printStackTrace();
 		}
 	
-		System.out.println("size:"+list.size());
+		logger.info("size:"+list.size());
 		iTotalRecords = list.size();
 		List<Device> devices = new LinkedList<Device>();
 		for(Device d : list){
@@ -838,7 +826,7 @@ public class PineconeController {
 			data.add(row);
 		}
 		jsonResponse.put("aaData", data);
-		System.out.println(jsonResponse.toJSONString());
+		logger.info(jsonResponse.toJSONString());
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());
@@ -850,9 +838,9 @@ public class PineconeController {
 		//get user name ,password, userid
 		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
 		String username = securityContextImpl.getAuthentication().getName();
-		System.out.println("Username:" + username);  
+		logger.info("Username:" + username);  
 		String password = securityContextImpl.getAuthentication().getCredentials().toString();
-		System.out.println("Credentials:" + password);
+		logger.info("Credentials:" + password);
 		UserDetails ud = (UserDetails)securityContextImpl.getAuthentication().getPrincipal();
 		String userid = null;
 		if(ud instanceof LoginUserDetailsImpl){
@@ -862,7 +850,7 @@ public class PineconeController {
 		
 		//get user config
 		String path =  request.getSession().getServletContext().getRealPath("/");
-		System.out.println("path:"+path);
+		logger.info("path:"+path);
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		//get request parameter from http request
@@ -874,19 +862,19 @@ public class PineconeController {
 		
 
 		String strLoading=msgSrc.getMessage("pineconecontroller.loading", null, null);
-		String strHistoryData = msgSrc.getMessage("pineconecontroller.historydata", null, null);
+//		String strHistoryData = msgSrc.getMessage("pineconecontroller.historydata", null, null);
 		String strRemoveFavorites = msgSrc.getMessage("pineconecontroller.removefavorites", null, null);
-		String strDeviceName = msgSrc.getMessage("pineconecontroller.devicename", null, null);
-		String strDeviceCode = msgSrc.getMessage("pineconecontroller.devicecode", null, null);
-		String strAlermSetting = msgSrc.getMessage("pineconecontroller.alermsetting", null, null);
+//		String strDeviceName = msgSrc.getMessage("pineconecontroller.devicename", null, null);
+//		String strDeviceCode = msgSrc.getMessage("pineconecontroller.devicecode", null, null);
+//		String strAlermSetting = msgSrc.getMessage("pineconecontroller.alermsetting", null, null);
 		String strAddFavorites = msgSrc.getMessage("pineconecontroller.addfavorites", null, null);
 		String strDetail = msgSrc.getMessage("pineconecontroller.detail", null, null);
 		String strDisconnect = msgSrc.getMessage("pineconecontroller.disconnect", null, null);
 		String strEdit = msgSrc.getMessage("pineconecontroller.edit", null, null);
 		
-		int startPage = param.iDisplayStart/PAGE_NUM;
-		int startIndex = param.iDisplayStart%PAGE_NUM;
-		int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
+//		int startPage = param.iDisplayStart/PAGE_NUM;
+//		int startIndex = param.iDisplayStart%PAGE_NUM;
+//		int pageCount = (param.iDisplayLength - param.iDisplayStart) / PAGE_NUM + 1;
 		
 		JSONObject jsonResponse = new JSONObject();
 		jsonResponse.put("sEcho", sEcho);
@@ -934,9 +922,8 @@ public class PineconeController {
 				row.add(rowHumidity);
 				row.add(rowLight);
 				row.add(rowTemperature);
-				//TODO switch
 				row.add("<input type='checkbox' cheched='checked' />");
-				//TODO slide bar
+				
 				row.add("<div id='increments-slider' title='0'></div>");
 				if(conf.getDevice(""+dev.getId()) == null){
 					row.add("<ul class='table-controls'>"+
@@ -960,7 +947,7 @@ public class PineconeController {
 		}
 
 		jsonResponse.put("aaData", data);
-		System.out.println(jsonResponse.toJSONString());
+		logger.info(jsonResponse.toJSONString());
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		response.getWriter().print(jsonResponse.toString());

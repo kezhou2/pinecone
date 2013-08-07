@@ -16,9 +16,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import cc.pinecone.renren.devicecontroller.model.ExDeviceInfo;
 import cc.pinecone.renren.devicecontroller.model.FocusDevice;

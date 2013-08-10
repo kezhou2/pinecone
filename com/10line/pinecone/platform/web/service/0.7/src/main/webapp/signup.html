@@ -61,10 +61,17 @@
 	<script type="text/javascript">
 		
 		$(document).ready(function() {
+			
+			$.validator.addMethod("alphanumeric", function(value, element) {
+		        return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
+			}); 
 		
 			$("#signup").validate({
 				rules : {
-					username : "required",
+					username : {
+						required : true,
+						alphanumeric : true
+					},
 					email : {
 						required : true,
 						email : true
@@ -78,6 +85,24 @@
 						equalTo : "#password"
 					}
 				},
+				messages : {
+		            username : {
+		            	required : "不能为空",
+		            	alphanumeric: "只能为字母或者数字"
+		            },
+					email : {
+						required : "不能为空",
+						email : "不是合法电子邮件格式"
+					},
+					password : {
+						required : "不能为空",
+						minlength : "不能少于8个字符"
+					},
+					conpassword : {
+						required : "不能为空",
+						equalTo : "请输入相同的密码"
+					}
+		        },
 				errorClass : "help-inline"
 			});
 		

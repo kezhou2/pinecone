@@ -23,6 +23,13 @@
   background: url("../images/top.png") no-repeat;
 }
 
+/* Well
+--------------------------------------------------*/
+
+.well {
+  margin-top: 20px;
+}
+
 /* Body and structure
 -------------------------------------------------- */
 

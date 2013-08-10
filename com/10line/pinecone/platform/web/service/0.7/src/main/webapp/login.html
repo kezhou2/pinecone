@@ -47,14 +47,31 @@
 		
 		$(document).ready(function() {
 		
+			$.validator.addMethod("alphanumeric", function(value, element) {
+		        return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
+			}); 
+			
 			$("#login").validate({
 				rules : {
-					username : "required",
+					username : {
+						required : true,
+						alphanumeric : true
+					},
 					password : {
 						required : true,
 						minlength : 8
 					}
 				},
+				messages : {
+		            username : {
+		            	required : "不能为空",
+		            	alphanumeric: "只能为字母或者数字"
+		            },
+					password : {
+						required : "不能为空",
+						minlength : "不能少于8个字符"
+					}
+		        },
 				errorClass : "help-inline"
 			});
 		

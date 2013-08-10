@@ -20,11 +20,9 @@
           <a class="brand" href="#">松果网</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">首页</a></li>
               <li><a href="http://shop104362768.taobao.com" target="_blank">商店</a></li>
               <li><a href="http://e.weibo.com/pinecone201204" target="_blank">微博</a></li>
-              <li><a href="#">注册</a></li>
-              <li><a href="#">登录</a></li>
+              <li><a href="signup.html">注册</a></li>
             </ul>
           </div>
         </div>
@@ -34,7 +32,7 @@
   	  <div class="container">
     	<h1>松果网</h1>
     	<p>便捷、稳定、智能的物联网应用平台，让生活更美好、现代。</p>
-    	<p><a href="#" class="btn btn-success btn-large">立即登录</a></p>
+    	<p><a href="login.html" class="btn btn-success btn-large">立即登录</a></p>
   	  </div>
 	</div>
 	<div class="container">
@@ -82,9 +80,7 @@
           </div>
         </div>
       </div>
-    </div>
-    <footer class="footer">
-      <div class="container">
+      <footer class="footer">
         <p>&copy; 2013 北京松果科技有限公司</p>
         <ul class="footer-links">
           <li><a href="#">关于我们</a></li>
@@ -96,9 +92,28 @@
           <li><a href="#">用户协议</a></li>
         </ul>
         <p><a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备13022507号</a></p>
-      </div>
-    </footer>
+      </footer>
+    </div>
 	<script src="http://cdnjs.bootcss.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <script type="text/javascript">
+    	
+    	$(document).ready(function() {
+    	
+    		$.scrollUp({
+    			scrollName: 'scrollUp', 
+    	    	topDistance: '300', 
+    	    	topSpeed: 300, 
+    	    	animation: 'fade', 
+    	    	animationInSpeed: 200, 
+    	    	animationOutSpeed: 200, 
+    	    	scrollText: '', 
+    	    	activeOverlay: false 
+    		});
+    	
+    	});
+    
+    </script>
   </body>
 </html>

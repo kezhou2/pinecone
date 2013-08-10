@@ -6,6 +6,22 @@
 */
 
 
+/* Google Map
+---------------------------------------------------*/
+
+#map_canvas {
+  height: 500px;
+}
+
+/* Scroll Up
+--------------------------------------------------*/
+#scrollUp {
+  bottom: 20px;
+  right: 20px;
+  height: 38px;  /* Height of image */
+  width: 38px; /* Width of image */
+  background: url("../images/top.png") no-repeat;
+}
 
 /* Body and structure
 -------------------------------------------------- */
@@ -833,7 +849,6 @@ form.bs-docs-example {
 }
 .bs-docs-sidenav .active .icon-chevron-right,
 .bs-docs-sidenav .active a:hover .icon-chevron-right {
-  background-image: url(../images/glyphicons-halflings-white.png);
   opacity: 1;
 }
 .bs-docs-sidenav.affix {

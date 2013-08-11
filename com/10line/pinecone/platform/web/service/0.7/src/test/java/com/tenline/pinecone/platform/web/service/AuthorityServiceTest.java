@@ -20,7 +20,7 @@ import com.tenline.pinecone.platform.sdk.RESTClient;
  */
 public class AuthorityServiceTest extends AbstractServiceTest {
 
-	private int page = 5;
+	private int page = 6;
 	private RESTClient client;
 	
 	@Before

@@ -31,6 +31,22 @@
         <param-value>classpath:spring/*.xml</param-value>
     </context-param>
     
+    <!-- Processes application requests -->
+	<servlet>
+		<servlet-name>controllerServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/servlet-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>controllerServlet</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+    
     <!-- Spring Data REST - JPA Exporter -->
     <servlet>
         <servlet-name>exporter</servlet-name>

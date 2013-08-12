@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="zh">
   <head>
@@ -11,13 +12,13 @@
   <body>
 	<div class="container">
 	  <div class="well">
-		<form id="login" class="form-horizontal" method="post" action="#">
+		<form id="login" class="form-horizontal" method="post" action="${pageContext.request.contextPath}/j_spring_security_check">
 		  <legend>登录</legend>
 		  <div class="control-group">
 			<div class="controls">
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-user"></i></span> 
-				<input type="text" class="input-xlarge" id="username" name="username" placeholder="用户名">
+				<input type="text" class="input-xlarge" id="username" name="j_username" placeholder="用户名">
 			  </div>
 			</div>
 		  </div>
@@ -25,7 +26,7 @@
 			<div class="controls">
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-lock"></i></span> 
-				<input type="Password" id="password" class="input-xlarge" name="password" placeholder="密码">
+				<input type="Password" id="password" class="input-xlarge" name="j_password" placeholder="密码">
 			  </div>
 			</div>
 		  </div>

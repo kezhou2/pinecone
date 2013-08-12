@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="zh">
   <head>
@@ -11,7 +12,7 @@
   <body>
 	<div class="container">
 	  <div class="well">
-		<form id="signup" class="form-horizontal" method="post" action="#">
+		<form id="signup" class="form-horizontal" method="post" action="registeruser.html">
 		  <legend>注册</legend>
 		  <div class="control-group">
 			<div class="controls">

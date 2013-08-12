@@ -20,8 +20,9 @@
   <!-- Spring Security Filter Chain for WEB Pages -->
   <sec:http>
     <sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    <sec:form-login/>
-    <sec:logout/>
+    <sec:form-login login-page="/login.html" authentication-failure-url="/login.html?error=true"
+			default-target-url="/index.html" />
+	<sec:logout logout-success-url="/login.html"/>
   </sec:http>
   
   <!-- Spring Security JDBC-based User Service -->

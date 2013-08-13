@@ -7,6 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<script src="http://cdnjs.bootcss.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
+	<script src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
 	<link href="css/main.css" rel="stylesheet">
   </head>
   <body>
@@ -14,7 +17,7 @@
 	  <div class="well">
 		<form id="signup" class="form-horizontal" method="post" action="registeruser.html">
 		  <legend>注册</legend>
-		  <div class="control-group">
+		  <div id='name_input' class="control-group">
 			<div class="controls">
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-user"></i></span> 
@@ -56,9 +59,7 @@
 		</form>
 	  </div>
 	</div>
-	<script src="http://cdnjs.bootcss.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
-	<script src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
+	
 	<script type="text/javascript">
 		
 		$(document).ready(function() {
@@ -68,14 +69,36 @@
 			}); 
 		
 			$("#signup").validate({
+
 				rules : {
 					username : {
 						required : true,
-						alphanumeric : true
+						alphanumeric : true,
+						remote: {
+	    		        	url: "validatename.html",      //url地址
+	    		        	type: "post",           //发送方式
+	    		        	dataType: "json",       //数据格式     
+	    		        	data: {                 //要传递的数据
+	    		        		username: function() {
+	    		        			return $("#username").val();
+	    		        		}
+							}
+	    		        }
 					},
 					email : {
 						required : true,
-						email : true
+						email : true,
+						remote: {
+	    		        	url: "validateemail.html",      //url地址
+	    		        	type: "post",           //发送方式
+	    		        	dataType: "json",       //数据格式     
+	    		        	data: {                 //要传递的数据
+	    		        		username: function() {
+	    		        			alert("");
+	    		        			return $("#email").val();
+	    		        		}
+							}
+	    		        }
 					},
 					password : {
 						required : true,
@@ -89,11 +112,13 @@
 				messages : {
 		            username : {
 		            	required : "不能为空",
-		            	alphanumeric: "只能为字母或者数字"
+		            	alphanumeric: "只能为字母或者数字",
+		            	remote:"用户名已经被注册"
 		            },
 					email : {
 						required : "不能为空",
-						email : "不是合法电子邮件格式"
+						email : "不是合法电子邮件格式",
+						remote:"邮箱已经被占用"
 					},
 					password : {
 						required : "不能为空",

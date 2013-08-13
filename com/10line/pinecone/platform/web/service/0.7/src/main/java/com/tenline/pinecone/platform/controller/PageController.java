@@ -1,12 +1,16 @@
 package com.tenline.pinecone.platform.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tenline.pinecone.platform.Constant;
 import com.tenline.pinecone.platform.model.Authority;
@@ -94,6 +98,53 @@ public class PageController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		request.setAttribute("isregister", "false");
 		return "signup";
+	}
+	
+	@RequestMapping(value = "/validatename.html", method = RequestMethod.POST)
+	public void validatename(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		System.out.println("validatename.html");
+		String username = request.getParameter("username");
+		
+		try {
+			ArrayList<Entity> users = (ArrayList<Entity>) this.getRESTClient()
+					.get("/user/search/names?name=" + username, Constant.getAdminId(),
+							Constant.getAdminPassword());
+			
+			if (users.size() == 0) {
+				response.getWriter().print(true);
+			} else {
+				response.getWriter().print(false);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping(value = "/validateemail.html", method = RequestMethod.POST)
+	public void validateemail(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		System.out.println("validateemail.html");
+		String email = request.getParameter("email");
+		
+		try {
+			ArrayList<Entity> users = (ArrayList<Entity>) this.getRESTClient().get("/user/search/emails?email=" + email, Constant.getAdminId(),
+					Constant.getAdminPassword());
+			if (users.size() == 0) {
+				response.getWriter().print(true);
+			} else {
+				response.getWriter().print(false);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

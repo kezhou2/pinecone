@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="zh">
   <head>
@@ -8,13 +10,36 @@
 	<link href="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
+	<script type="text/javascript">
+	window.onload = function(){
+		var error = <%=request.getParameter("error")%>;
+		if(error){
+			$("#name_input").before(
+				"<div class='control-group alert'>"+
+					"<button type='button' class='close' data-dismiss='alert'>&times;</button>"+
+				  	"<strong>登录失败，请重新输入!</strong>"+
+				"</div>"
+			);
+		}
+		
+		var isregister = <%=(String)request.getAttribute("isregister")%>;
+		if(isregister){
+			$("#name_input").before(
+				"<div class='control-group success'>"+
+					"<button type='button' class='close' data-dismiss='success'>&times;</button>"+
+				  	"<strong>注册成功！</strong>"+
+				"</div>"
+			);
+		}
+	}
+	</script>
   </head>
   <body>
 	<div class="container">
 	  <div class="well">
 		<form id="login" class="form-horizontal" method="post" action="${pageContext.request.contextPath}/j_spring_security_check">
 		  <legend>登录</legend>
-		  <div class="control-group">
+		  <div id="name_input" class="control-group">
 			<div class="controls">
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-user"></i></span> 

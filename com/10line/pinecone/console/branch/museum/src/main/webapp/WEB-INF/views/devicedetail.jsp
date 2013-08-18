@@ -150,7 +150,7 @@ window.onload = function(){
 			
 			//init background thread
 			initConfig();
-			setRefresh(5);
+			setRefresh(1);
 		},
 		"sAjaxSource": "/museum/queryvariable.html?id=<%=querydeviceid%>"
     });

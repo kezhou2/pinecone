@@ -33,6 +33,9 @@ public class ChannelSubscribeServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		if(req.getSession(false)==null)
+			req.getRequestDispatcher("index.html").forward(req, resp);
+		
 		try{
 			String isDisconnect = req.getParameter("isDisconnect");
 			logger.info("isDisconnect========================"+isDisconnect);

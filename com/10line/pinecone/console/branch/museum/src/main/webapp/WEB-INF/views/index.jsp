@@ -208,7 +208,7 @@ window.onload = function(){
 			});
 			
 			//start refresh thread on the background
-			setRefresh(5);
+			setRefresh(1);
 		},	
 		"sAjaxSource": "/museum/querydashboard.html"
 	});

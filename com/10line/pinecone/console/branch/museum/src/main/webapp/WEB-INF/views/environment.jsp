@@ -79,7 +79,7 @@ window.onload = function(){
 	});
 
 	//start refresh thread on the background
-	setRefresh(5);
+	setRefresh(1);
 }
 
 function setRefresh(time){

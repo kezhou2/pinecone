@@ -27,6 +27,9 @@ public class ChannelPublishServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		if(req.getSession(false)==null)
+			req.getRequestDispatcher("index.html").forward(req, resp);
+		
 		try{
 			String varid = req.getParameter("variableid");
 			logger.info("recived:"+varid);

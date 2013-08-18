@@ -36,6 +36,9 @@ public class DeviceStatusServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		if(request.getSession(false)==null)
+			request.getRequestDispatcher("index.html").forward(request, response);
+		
 		try{
 			String isDisconnect = request.getParameter("isDisconnect");
 			logger.info("isDisconnect========================"+isDisconnect);

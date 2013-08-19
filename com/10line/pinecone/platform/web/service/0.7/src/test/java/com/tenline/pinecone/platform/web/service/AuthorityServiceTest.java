@@ -20,12 +20,16 @@ import com.tenline.pinecone.platform.sdk.RESTClient;
  */
 public class AuthorityServiceTest extends AbstractServiceTest {
 
-	private int page = 6;
+	// Modify to customize
+	private int page = 1;
+	private String url = "http://localhost:8080/service";
+	//
+	
 	private RESTClient client;
 	
 	@Before
 	public void testSetup() throws Exception {
-		client = new RESTClient("http://www.pinecone.cc");
+		client = new RESTClient(url);
 	}
 	
 	@After

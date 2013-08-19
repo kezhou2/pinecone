@@ -13,7 +13,7 @@
 	  <div class="well">
 		<form id="login" class="form-horizontal" method="post" action="/j_spring_security_check">
 		  <legend>登录</legend>
-		  <div class="control-group">
+		  <div id="username" class="control-group">
 			<div class="controls">
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-user"></i></span> 
@@ -43,13 +43,20 @@
     <script src="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js"></script>
-	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh.js "></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh.js"></script>
+	<script src="js/localization/messages_zh.js"></script>
 	<script type="text/javascript">
 		
 		$(document).ready(function() {
 			
 			if(<%=request.getParameter("error")%>) {
-				alert("您的用户名和密码不匹配");
+				$("#username").before(
+					"<div class='control-group'>"+
+						"<div class='controls'>"+
+							"<strong>登录失败，请重新输入!</strong>"+
+						"</div>"+
+					"</div>"
+				);
 			}
 			
 			$("#login").validate({

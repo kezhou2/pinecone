@@ -11,18 +11,20 @@
   
   <!-- Spring Security Filter Chain for REST Service -->
   <sec:http pattern="/rest/**" create-session="stateless">
+  	<sec:intercept-url pattern="/rest/m/user" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" method="POST" />
+    <sec:intercept-url pattern="/rest/m/user/search/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
     <sec:intercept-url pattern="/rest/**" access="ROLE_USER, ROLE_ADMIN" method="GET" />
     <sec:intercept-url pattern="/rest/**" access="ROLE_ADMIN" />
-    <sec:anonymous enabled="false" />
     <sec:http-basic/>
   </sec:http>
   
   <!-- Spring Security Filter Chain for WEB Pages -->
   <sec:http>
-    <sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    <sec:form-login login-page="/login.html" authentication-failure-url="/login.html?error=true"
-			default-target-url="/index.html" />
-	<sec:logout logout-success-url="/login.html"/>
+    <sec:intercept-url pattern="/console.html" access="ROLE_USER, ROLE_ADMIN" />
+    <sec:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
+    <sec:form-login login-page="/login.jsp" default-target-url="/console.html" 
+    	authentication-failure-url="/login.jsp?error=true"/>
+    <sec:logout logout-success-url="/index.html"/>
   </sec:http>
   
   <!-- Spring Security JDBC-based User Service -->

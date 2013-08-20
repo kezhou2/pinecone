@@ -125,7 +125,6 @@ String username = (String)request.getSession().getAttribute("username");
 
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
-			            <li><a href="#" title=""><i class="fam-application-home"></i><fmt:message key="application.menu" /></a></li>
 			            <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
 			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
 			            <li><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>

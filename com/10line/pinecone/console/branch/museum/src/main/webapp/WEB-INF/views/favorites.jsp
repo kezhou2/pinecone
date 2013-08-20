@@ -260,13 +260,6 @@ function refresh(){
  		error: function(XMLHttpRequest, textStatus, errorThrown){
  			if(!isAlert){
  				isAlert = true;
-	 			bootbox.confirm("<fmt:message key='application.lost.connect' />", function(result) {
-	 				if(result =='false'){
-	 					clearInterval(refreshid);
-	 					isRefreshing = false;
-	 					isAlert = false;
-	 				}
-	 			});
  			}
  		}, 
  		success: function(result){
@@ -429,7 +422,7 @@ function removeVariable(devid,varid){
 
 					<!-- Main navigation -->
 					<ul class="navigation widget">
-						<li><a href="#" title=""><i class="fam-application-home"></i><fmt:message key="application.menu" /></a></li>
+						
 			            <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
 			            <li class="active"><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
 			            <li><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>

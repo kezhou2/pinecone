@@ -17,7 +17,7 @@
 			<div class="controls">
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-user"></i></span> 
-				<input type="text" class="input-xlarge" name="j_username" placeholder="用户名">
+				<input type="text" class="input-xlarge" id="j_username" name="j_username" placeholder="用户名">
 			  </div>
 			</div>
 		  </div>
@@ -25,7 +25,7 @@
 			<div class="controls">
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-lock"></i></span> 
-				<input type="password" class="input-xlarge" name="j_password" placeholder="密码">
+				<input type="password" class="input-xlarge" id="j_password" name="j_password" placeholder="密码">
 			  </div>
 			</div>
 		  </div>
@@ -45,6 +45,7 @@
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh.js"></script>
 	<script src="js/localization/messages_zh.js"></script>
+	<script src="js/jquery.html5storage.min.js"></script>
 	<script type="text/javascript">
 		
 		$(document).ready(function() {
@@ -70,6 +71,8 @@
 					}
 				},
 				submitHandler : function(form) {  
+					$.sessionStorage.setItem("username", $("#j_username").val());
+					$.sessionStorage.setItem("password", $("#j_password").val());
 		            form.submit();
 		        }
 			});

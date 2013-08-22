@@ -20,7 +20,7 @@
           <a class="brand" href="#">松果网</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li><a href="activation.html">激活设备</a></li>
+              <li><a href="activation.jsp">激活设备</a></li>
               <li><a href="/j_spring_security_logout">退出</a></li>
             </ul>
           </div>
@@ -107,6 +107,7 @@
     	}
     	
     	function getDevicesByUserId(id) {
+    		$.sessionStorage.setItem("userId", id);
     		$.ajax({
 	    		type : "GET",
 	    		url : "/rest/user/" + id + "/devices",

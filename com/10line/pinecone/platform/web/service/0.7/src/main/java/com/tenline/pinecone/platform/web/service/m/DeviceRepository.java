@@ -60,6 +60,12 @@ public class DeviceRepository {
 		return "{\"lat\":\""+locations.get(code)[0]+"\", \"lng\":\""+locations.get(code)[1]+"\"}";
 	}
 	
+	@RequestMapping(value = "/search/activation/codes", method = RequestMethod.GET)
+	public @ResponseBody boolean findByCode(@RequestParam(value = "devicecode") String code) {
+		List<Device> devices = manager.createQuery("from Device where code='" + code + "'", Device.class).getResultList();
+		if(devices.size() > 0) return true; else return false;
+	}
+	
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody String create(@RequestBody Device device) {

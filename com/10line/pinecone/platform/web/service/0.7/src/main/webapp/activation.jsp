@@ -42,6 +42,7 @@
     <script src="http://cdnjs.bootcss.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh.js"></script>
+	<script src="js/jquery.html5storage.min.js"></script>
 	<script type="text/javascript">
 		
 		$(document).ready(function() {
@@ -50,26 +51,50 @@
 				rules : {
 					devicecode : {
 						required : true,
-						remote : ""
+						remote : {
+							url : "/rest/m/device/search/activation/codes",
+							username : $.sessionStorage.getItem("username"),
+				    		password : $.sessionStorage.getItem("password")
+						}
 					},
 					devicename : {
 						required : true
 					}
 				},
-				submitHandler : function() {  				
-					$.ajax({
-				    	type : "",
-				    	url : "",
-				    	contentType : "",
-				    	data : ,
-				    	success : function() {
-				    		window.location = "console.html"; // no cache for refreshing to display new device 
-				    	}
-					});
+				submitHandler : function() {
+					getDeviceId($("#devicecode").val());
 		        }
 			});
 		
 		});
+		
+		function getDeviceId(code) {
+    		$.ajax({
+		    	type : "GET",
+		    	url : "/rest/device/search/codes?code=" + code,
+		    	dataType : "json",
+		    	username : $.sessionStorage.getItem("username"),
+		    	password : $.sessionStorage.getItem("password"),
+		    	success : function(data) {
+		    		var href = data.results[0]._links[2].href;
+		    		activateDevice(href.substring(href.lastIndexOf("/") + 1));
+		    	}
+			});
+    	}
+		
+		function activateDevice(id) {
+			$.ajax({
+		    	type : "POST",
+		    	username : $.sessionStorage.getItem("username"),
+	    		password : $.sessionStorage.getItem("password"),
+		    	url : "/rest/device/" + id + "/user",
+		    	contentType : "text/uri-list; charset=utf-8",
+		    	data : "http://" + <%=request.getServerName()%> + "/rest/user/" + $.sessionStorage.getItem("userId"),
+		    	success : function() {
+		    		window.location = "console.html";
+		    	}
+			});
+		}
 	
 	</script>
   </body>

@@ -22,8 +22,8 @@
   <sec:http>
     <sec:intercept-url pattern="/console.html" access="ROLE_USER, ROLE_ADMIN" />
     <sec:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
-    <sec:form-login login-page="/login.jsp" default-target-url="/console.html" 
-    	authentication-failure-url="/login.jsp?error=true"/>
+    <sec:form-login login-page="/login.html" default-target-url="/console.html" 
+    	authentication-failure-url="/login_error.html"/>
     <sec:logout logout-success-url="/index.html"/>
   </sec:http>
   

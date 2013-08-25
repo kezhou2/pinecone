@@ -34,6 +34,11 @@ public class HistoryRepository {
 	public void create(@PathVariable String id, @RequestBody String value) {
 		template.opsForHash().put(id, format.format(new Date()), value);
 	}
+	
+	@RequestMapping(value = "/{id}/{date}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable String id, @PathVariable String date) {
+		template.opsForHash().delete(id, date);
+	}
 
 	@RequestMapping(value = "/{id}/{date}", method = RequestMethod.GET)
 	public @ResponseBody Object find(@PathVariable String id, @PathVariable String date) {

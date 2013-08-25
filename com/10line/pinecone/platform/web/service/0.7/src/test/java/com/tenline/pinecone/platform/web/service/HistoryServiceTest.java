@@ -27,7 +27,7 @@ public class HistoryServiceTest extends AbstractServiceTest {
 
 	@Before
 	public void testSetup() throws Exception {
-		client = new HistoryClient("www.pinecone.cc");
+		client = new HistoryClient("42.96.188.79");
 		random = new Random();
 	}
 	

@@ -53,14 +53,11 @@ public class DeviceStatusServlet extends HttpServlet {
 				for(int i=0;i<array.size();i++){
 					JSONObject obj = (JSONObject)array.get(i);
 					if(connectorMap.get(obj.get("deviceCode")) != null){
-						try {
-							connectorMap.get(obj.get("deviceCode")).destroy();
-							connectorMap.remove(obj.get("deviceCode"));
-							connectorMap.clear();
-							return;
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						connectorMap.get(obj.get("deviceCode")).destroy();
+						connectorMap.remove(obj.get("deviceCode"));
+						connectorMap.clear();
+						return;
+					
 					}
 				}
 			}
@@ -74,13 +71,8 @@ public class DeviceStatusServlet extends HttpServlet {
 		
 				if(connectorMap.get(deviceCode) == null){
 					logger.info("#################initial deviceCode:"+deviceCode);
-					try {
-						Connector con = new Connector(""+deviceId,"pinecone@device."+deviceCode+".publish");
-						connectorMap.put(deviceCode, con);
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-					}	
+					Connector con = new Connector(""+deviceId,"pinecone@device."+deviceCode+".publish");
+					connectorMap.put(deviceCode, con);
 				}else{
 					logger.info("#################getting data. deviceCode:"+deviceCode);
 					Connector connector = connectorMap.get(deviceCode);

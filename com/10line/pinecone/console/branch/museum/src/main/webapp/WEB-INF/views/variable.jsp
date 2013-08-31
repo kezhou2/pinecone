@@ -403,9 +403,9 @@ function removeVariable(devid,varid){
 
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
-			            <li class="active"><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
-			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
-			            <li><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
+			            <li class="active menu-item"><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
+			            <li><a href="favorites.html" title="" class="menu-item"><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
+			            <li><a href="environment.html" title="" class="menu-item"><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
 			        </ul>
 			        <!-- /main navigation -->
 

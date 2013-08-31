@@ -454,7 +454,7 @@ function editDeviceInfo(devid){
 						</div>
 						<div>
 							<a href="#" title="" class="user"><img
-								src="img/user.jpg" style="border:1px solid #d5d5d5" alt="" /></a>
+								src="img/user.jpg" class="protrait-image" alt="" /></a>
 						</div>
 					</div>
 					<!-- /sidebar user -->
@@ -462,9 +462,9 @@ function editDeviceInfo(devid){
 					<!-- Main navigation -->
 					<ul class="navigation widget">
 						
-			            <li class="active"><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
-			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
-			            <li><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
+			            <li class="active menu-item"><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
+			            <li><a href="favorites.html" title=""  class="menu-item"><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
+			            <li><a href="environment.html" title=""  class="menu-item"><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
 					</ul>
 					<!-- /main navigation -->
 

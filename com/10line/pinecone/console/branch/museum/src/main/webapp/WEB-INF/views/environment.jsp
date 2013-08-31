@@ -185,9 +185,9 @@ window.onunload = function(){
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
 			        	
-			            <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
-			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
-			            <li class="active"><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
+			            <li><a href="index.html" title=""><i class="fam-application-view-tile" class="menu-item"></i><fmt:message key="application.device" /></a></li>
+			            <li><a href="favorites.html" title=""><i class="fam-folder-star" class="menu-item"></i><fmt:message key="application.favorites" /></a></li>
+			            <li class="active menu-item"><a href="environment.html" title="" class="menu-item"><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
 			        </ul>
 			        <!-- /main navigation -->
 

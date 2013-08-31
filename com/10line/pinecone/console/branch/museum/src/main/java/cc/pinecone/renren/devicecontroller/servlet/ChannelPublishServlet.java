@@ -39,12 +39,8 @@ public class ChannelPublishServlet extends HttpServlet{
 			logger.info("recived:"+devicecode);
 			
 			if(connectorMap.get(devicecode) == null){
-				try {
-					Connector con = new Connector(devicecode,"pinecone@device."+devicecode+".subscribe");
-					connectorMap.put(devicecode, con);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}	
+				Connector con = new Connector(devicecode,"pinecone@device."+devicecode+".subscribe");
+				connectorMap.put(devicecode, con);	
 			}
 			
 			resp.setContentType("text/html; charset=utf-8"); 
@@ -54,14 +50,10 @@ public class ChannelPublishServlet extends HttpServlet{
 			
 			Connector connector = connectorMap.get(devicecode);
 			if(connector != null){
-				try {
-					connector.publish("pinecone@device."+devicecode+".subscribe",varid, value);
-					out.write("true");
-					out.close();
-					return;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				connector.publish("pinecone@device."+devicecode+".subscribe",varid, value);
+				out.write("true");
+				out.close();
+				return;
 			}
 			
 			out.write("false");

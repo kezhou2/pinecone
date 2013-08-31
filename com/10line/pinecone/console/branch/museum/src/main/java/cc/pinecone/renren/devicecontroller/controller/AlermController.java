@@ -88,16 +88,16 @@ public class AlermController {
 		Config conf = Config.getInstance(userid, path+File.separatorChar+AppConfig.getCachePath());
 		
 		JSONObject ob = new JSONObject();
-//		ob.put("conditionType", conditionType);
-//		ob.put("condition", condition);
-//		ob.put("variablevalue", variablevalue);
-//		ob.put("clog", clog);
-//		ob.put("cpage", cpage);
-//		ob.put("csound", csound);
-//		ob.put("csms", csms);
-//		ob.put("cemail", cemail);
-//		ob.put("cellphone", cellphone);
-//		ob.put("email", email);
+		ob.put("conditionType", conditionType);
+		ob.put("condition", condition);
+		ob.put("variablevalue", variablevalue);
+		ob.put("clog", clog);
+		ob.put("cpage", cpage);
+		ob.put("csound", csound);
+		ob.put("csms", csms);
+		ob.put("cemail", cemail);
+		ob.put("cellphone", cellphone);
+		ob.put("email", email);
 		
 		conf.addAlerm(deviceId, variableId, ob.toJSONString());
 		

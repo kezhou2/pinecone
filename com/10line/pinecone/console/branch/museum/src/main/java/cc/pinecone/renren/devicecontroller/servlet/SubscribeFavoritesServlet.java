@@ -56,14 +56,10 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 			logger.info("ready to disconnect");
 			for(String deviceCode:deviceCodes){
 				if(connectorMap.get(deviceCode) != null){
-					try {
-						connectorMap.get(deviceCode).destroy();
-						connectorMap.remove(deviceCode);
-						connectorMap.clear();
-						return;
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					connectorMap.get(deviceCode).destroy();
+					connectorMap.remove(deviceCode);
+					connectorMap.clear();
+					return;
 				}
 			}
 		}
@@ -101,17 +97,12 @@ public class SubscribeFavoritesServlet extends HttpServlet {
 	
 			if(connectorMap.get(deviceCode) == null){
 				logger.info("#################initial deviceCode:"+deviceCode);
-				try {
-					Connector con = new Connector(deviceId,"pinecone@device."+deviceCode+".publish");
-					connectorMap.put(deviceCode, con);
-					
-					JSONArray varArray = (JSONArray)array.get(i);
-					for(int j=0;j<varArray.size();j++)
-						con.addVariable(varArray.get(j).toString());
+				Connector con = new Connector(deviceId,"pinecone@device."+deviceCode+".publish");
+				connectorMap.put(deviceCode, con);
 				
-				} catch (Exception e) {
-					e.printStackTrace();
-				}	
+				JSONArray varArray = (JSONArray)array.get(i);
+				for(int j=0;j<varArray.size();j++)
+					con.addVariable(varArray.get(j).toString());
 			}else{
 				logger.info("#################getting data. deviceCode:"+deviceCodes[i]);
 				Connector connector = connectorMap.get(deviceCode);

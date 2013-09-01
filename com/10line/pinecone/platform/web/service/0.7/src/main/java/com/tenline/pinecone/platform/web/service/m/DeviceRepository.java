@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,6 +38,7 @@ public class DeviceRepository {
 	private EntityManager manager;
 	
 	// IP Location
+	private Random random = new Random();
 	private ObjectMapper mapper = new ObjectMapper();
 	private Hashtable<String, String[]> locations = new Hashtable<String, String[]>();
 
@@ -52,7 +54,12 @@ public class DeviceRepository {
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 		connection.connect(); JsonNode root = mapper.readTree(connection.getInputStream());
 		JsonNode point = root.findValue("point"); connection.disconnect();
-		return new String[]{point.get("y").asText(), point.get("x").asText()};
+		return new String[]{calculateOffset(point.get("y").asText()), calculateOffset(point.get("x").asText())};
+	}
+	
+	private String calculateOffset(String input) {
+		String result = String.valueOf(Integer.valueOf(input.substring(input.lastIndexOf(".") + 1)) + random.nextInt(11) * 10000);
+		return input.substring(0, input.lastIndexOf(".") + 1) + result;
 	}
 	
 	@RequestMapping(value = "/search/location/codes", method = RequestMethod.GET)

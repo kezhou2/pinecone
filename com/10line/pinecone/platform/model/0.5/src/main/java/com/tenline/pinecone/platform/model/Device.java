@@ -29,6 +29,12 @@ public class Device extends com.tenline.pinecone.platform.model.Entity {
 	
 	@Column
 	private String code;
+	
+	@Column
+	private String latitude;
+	
+	@Column
+	private String longitude;
 
 	@ManyToOne
 	private User user;
@@ -70,6 +76,34 @@ public class Device extends com.tenline.pinecone.platform.model.Entity {
 	 */
 	public String getCode() {
 		return code;
+	}
+
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+	
+	/**
+	 * @return the latitude
+	 */
+	public String getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+	
+	/**
+	 * @return the longitude
+	 */
+	public String getLongitude() {
+		return longitude;
 	}
 
 	/**

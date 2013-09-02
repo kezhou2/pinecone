@@ -205,24 +205,11 @@
 	    		username : $.sessionStorage.getItem("username"),
 	    		password : $.sessionStorage.getItem("password"),
 	    		success : function(data) {
-	    			getDeviceLocation(markerClusterer, data.name, data.code);
+	    			addDeviceToMap(markerClusterer, data.latitude, data.longitude, data.name, data.code);
 	    		}
 			});
     	}
-    	
-    	function getDeviceLocation(markerClusterer, name, code) {
-    		$.ajax({
-	    		type : "GET",
-	    		url : "/rest/m/device/search/location/codes?code=" + code,
-	    		dataType : "json",
-	    		username : $.sessionStorage.getItem("username"),
-	    		password : $.sessionStorage.getItem("password"),
-	    		success : function(data) {	
-	    			addDeviceToMap(markerClusterer, data.lat, data.lng, name, code);
-	    		}
-			});
-    	}
-    	
+
     	function addDeviceToMap(markerClusterer, latitude, longitude, name, code) { 
     		$("#map_canvas").before(
     			'<div id="info_' + code + '" class="hide">'+

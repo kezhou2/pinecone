@@ -248,7 +248,6 @@
     		$.goMap.createListener({type:'marker', marker:code}, 'click', function() { 
     			$("#selectedCode").text(code);
     	    }); 
-    		$($.goMap.mapId).data(code).setVisible(false);
     		getDeviceId(code, getVariablesByDeviceId);  
     		markerClusterer.addMarker($($.goMap.mapId).data(code));
     	}
@@ -299,7 +298,6 @@
 	            		'<a href="#"><i class="icon-wrench"></i> 设置</a>'+
 	            		'</td></tr>'
 	            	);	
-	    			$($.goMap.mapId).data(code).setVisible(true);
 	    		}
 			});
     	}

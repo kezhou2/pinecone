@@ -517,6 +517,8 @@ span.green { background-color: #41CA83; }
 .login-top { background: url(../img/icons/top/login.png) no-repeat 50% 16px; width: 18px; height: 16px; padding: 14px; }
 .messages { background: url(../img/icons/top/messages.png) no-repeat 50% 16px; width: 18px; height: 16px; padding: 14px; }
 
+.helpinfo { background: url(../img/icons/top/helpinfo.png) no-repeat 50%; width: 18px; height: 16px; padding: 14px; }
+
 
 /*===== Footer =====*/
 
@@ -880,7 +882,7 @@ span.green { background-color: #41CA83; }
 .subtitle code { margin-left: 6px; font-weight: normal; }
 .margin { margin: 15px 14px; }
 .drag { width: 12px; height: 10px; background: url(../img/elements/interface/order.png) no-repeat; cursor: pointer; display: block; float: right; margin: 14px; }
-#sidebar .widget { margin: 25px 20px 0 20px; }
+#sidebar .widget { margin: 10px 20px 0 20px; }
 .pre-scrollable { max-height: 340px; overflow-y: scroll; }
 
 
@@ -1223,7 +1225,7 @@ table { max-width: 100%; background-color: transparent; border-collapse: collaps
 /* Color highlighting */
 
 .table tbody tr.success td { background-color: #f0faec; }
-.table tbody tr.error td { background-color: #fdf3f3; }
+.table tbody tr.error td { background-color: #F8C4C4; }
 .table tbody tr.warning td { background-color: #FFFFF7; }
 .table tbody tr.info td { background-color: #eef7fb; }
 .table-hover tbody tr.success:hover td { background-color: #eaf9e4; }

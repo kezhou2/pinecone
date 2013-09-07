@@ -147,9 +147,8 @@ window.onunload = function(){
 		<div class="fixed">
 			<a href="index.html" title="" class="logo"><img src="img/logo.png" alt="" /></a>
 			<ul class="top-menu">
-				
 				<li class="dropdown">
-					<a class="user-menu" data-toggle="dropdown"><!-- <img src="img/userpic.png" alt="" /> --><span id="greeting_word_1"><fmt:message key="application.welcome"><fmt:param value="${username}" /></fmt:message><b class="caret"></b></span></a>
+					<a class="user-menu" data-toggle="dropdown"><img src="img/userpic.png" alt="" /><span id="greeting_word_1"><fmt:message key="application.welcome"><fmt:param value="${username}" /></fmt:message><b class="caret"></b></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="profile.html" title=""><i class="fam-group-gear"></i><fmt:message key="application.profile" /></a></li>
 						<li><a href="j_spring_security_logout" title=""><i class="fam-door-out"></i><fmt:message key="application.logout" /></a></li>
@@ -185,9 +184,9 @@ window.onunload = function(){
 				    <!-- Main navigation -->
 			        <ul class="navigation widget">
 			        	
-			            <li><a href="index.html" title=""><i class="fam-application-view-tile" class="menu-item"></i><fmt:message key="application.device" /></a></li>
-			            <li><a href="favorites.html" title=""><i class="fam-folder-star" class="menu-item"></i><fmt:message key="application.favorites" /></a></li>
-			            <li class="active menu-item"><a href="environment.html" title="" class="menu-item"><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
+			            <li><a href="index.html" title=""><i class="fam-application-view-tile"></i><fmt:message key="application.device" /></a></li>
+			            <li><a href="favorites.html" title=""><i class="fam-folder-star"></i><fmt:message key="application.favorites" /></a></li>
+			            <li class="active"><a href="environment.html" title=""><i class="fam-world"></i><fmt:message key="application.environment" /></a></li>
 			        </ul>
 			        <!-- /main navigation -->
 

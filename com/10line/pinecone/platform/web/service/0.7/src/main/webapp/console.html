@@ -22,7 +22,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li><a href="activation.jsp">激活设备</a></li>
-              <li><a href="/j_spring_security_logout">退出</a></li>
+              <li><a href="j_spring_security_logout">退出</a></li>
             </ul>
           </div>
         </div>
@@ -114,7 +114,7 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBKkEdoXQxDyl3OKTnMjkvRX-HzOxmsxi8&sensor=false"></script>
-    <script src="http://gomap.googlecode.com/files/jquery.gomap-1.3.2.min.js"></script>
+    <script src="js/jquery.gomap-1.3.2.min.js"></script>
     <script src="js/additional-methods.js"></script>
 	<script src="js/localization/messages_zh.js"></script>
     <script src="js/jquery.scrollUp.min.js"></script>
@@ -199,7 +199,7 @@
     	function getHistory(id, start, end) {
     		$.ajax({
 		    	type : "GET",
-		    	url : "/rest/m/history/" + id + "/" + start.format("yyyy-MM-dd hh:mm:ss"),
+		    	url : "rest/m/history/" + id + "/" + start.format("yyyy-MM-dd hh:mm:ss"),
 		    	username : $.sessionStorage.getItem("username"),
 		    	password : $.sessionStorage.getItem("password"),
 		    	success : function(data) {
@@ -213,7 +213,7 @@
     	function updateDevice(id) {
     		$.ajax({
 		    	type : "PUT",
-		    	url : "/rest/device/" + id,
+		    	url : "rest/device/" + id,
 		    	contentType : "application/json; charset=utf-8",
 		    	data : "{\"name\":\"" + $("#devicename").val() + "\"}",
 		    	username : $.sessionStorage.getItem("username"),
@@ -224,7 +224,7 @@
     	function deleteDevice(id) {
     		$.ajax({
 		    	type : "DELETE",
-		    	url : "/rest/device/" + id,
+		    	url : "rest/device/" + id,
 		    	username : $.sessionStorage.getItem("username"),
 		    	password : $.sessionStorage.getItem("password")
 			});
@@ -233,7 +233,7 @@
     	function getUserId(markerClusterer) {
     		$.ajax({
 		    	type : "GET",
-		    	url : "/rest/user/search/names?name=" + $.sessionStorage.getItem("username"),
+		    	url : "rest/user/search/names?name=" + $.sessionStorage.getItem("username"),
 		    	dataType : "json",
 		    	username : $.sessionStorage.getItem("username"),
 		    	password : $.sessionStorage.getItem("password"),
@@ -248,7 +248,7 @@
     		$.sessionStorage.setItem("userId", id);
     		$.ajax({
 	    		type : "GET",
-	    		url : "/rest/user/" + id + "/devices",
+	    		url : "rest/user/" + id + "/devices",
 	    		dataType : "json",
 	    		username : $.sessionStorage.getItem("username"),
 	    		password : $.sessionStorage.getItem("password"),
@@ -300,6 +300,8 @@
             });  
     		$.goMap.createListener({type:'marker', marker:code}, 'click', function() { 
     			$("#selectedCode").text(code);
+    			//start mqtt client
+    			refresh(code);
     	    }); 
     		getDeviceId(code, getVariablesByDeviceId);  
     		markerClusterer.addMarker($($.goMap.mapId).data(code));
@@ -308,7 +310,7 @@
     	function getDeviceId(code, callback) {
     		$.ajax({
 		    	type : "GET",
-		    	url : "/rest/device/search/codes?code=" + code,
+		    	url : "rest/device/search/codes?code=" + code,
 		    	dataType : "json",
 		    	username : $.sessionStorage.getItem("username"),
 		    	password : $.sessionStorage.getItem("password"),
@@ -322,7 +324,7 @@
     	function getVariablesByDeviceId(id, code) {
     		$.ajax({
 	    		type : "GET",
-	    		url : "/rest/device/" + id + "/variables",
+	    		url : "rest/device/" + id + "/variables",
 	    		dataType : "json",
 	    		username : $.sessionStorage.getItem("username"),
 	    		password : $.sessionStorage.getItem("password"),
@@ -346,13 +348,36 @@
 	    		password : $.sessionStorage.getItem("password"),
 	    		success : function(data) {
 	    			$("#" + code + " tbody").append(
-	    				'<tr><td>' + data.name + '</td><td></td><td>'+  
+	    				'<tr><td>' + data.name + '</td><td id='+data.id+'><td>'+  
 	    				'<a data-toggle="modal" data-target="#queryModel"><i class="icon-search"></i> 查询 </a>'+
 	            		'<a href="#"><i class="icon-wrench"></i> 设置</a>'+
 	            		'</td></tr>'
 	            	);	
 	    		}
 			});
+    	}
+    	
+    	function refresh(code){
+    		$.ajax({
+    	 		url:'rest/channel/subscribe', 
+    	 		type: 'POST',
+    	 		dataType : "json",
+    	 		data: {code:code}, 
+    			timeout: 1000,
+    			cache: false,
+    	 		error: function(XMLHttpRequest, textStatus, errorThrown){
+    	 			refresh(code);
+    	 		}, 
+    	 		success: function(result){
+    	 			isConnected = true;
+    	 			var obj = eval('(' + result + ')'); 
+    	 			jsonObject = obj;
+    	 			
+    	 			$("td[id="+obj.id+"]").text(obj.value);
+    	 			
+    	 			refresh(code);
+    	 		} 
+    	 	});
     	}
     	
     </script>

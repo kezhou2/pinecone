@@ -41,7 +41,7 @@ public class ChannelController{
 	
 	@RequestMapping(value = "/subscribe" ,method = RequestMethod.POST)
 	public @ResponseBody void subscribe(HttpServletRequest req, HttpServletResponse resp) throws MqttException, Exception{
-		
+		System.out.println("###Call subscribe");
 		String code = req.getParameter("code");
 		
 		try{
@@ -54,15 +54,17 @@ public class ChannelController{
 	
 				@Override
 				public void connectionLost(Throwable arg0) {
+					System.out.println("###connectionLost");
 					out.write("{}");
 				}
 	
 				@Override
-				public void deliveryComplete(MqttDeliveryToken arg0) {}
+				public void deliveryComplete(MqttDeliveryToken arg0) {System.out.println("###deliveryComplete");}
 	
 				@Override
 				public void messageArrived(MqttTopic arg0, MqttMessage arg1)
 						throws Exception {
+					System.out.println("###messageArrived");
 					byte[] buf = arg1.getPayload();
 					if(buf != null){
 						out.write(new String(buf));
@@ -77,47 +79,50 @@ public class ChannelController{
 		}
 	}
 	
-//	public void subscribe(String code) throws MqttException, Exception{
-//		
-//		try{
-//			
-//			this.getClient().setCallback(new MqttCallback(){
-//	
-//				@Override
-//				public void connectionLost(Throwable arg0) {
-//					System.out.println("{}");
-//				}
-//	
-//				@Override
-//				public void deliveryComplete(MqttDeliveryToken arg0) {
-//					System.out.println("delivery");
-//				}
-//	
-//				@Override
-//				public void messageArrived(MqttTopic arg0, MqttMessage arg1)
-//						throws Exception {
-//					byte[] buf = arg1.getPayload();
-//					if(buf != null){
-//						System.out.println(new String(buf));
-//					}
-//				}
-//				
-//			});
-//			this.getClient().subscribe("pinecone@device."+code+".publish");
-//
-//		}finally{
+	public void subscribe(String code) throws MqttException, Exception{
+		System.out.println("###Call subscribe");
+		try{
+			
+			this.getClient().setCallback(new MqttCallback(){
+	
+				@Override
+				public void connectionLost(Throwable arg0) {
+					System.out.println("{}");
+				}
+	
+				@Override
+				public void deliveryComplete(MqttDeliveryToken arg0) {
+					System.out.println("delivery");
+				}
+	
+				@Override
+				public void messageArrived(MqttTopic arg0, MqttMessage arg1)
+						throws Exception {
+					System.out.println("###messageArrived");
+					byte[] buf = arg1.getPayload();
+					if(buf != null){
+						System.out.println(new String(buf));
+					}
+				}
+				
+			});
+			this.getClient().subscribe("pinecone@device."+code+".publish");
+			System.out.println("###subscribed...");
+
+		}finally{
 //			this.getClient().unsubscribe("pinecone@device."+code+".publish");
-//		}
-//	}
-//	
-//	public static void main(String[] args){
-//		ChannelController cc = new ChannelController();
-//		try {
-//			cc.subscribe("a83cb7d3-f9ba-4329-93b8-50a98df6c2cf");
-//		} catch (MqttException e) {
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+			System.out.println("###finally");
+		}
+	}
+	
+	public static void main(String[] args){
+		ChannelController cc = new ChannelController();
+		try {
+			cc.subscribe("a83cb7d3-f9ba-4329-93b8-50a98df6c2cf");
+		} catch (MqttException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -12,6 +12,7 @@
   <!-- Spring Security Filter Chain for REST Service -->
   <sec:http pattern="/rest/**" create-session="stateless">
   	<sec:intercept-url pattern="/rest/m/user" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" method="POST" />
+  	<sec:intercept-url pattern="/rest/m/channel/subscribe/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN"/>
     <sec:intercept-url pattern="/rest/m/user/search/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
     <sec:intercept-url pattern="/rest/device/**" access="ROLE_USER, ROLE_ADMIN" method="PUT" />
     <sec:intercept-url pattern="/rest/device/**" access="ROLE_USER, ROLE_ADMIN" method="DELETE" />

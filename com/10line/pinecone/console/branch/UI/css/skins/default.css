@@ -1,0 +1,49 @@
+.button,
+.section_title,
+.caption-head:hover,
+.flex-control-paging li a.flex-active,
+.index_static,
+.camera_wrap .camera_pag .camera_pag_ul li.cameracurrent > span{
+	background-color: #0088cc;
+}
+.promotion_table .head_table{
+	background-color: #0088cc;
+}
+.button{
+	border: 1px solid #107fb7;
+	-webkit-box-shadow: inset 0 2px 0 #107fb7;
+	box-shadow: inset 0 2px 0 #107fb7;	
+}
+.button:hover,
+.camera_wrap .camera_pag .camera_pag_ul li.cameracurrent > span:hover{	
+	background: #107fb7;
+}
+.index_static,
+.section_title{
+	background: #0088cc url("../../img/bg_index_static.png");
+}
+.overlay{
+	background: #0088cc url("../../img/more.png") no-repeat center center;;
+	background: rgba(0, 136, 204,0.6) url("../../img/more.png") no-repeat center center;
+}
+.results h2,
+.camera_caption h1 span,
+.sf-menu > li > a:hover,
+ul.filter li a:hover,
+ul.filter li a.active,
+.info_vertical span,
+.post h2 a:hover,
+.post h2 span,
+.comment .title_comment span a:hover,
+.head_table h2{
+	color: #0088cc;
+}
+.index_static h1 span{
+	color: #222;
+}
+.comments_carousel .image{
+	border: 5px solid #0088cc;
+}
+.arrow_coment{
+	background: url("../../img/arrow_coment.png") no-repeat center;
+}

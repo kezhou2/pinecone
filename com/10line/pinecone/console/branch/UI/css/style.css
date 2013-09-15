@@ -602,6 +602,11 @@ header .container{
 	color: #fff;	
 	padding: 0 0 0 20px;
 }
+.section_title h5{
+	color: #fff;	
+	padding: 0 0 0 20px;
+}
+
 .section_title p{
 	color: #fff;
 	text-align: right;
@@ -1741,5 +1746,13 @@ footer .button{
 
 
 }
+
+.box_frame{
+	padding: 5px;
+	background: #fff;
+	border: solid 1px #cdcdcd;
+	text-align: left;
+}
+
 
 

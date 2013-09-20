@@ -347,7 +347,7 @@
 	    		username : $.sessionStorage.getItem("username"),
 	    		password : $.sessionStorage.getItem("password"),
 	    		success : function(data) {
-	    			var href = data.results[0]._links[2].href;
+	    			var href = data._links[2].href;
 	    			var varid = href.substring(href.lastIndexOf("/") + 1);
 	    			$("#" + code + " tbody").append(
 	    				'<tr><td>' + data.name + '</td><td id='+varid+'><td>'+  
@@ -363,7 +363,6 @@
     		$.ajax({
     	 		url:'rest/m/channel/subscribe', 
     	 		type: 'POST',
-    	 		dataType : "json",
     	 		data: {code:code}, 
     			timeout: 1000,
     			cache: false,

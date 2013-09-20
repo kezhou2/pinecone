@@ -32,7 +32,8 @@ public class ChannelController{
 			client.connect();
 		}else{
 			if(!client.isConnected()){
-				client = null;
+				client = new MqttClient("tcp://www.pinecone.cc:1883", UUID.randomUUID().toString(), new MemoryPersistence());
+				client.connect();
 			}
 		}
 		
@@ -49,33 +50,37 @@ public class ChannelController{
 			resp.setCharacterEncoding("UTF-8");
 			resp.setHeader("Cache-Control","no-cache");
 			final PrintWriter out=resp.getWriter();
+			out.write("{}");
+			out.close();
 			
-			this.getClient().setCallback(new MqttCallback(){
-	
-				@Override
-				public void connectionLost(Throwable arg0) {
-					System.out.println("###connectionLost");
-					out.write("{}");
-				}
-	
-				@Override
-				public void deliveryComplete(MqttDeliveryToken arg0) {System.out.println("###deliveryComplete");}
-	
-				@Override
-				public void messageArrived(MqttTopic arg0, MqttMessage arg1)
-						throws Exception {
-					System.out.println("###messageArrived");
-					byte[] buf = arg1.getPayload();
-					if(buf != null){
-						out.write(new String(buf));
-					}
-				}
-				
-			});
-			this.getClient().subscribe("pinecone@device."+code+".publish");
-
+//			this.getClient().setCallback(new MqttCallback(){
+//	
+//				@Override
+//				public void connectionLost(Throwable arg0) {
+//					System.out.println("###connectionLost");
+//					out.write("{}");
+//					out.close();
+//				}
+//	
+//				@Override
+//				public void deliveryComplete(MqttDeliveryToken arg0) {System.out.println("###deliveryComplete");}
+//	
+//				@Override
+//				public void messageArrived(MqttTopic arg0, MqttMessage arg1)
+//						throws Exception {
+//					System.out.println("###messageArrived");
+//					byte[] buf = arg1.getPayload();
+//					if(buf != null){
+//						System.out.println("buf:"+new String(buf));
+//						out.write(new String(buf));
+//						out.close();
+//					}
+//				}
+//				
+//			});
+//			this.getClient().subscribe("pinecone@device."+code+".publish");
 		}finally{
-			this.getClient().unsubscribe("pinecone@device."+code+".publish");
+//			this.getClient().unsubscribe("pinecone@device."+code+".publish");
 		}
 	}
 	

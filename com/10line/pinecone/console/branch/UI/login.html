@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Jekas  - Software, Studio and Corporate Responsive Template</title>    
+    <title>登录</title>    
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -39,7 +39,7 @@
 
                         <!-- Logo-->
                         <div class="span3 logo">
-                            <a href="index.html" title="Back to Home">                            
+                            <a href="index.html" title="回到首页">                            
                                 <img src="img/logo.png" alt="Logo">
                             </a>
                         </div>
@@ -49,8 +49,8 @@
                         <nav class="span9">
                             <!-- Menu-->
                             <ul id="menu" class="sf-menu">
-                                <li><a href="index.html">首页</a></li>
-                                <li><a href="about.html">注册</a></li>
+                                <li><a href="index.html">回到首页</a></li>
+                                <li><a href="registry.html">注册</a></li>
                             </ul>
                             <!-- End Menu-->
                         </nav>
@@ -65,35 +65,35 @@
 
         <section class="content_info" style="padding-top:0px;">
             
-            <section class="info_resalt borders" style="background: url('file:///D:/Workspace/Web%20Page%20Resource/service/boxed/img/bg_index_static.png');">
+            <section class="info_resalt borders" style="background: url('/img/bg_index_static.png');">
                 <div class="center_info">  
                      <div class="row-fluid">
 						<div class="span5 offset1" style="border-right: 1px dashed #e5e5e5;">
-							<form>
+							<form id="login" method="post" action="j_spring_security_check">
 							  <fieldset>
 								<legend><h1>登录</h1></legend>
 								<div class="control-group">
 									<div class="controls">
 										 <div class="input-prepend">
-											<span class="add-on"><i class="icon-user"></i></span> 
-											<input type="text" class="input-xlarge" id="j_username" name="j_username" placeholder="用户名">
+											<span class="add-on" style="height:26px"><i class="icon-user"></i></span> 
+											<input type="text" class="input-xlarge" style="height:26px" id="j_username" name="j_username" placeholder="用户名">
 										 </div>
-										<span class="help-block"></span>
+										<span class="help-block">&nbsp;</span>
 									</div>
 								 </div>
 								<div class="control-group">
 									<div class="controls">
 										<div class="input-prepend">
-											<span class="add-on"><i class="icon-lock"></i></span> 
-											<input type="password" class="input-xlarge" id="j_password" name="j_password" placeholder="密码">
+											<span class="add-on" style="height:26px"><i class="icon-lock"></i></span> 
+											<input type="password" class="input-xlarge" style="height:26px" id="j_password" name="j_password" placeholder="密码">
 										 </div>
-										 <span class="help-block"></span>
+										 <span class="help-block">&nbsp;</span>
 									</div>
 								 </div>
 								 <div class="control-group">
 									<div class="controls">
 										<button type="submit" class="btn btn-primary">登录</button>
-										<button class="btn btn-danger">创建账户</button>
+										<a href="registry.html" class="btn btn-danger">创建账户</a>
 										<a class="btn">忘记密码...</a>
 									</div>
 								 </div>
@@ -108,6 +108,12 @@
             </section>
 
         </section>
+		<!-- footer-->
+        <footer class="coopring">
+            <p>© 2013 北京松果科技有限公司</p>
+			<p><a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备13022507号</a></p>
+        </footer>      
+        <!-- End footer-->
     </div>
    
         <!-- ======================= JQuery libs =========================== -->
@@ -145,7 +151,30 @@
         <!--fUNCTIONS-->
         <script type="text/javascript" src="js/jquery-func.js"></script>
         <!-- ======================= End JQuery libs =========================== -->
-
+		<script type="text/javascript">
+		
+			$(document).ready(function() {
+				
+				$("#login").validate({
+					rules : {
+						j_username : {
+							required : true,
+							alphanumeric : true
+						},
+						j_password : {
+							required : true
+						}
+					},
+					submitHandler : function(form) {  
+						$.sessionStorage.setItem("username", $("#j_username").val());
+						$.sessionStorage.setItem("password", $("#j_password").val());
+						form.submit();
+					}
+				});
+			
+			});
+	
+		</script>
 
   </body>
 </html>

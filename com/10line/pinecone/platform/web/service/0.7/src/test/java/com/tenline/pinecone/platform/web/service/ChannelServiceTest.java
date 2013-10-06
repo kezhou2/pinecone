@@ -28,7 +28,7 @@ public class ChannelServiceTest extends AbstractServiceTest implements MqttCallb
 	
 	@Before
 	public void testSetup() throws Exception {
-		client = new ChannelClient("tcp://m2m.eclipse.org:1883");
+		client = new ChannelClient("tcp://www.pinecone.cc:1883");
 		client.listen(this, topic);
 	}
 	

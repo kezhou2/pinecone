@@ -120,9 +120,12 @@
     <script src="js/jquery.scrollUp.min.js"></script>
     <script src="js/jquery.html5storage.min.js"></script>
     <script src="js/markerclusterer.min.js"></script>
+    <script src="js/mqttws31.js"></script>
     <script src="js/main.js"></script>
     <script type="text/javascript">
       
+    	var client;
+    	
     	$(document).ready(function() {
     	
 			$.scrollUp({
@@ -191,10 +194,26 @@
 			});
 			
 			$.goMap.ready(function() {
-				getUserId(new MarkerClusterer($.goMap.map));
+				var clientId = $.sessionStorage.getItem("username") + "@pinecone.cc";
+				client = new Messaging.Client("www.pinecone.cc", Number("61614"), clientId);
+				client.onMessageArrived = onMessageArrived;           
+			    client.connect({onSuccess:onConnect, onFailure:onFailure}); 
 			});
 	
 		});
+    	
+    	function onConnect(frame) {
+    		getUserId(new MarkerClusterer($.goMap.map));
+    	}
+    	
+    	function onFailure(failure) {
+    		getUserId(new MarkerClusterer($.goMap.map));
+    		alert(failure.errorMessage);
+    	}
+    	
+    	function onMessageArrived(message) {
+    		alert(message.payloadString);
+    	}
     	
     	function getHistory(id, start, end) {
     		$.ajax({
@@ -305,6 +324,7 @@
     	    }); 
     		getDeviceId(code, getVariablesByDeviceId);  
     		markerClusterer.addMarker($($.goMap.mapId).data(code));
+    		client.subscribe("pinecone@device." + code);
     	}
     	
     	function getDeviceId(code, callback) {

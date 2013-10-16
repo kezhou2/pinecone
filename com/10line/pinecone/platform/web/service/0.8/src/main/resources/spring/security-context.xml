@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security 
+       http://www.springframework.org/schema/security/spring-security.xsd">
+  
+  <!-- Enables Spring Security Debugging --><sec:debug/>
+  
+  <!-- Spring Security Filter Chain for REST Service -->
+  <sec:http pattern="/rest/**" create-session="stateless">
+  	<sec:intercept-url pattern="/rest/m/user" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" method="POST" />
+    <sec:intercept-url pattern="/rest/m/user/search/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
+    <sec:intercept-url pattern="/rest/device/**" access="ROLE_USER, ROLE_ADMIN" method="PUT" />
+    <sec:intercept-url pattern="/rest/device/**" access="ROLE_USER, ROLE_ADMIN" method="DELETE" />
+    <sec:intercept-url pattern="/rest/**" access="ROLE_USER, ROLE_ADMIN" method="GET" />
+    <sec:intercept-url pattern="/rest/**" access="ROLE_ADMIN" />
+    <sec:http-basic/>
+  </sec:http>
+  
+  <!-- Spring Security Filter Chain for WEB Pages -->
+  <sec:http>
+    <sec:intercept-url pattern="/console.html" access="ROLE_USER, ROLE_ADMIN" />
+    <sec:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
+    <sec:form-login login-page="/login.html" default-target-url="/console.html" 
+    	authentication-failure-url="/login.html?error=true"/>
+    <sec:logout logout-success-url="/index.html"/>
+  </sec:http>
+  
+  <!-- Spring Security JDBC-based User Service -->
+  <sec:authentication-manager>
+  	<sec:authentication-provider>
+      <sec:jdbc-user-service data-source-ref="dataSource"/>
+  	</sec:authentication-provider>
+  </sec:authentication-manager>
+    
+</beans>

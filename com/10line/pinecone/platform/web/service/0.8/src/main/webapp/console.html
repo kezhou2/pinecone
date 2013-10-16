@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+		
+		<link rel="stylesheet" href="css/style.css">
+		
+		<style type="text/css" media="screen">
+			#message { position:absolute; padding:10px; background:#555; color:#fff; width:75px; }
+		</style>
+		
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        <!-- Add your site or application content here -->
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">
+						<img src="img/logo.png" />
+					</a>
+				</div>
+				<div class="navbar-collapse collapse pull-right" style="padding-top: 7px;">
+					<ul class="nav navbar-nav">
+						<li><a href="activation.html" class="btn btn-danger btn-lg site-heading-button">发布设备</a></li>
+						<li>
+							<div class="btn-group pull-right" style="padding-top: 10px;">
+								<a href="j_spring_security_logout" class="btn btn-default">注销</a>
+								<a href="login.html" class="btn btn-default">更换账户</a>
+							</div>
+						</li>
+						<li>
+							<ul class="btn-group pull-right" style="padding-top: 10px;">
+								<button data-toggle="modal" data-target="#" type="button" class="btn btn-info">帮助</button>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--edit modal -->
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">修改设备</h4>
+					</div>
+					<form id="editDevice" method="post" action="#" class="form-horizontal" role="form">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="devicename" class="col-sm-2 control-label">设备名称</label>
+							<div class="col-sm-10">
+								<input type="email" class="form-control" id="devicename" name="devicename" placeholder="设备名称">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-success">确定</button></form>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+					
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+        <!--delete modal-->
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">删除设备</h4>
+					</div>
+					<div class="modal-body">
+						<p>确定删除吗？</p>
+					</div>
+					<div class="modal-footer">
+						<button id="deleteDevice" class="btn btn-success">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">取消</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+        <div id="queryModel" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>数据查询</h3>
+			</div>
+			<div class="modal-body"><form id="queryData" method="post" action="#">
+				<div id="startTime" class="input-prepend date">
+					<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+					<input type="text" id="starttime" class="input-xlarge" name="starttime" placeholder="起始时间"></input>
+				</div>
+				<div id="endTime" class="input-prepend date">
+					<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+					<input type="text" id="endtime" class="input-xlarge" name="endtime" placeholder="结束时间"></input>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success">查询</button></form>
+				<button class="btn btn-success" data-dismiss="modal" aria-hidden="true">取消</button>
+			</div>
+        </div>
+		<p id="selectedCode" class="hide"></p>
+		<div class="row site-content"><!--before bootstrap 3.0 there is container-->
+			<div class="row row-offcanvas row-offcanvas-right site-content-no-padding">
+				<div class="well col-xs-12 col-sm-12 col-md-6 col-lg-8">
+					<div id="map_canvas" style="height:500px;"></div>
+				</div><!--/span-->
+
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+					<div class="table-overflow">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="input-group">
+									<input type="text" class="form-control">
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button">Go!</button>
+									</span>
+								</div>
+							</div>
+							<div class="panel-body">
+								<table class="table table-striped table-bordered" id="data-table">
+									<thead>
+										<tr>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>	
+					</div>
+				</div><!--/span-->
+			</div>
+		</div>
+        
+		<div id="footer">
+			<div class="container">
+				<p class="text-muted credit">&copy; 2013 北京松果科技有限公司&nbsp;<a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备13022507号</a></p>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">欢迎登陆我们的平台</h4>
+					</div>
+					<div class="modal-body">
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-primary">提交</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		
+		
+		
+		
+		
+        <script src="js/vendor/jquery-1.9.0.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBKkEdoXQxDyl3OKTnMjkvRX-HzOxmsxi8&sensor=false"></script> 
+		<script type="text/javascript" src="js/jquery.gomap-1.3.2.min.js"></script> 
+		<script src="js/bootstrap.min.js"></script>
+		<script src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
+		<script type="text/javascript" src="js/tables/jquery.dataTables.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_zh.js"></script>
+		<script src="js/additional-methods.js"></script>
+        <script src="js/localization/messages_zh.js"></script>
+		<script src="js/jquery.scrollUp.min.js"></script>
+		<script src="js/jquery.html5storage.min.js"></script>
+		<script src="js/markerclusterer.min.js"></script>
+		<script src="js/mqttws31.js"></script>
+		<script src="js/main.js"></script>
+		
+		<script type="text/javascript">
+      
+		var oTable;
+		var isInfoWindowOpened = false;
+		var lastCode = null;
+	  
+    	$(document).ready(function() {
+		
+			oTable = $('#data-table').dataTable({
+				"bJQueryUI": false,
+				"bAutoWidth": true,
+				"bPaginate": false,
+				"bFilter": false,
+				"sScrollY": "450",
+				"bSort": false,
+				"bScrollCollapse": true,
+				"sPaginationType": "full_numbers",
+				"fnInitComplete" : function(oSettings, json) {
+					// Find the wrapper and hide all thead
+					$('#data-table').parents('.dataTables_wrapper').first().find("div[class='dataTables_scrollHead']").remove();
+				}
+			});
+		
+			$.scrollUp({
+				scrollName: 'scrollUp', 
+				topDistance: '300', 
+				topSpeed: 300, 
+				animation: 'fade', 
+				animationInSpeed: 200, 
+				animationOutSpeed: 200, 
+				scrollText: '', 
+				activeOverlay: false 
+			});
+			
+			$("#startTime").datetimepicker({
+					format: "yyyy-MM-dd hh:mm:ss",
+					language: "zh"
+			});
+			
+			$("#endTime").datetimepicker({
+					format: "yyyy-MM-dd hh:mm:ss",
+					language: "zh"
+			});
+			
+			$("#queryData").validate({
+				rules : {
+					starttime : {
+							required : true,
+							soonerThan : "#endtime"
+					},
+					endtime : {
+							required : true,
+							laterThan : "#starttime"
+					}
+				},
+				submitHandler : function() { 
+					// need to modify
+					getHistory("hello", new Date($("#starttime").val()), new Date($("#endtime").val()));
+				}
+			});
+			
+			$("#editDevice").validate({
+				rules : {
+					devicename : {
+							required : true
+					}
+				},
+				submitHandler : function() {
+					$("#editModel").modal("hide");
+					getDeviceId($("#selectedCode").text(), updateDevice);
+				}
+			});
+			
+			$("#deleteDevice").on("click", function() {
+				$("#deleteModel").modal("hide");
+				getDeviceId($("#selectedCode").text(), deleteDevice);
+			});
+			
+			//$("#identity").text("欢迎" + $.sessionStorage.getItem("username") + "，开始管理你的设备吧！");
+		
+			$("#map_canvas").goMap({
+				latitude: 39.905841, 
+				longitude: 116.391596, 	
+				zoom: 8,
+				maptype: 'ROADMAP',
+				hideByClick: false
+			});
+
+			overlay = $.goMap.overlay;
+			
+			$.goMap.ready(function() {
+				var clientId = $.sessionStorage.getItem("username") + "@pinecone.cc";
+				client = new Messaging.Client("www.pinecone.cc", Number("61614"), clientId);
+				client.onMessageArrived = onMessageArrived;           
+				client.connect({onSuccess:onConnect, onFailure:onFailure}); 
+			});
+		});
+		
+		function onConnect(frame) {
+                getUserId(new MarkerClusterer($.goMap.map));
+        }
+        
+        function onFailure(failure) {
+                getUserId(new MarkerClusterer($.goMap.map));
+                alert(failure.errorMessage);
+        }
+        
+        function onMessageArrived(message) {
+                alert(message.payloadString);
+        }
+        
+        function getHistory(id, start, end) {
+                $.ajax({
+                        type : "GET",
+                        url : "rest/m/history/" + id + "/" + start.format("yyyy-MM-dd hh:mm:ss"),
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password"),
+                        success : function(data) {
+                                alert(start.format("yyyy-MM-dd hh:mm:ss") + " --- " + data); // need to remove
+                                start.setSeconds(start.getSeconds() + 1);
+                                if(start <= end) getHistory(id, start, end);
+                        }
+                });
+        }
+        
+        function updateDevice(id) {
+                $.ajax({
+                        type : "PUT",
+                        url : "rest/device/" + id,
+                        contentType : "application/json; charset=utf-8",
+                        data : "{\"name\":\"" + $("#devicename").val() + "\"}",
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password")
+                        });
+        }
+        
+        function deleteDevice(id) {
+                $.ajax({
+                        type : "DELETE",
+                        url : "rest/device/" + id,
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password")
+                        });
+        }
+        
+        function getUserId(markerClusterer) {
+                $.ajax({
+                        type : "GET",
+                        url : "rest/user/search/names?name=" + $.sessionStorage.getItem("username"),
+                        dataType : "json",
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password"),
+                        success : function(data) {
+                                var href = data.results[0]._links[2].href;
+                                getDevicesByUserId(markerClusterer, href.substring(href.lastIndexOf("/") + 1));
+                        }
+                        });
+        }
+        
+        function getDevicesByUserId(markerClusterer, id) {
+                $.sessionStorage.setItem("userId", id);
+                $.ajax({
+                        type : "GET",
+                        url : "rest/user/" + id + "/devices",
+                        dataType : "json",
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password"),
+                        success : function(data) {
+                                var links = data._links;
+                                if(links.length > 0) {
+                                        for(var i = 0; i < links.length; i++) {
+                                                getDeviceById(markerClusterer, links[i].href);
+                                        }                                       
+                                }
+                        }
+                        });
+        }
+        
+        function getDeviceById(markerClusterer, url) {
+                $.ajax({
+                        type : "GET",
+                        url : url,
+                        dataType : "json",
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password"),
+                        success : function(data) {
+                                addDeviceToMap(markerClusterer, data.latitude, data.longitude, data.name, data.code);
+                        }
+                        });
+        }
+
+        function addDeviceToMap(markerClusterer, latitude, longitude, name, code) { 
+			$("#map_canvas").before(
+				'<div id="info_' + code + '" class="hide">'+
+					'<p>' + name + '</p>'+
+					'<ul class="nav nav-pills">'+
+							'<li><a data-toggle="modal" data-target="#editModel"><i class="icon-edit"></i> 修改</a></li>'+
+							'<li><a data-toggle="modal" data-target="#deleteModel"><i class="icon-remove"></i> 删除</a></li>'+ 
+					'</ul>'+
+					'<table id="' + code + '" class="table table-hover">'+
+							'<tbody></tbody>'+
+					'</table>'+
+				'</div>'
+			);
+			
+			$.goMap.createMarker({  
+                id: code,
+                latitude: latitude, 
+                longitude: longitude, 
+                title: name,
+                html: {
+					id: '#info_' + code
+                }
+            });
+			
+			oTable.fnAddData([
+				'<td>'+
+					'<div class="container">'+
+						'<div class="row" style="height:64px;">'+
+							'<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">'+
+								'<img src="img/device-1.jpg" class="img-thumbnail img-responsive"/>'+
+							'</div>'+
+							'<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">'+
+								'<div class="row" style="height:25px;">'+
+									'<h5>设备名称：'+name+'</h5>'+
+								'</div>'+
+								'<div class="row" style="height:20px;">'+
+									'<h6>纬度：'+latitude+'</h6>'+
+								'</div>'+
+								'<div class="row" style="height:20px;">'+
+									'<h6>经度：'+longitude+'</h6>'+
+								'</div>'+
+							'</div>'+
+							'<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">'+
+								'<div class="row" style="height:20px; padding-top:10px;">'+
+									'<button type="button" class="btn btn-primary  btn-block" id="'+code+'">定位</button>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+
+				'</td>'
+			]);
+			
+			//add event to button
+			$("button[id='"+code+"']").click(function(){
+				if(isInfoWindowOpened)
+					google.maps.event.trigger($($.goMap.mapId).data(lastCode), 'click');
+				
+				displayPoint(code);
+				google.maps.event.trigger($($.goMap.mapId).data(code), 'click');
+				lastIndex = code;
+			});
+			
+              
+			
+			$.goMap.createListener({type:'marker', marker:code}, 'click', function() { 
+				$("#selectedCode").text(code);
+				displayPoint(code);
+            }); 
+                getDeviceId(code, getVariablesByDeviceId);  
+                markerClusterer.addMarker($($.goMap.mapId).data(code));
+                client.subscribe("pinecone@device." + code);
+        }
+        
+        function getDeviceId(code, callback) {
+                $.ajax({
+                        type : "GET",
+                        url : "rest/device/search/codes?code=" + code,
+                        dataType : "json",
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password"),
+                        success : function(data) {
+                                var href = data.results[0]._links[2].href;
+                                callback(href.substring(href.lastIndexOf("/") + 1), code);
+                        }
+                        });
+        }
+        
+        function getVariablesByDeviceId(id, code) {
+                $.ajax({
+                        type : "GET",
+                        url : "rest/device/" + id + "/variables",
+                        dataType : "json",
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password"),
+                        success : function(data) {
+                                var links = data._links;
+                                if(links.length > 0) {
+                                        for(var i = 0; i < links.length; i++) {
+                                                getVariableById(links[i].href, code);
+                                        }                                       
+                                }
+                        }
+                        });
+        }
+        
+        function getVariableById(url, code) {
+                $.ajax({
+                        type : "GET",
+                        url : url,
+                        dataType : "json",
+                        username : $.sessionStorage.getItem("username"),
+                        password : $.sessionStorage.getItem("password"),
+                        success : function(data) {
+                                var href = data._links[2].href;
+                                var varid = href.substring(href.lastIndexOf("/") + 1);
+                                $("#" + code + " tbody").append(
+                                        '<tr><td>' + data.name + '</td><td id='+varid+'><td>'+  
+                                        '<a data-toggle="modal" data-target="#queryModel"><i class="icon-search"></i> 查询 </a>'+
+                                '<a href="#"><i class="icon-wrench"></i> 设置</a>'+
+                                '</td></tr>'
+                        );      
+                        }
+                        });
+        }
+		
+		function displayPoint(marker){
+			
+			//google.maps.event.trigger($($.goMap.mapId).data('info_0'), 'click');
+			
+			var position = $($.goMap.mapId).data(marker).position;
+	
+			var moveEnd = $.goMap.createListener({type:'map'}, 'bounds_changed', function() {
+
+				var markerOffset = overlay.getProjection().fromLatLngToDivPixel(position);
+			});
+
+			$.goMap.map.panTo(position);
+		}
+		</script>
+    </body>
+</html>

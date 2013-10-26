@@ -21,8 +21,8 @@ import com.tenline.pinecone.platform.sdk.RESTClient;
 public class AuthorityServiceTest extends AbstractServiceTest {
 
 	// Modify to customize
-	private int page = 1;
-	private String url = "http://localhost:8080/service";
+	private int page = 9;
+	private String url = "http://www.pinecone.cc";
 	//
 	
 	private RESTClient client;
